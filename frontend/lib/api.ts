@@ -1522,3 +1522,92 @@ export function applyAmendment(policy: PolicyDSL, a: Amendment): PolicyDSL {
   }
   return amended as PolicyDSL;
 }
+
+// ---------------------------------------------------------------------------
+// Economic spillover (SPEC §7.4) — POST /economy
+// ---------------------------------------------------------------------------
+
+/**
+ * One transparent economic transmission channel (input-output / elasticity). The
+ * physical driver (`physical_value`) is Simulated by the mode-choice model; the
+ * monetary translation (`annual_impact` + band) is Estimated (SPEC §8/§34).
+ */
+export interface EconomicChannel {
+  id: string;
+  name: string;
+  mechanism: string;
+  direction: string; // 'positive' | 'negative' | 'ambiguous'
+  physical_basis: string;
+  physical_value: number | null;
+  annual_impact: number;
+  annual_impact_low: number;
+  annual_impact_high: number;
+  unit: string;
+  confidence: number;
+  confidence_label: string;
+  tag: MetricTag;
+  assumptions: string[];
+  note: string;
+}
+
+/**
+ * How one sector is exposed to the policy — a direction + qualitative magnitude,
+ * deliberately NOT a fabricated hard jobs/GDP number (SPEC §34).
+ */
+export interface SectorExposure {
+  sector: string;
+  direction: string; // 'positive' | 'negative' | 'ambiguous'
+  magnitude: string; // 'low' | 'moderate' | 'high'
+  mechanism: string;
+  annual_impact_estimate: number | null;
+  tag: MetricTag;
+}
+
+/** Local-economy spillover report for one policy run (SPEC §7.4). */
+export interface EconomicSpilloverReport {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  horizon: Checkpoint;
+  channels: EconomicChannel[];
+  sector_exposure: SectorExposure[];
+  net_annual_impact: number;
+  net_annual_impact_low: number;
+  net_annual_impact_high: number;
+  net_confidence: number;
+  unit: string;
+  not_modelled: string[];
+  assumptions: Record<string, unknown>;
+  headline: string;
+}
+
+/**
+ * Estimate a policy's local economic spillover via `POST /economy`. Builds ahead
+ * of / alongside the backend against the documented contract; throws on
+ * network/HTTP error so the panel can show an honest waiting/error state rather
+ * than inventing a figure (SPEC §34).
+ */
+export async function runEconomy(
+  policy: PolicyDSL,
+  horizonMonths?: number,
+  signal?: AbortSignal,
+): Promise<EconomicSpilloverReport> {
+  const res = await fetch(`${API_BASE_URL}/economy`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, horizon_months: horizonMonths ?? null }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as EconomicSpilloverReport;
+}

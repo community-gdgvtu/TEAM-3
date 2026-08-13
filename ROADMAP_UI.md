@@ -73,3 +73,9 @@ but not the panel↔endpoint↔SPEC map or *how* the honesty contract is impleme
 the single most judge-relevant thing about this track ("how do we know this isn't AI astrology").
 Docs only; no fabricated numbers; accurately reflects the real code.
 - [x] Expand `frontend/README.md`: architecture overview (App Router pages, `lib/api.ts` typed client, panel components), the full analysis-tab → endpoint → SPEC-section map (all 18 endpoints), and a "Honesty contract in the UI" section documenting the `MetricTag` provenance chips (`.tag.observed/.estimated/.simulated/.generated`), visible uncertainty bands, SIMULATED media stamps, "waiting for backend" states, and the crash-safe error boundaries (SPEC §34)
+
+## M14 — Surface the economic spillover layer (SPEC §7.4)
+The engine track shipped `POST /economy` after the UI roadmap was declared complete.
+Same rules: every number tagged, uncertainty visible, never invent one when the backend
+is down; be explicit about what the layer does *not* model (honesty surface).
+- [x] Economy tab: `POST /economy` → the policy's local-economy spillover. Show the net partial-equilibrium annual impact with its band, each transparent transmission channel (mechanism, the Simulated physical driver it reads, elasticity/IO assumption, banded monetary estimate, direction, confidence), per-sector exposure (direction/magnitude, not fabricated hard jobs numbers), the `not_modelled` list and translation `assumptions`. Physical drivers Simulated, monetary translation Estimated — surface both provenance classes; partial-equilibrium caveat prominent (SPEC §7.4/§8/§34)

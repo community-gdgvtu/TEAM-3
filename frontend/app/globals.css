@@ -4360,3 +4360,313 @@ ul.assumptions {
     width: auto;
   }
 }
+
+/* -------------------------------------------------------------------------
+   Economic spillover panel (SPEC §7.4) — POST /economy
+   ------------------------------------------------------------------------- */
+.eco-body {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Net headline block */
+.eco-net {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: rgba(79, 140, 255, 0.05);
+}
+.eco-net-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+.eco-net-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.eco-net-value.good {
+  color: var(--ok);
+}
+.eco-net-value.warn {
+  color: var(--bad);
+}
+.eco-net-value.mid {
+  color: var(--text);
+}
+.eco-net-unit {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.eco-net-meta {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.eco-net-band {
+  font-variant-numeric: tabular-nums;
+}
+.eco-net-conf,
+.eco-net-horizon {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+.eco-headline {
+  margin: 0.7rem 0 0;
+  color: var(--text);
+  font-size: 0.92rem;
+  opacity: 0.95;
+}
+
+/* Section titles inside the panel */
+.eco-sec-title {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.eco-sec-note {
+  font-weight: 400;
+  font-size: 0.74rem;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Direction glyph pill (shared by channels + sectors) */
+.eco-dir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  border: 1px solid var(--border);
+  flex: none;
+}
+.eco-dir.good {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.eco-dir.warn {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+.eco-dir.mid {
+  color: #f6be60;
+  border-color: #f6be60;
+}
+
+/* Channels */
+.eco-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.eco-channel {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  background: var(--panel);
+}
+.eco-ch-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.eco-ch-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.eco-ch-impact {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.eco-ch-band {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.78rem;
+}
+.eco-ch-mech {
+  margin: 0.45rem 0 0;
+  color: var(--text);
+  opacity: 0.9;
+  font-size: 0.86rem;
+}
+.eco-ch-basis {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.eco-basis-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.eco-basis-val {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.eco-ch-conf {
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+.eco-ch-assumptions {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.eco-ch-note {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+/* Sector exposure */
+.eco-sectors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+}
+.eco-sector {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  background: var(--panel);
+}
+.eco-sector-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.eco-sector-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-transform: capitalize;
+}
+.eco-mag {
+  margin-left: auto;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.08rem 0.45rem;
+  color: var(--muted);
+}
+.eco-mag-high {
+  color: #f6be60;
+  border-color: #f6be60;
+}
+.eco-mag-moderate {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.eco-sector-mech {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.eco-sector-est {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
+}
+
+/* Not-modelled honesty surface */
+.eco-notmodelled {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  background: rgba(255, 107, 107, 0.04);
+}
+.eco-nm-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.eco-notmodelled ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--text);
+  opacity: 0.9;
+  font-size: 0.84rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* Assumptions (auditable) */
+.eco-assumptions {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  background: var(--panel);
+}
+.eco-assumptions > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.eco-assum-count {
+  color: var(--muted);
+  font-weight: 400;
+}
+.eco-assumptions dl {
+  margin: 0.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.eco-assum-row {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+}
+.eco-assum-row dt {
+  flex: none;
+  min-width: 40%;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.eco-assum-row dd {
+  margin: 0;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+.eco-note {
+  margin: 0.2rem 0 0;
+}

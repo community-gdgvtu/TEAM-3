@@ -331,3 +331,19 @@ Dated notes, newest at the bottom. One line per shipped item.
   `.simulated/.generated/.synthetic` in `globals.css`, evidence is POST, compile is SPEC
   Step 2) — no fabricated numbers, docs only. Build/lint/typecheck unaffected (markdown).
   **UI track roadmap complete through M13.**
+- 2026-08-13 — M14: Economy tab (`POST /economy`, SPEC §7.4). The engine track shipped
+  the economic-spillover endpoint after the UI roadmap was declared complete; this run
+  surfaces it. New `EconomyPanel` + `runEconomy`/`EconomicSpilloverReport`/`EconomicChannel`/
+  `SectorExposure` types in `lib/api.ts`, wired as an "Economy" tab in `PanelTabs`. The panel
+  renders the net partial-equilibrium annual impact with its low…high band + confidence +
+  horizon; each transmission channel (mechanism, the **Simulated** physical driver it reads
+  with its value, the **Estimated** banded monetary effect, direction glyph, confidence,
+  elasticity/IO assumptions, note); per-sector exposure cards (direction + qualitative
+  magnitude — deliberately NOT fabricated hard jobs numbers); the `not_modelled` honesty
+  surface; and a collapsible auditable `assumptions` block. Honesty contract held: two
+  provenance classes surfaced side by side (physical Simulated → money Estimated), band always
+  visible, partial-equilibrium/no-CGE caveat prominent, `waiting`/`idle`/`error` states when the
+  backend is down (never invents a figure). Added ~310 lines of scoped `.eco-*` CSS reusing the
+  theme tokens + existing `.tag.*` chips. Updated `frontend/README.md` endpoint map (now 19
+  surfaces). `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4
+  static pages). **M14 complete — every documented backend endpoint incl. /economy is surfaced.**

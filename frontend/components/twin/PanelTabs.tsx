@@ -27,6 +27,7 @@ import PressConferencePanel from "./PressConferencePanel";
 import ComparePanel from "./ComparePanel";
 import UncertaintyPanel from "./UncertaintyPanel";
 import OptimiserPanel from "./OptimiserPanel";
+import EconomyPanel from "./EconomyPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -41,6 +42,7 @@ type TabKey =
   | "ensemble"
   | "uncertainty"
   | "optimiser"
+  | "economy"
   | "institutions"
   | "backtest"
   | "registry";
@@ -57,6 +59,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "ensemble", label: "Ensemble" },
   { key: "uncertainty", label: "Uncertainty" },
   { key: "optimiser", label: "Optimiser" },
+  { key: "economy", label: "Economy" },
   { key: "institutions", label: "Institutions" },
   { key: "backtest", label: "Backtest" },
   { key: "registry", label: "Registry" },
@@ -124,6 +127,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "optimiser"}>
           <OptimiserPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "economy"}>
+          <EconomyPanel />
         </div>
         <div role="tabpanel" hidden={active !== "institutions"}>
           <InstitutionsPanel />
