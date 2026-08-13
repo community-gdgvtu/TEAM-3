@@ -4126,6 +4126,199 @@ ul.assumptions {
   }
 }
 
+/* --- Engine capability manifest panel (M52, SPEC §27/§33) ------------- */
+/* Reuses .reg-body / .reg-topline / .reg-ver / .reg-gen / .reg-note /
+   .reg-counts / .reg-spec / .tag.* from the registry panel above. */
+
+/* Drift invariant banner (undocumented routes / phantom cards MUST be empty) */
+.cap-drift {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  margin: 0.9rem 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  background: rgba(255, 255, 255, 0.015);
+}
+.cap-drift.ok {
+  border-left-color: var(--ok);
+}
+.cap-drift.bad {
+  border-left-color: var(--bad);
+}
+.cap-drift-mark {
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+.cap-drift.ok .cap-drift-mark {
+  color: var(--ok);
+}
+.cap-drift.bad .cap-drift-mark {
+  color: var(--bad);
+}
+.cap-drift code {
+  font-size: 0.8em;
+}
+
+/* Filter / keyless controls */
+.cap-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.8rem;
+  margin: 1rem 0 0.4rem;
+}
+.cap-controls .tab-filter-input {
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+.cap-keyless {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cap-shown {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+/* Groups + endpoint cards */
+.cap-groups {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+.cap-group {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  background: rgba(255, 255, 255, 0.012);
+}
+.cap-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.cap-group-name {
+  margin: 0;
+  font-size: 0.98rem;
+}
+.cap-group-specs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.cap-group-count {
+  font-size: 0.72rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  font-variant-numeric: tabular-nums;
+}
+.cap-group-summary {
+  margin: 0.35rem 0 0.7rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.cap-endpoints {
+  display: grid;
+  gap: 0.55rem;
+}
+.cap-ep {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+.cap-ep-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.cap-ep-methods {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+.cap-method {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--border);
+}
+.cap-method.get {
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+}
+.cap-method.post {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+.cap-ep-path {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+.cap-ep-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.cap-nonum {
+  font-size: 0.68rem;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+}
+.cap-ep-summary {
+  margin: 0.4rem 0 0.45rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.cap-ep-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  flex-wrap: wrap;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+.cap-body.yes {
+  color: var(--accent);
+}
+.cap-keyless-note code {
+  font-size: 0.78em;
+}
+
+@media (max-width: 640px) {
+  .cap-ep-tags {
+    margin-left: 0;
+    width: 100%;
+  }
+  .cap-shown {
+    margin-left: 0;
+  }
+}
+
 /* --- Institutional review panel (M9) ---------------------------------- */
 .inst-body {
   margin-top: 1rem;

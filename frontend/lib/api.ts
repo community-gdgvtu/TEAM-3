@@ -4030,3 +4030,68 @@ export async function getBriefExample(
   }
   return (await res.json()) as BriefResponse;
 }
+
+// ---------------------------------------------------------------------------
+// Capability manifest — the machine-readable "front door" (SPEC §27/§33/§34)
+// GET /capabilities: every HTTP route mapped to its SPEC section, area, and
+// provenance class, reconciled live against the running app so it cannot drift.
+// ---------------------------------------------------------------------------
+
+/** A self-describing entry for one HTTP route in the manifest. */
+export interface EndpointCard {
+  path: string;
+  methods: string[];
+  area: string;
+  spec_sections: string[];
+  summary: string;
+  needs_body: boolean;
+  /** Companion GET returning a canonical result with no body, if any. */
+  keyless_example: string | null;
+  produces_numbers: boolean;
+  /** Provenance class of this route's numbers (null = prose/metadata only). */
+  output_tag: MetricTag | null;
+}
+
+/** A functional area grouping several endpoints. */
+export interface CapabilityGroup {
+  area: string;
+  spec_sections: string[];
+  summary: string;
+  endpoints: EndpointCard[];
+}
+
+/** The full self-describing catalogue of the engine's HTTP surface. */
+export interface CapabilityManifest {
+  provenance: MetricTag;
+  note: string;
+  app_version: string;
+  generated_from: string;
+  groups: CapabilityGroup[];
+  keyless_examples: string[];
+  /** Live routes with no catalogue card — MUST be empty. */
+  undocumented_routes: string[];
+  /** Catalogue cards for routes that no longer exist — MUST be empty. */
+  phantom_cards: string[];
+  counts: Record<string, number>;
+}
+
+/**
+ * Fetch the capability manifest (SPEC §27/§33): every HTTP route the engine
+ * serves, mapped to its SPEC section, functional area, provenance class and
+ * keyless-example companion, reconciled live against the running app's routes
+ * so it cannot drift. Observed about the service — no LLM, no simulation. Throws
+ * on network/HTTP error so the panel shows an honest waiting/error state
+ * instead of inventing a surface (SPEC §34).
+ */
+export async function getCapabilities(
+  signal?: AbortSignal,
+): Promise<CapabilityManifest> {
+  const res = await fetch(`${API_BASE_URL}/capabilities`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as CapabilityManifest;
+}

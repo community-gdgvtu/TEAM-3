@@ -1288,3 +1288,27 @@ calls the table hadn't caught up with. Reverse-checked too — every backend rou
 prefix now maps to at least one UI fetch — so the "every documented backend
 endpoint has a UI surface" claim is literally true in both directions. Docs-only;
 no code/types/styles/endpoints touched. Build/lint/tests (41) unchanged from M50.
+
+## 2026-08-13 — M52: surface GET /capabilities, the engine's machine-readable front door (SPEC §27/§33/§34)
+The engine track (commit b4bffbf) shipped `GET /capabilities`: a self-describing
+manifest mapping every HTTP route the engine serves to its SPEC section, functional
+area, provenance class and keyless-example companion, reconciled *live* against the
+running app's routes so it can't drift. The UI roadmap was fully exhausted (M1–M51),
+so — following the established engine-adds-endpoint → UI-surfaces-it cadence — I added
+M52 to close the new surface.
+- `lib/api.ts`: added `getCapabilities()` (`GET /capabilities`) + `EndpointCard` /
+  `CapabilityGroup` / `CapabilityManifest` types, mirroring `getRegistry`'s honest
+  throw-on-error contract (panel shows waiting/error + Retry, never an invented surface).
+- New `CapabilitiesPanel.tsx` + "Capabilities" tab registered in `PanelTabs` right after
+  Registry (the transparency family). Policy-independent, loads on mount, itself Observed.
+  Shows: provenance/version topline, note, full-manifest counts grid, a **surface-drift
+  invariant banner** (red + lists paths if `undocumented_routes`/`phantom_cards` non-empty
+  — surfaced, never hidden), then endpoints grouped by area with SPEC chips, method badges,
+  per-route provenance tag or honest "no numbers" pill, needs-body marker, and keyless-example
+  companion. Presentation-only filter + "keyless only" toggle with a `showing N/total` readout
+  so a filter can never make the surface look smaller than it is.
+- `globals.css`: new `.cap-*` styles; reuses the registry panel's `.reg-*` + `.tag.*`.
+- No LLM on any path, no minted numbers, no new endpoints. `tsc --noEmit` + `next build`
+  + `next lint` + `npm test` (41) all clean. Built ahead of the local backend (twin backend
+  not live here — port 8000 is a different service), so the tab shows the honest waiting state
+  until `/capabilities` responds.

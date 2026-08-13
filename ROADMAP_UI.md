@@ -534,3 +534,19 @@ Grand-counterfactual tab), and `POST /parliament/ask` (the persona follow-up
 question in the Parliament panel). All three are live UI calls; the table just
 lagged. Docs-only, no code — every claim now matches a real `fetch` in `api.ts`.
 - [x] Cross-checked every `${API_BASE_URL}/…` fetch target in `lib/api.ts` against the README endpoint→SPEC table and closed the three gaps: the Parliament row now lists `POST /parliament/ask` alongside `/parliament/debate` + `/simulate/amend`; the Grand A/B/C/D row lists `GET /compare/example` alongside `/compare/grand`; the Historical-analogues row lists `GET /analogues/cases` alongside `POST /analogues`. Reverse-checked too: every backend router prefix now maps to at least one UI `fetch`, so the "every documented endpoint has a UI surface" claim is literally true in both directions. No code, types, styles or endpoints changed; `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) remain clean from M50 (SPEC §28/§37/§34)
+
+## M52 — Surface the engine's machine-readable front door: GET /capabilities (SPEC §27/§33/§34)
+The engine track's M52 (commit b4bffbf) added `GET /capabilities`: a self-describing
+manifest that maps **every HTTP route the engine serves** to its SPEC section,
+functional area, provenance class and keyless-example companion — reconciled *live*
+against the running FastAPI app's routes (via route introspection joined to a curated
+catalogue) so the map can never silently drift from the surface. Two invariants ride
+along: `undocumented_routes` (a live route with no card) and `phantom_cards` (a card
+for a dead route) MUST both be empty. Where the Registry tab (SPEC §33) already
+describes the forecast *models*, nothing in the UI described the **HTTP surface
+itself** — the direct answer to a judge's "what can this thing actually do, and where's
+the honest number for each route?". This surfaces it as a policy-independent tab that
+loads on mount, itself Observed (it describes the app, it doesn't simulate). Pure
+surfacing of real backend data — the panel mints no numbers; every metric shown is the
+route's own declared provenance tag copied verbatim from the manifest.
+- [x] Add `getCapabilities()` (`GET /capabilities`) plus `EndpointCard` / `CapabilityGroup` / `CapabilityManifest` types to `lib/api.ts`, mirroring `getRegistry`'s honest throw-on-error contract so the panel shows a waiting/error state (with Retry) rather than an invented surface. Built `CapabilitiesPanel` (new "Capabilities" tab, registered in `PanelTabs` after Registry — the transparency family): renders the provenance/version topline, the note, the full-manifest counts grid (routes/areas/GET/POST/keyless/spec-sections), and a **surface-drift invariant banner** that goes red and lists the offending paths if `undocumented_routes` or `phantom_cards` is non-empty (surfaced, never hidden). Endpoints are grouped by curated area, each with SPEC-section chips + a group summary; every endpoint card shows GET/POST method badges, the path, its SPEC chips, its per-route provenance tag (`Observed`/`Estimated`/`Simulated`/`Generated`) or an honest "no numbers" pill for prose/metadata routes, a needs-body/no-body marker, and its keyless-example companion (`GET …`) when one exists. A presentation-only free-text filter (path/area/SPEC §/summary) and a "keyless only" toggle narrow the view while a `showing N/total` readout guarantees a filter can never make the surface look smaller than it is. Reuses the registry panel's `.reg-body`/`.reg-topline`/`.reg-counts`/`.reg-spec`/`.tag.*` styles plus new `.cap-*` styles in `globals.css`; no new numeric model, no LLM on any path, no endpoints beyond the documented one. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §27/§33/§34)
