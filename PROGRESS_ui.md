@@ -605,3 +605,34 @@ no backend files touched) and ran a real contract smoke test replicating the exa
 - Backend was shut down after the test (running it is the engine track's domain); the UI's
   "waiting for backend" states remain correct when it's down. No files outside `frontend/**` +
   this progress file were modified.
+
+## 2026-08-13 (12:35 UTC) — M21: Historical-analogue / causal layer tab (SPEC §7.1/§8)
+The engine shipped `POST /analogues` (+ `GET /analogues/cases`, router `analogues.py`, commit
+8c753cb) after M20 declared the UI roadmap complete — an unsurfaced endpoint. Added the **Analogue**
+tab, the last uncovered engine surface.
+- `lib/api.ts`: `HistoricalCase`, `CaseEstimate`, `StructuralComparison`, `AnalogueEstimate`
+  interfaces + `runAnalogues(policy, horizonMonths?, includeStructuralComparison?)` (POST) and
+  `fetchAnalogueCases()` (GET). Throw-on-non-OK so the panel shows an honest waiting/error state,
+  never a fabricated figure (SPEC §34).
+- `components/twin/AnaloguePanel.tsx`: transfer-weighted central estimate + confidence band
+  (widens when analogues weak/disagree), analogue-quality (strong/moderate/weak) + transferability
+  pills; a DiD range chart (each pooled scheme's effect, marker opacity = pool weight, over the
+  highlighted pooled CI + central line, zero-line); the **structural cross-check** card — agent-based
+  `structural_effect_pct` tagged Simulated vs analogue `analogue_effect_pct` tagged Estimated + signed
+  gap + agreement pill (consistent/moderate-gap/large-gap) + interpretation (SPEC §8 "real cordons
+  rarely exceed ~30%" sanity floor); contributing-cases table (DiD, identification, transfer, weight;
+  context-only schemes greyed at weight 0); identification diagnostics; collapsible `not_modelled`.
+  Honest "no comparable scheme" state for transit-only/other policies. Historical outcomes Observed
+  (illustrative), transfer Estimated — both classes surfaced.
+- `PanelTabs.tsx`: registered the `analogue` tab (label "Analogue") between Stress and Institutions;
+  panel stays mounted like the others. `globals.css`: scoped `.anl-*` styles (own prefix — the
+  existing `.analogue-*` classes belong to EvidenceDrawer, no collision), mobile-safe.
+- **Live contract check** (stood the twin backend up read-only on port 8139, no backend files touched):
+  `/analogues` returned HTTP 200 with every key the panel destructures; a £15/day cordon+reinvest
+  policy pooled 8 cases → quality "strong", est −21.69% (CI −54.12…0.0), transferability 0.758, and
+  the structural cross-check flagged agreement="large gap" (ABM −92.68% vs analogue −21.69%, gap
+  −70.99 pts) — exactly the SPEC §8 honesty story the card exists to tell. `/analogues/cases` → 8
+  cases, tag Observed. Backend shut down after (running it is the engine track's domain).
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static, / at 46.7 kB / 134 kB First Load); `next lint`
+  no warnings/errors. Only `frontend/**` + ROADMAP_UI.md + this file touched. Every documented engine
+  endpoint is now surfaced in the UI (25 routers incl. `/health`).

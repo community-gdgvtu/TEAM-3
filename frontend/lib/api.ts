@@ -2183,3 +2183,148 @@ export async function runStressTest(
   }
   return (await res.json()) as StressReport;
 }
+
+// ---------------------------------------------------------------------------
+// Historical Analogue / Causal Layer (SPEC §7.1) — POST /analogues, GET /analogues/cases
+// ---------------------------------------------------------------------------
+
+/**
+ * One real-world congestion-pricing / access-restriction scheme in the analogue
+ * base (London, Stockholm, Singapore, Milan, Gothenburg, Oslo, Ghent, Madrid).
+ * Its reported outcome is Observed (a real, published effect) but flagged
+ * illustrative/approximate — a reference figure, not a live data source (§7.1).
+ */
+export interface HistoricalCase {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
+  year: number;
+  intervention_family: string;
+  scheme: string;
+  treated_change_pct: number;
+  control_change_pct: number;
+  charge_per_day_ref: number | null;
+  reinvested_in_transit: boolean;
+  design: string;
+  identification_strength: number;
+  parallel_trend_note: string;
+  context_similarity: number;
+  mode_shift_note: string;
+  source_note: string;
+  tag: MetricTag;
+}
+
+/** One case's difference-in-differences effect and its transfer weight to the input policy. */
+export interface CaseEstimate {
+  case_id: string;
+  name: string;
+  year: number;
+  applicable: boolean;
+  /** treated_change − control_change (%), the trend-stripped effect. */
+  did_effect_pct: number;
+  identification_strength: number;
+  transferability_score: number;
+  /** identification_strength × transferability_score. */
+  analogue_quality: number;
+  /** Normalised weight this case carries in the pool. */
+  pool_weight: number;
+  /** The auditable components that built the transferability score. */
+  transfer_factors: Record<string, number | boolean>;
+  note: string;
+  tag: MetricTag;
+}
+
+/** Cross-check of the analogue estimate against the agent-based model (SPEC §8 honesty). */
+export interface StructuralComparison {
+  /** The agent-based World-B model's own flagship cordon Δ% (Simulated). */
+  structural_effect_pct: number;
+  /** This layer's pooled analogue estimate (Estimated). */
+  analogue_effect_pct: number;
+  /** structural − analogue (percentage points). */
+  gap_pct_points: number;
+  /** 'consistent' | 'moderate gap' | 'large gap'. */
+  agreement: string;
+  interpretation: string;
+  tag: MetricTag;
+}
+
+/** Full `POST /analogues` payload — the Historical Analogue / Causal Layer (SPEC §7.1). */
+export interface AnalogueEstimate {
+  /** Per-case outcomes are Observed; the transferred estimate is Estimated. */
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  intervention_family: string;
+  horizon_label: string;
+  metric_key: string;
+  metric_label: string;
+  /** Transfer-weighted central estimate of the % change (negative = fall). */
+  estimated_effect_pct: number;
+  ci_low_pct: number;
+  ci_high_pct: number;
+  /** 'strong' | 'moderate' | 'weak' overall analogue quality. */
+  analogue_quality: string;
+  transferability_score: number;
+  cases: CaseEstimate[];
+  identification_diagnostics: string[];
+  structural_comparison: StructuralComparison | null;
+  not_modelled: string[];
+}
+
+/**
+ * Estimate the flagship cordon effect from comparable real-world schemes via
+ * `POST /analogues` (SPEC §7.1): a difference-in-differences read per scheme
+ * (treated change − background trend) transferred to this policy by an auditable
+ * similarity score, pooled into a central estimate + confidence interval, with an
+ * optional cross-check against the agent-based model (SPEC §8). Historical
+ * outcomes are Observed but illustrative; the transfer is Estimated. No LLM
+ * touches any number. Throws on network/HTTP error so the panel can show an
+ * honest waiting/error state rather than inventing a figure (SPEC §7.1/§34).
+ */
+export async function runAnalogues(
+  policy: PolicyDSL,
+  horizonMonths?: number | null,
+  includeStructuralComparison?: boolean,
+  signal?: AbortSignal,
+): Promise<AnalogueEstimate> {
+  const body: Record<string, unknown> = { policy };
+  if (horizonMonths != null) body.horizon_months = horizonMonths;
+  if (includeStructuralComparison != null)
+    body.include_structural_comparison = includeStructuralComparison;
+  const res = await fetch(`${API_BASE_URL}/analogues`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const errBody = (await res.json()) as { detail?: unknown };
+      if (typeof errBody.detail === "string") detail = errBody.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as AnalogueEstimate;
+}
+
+/**
+ * The raw curated database of real-world schemes behind the analogue layer via
+ * `GET /analogues/cases` (illustrative, Observed). Throws on network/HTTP error.
+ */
+export async function fetchAnalogueCases(
+  signal?: AbortSignal,
+): Promise<HistoricalCase[]> {
+  const res = await fetch(`${API_BASE_URL}/analogues/cases`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as HistoricalCase[];
+}

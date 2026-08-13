@@ -6768,3 +6768,371 @@ main.wide {
   color: #7c88a5;
   font-style: italic;
 }
+
+/* ------------------------------------------------------------------ */
+/* Historical Analogue / Causal Layer panel (SPEC §7.1)               */
+/* ------------------------------------------------------------------ */
+.anl-body {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.anl-metric {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.anl-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.anl-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.anl-central {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.anl-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.anl-head-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+}
+
+.anl-band {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.anl-pill {
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  color: var(--muted);
+}
+.anl-pill.good {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.anl-pill.mid {
+  color: #f6be60;
+  border-color: #f6be60;
+}
+.anl-pill.warn {
+  color: #ff9d5c;
+  border-color: #f0834a;
+}
+.anl-pill.neutral {
+  color: var(--muted);
+}
+
+.anl-interp {
+  margin: 0.6rem 0 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  opacity: 0.92;
+}
+.warn-text {
+  color: #ff9d5c;
+}
+
+.anl-chart {
+  margin-top: 1rem;
+}
+
+.anl-scale {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.25rem;
+  height: 1rem;
+}
+
+.anl-zero-label {
+  position: absolute;
+  transform: translateX(-50%);
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.anl-plot {
+  position: relative;
+  height: 64px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.anl-cband {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(79, 140, 255, 0.16);
+  border-left: 1px dashed rgba(79, 140, 255, 0.5);
+  border-right: 1px dashed rgba(79, 140, 255, 0.5);
+}
+
+.anl-ccentral {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-1px);
+  background: var(--accent);
+}
+
+.anl-zeroline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.anl-cmarker {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--ok);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.anl-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+.anl-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.anl-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border-radius: 2px;
+}
+.anl-swatch.band {
+  background: rgba(79, 140, 255, 0.28);
+  border: 1px dashed rgba(79, 140, 255, 0.6);
+}
+.anl-swatch.central {
+  width: 3px;
+  background: var(--accent);
+}
+.anl-swatch.marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ok);
+}
+
+/* Structural cross-check card */
+.anl-struct {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+.anl-struct-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.anl-struct-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+.anl-struct-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.14);
+}
+.anl-struct-val {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.anl-struct-cap {
+  font-size: 0.74rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.anl-struct-interp {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.92;
+}
+.anl-struct-horizon {
+  margin-top: 0.4rem;
+}
+
+/* Case table */
+.anl-h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.anl-h3-sub {
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+.anl-cases {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+.anl-case-table {
+  display: flex;
+  flex-direction: column;
+}
+.anl-case-row {
+  display: grid;
+  grid-template-columns: 2.4fr 0.9fr 1fr 0.9fr 0.8fr;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.45rem 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+.anl-case-headrow {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.anl-case-row.off {
+  opacity: 0.55;
+}
+.anl-case-name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.anl-case-title {
+  color: var(--text);
+}
+.anl-case-year {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.anl-case-did {
+  font-weight: 600;
+  color: var(--ok);
+}
+.anl-case-row.off .anl-case-did {
+  color: var(--muted);
+}
+.anl-context-note {
+  margin-top: 0.6rem;
+}
+
+/* Diagnostics + not-modelled */
+.anl-diag {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+.anl-diag-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  opacity: 0.92;
+}
+.anl-notmodelled {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  background: rgba(0, 0, 0, 0.14);
+}
+.anl-notmodelled summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.anl-notmodelled ul {
+  margin: 0.6rem 0 0.2rem;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.anl-note {
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .anl-struct-grid {
+    grid-template-columns: 1fr;
+  }
+  .anl-case-row {
+    grid-template-columns: 1.8fr 0.8fr 0.8fr;
+  }
+  .anl-case-id,
+  .anl-case-transfer {
+    display: none;
+  }
+}
