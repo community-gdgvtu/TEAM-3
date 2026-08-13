@@ -93,3 +93,10 @@ original)** — the amendment's own marginal effect. The Parliament amendment lo
 drove the map with the amended World B (`/simulate`), so the chamber never saw what the
 amendment *itself* changed. Same rules: every number tagged, band visible, never invent.
 - [x] Parliament amendment loop: on "Apply + re-simulate", also call `POST /simulate/amend` and render an "Amendment effect vs original policy" table — the concrete structured `changes` + the isolated `amendment_delta` per metric at the final checkpoint (signed Δ, %, and low…high band), a near-zero row shown as "≈ 0 (no change)". Distinct from the dashboard (amended-vs-baseline): here the "before" is the *original policy*. Deterministic/LLM-free → Simulated; runs alongside the existing map-driving `/simulate` call; honest error state when the backend is down (SPEC §12/§34)
+
+## M17 — Surface the distributional microsimulation (SPEC §7.3)
+The engine shipped `POST /microsim` after M16 declared the roadmap complete — the
+person-level "who gains, who loses, by how much" layer SPEC §7.3 asks for directly.
+Same rules: every number tagged, uncertainty/limits visible, never invent one when the
+backend is down.
+- [x] Microsim tab: `POST /microsim` → the policy's distribution. Render the winners/losers/unaffected split (count + share bar) with the population mean per-trip generalized-cost change and named biggest-winner / worst-hit groups; a prominent **charge-burden regressivity** card (ratio + verdict progressive/flat/regressive, payer count, mean payer burden); and four breakdown tables — by income decile (with burden-%-of-income column), household type, home neighbourhood, occupation — each row showing Δ generalized cost (with a scaled bar), daily money-equivalent, and the better/worse split. Welfare deterministic/LLM-free → Simulated; money-equivalent → Estimated (documented value-of-time) — both provenance classes surfaced; `not_modelled` list + auditable `params`; `waiting`/`idle`/`error` states when the backend is down (SPEC §7.3/§34)

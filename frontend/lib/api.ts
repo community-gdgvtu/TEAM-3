@@ -1741,3 +1741,197 @@ export async function runDynamics(
   }
   return (await res.json()) as SystemDynamicsResult;
 }
+
+// ---------------------------------------------------------------------------
+// Distributional microsimulation (SPEC §7.3) — POST /microsim
+// ---------------------------------------------------------------------------
+
+/** Distributional impact for one population subgroup (SPEC §7.3). */
+export interface GroupImpact {
+  group: string;
+  agents: number;
+  /** Mean per-trip generalized-cost change (min-equiv). +worse / −better. */
+  mean_gc_change_min: number;
+  /** Mean daily welfare change in money-equivalent (Estimated). +loss. */
+  mean_money_equiv_daily: number;
+  mean_charge_paid_daily: number;
+  /** Mean annual charge as % of annual income (0 for non-payers). */
+  mean_burden_pct_income: number;
+  pct_worse_off: number;
+  pct_better_off: number;
+  pct_switched_mode: number;
+}
+
+/** Full person-level distributional microsimulation report (SPEC §7.3). */
+export interface MicrosimReport {
+  policy_id: string;
+  provenance: MetricTag;
+  note: string;
+  commuters: number;
+  winners: number;
+  losers: number;
+  unaffected: number;
+  mean_gc_change_min: number;
+  payers: number;
+  mean_payer_burden_pct: number;
+  /** Lowest-decile ÷ highest-decile mean burden. >1 = regressive. */
+  regressivity_ratio: number;
+  regressivity_note: string;
+  by_income_decile: GroupImpact[];
+  by_household_type: GroupImpact[];
+  by_geography: GroupImpact[];
+  by_occupation: GroupImpact[];
+  worst_hit: string;
+  biggest_winner: string;
+  params: Record<string, unknown>;
+  not_modelled: string[];
+}
+
+/**
+ * Run the distributional microsimulation via `POST /microsim`. Builds ahead of /
+ * alongside the backend against the documented contract; throws on network/HTTP
+ * error so the panel can show an honest waiting/error state rather than inventing
+ * a distribution (SPEC §34).
+ */
+export async function runMicrosim(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<MicrosimReport> {
+  const res = await fetch(`${API_BASE_URL}/microsim`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as MicrosimReport;
+}
+
+// ---------------------------------------------------------------------------
+// Spatial traffic-assignment (SPEC §7.7) — POST /spatial
+// ---------------------------------------------------------------------------
+
+/** Aggregate network performance for one world (peak hour). */
+export interface NetworkState {
+  world: string; // 'A' baseline or 'B' policy
+  total_vehicle_hours: number;
+  mean_vc: number;
+  max_vc: number;
+  congested_arcs: number;
+  overcapacity_arcs: number;
+  mean_speed_kmh: number;
+  cordon_inflow_veh_per_hr: number;
+  total_vehicle_km: number;
+}
+
+/** Per-arc load in both worlds (notable/cordon/bottleneck arcs). */
+export interface ArcLoad {
+  arc_id: string;
+  from_zone: string;
+  to_zone: string;
+  road_class: string;
+  crosses_cordon: boolean;
+  capacity_veh_per_hr: number;
+  flow_a: number;
+  flow_b: number;
+  vc_a: number;
+  vc_b: number;
+  speed_a_kmh: number;
+  speed_b_kmh: number;
+  delta_flow: number;
+}
+
+/** A per-zone value in both worlds (accessibility or pollution). */
+export interface ZoneChange {
+  zone_id: string;
+  is_cbd: boolean;
+  value_a: number;
+  value_b: number;
+  delta: number;
+  delta_pct: number;
+}
+
+/** Gravity job-accessibility by congested car network (SPEC §7.7). */
+export interface AccessibilityReport {
+  metric: string;
+  tag: MetricTag;
+  mean_a: number;
+  mean_b: number;
+  mean_delta_pct: number;
+  top_gainers: ZoneChange[];
+  top_losers: ZoneChange[];
+}
+
+/** Road-CO₂ dispersion proxy by zone (SPEC §7.7). */
+export interface PollutionReport {
+  metric: string;
+  tag: MetricTag;
+  cbd_a: number;
+  cbd_b: number;
+  cbd_delta_pct: number;
+  network_total_a: number;
+  network_total_b: number;
+  biggest_drops: ZoneChange[];
+  biggest_rises: ZoneChange[];
+  displacement_note: string;
+}
+
+/** Full spatial traffic-assignment report (SPEC §7.7). */
+export interface SpatialReport {
+  policy_id: string;
+  provenance: MetricTag;
+  note: string;
+  peak_hour_car_trips_a: number;
+  peak_hour_car_trips_b: number;
+  world_a: NetworkState;
+  world_b: NetworkState;
+  cordon_inflow_delta_pct: number;
+  vehicle_hours_delta_pct: number;
+  notable_arcs: ArcLoad[];
+  bottlenecks_a: ArcLoad[];
+  bottlenecks_b: ArcLoad[];
+  accessibility: AccessibilityReport;
+  pollution: PollutionReport;
+  params: Record<string, unknown>;
+  not_modelled: string[];
+}
+
+/**
+ * Run the peak-hour spatial traffic assignment via `POST /spatial`. Builds ahead
+ * of / alongside the backend against the documented contract; throws on
+ * network/HTTP error so the panel can show an honest waiting/error state rather
+ * than inventing link flows (SPEC §34).
+ */
+export async function runSpatial(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<SpatialReport> {
+  const res = await fetch(`${API_BASE_URL}/spatial`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as SpatialReport;
+}

@@ -391,3 +391,25 @@ Dated notes, newest at the bottom. One line per shipped item.
   `frontend/README.md` endpoint map (now 21 surfaces incl. /simulate/amend). `tsc
   --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4 static pages).
   **M16 complete — the dedicated amendment-comparison endpoint is now surfaced.**
+
+- 2026-08-13 — **M17: Distributional microsimulation surface — POST /microsim (SPEC §7.3).**
+  The engine shipped `POST /microsim` (person-level "who gains, who loses, by how
+  much") after M16 declared the UI roadmap complete; this run surfaces it. Added
+  `GroupImpact` + `MicrosimReport` types and a `runMicrosim()` client to `lib/api.ts`
+  (documented contract: `{ policy }` → per-agent distribution). New `MicrosimPanel`
+  renders: a winners/losers/unaffected split with a share bar + population mean
+  per-trip generalized-cost change + named biggest-winner / worst-hit groups; a
+  prominent **charge-burden regressivity** card (ratio → verdict progressive/flat/
+  regressive, payer count, mean payer burden %); and four breakdown tables — by
+  income decile (with a burden-%-of-income column), household type, home
+  neighbourhood, occupation — each row showing Δ generalized cost (scaled bar),
+  daily money-equivalent, and the better/worse split. Honesty: welfare is
+  deterministic/LLM-free → stamped Simulated, the money-equivalent uses a documented
+  value-of-time → Estimated (both provenance classes shown); `not_modelled` list +
+  auditable `params` surfaced; honest waiting/idle/error states — never invents a
+  distribution when the backend is down (the current :8000 host is a different
+  service, so the panel correctly stays in its pre-run state). Wired a new
+  **Microsim** tab into `PanelTabs`; added ~230 lines of scoped `.ms-*` CSS reusing
+  the theme tokens + existing `.eco-*`/`.tag.*` classes. Updated `frontend/README.md`
+  endpoint map (now 22 surfaces incl. /microsim). `tsc --noEmit` clean, `next lint`
+  clean (0 warnings), `next build` clean (4/4 static pages). **M17 complete.**
