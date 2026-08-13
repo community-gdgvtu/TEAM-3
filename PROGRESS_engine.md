@@ -821,3 +821,44 @@ Roadmap was SPEC-complete (37/37, 323 green), so rather than invent speculative 
 - Ends with a live **§34 guardrail audit** on the composed payload: every headline metric carries a provenance tag; the Δ uncertainty band is non-decreasing across the horizon (read from `delta.series[*].points[*].low/high`); every media headline is labelled SIMULATED; debate & media prose is tagged Generated (numbers stay Simulated). Returns a **non-zero exit code** if any guardrail fails, so it's a real smoke gate, not just pretty output. Flags: `--json` (raw `/run` payload for scripting), `--text` (custom policy), `--horizon` (months). ANSI colour auto-disables when stdout isn't a TTY; progress line goes to stderr so `--json` stays pipeable.
 - **No new numeric model, no LLM** — it only reads existing endpoints (SPEC §34). Guarded by `backend/tests/test_demo_script.py` (5 tests: script present, runs + audit passes with all §29 sections rendered, `--json` is a valid `/run` payload with every composed section, guardrails hold at horizons 12 & 60).
 - `python -m pytest -q` → **328 passed** (was 323); app still boots with **42 routes**.
+
+---
+
+## 2026-08-13 — ENGINE-track: North-Star answer endpoint (SPEC §37) — `POST /north-star`
+
+Roadmap was SPEC-complete (39/39, 328 green) and the whole backend re-verified green this
+run. Rather than invent speculative numeric layers (a §34 risk on a demo-ready engine), I built
+the **one named SPEC deliverable with no first-class endpoint**: **§37 "North-Star Experience"** —
+the minister's *"What happens if we implement this?"* answer, which the SPEC ends with ("That is
+URBAN."). It is a **different, larger composition than `/run`**: `/run` scripts the §28/§29 demo
+beats (compile→sim→public→parliament→amendment→media); §37 is the explicit ministerial *answer*
+that also assembles the analogue layer, the uncertainty fan, who-gains/who-loses microdata, the
+ranked failure register, the opinion-diffusion arc, the optimiser's best-fit config, and the full
+assumption/guardrail ledger.
+
+- New `backend/app/northstar/` (`schema.py`, `service.py`, `__init__.py`) + `backend/app/routers/northstar.py`
+  → `POST /north-star`. Returns the **fixed 15-line §37 narrative**, each line a `NorthStarSection`
+  with a deterministic one-sentence `lead` (read straight off the numbers) + provenance tag, plus the
+  **full backing object** for each line embedded verbatim.
+- **Pure orchestration — no new numeric model, no LLM in any figure (SPEC §34).** Every section reuses
+  an existing layer service so the answer can never disagree with the standalone tabs:
+  `/simulate` world_a + event_ledger (§37.1/3), `run_analogues` (§37.2), snapped-horizon headline =
+  `/simulate` Δ (§37.4), `run_uncertainty` on the flagship cordon metric, 80 seeded MC draws (§37.5),
+  `build_microsim_report` winners/losers/regressivity (§37.6/7), `build_failure_register` (§37.8), the
+  most-confident non-supporting `/parliament/debate` argument (§37.9), `run_diffusion` (§37.10),
+  `run_media` SIMULATED feed (§37.11), up to **three deterministically-derived risk-reducing
+  amendments** each re-simulated via `compare_amendment` (§37.12/13 — regressivity→exempt low-income,
+  crowding→full reinvest, backlash→half-strength phase-in), `/optimise` best-balanced for the caller's
+  objective/constraints (§37.14), and the live `/registry` assumption index + §34 guardrails asserting
+  `llm_touches_numbers=False` (§37.15).
+- **Guarded** by `backend/tests/test_northstar.py` (12 tests): fixed 1..15 order + allowed tags;
+  baseline==/simulate world_a; median outcome==/simulate Δ at horizon; analogues==/analogues at the
+  snapped horizon; opposition argument is a real most-confident non-supporting debate contribution;
+  best_configuration==/optimise for the same objective/constraints; evidence assumptions==/registry
+  with `llm_touches_numbers False`; ≤3 re-simulated amendments incl. the low-income exemption; two
+  identical calls byte-identical; every media headline labelled SIMULATED; 422 when neither text nor
+  policy supplied. Also added `/north-star` to `test_integration_smoke.py` so the global provenance-tag
+  + no-LLM guardrail covers it.
+- Mirrors `/run`'s NL-compile-or-precompiled input + 422 validator. Pure additive composition — no
+  existing `backend/app/**` layer changed.
+- `python -m pytest -q` → **340 passed** (was 328); app boots with **43 routes** (was 42).
