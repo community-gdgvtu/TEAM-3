@@ -627,3 +627,41 @@ difference-in-differences, no transferability scoring, no endpoint. Now a first-
   headline (no per-corridor/distributional transfer — those are the spatial/microsim layers); transfer
   assumes similar behavioural response; coarse charge bucket, not PPP-adjusted.
 - 12 tests; **266 green** (was 254), app boots with **35 routes** (was 33).
+
+## 2026-08-13 — Time-Series Layer (SPEC §7.2) [NEW LAYER]
+
+Engine roadmap was 100% checked (31/31). Rather than invent marginal features, closed the one
+**genuine remaining SPEC §7 gap**: of the seven enumerated hybrid-forecast sub-layers, §7.1/§7.3/§7.4/
+§7.5/§7.6/§7.7 all shipped as first-class layers, but **§7.2 (Time-Series Layer)** had no dedicated
+implementation — it lived only implicitly as the reduced-form elasticity method *inside* the ensemble,
+and `app/baseline/timeseries.py` is just a fixed-growth projection with a hand-set band, not a fitted
+statistical model. §7.2 asks specifically for the layer that treats variables whose temporal structure
+is informative and says: "Forecast World A first. Then policy models alter the baseline trajectory."
+
+- `backend/app/timeseries/` (`params.py`, `history.py`, `schema.py`, `model.py`) + `backend/app/routers/
+  timeseries.py` → `POST /timeseries`.
+- **Synthetic history** (`history.py`): seeded monthly DGP per metric — trend + annual seasonality +
+  AR(1) noise — **anchored** so the final month equals the deterministic ABM baseline snapshot value.
+  The anchor keeps §7.2 continuous with `/simulate` (cross-layer consistency, SPEC §34); the path is
+  honestly labelled **Simulated** synthetic history, not real observations (the synthetic city keeps no
+  real logs). Damped trend/seasonality/noise for %-share metrics.
+- **Structural fit** (`model.py`): OLS local-linear-trend + 12-month seasonal dummies, AR(1) on the
+  residuals. **Forecasts World A first** across the Time-Machine checkpoints. Prediction-interval
+  variance is **derived from the fit** — regression mean-estimation variance (`σ²·x₀ᵀ(XᵀX)⁻¹x₀`, grows
+  with the extrapolation distance) + accumulated AR(1) innovation variance (`σ_e²(1−φ^{2h})/(1−φ²)`) —
+  so the band **widens with horizon** honestly (SPEC §34) instead of by a pasted-on assumption. Reports
+  in-sample MAPE **and** an honest out-of-sample backtest (refit on all but a held-out 12-month tail →
+  forecast MAPE).
+- **Policy step**: the deterministic ABM Δ(B−A) shifts the fitted World-A trajectory to World B —
+  multiplicative for volumes, additive %-points for shares. "Policy models alter the baseline
+  trajectory" (§7.2 verbatim). Demo £12 reinvest charge: World-A cordon drifts ~3.3–3.7k/day with a
+  fan-out band (95% width 142→425 trips over 10 yr, monotone), World B ≈ −92% post-T0 (tracks the ABM);
+  a zero-charge no-op leaves World B ≡ World A; share shift additive, 0 at T0.
+- Provenance: synthetic history **Simulated**, statistical baseline forecast **Estimated**, policy shift
+  **Simulated**. Deterministic, no LLM in any number (SPEC §7.2/§8/§34). Registered in the §33 registry
+  (`time_series`, `llm_touches_numbers=False`, assumptions read live from `DEFAULT_TS_PARAMS`) → **15
+  layers**. Added to the integration-smoke + determinism-regression standing guards.
+- Honest `not_modelled`: synthetic (not measured) history; univariate per metric (no VAR / exogenous
+  regressors beyond trend/seasonality); Gaussian intervals (not a full Bayesian posterior / bootstrap);
+  the behavioural response is the ABM's — the TS layer only shapes the baseline trajectory + uncertainty.
+- 9 tests; **275 green** (was 266), app boots with **36 routes** (was 35).

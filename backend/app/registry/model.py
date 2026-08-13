@@ -17,6 +17,7 @@ from ..opinion.params import OpinionParams
 from ..simulation.levers import DEFAULT_SIM_PARAMS
 from ..simulation.timeline import DEFAULT_ADAPTATION
 from ..spatial.params import DEFAULT_SPATIAL_PARAMS
+from ..timeseries.params import DEFAULT_TS_PARAMS
 from .schema import (
     AssumptionRecord,
     DataSourceCard,
@@ -59,6 +60,31 @@ def _baseline_assumptions() -> list[AssumptionRecord]:
              "Annualisation factor", est),
         _rec("car_co2_kg_per_km", "Tailpipe CO₂ factor", p.car_co2_kg_per_km, "kg/veh-km",
              "Average petrol car; totals become Simulated once multiplied by modelled veh-km", est),
+    ]
+
+
+def _timeseries_assumptions() -> list[AssumptionRecord]:
+    t = DEFAULT_TS_PARAMS
+    est = MetricTag.estimated
+    return [
+        _rec("history_months", "Synthetic history length", t.history_months, "months",
+             "Monthly pre-implementation history manufactured to fit (Simulated, anchored to ABM baseline)", est),
+        _rec("season_period", "Seasonal period", t.season_period, "months", "Annual seasonality", est),
+        _rec("trend_per_year", "Synthetic-history trend", t.trend_per_year, "relative/yr",
+             "Mild demand drift of the synthetic history for volume metrics", est),
+        _rec("seasonal_amplitude", "Synthetic seasonal amplitude", t.seasonal_amplitude, "relative",
+             "Annual seasonal swing of the synthetic history (volumes)", est),
+        _rec("ar1_phi", "Synthetic AR(1) persistence", t.ar1_phi, "coefficient",
+             "Persistence of the synthetic-history noise", est),
+        _rec("noise_rel_sigma", "Synthetic noise std", t.noise_rel_sigma, "relative",
+             "Month-to-month wobble of the synthetic history (volumes)", est),
+        _rec("share_damping", "Share-metric damping", t.share_damping, "relative",
+             "Trend/seasonality/noise damping applied to %-share metrics", est),
+        _rec("holdout_months", "Backtest holdout", t.holdout_months, "months",
+             "Held-out tail for the out-of-sample MAPE backtest", est),
+        _rec("min_rel_sigma", "Interval floor", t.min_rel_sigma, "relative",
+             "Floor on residual std so a near-perfect fit still yields an honest band", est),
+        _rec("seed", "History RNG seed", t.seed, "int", "Fixed seed → byte-reproducible history (SPEC §34)", est),
     ]
 
 
@@ -497,6 +523,41 @@ def _models() -> list[ModelCard]:
             output_tag=MetricTag.estimated,
             code="app.analogues.model",
             assumptions=[],
+        ),
+        ModelCard(
+            id="time_series",
+            name="Structural time-series layer (World-A forecast)",
+            spec_sections=["§7.2", "§8"],
+            layer="Time-Series Layer (SPEC §7.2)",
+            method=(
+                "Fits a structural time-series model (OLS local-linear-trend + "
+                "12-month seasonal dummies, AR(1) on the residuals) to a seeded "
+                "synthetic monthly history anchored to the ABM baseline snapshot, "
+                "and forecasts World A across the Time-Machine checkpoints. "
+                "Prediction-interval variance is derived from the fit — regression "
+                "mean-estimation variance (grows with the extrapolation distance) "
+                "plus accumulated AR(1) innovation variance — so the band widens "
+                "with horizon. The deterministic ABM Δ(B−A) then alters the "
+                "baseline trajectory to give World B."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=[
+                "compiled Policy DSL",
+                "ABM baseline snapshot (anchor)",
+                "ABM Δ(B−A) trajectory",
+                "documented history/model assumptions",
+            ],
+            outputs=[
+                "synthetic history (Simulated)",
+                "World-A forecast + intervals (Estimated)",
+                "World-B forecast (policy-shifted, Simulated)",
+                "fit diagnostics + holdout backtest",
+            ],
+            output_tag=est,
+            code="app.timeseries.model",
+            assumptions=_timeseries_assumptions(),
         ),
     ]
 

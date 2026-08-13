@@ -45,6 +45,7 @@ _P = {"policy": DEMO_POLICY}
 DETERMINISTIC_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/simulate", _P),
     ("/spatial", _P),
+    ("/timeseries", _P),
     ("/microsim", _P),
     ("/economy", _P),
     ("/dynamics", _P),

@@ -114,6 +114,7 @@ POST_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/reproduce", _P),
     ("/sdg", _P),
     ("/spatial", _P),
+    ("/timeseries", _P),
     ("/stress-test", {**_P, "scenarios": ["recession", "fuel_price_spike"]}),
     ("/uncertainty", {**_P, "metric_key": "traffic.daily_vehicle_km", "samples": 20}),
     ("/optimise", {

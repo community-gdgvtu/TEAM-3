@@ -39,6 +39,7 @@ from .routers import (
     simulate,
     spatial,
     stress,
+    timeseries,
     uncertainty,
 )
 
@@ -88,6 +89,7 @@ def create_app() -> FastAPI:
     app.include_router(microsim.router)
     app.include_router(stress.router)
     app.include_router(analogues.router)
+    app.include_router(timeseries.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
