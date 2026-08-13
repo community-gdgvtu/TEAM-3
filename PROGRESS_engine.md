@@ -356,3 +356,48 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   `spatial/network.py`, `spatial/assignment.py`, `spatial/model.py`, `spatial/schema.py`,
   `spatial/__init__.py`, `routers/spatial.py`; registry + `main.py` wired.
   **9 new tests; 202 green** (was 193), app boots with **29 routes** (was 28).
+
+- 2026-08-13 10:42 UTC — **Distributional microsimulation layer (SPEC §7.3)** —
+  `backend/app/microsim/` + `POST /microsim`. SPEC §7.3 asks the microsimulation
+  layer, by name, to answer *Who gains? Who loses? By how much? Which decile? Which
+  neighbourhood? Which household type?* — and nothing answered it directly: the
+  cohort-opinion model produces a Likert **support** distribution and the optimiser
+  a single low-income-burden %, but neither is a £-and-minutes who-gains/who-loses
+  microdata table. This computes, for every synthetic commuter, the change in their
+  **minimum generalized cost** between World A and World B under the *same*
+  deterministic mode-choice model as `/simulate` (World A `mode_options`, World B
+  `policy_mode_options`, taking the argmin each side) — so a commuter who
+  re-optimises is credited with the cost of their **new** best option, a proper
+  discrete-choice welfare change, not a counterfactual they'd never take — plus the
+  out-of-pocket charge each agent actually pays. It rolls the person-level impact up
+  across **income deciles** (ranked live from synthetic incomes), **household size**
+  (1/2/3/4+), **home neighbourhood** (central-vs-outer + the most-adversely-affected
+  zones) and **occupation**. Each group carries mean gc-change (minutes-equiv), a
+  money-equivalent (Estimated, via the population value-of-time `money_to_minutes`),
+  mean charge paid/day, mean annual-charge **burden as % of income**, and
+  %worse-off / %better-off / %switched-mode. Headline: winners vs losers vs
+  unaffected, count of charge payers + their mean burden, and a **regressivity
+  ratio** = bottom-decile burden ÷ top-decile burden with a plain-language verdict,
+  plus named worst-hit and biggest-winner groups. Demo £12 full-reinvest charge:
+  **1438 winners** (transit users gaining from the reinvested service) / **1679
+  losers** / 4868 unaffected; the flat charge is **3.6× regressive** on out-of-pocket
+  burden (bottom vs top decile) — yet *more* high-income commuters are worse off
+  overall because they drive more, and the report surfaces both dimensions rather
+  than collapsing them. Edge cases verified: a low-income exemption zeroes the
+  bottom-decile burden (regressivity→0); a general-fund charge (no reinvestment)
+  yields **0** transit winners vs 1438 with reinvestment; a no-op transit-investment
+  policy leaves everyone unaffected (winners=losers=payers=0); every commuter lands
+  in exactly one decile (partition checked). Welfare change Simulated, the
+  money-equivalent Estimated (documented population value-of-time; the per-agent GC
+  already weights money by each agent's own price sensitivity); fully deterministic,
+  no LLM (SPEC §7.3/§34). Registered in the §33 model registry (now **13 forecast
+  layers**, 11 numeric, 0 touching numbers with an LLM) and named in the
+  no-LLM-numbers guardrail. Honest `not_modelled`: commuter travel welfare only (no
+  wider household budgets, labour-supply changes, business costs, or in-kind gains
+  from reinvested revenue attributed back to individuals); a single population
+  value-of-time (true compensating variation is agent-specific, only approximated);
+  no tax/benefit interaction; deciles/household/occupation are the synthetic sample,
+  not a real administrative microdata register. New files: `microsim/schema.py`,
+  `microsim/model.py`, `microsim/__init__.py`, `routers/microsim.py`; registry +
+  `main.py` wired. **8 new tests; 210 green** (was 202), app boots with **30 routes**
+  (was 29).

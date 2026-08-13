@@ -390,6 +390,34 @@ def _models() -> list[ModelCard]:
             assumptions=_spatial_assumptions(),
         ),
         ModelCard(
+            id="microsimulation",
+            name="Distributional microsimulation (who gains / who loses)",
+            spec_sections=["§7.3"],
+            layer="Microsimulation Layer (SPEC §7.3)",
+            method=(
+                "Computes each synthetic commuter's change in minimum generalized "
+                "cost between World A and World B under the same deterministic mode-"
+                "choice model as /simulate, plus the out-of-pocket charge they pay, "
+                "and rolls the person-level welfare change up by income decile, "
+                "household type, home neighbourhood and occupation → winners/losers, "
+                "mean impact, and a charge-burden regressivity gradient. The welfare "
+                "change is Simulated; the money-equivalent uses a documented "
+                "Estimated population value-of-time."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["synthetic population (income/household/zone/occupation)", "policy levers"],
+            outputs=[
+                "winners / losers / unaffected",
+                "impact by decile / household / geography / occupation",
+                "charge-burden regressivity ratio",
+            ],
+            output_tag=sim,
+            code="app.microsim.model",
+            assumptions=[],
+        ),
+        ModelCard(
             id="policy_optimiser",
             name="Policy optimiser (grid search → Pareto set)",
             spec_sections=["§22"],
@@ -499,7 +527,8 @@ def _guardrails() -> list[GuardrailCheck]:
             enforced_by=(
                 "All numeric models (baseline, world_b, timeline, uncertainty, "
                 "opinion, diffusion, economic spillover, system dynamics, spatial "
-                "assignment, optimiser) are pure deterministic/seeded code; LLM use "
+                "assignment, microsimulation, optimiser) are pure deterministic/"
+                "seeded code; LLM use "
                 "is confined to prose (parliament, media) and language structuring "
                 "(policy compiler)."
             ),

@@ -26,6 +26,7 @@ from .routers import (
     health,
     institutions,
     media,
+    microsim,
     optimise,
     parliament,
     policy,
@@ -80,6 +81,7 @@ def create_app() -> FastAPI:
     app.include_router(economy.router)
     app.include_router(dynamics.router)
     app.include_router(spatial.router)
+    app.include_router(microsim.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
