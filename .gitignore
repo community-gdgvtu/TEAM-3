@@ -29,3 +29,8 @@ data/generated/
 .DS_Store
 .vscode/
 .idea/
+
+# Dev-loop concurrency locks
+.devlock/
+.lock-engine/
+.lock-ui/

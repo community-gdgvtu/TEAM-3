@@ -10,7 +10,7 @@ Work top-to-bottom. Each run, do as many items as you can finish cleanly (commit
 label generated media SIMULATED; uncertainty widens with horizon).
 
 ## M3 — Policy simulation (World B) + time machine
-- [ ] `backend/app/sim/` — apply the compiled Policy DSL to the mode-choice + traffic model: congestion charge raises car generalized cost inside the cordon; pedestrianisation removes car access on cordon links; revenue → bus frequency → transit access/speed improvement. Deterministic, no LLM. (SPEC §7.5/§7.7)
+- [x] `backend/app/simulation/` — apply the compiled Policy DSL to the mode-choice + traffic model: congestion charge raises car generalized cost inside the cordon; pedestrianisation removes car access on cordon links; revenue → bus frequency → transit access/speed improvement. Deterministic, no LLM. (SPEC §7.5/§7.7) [DONE in commit 197f244 — module is `backend/app/simulation/`, reuse it]
 - [ ] Timeline checkpoints (T0,1m,3m,5m,1y,2y,5y,10y): staged adaptation (behaviour substitution short-run, transit capacity ramp funded by revenue mid-run) with confidence bands that widen with horizon (SPEC §9/§24)
 - [ ] `POST /simulate` — body = Policy DSL (+ optional shocks/seed); returns World A, World B, Δ(B−A) per metric across checkpoints, tagged Simulated
 - [ ] Event ledger (SPEC §10): structured events (e.g. transit capacity exceeded, cordon load drop) with cause/affected/confidence/downstream — this is the shared truth other engines read
