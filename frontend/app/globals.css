@@ -116,3 +116,223 @@ code {
   font-size: 0.85rem;
   margin-top: 1rem;
 }
+
+/* --- Policy compiler ---------------------------------------------------- */
+
+.policy-input {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.policy-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.policy-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #06122b;
+  font-weight: 600;
+}
+
+.error-text {
+  color: var(--bad);
+}
+
+.compiled {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  color: var(--muted);
+}
+
+.tag.generated {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tag.muted {
+  opacity: 0.8;
+}
+
+.warnings {
+  margin: 0 0 0.75rem;
+  padding-left: 1.1rem;
+  color: var(--bad);
+  font-size: 0.85rem;
+}
+
+.assumptions-title {
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+ul.assumptions {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.assumption {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+
+.assumption-head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.field {
+  font-size: 0.82rem;
+}
+
+.source {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.source.stated {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.source.inferred {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.source.default {
+  color: var(--muted);
+}
+
+.confidence {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.assumption-control {
+  margin-top: 0.5rem;
+}
+
+.value-input {
+  width: 100%;
+  max-width: 22rem;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+
+.value-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.value-readonly {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.rationale {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.dsl-json {
+  margin-top: 1rem;
+}
+
+.dsl-json summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.dsl-json pre {
+  margin-top: 0.6rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}

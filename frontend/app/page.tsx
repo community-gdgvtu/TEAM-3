@@ -1,4 +1,5 @@
 import HealthStatus from "./HealthStatus";
+import PolicyCompiler from "./PolicyCompiler";
 
 export default function Home() {
   return (
@@ -13,6 +14,8 @@ export default function Home() {
         <strong>Simulated</strong> or <strong>Generated</strong>, and long-run
         uncertainty widens honestly.
       </p>
+
+      <PolicyCompiler />
 
       <HealthStatus />
 

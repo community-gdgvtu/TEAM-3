@@ -15,7 +15,7 @@ Demo policy: *Pedestrianise / price vehicles entering a central district and rei
 
 ## M1 — Policy compiler (NL → Policy DSL)
 - [x] `POST /policy/compile`: NL policy text → structured Policy DSL (SPEC §3) via LLM, with fallback rule-based parser
-- [ ] Frontend policy input box + editable extracted-assumptions panel
+- [x] Frontend policy input box + editable extracted-assumptions panel
 
 ## M2 — Baseline digital twin + synthetic population
 - [ ] Generate ≥5k numerical micro-agents (origin/dest, income, car access, price sensitivity) — SPEC §6
