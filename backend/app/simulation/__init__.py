@@ -8,7 +8,12 @@ baseline. No LLM touches the numeric path (SPEC §34).
 
 from .levers import DEFAULT_SIM_PARAMS, PolicyLevers, SimParams, derive_levers
 from .model import choose_mode_policy, compute_world_b
-from .schema import BehaviouralRule, WorldBMetrics
+from .schema import BehaviouralRule, WorldBMetrics, WorldBTimeSeries
+from .timeline import (
+    DEFAULT_ADAPTATION,
+    AdaptationParams,
+    build_world_b_timeline,
+)
 
 __all__ = [
     "derive_levers",
@@ -18,5 +23,9 @@ __all__ = [
     "choose_mode_policy",
     "compute_world_b",
     "WorldBMetrics",
+    "WorldBTimeSeries",
     "BehaviouralRule",
+    "build_world_b_timeline",
+    "AdaptationParams",
+    "DEFAULT_ADAPTATION",
 ]

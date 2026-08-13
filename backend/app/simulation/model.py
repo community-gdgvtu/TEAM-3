@@ -97,16 +97,31 @@ def compute_world_b(
     policy: PolicyDSL,
     params: BaselineParams = DEFAULT_PARAMS,
     sim: SimParams = DEFAULT_SIM_PARAMS,
+    reinvestment: bool = True,
 ) -> WorldBMetrics:
     """Run the policy mode-choice model over the whole synthetic population.
 
     Returns a fully provenance-tagged :class:`WorldBMetrics` snapshot — the
     with-intervention counterpart to the baseline. The behavioural levers derived
     from ``policy`` are attached for the Evidence Drawer (SPEC §7.5).
+
+    ``reinvestment`` gates the revenue → transit service uplift. Set it ``False``
+    to obtain the *short-run* reachable state (people substitute away from the
+    charge/ban immediately, but the revenue-funded transit capacity ramp has not
+    yet landed). The timeline builder (:mod:`app.simulation.timeline`) uses both
+    the reinvestment-off and reinvestment-on anchors to stage adaptation over the
+    Time Machine horizon (SPEC §9).
     """
     agents = dataset.population_agents()
     cbd_zone_ids = dataset.cbd_zone_ids()
     levers = derive_levers(policy, params=params, sim=sim)
+    if not reinvestment:
+        # Short-run anchor: the behavioural substitution has happened, but the
+        # transit capacity funded by revenue has not been built yet, so the
+        # service-quality levers are neutral and their audit rule is dropped.
+        levers.transit_fare_multiplier = 1.0
+        levers.transit_speed_multiplier = 1.0
+        levers.rules = [r for r in levers.rules if r.name != "transit_reinvestment"]
     trips = params.trips_per_commuter_per_day
 
     counts = {CAR: 0, TRANSIT: 0, WALK: 0}

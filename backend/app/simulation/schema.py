@@ -23,8 +23,11 @@ from pydantic import BaseModel, Field
 
 # Reuse the baseline metric families so World A / World B are directly comparable.
 from ..baseline.schema import (
+    Checkpoint,
     EmissionsMetrics,
     Metric,
+    MetricPoint,
+    MetricSeries,
     MetricTag,
     ModeShare,
     TrafficMetrics,
@@ -97,4 +100,42 @@ class WorldBMetrics(BaseModel):
     )
     params: dict = Field(
         default_factory=dict, description="Simulation assumptions used (auditable)."
+    )
+
+
+class WorldBTimeSeries(BaseModel):
+    """World-B metric trajectories across the Time Machine checkpoints (SPEC §9).
+
+    Unlike the baseline (which drifts only with exogenous demand), World B ramps
+    from the no-intervention state toward the fully-adapted policy state in two
+    transparent, deterministic stages (SPEC §9/§24):
+
+    * **Behavioural substitution (short run)** — commuters re-choose their mode
+      almost immediately once the charge/ban lands; this fraction saturates
+      within a few months.
+    * **Transit capacity ramp (mid run)** — the revenue-funded service uplift is
+      planned and built with a lag, so it phases in over the first years and only
+      then delivers its full pull onto transit.
+
+    Every point is :class:`MetricTag.simulated` (a deterministic transform of the
+    structural anchors — no LLM, SPEC §34). The confidence band widens
+    monotonically with the horizon, and is wider than the baseline's because a
+    policy response is inherently less certain than "nothing changes".
+    """
+
+    world: str = Field("B", description="'B' = with intervention (SPEC §5).")
+    provenance: MetricTag = Field(MetricTag.simulated)
+    note: str = Field(
+        default=(
+            "World-B projection: staged adaptation (short-run behaviour "
+            "substitution + mid-run revenue-funded transit ramp) between the "
+            "no-intervention baseline and the fully-adapted policy state, with a "
+            "horizon-widening confidence band. Deterministic — no LLM (SPEC §34)."
+        )
+    )
+    policy_id: str
+    checkpoints: list[Checkpoint] = Field(default_factory=list)
+    series: list[MetricSeries] = Field(default_factory=list)
+    adaptation: dict = Field(
+        default_factory=dict, description="Staged-adaptation assumptions used (auditable)."
     )
