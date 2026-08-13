@@ -1068,3 +1068,17 @@ Frontend-only.
   `lib/api.ts`; registered the tab right after Stress; re-synced `frontend/README.md`
   (32→33 surfaces, endpoint→SPEC row + prose). `npx tsc --noEmit`, `npx next build`
   (/ = 71 kB, First Load 159 kB), `npx next lint`, and `npm test` (14 pass) all clean.
+
+- 2026-08-13 — M39: guarded the client-side city model, the biggest untested §34
+  surface. Added `frontend/tests/cityModel.test.mts` (14 tests, +0 deps, auto-picked
+  by the `tests/*.test.mts` glob) over `lib/cityModel.ts` + `lib/city.ts`: exact
+  arithmetic for `cityConstants` (incl. empty-matrix zeros-not-NaN), `inflowByZone`,
+  and `deltaPct` (zero/NaN/Infinity reference → `null`, no Infinity leak into a
+  headline); plus `predict` invariants — year-0 shares = today's split (ramp 0),
+  0–10 horizon clamped both ends, charge cuts CBD car share/CO₂ and lifts transit,
+  public realm ramps slowly, baseline drifts up with growth, all outputs within
+  documented bounds (support 0.05–0.95, congestion 0–1.6, shares 0–1, non-negative,
+  finite) swept over every scenario × the horizon, and CO₂ = vehicle-km × the one
+  published tailpipe factor. 28 tests total, all green. `npx tsc --noEmit`,
+  `npx next lint` (clean), `npx next build` (/ = 71 kB, First Load 159 kB), and
+  `npm test` (28 pass) all clean. No runtime code changed.
