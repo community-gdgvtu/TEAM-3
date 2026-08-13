@@ -84,7 +84,7 @@ export default function CityMapPanel({ timeLabel }: CityMapPanelProps) {
   const transitLoading = overlay === "transit" && !od;
 
   return (
-    <section className="map-section card">
+    <section className="map-section card" data-tour="map">
       <div className="map-header">
         <div>
           <h2>Meridia — 3D world</h2>

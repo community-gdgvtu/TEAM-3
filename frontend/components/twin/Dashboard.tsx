@@ -84,7 +84,7 @@ export default function Dashboard({
   }, [sim]);
 
   return (
-    <section className="card dashboard">
+    <section className="card dashboard" data-tour="outcomes">
       <div className="dashboard-head">
         <h2>Outcomes</h2>
         <span className="dashboard-sub">

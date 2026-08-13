@@ -53,3 +53,8 @@ never invent one when the backend is down. Endpoint paths as documented.
 - [x] Counterfactual compare tab: `POST /compare` → World A (baseline) vs B (intervention) vs amendment worlds C/D…, headline table of every world + Δ per metric at one horizon; baseline always present (SPEC §21)
 - [x] Uncertainty fan tab: `POST /uncertainty` → Monte-Carlo median + 50/80/95% bands per horizon for a chosen metric, ranked most-influential assumptions, behavioural-regime disagreement (SPEC §24)
 - [x] Policy optimiser tab: `POST /optimise` → objective + constraints → feasible Pareto frontier + representative picks (cheapest / most equitable / largest emissions cut / best balanced); outcomes Simulated, budget proxy Estimated (SPEC §22)
+
+## M11 — Demo & presentation polish (SPEC §29)
+Every documented engine endpoint now has a UI surface. This milestone makes the
+whole thing legible to a judge in 60 seconds without inventing any numbers.
+- [x] Guided demo tour: a floating launcher runs a spotlight walkthrough of the real UI — draft → compile → run counterfactual → scrub time → read tagged outcomes → Parliament debate/amendment → Red Team → transparency Registry. Pure guidance (never renders/fabricates a metric); drives the analysis tab bar; keyboard + Esc nav (SPEC §29)

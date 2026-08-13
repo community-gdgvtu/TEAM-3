@@ -10,8 +10,9 @@
  * bar until the compiler publishes a DSL (each panel also guards itself).
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { subscribeDemoTab } from "../../lib/demo";
 import ParliamentPanel from "./ParliamentPanel";
 import PublicReactionPanel from "./PublicReactionPanel";
 import PressFeedPanel from "./PressFeedPanel";
@@ -65,8 +66,11 @@ export default function PanelTabs() {
   const { policy } = useTwin();
   const [active, setActive] = useState<TabKey>("parliament");
 
+  // Let the guided demo drive the tab bar (its keys are a subset of TabKey).
+  useEffect(() => subscribeDemoTab((tab) => setActive(tab)), []);
+
   return (
-    <div className="panel-tabs">
+    <div className="panel-tabs" data-tour="tabs">
       <div className="tabbar" role="tablist" aria-label="Analysis panels">
         {TABS.map((t) => (
           <button

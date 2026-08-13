@@ -2,6 +2,7 @@ import HealthStatus from "./HealthStatus";
 import PolicyCompiler from "./PolicyCompiler";
 import TwinWorkspace from "../components/twin/TwinWorkspace";
 import PanelTabs from "../components/twin/PanelTabs";
+import DemoTour from "../components/twin/DemoTour";
 import { TwinProvider } from "../components/twin/TwinStore";
 
 export default function Home() {
@@ -26,6 +27,9 @@ export default function Home() {
 
         {/* … then the [Parliament] [Public] [Press] [Red Team] tabs. */}
         <PanelTabs />
+
+        {/* Floating launcher for the SPEC §29 60-second guided walkthrough. */}
+        <DemoTour />
       </TwinProvider>
 
       <HealthStatus />

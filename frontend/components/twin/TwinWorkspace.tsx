@@ -85,7 +85,7 @@ export default function TwinWorkspace() {
             onExplain={policy ? setExplainKey : undefined}
           />
         ) : (
-          <section className="card dashboard">
+          <section className="card dashboard" data-tour="outcomes">
             <div className="dashboard-head">
               <h2>Outcomes</h2>
               <span className="dashboard-sub">
@@ -111,7 +111,7 @@ export default function TwinWorkspace() {
       </div>
 
       {/* SPEC §27: draggable timeline spans the full width below the two panels. */}
-      <section className="card timeline-card">
+      <section className="card timeline-card" data-tour="timeline">
         {status === "loading" && (
           <div className="map-placeholder" style={{ height: "auto" }}>
             <span className="dot" /> <span>Loading baseline…</span>

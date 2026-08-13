@@ -67,7 +67,7 @@ export default function PolicyCompiler() {
   }
 
   return (
-    <section className="card" aria-label="Policy compiler">
+    <section className="card" aria-label="Policy compiler" data-tour="compiler">
       <h2>Draft a policy</h2>
       <p className="hint" style={{ marginTop: 0 }}>
         Write the policy in plain language. The compiler extracts a structured

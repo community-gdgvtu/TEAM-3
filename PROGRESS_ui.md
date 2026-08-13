@@ -270,3 +270,21 @@ Dated notes, newest at the bottom. One line per shipped item.
   lib/api.ts; wired as a new "Optimiser" tab (tabbar hint notes it runs without a
   compiled policy). **M10 complete — every documented engine endpoint now has a UI
   surface.** `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M11.1: Guided demo tour (SPEC §29). With every documented engine
+  endpoint now surfaced, added a presentation layer that walks a judge through the
+  60-second flow. New `lib/demo.ts` holds the ordered TOUR_STEPS (draft → compile →
+  run counterfactual → scrub the Time Machine → read the tagged outcome tiles →
+  Parliament debate + amendment re-sim → Red Team failure register → transparency
+  Registry) plus a tiny pub/sub (`subscribeDemoTab`/`requestDemoTab`) so a step can
+  switch the analysis tab bar without lifting PanelTabs' local state into a global
+  store. New `DemoTour` component renders a fixed "▶ Guided demo" launcher and, once
+  open, a spotlight overlay: it scrolls each step's `data-tour` anchor into view,
+  punches a lit hole around it via a huge box-shadow dimmer, and shows a caption
+  card with Back/Next/Done, a step counter, ✕/Esc close and ←/→ keyboard nav; the
+  spotlight re-measures on scroll/resize so it stays glued to its anchor. Added
+  stable `data-tour` anchors to the compiler, 3D map, outcomes dashboard (both the
+  ready and waiting-for-backend states), timeline card and the tab bar; PanelTabs
+  subscribes to demo tab requests. Honesty (SPEC §34): the tour is pure guidance —
+  it never renders or invents a metric, it only points at what the backend produced
+  (or its "waiting for backend" state) and narrates the flow. `tsc --noEmit` +
+  `next build` clean.
