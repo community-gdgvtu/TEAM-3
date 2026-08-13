@@ -32,6 +32,7 @@ export default function TwinWorkspace() {
   const [simulating, setSimulating] = useState(false);
   const [simError, setSimError] = useState<string | null>(null);
   const [explainKey, setExplainKey] = useState<string | null>(null);
+  const [exampleTrace, setExampleTrace] = useState(false);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -83,6 +84,7 @@ export default function TwinWorkspace() {
             sim={sim}
             simSource={simSource}
             onExplain={policy ? setExplainKey : undefined}
+            onExampleTrace={() => setExampleTrace(true)}
           />
         ) : (
           <section className="card dashboard" data-tour="outcomes">
@@ -174,13 +176,17 @@ export default function TwinWorkspace() {
         )}
       </section>
 
-      {policy && explainKey && (
+      {policy && explainKey && !exampleTrace && (
         <EvidenceDrawer
           policy={policy}
           metricKey={explainKey}
           horizonMonths={checkpoints[index]?.t_months}
           onClose={() => setExplainKey(null)}
         />
+      )}
+
+      {exampleTrace && (
+        <EvidenceDrawer example onClose={() => setExampleTrace(false)} />
       )}
     </div>
   );

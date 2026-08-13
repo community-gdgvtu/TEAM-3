@@ -8,15 +8,18 @@
  * confidence.
  *
  * Fetches `POST /evidence` for the clicked metric key at the current Time Machine
- * horizon. Provenance (SPEC §34): every number here is copied straight from the
- * deterministic simulation (World A / World B / Δ); analogues and citations are
- * static reference facts. No LLM produced or edited a number on this path — the
- * drawer only re-exposes what the model computed.
+ * horizon — or, in `example` mode, the keyless `GET /evidence/example` for the
+ * canonical §26 peak-transit metric on the §28 demo congestion charge, so a judge
+ * landing cold with no compiled policy can still open the drawer and walk the full
+ * causal ladder. Provenance (SPEC §34): every number here is copied straight from
+ * the deterministic simulation (World A / World B / Δ); analogues and citations
+ * are static reference facts. No LLM produced or edited a number on this path —
+ * the drawer only re-exposes what the model computed.
  */
 
 import { useEffect, useState } from "react";
 
-import { runEvidence } from "../../lib/api";
+import { getEvidenceExample, runEvidence } from "../../lib/api";
 import type {
   BehaviouralRule,
   PolicyDSL,
@@ -28,9 +31,17 @@ import type {
 import { formatNumber, formatSignedPct } from "../../lib/format";
 
 export interface EvidenceDrawerProps {
-  policy: PolicyDSL;
-  metricKey: string;
+  /** Compiled policy to trace. Omitted in `example` mode. */
+  policy?: PolicyDSL;
+  /** Metric key to trace, e.g. `traffic.daily_vehicle_km`. Omitted in `example` mode. */
+  metricKey?: string;
   horizonMonths?: number;
+  /**
+   * Open the keyless `GET /evidence/example` trace (canonical §26 metric on the
+   * §28 demo policy) instead of `POST /evidence` — reachable with no compiled
+   * policy. Mints no numbers of its own; stamped as the demo, not the user's policy.
+   */
+  example?: boolean;
   onClose: () => void;
 }
 
@@ -40,18 +51,24 @@ export default function EvidenceDrawer({
   policy,
   metricKey,
   horizonMonths,
+  example = false,
   onClose,
 }: EvidenceDrawerProps) {
   const [status, setStatus] = useState<Status>("loading");
   const [trace, setTrace] = useState<ProvenanceTrace | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Refetch whenever the metric or horizon changes.
+  // Refetch whenever the metric or horizon changes. In example mode the keyless
+  // GET is used (no policy/metric/horizon inputs); otherwise the POST endpoint.
   useEffect(() => {
     const ctrl = new AbortController();
     setStatus("loading");
     setError(null);
-    runEvidence(policy, metricKey, horizonMonths, ctrl.signal)
+    const pending =
+      example || !policy || !metricKey
+        ? getEvidenceExample(ctrl.signal)
+        : runEvidence(policy, metricKey, horizonMonths, ctrl.signal);
+    pending
       .then((t) => {
         setTrace(t);
         setStatus("ready");
@@ -62,7 +79,7 @@ export default function EvidenceDrawer({
         setStatus("error");
       });
     return () => ctrl.abort();
-  }, [policy, metricKey, horizonMonths]);
+  }, [policy, metricKey, horizonMonths, example]);
 
   // Close on Escape.
   useEffect(() => {
@@ -86,7 +103,7 @@ export default function EvidenceDrawer({
           <div>
             <span className="drawer-eyebrow">Evidence trace</span>
             <h2 className="drawer-title">
-              {trace?.metric_label ?? metricKey}
+              {trace?.metric_label ?? metricKey ?? "Example evidence trace"}
             </h2>
           </div>
           <button
@@ -100,6 +117,16 @@ export default function EvidenceDrawer({
         </header>
 
         <div className="drawer-body">
+          {(example || !policy || !metricKey) && (
+            <p className="brief-example-note">
+              <span className="tag muted">Example</span>
+              <span>
+                the canonical §26 peak-transit metric on the §28 demo congestion
+                charge — <strong>not</strong> a policy you compiled.
+              </span>
+            </p>
+          )}
+
           {status === "loading" && (
             <div className="map-placeholder" style={{ height: "auto" }}>
               <span className="dot" /> <span>Tracing evidence…</span>

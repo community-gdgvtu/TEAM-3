@@ -80,7 +80,7 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | 3D city map + baseline | `GET /baseline` | §17/§27 |
 | Simulate / re-simulate | `POST /simulate` | §29 |
 | Outcomes dashboard tiles | (from `/simulate` + `/baseline`) | §27 |
-| Evidence drawer | `POST /evidence` | §26 |
+| Evidence drawer | `POST /evidence`, `GET /evidence/example` | §26 |
 | North-Star answer (the minister's question) | `POST /north-star`, `GET /north-star/example` | §37 |
 | Minister's Brief (North-Star as a printable Markdown memo) | `POST /brief`, `GET /brief/example` | §27/§37 |
 | Run — whole pipeline in one call | `POST /run`, `GET /run/example` | §28/§29 |

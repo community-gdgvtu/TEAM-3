@@ -29,6 +29,12 @@ export interface DashboardProps {
   simSource: SimSource | null;
   /** Open the evidence drawer for a metric key (only when a policy exists). */
   onExplain?: (metricKey: string) => void;
+  /**
+   * Open the keyless example causal trace (`GET /evidence/example`) — always
+   * available, even with no compiled policy, so a judge can see the §26 evidence
+   * ladder cold.
+   */
+  onExampleTrace?: () => void;
 }
 
 interface TileSpec {
@@ -70,6 +76,7 @@ export default function Dashboard({
   sim,
   simSource,
   onExplain,
+  onExampleTrace,
 }: DashboardProps) {
   const byKey = useMemo(() => {
     const m = new Map<string, MetricSeries>();
@@ -92,6 +99,16 @@ export default function Dashboard({
             ? `World B (${simSource?.label ?? "policy"}) vs baseline · Δ shown at the selected horizon`
             : "World A (baseline) at the selected horizon · uncertainty band widens with time"}
         </span>
+        {onExampleTrace && (
+          <button
+            type="button"
+            className="tile-evidence dashboard-example-trace"
+            onClick={onExampleTrace}
+            title="Open the keyless §26 causal trace for the demo policy (no policy needed)"
+          >
+            Example evidence trace ▸
+          </button>
+        )}
       </div>
 
       {sim && simSource?.amended && (

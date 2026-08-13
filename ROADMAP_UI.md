@@ -504,3 +504,21 @@ endpoint→surface map for the last keyless example helper the engine shipped:
 one-click UI surface. Pure surfacing of real backend data — the button mints no
 numbers and is explicitly stamped **not** the compiled policy.
 - [x] Add `getCompareExample()` (`GET /compare/example`) to `lib/api.ts` mirroring `runGrandCompare`'s honest throw-on-error contract (so the panel shows a waiting/error state, never an invented quartet), and wire a "Load example comparison" button into `GrandComparePanel` alongside "Compose A/B/C/D": it composes the body-less canonical §28 demo quartet so the tab is usable with no compiled policy in the store. Un-gated the whole panel from `!policy` (the horizon / World-D-target selectors and Compose button now disable — not vanish — until a policy exists) so the example is always reachable. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading/label text distinguishes example-vs-policy, and (c) a fresh compiled policy clears the example. Reuses the existing `.brief-example-note` + `.grand-controls` styles — no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §21/§22/§34)
+
+## M50 — Surface the keyless §26 causal trace: GET /evidence/example (SPEC §26/§34)
+The engine track's M51 (commit fc9d3e1) added `GET /evidence/example`: a
+zero-body sibling of `POST /evidence` that compiles the canonical §28 demo
+congestion charge and runs the *identical* `run_evidence` service on the metric
+SPEC §26 itself uses to motivate Explainability — peak transit demand, *"why does
+public transport demand rise?"*. Until now the Evidence Drawer (SPEC §26) was
+reachable **only** through a metric tile's "Evidence ▸" button, and those buttons
+only appear once a policy is compiled (`onExplain` is gated on `policy`). So a
+judge landing on the twin cold — no compiled policy — could not open the causal
+ladder at all, even though it's arguably the whole point of the Explainability
+story. This closes the endpoint→surface map for the last keyless example helper
+the engine shipped: `/brief`, `/run`, `/north-star`, `/backtest`, `/compare`, and
+now `/evidence` each have a one-click keyless UI surface. Pure surfacing of real
+backend data — the button mints no numbers (the trace is copied from the
+deterministic simulation, no LLM on the numeric path) and is explicitly stamped
+**not** a policy the user compiled.
+- [x] Add `getEvidenceExample()` (`GET /evidence/example`) to `lib/api.ts` mirroring `runEvidence`'s honest throw-on-error contract (so the drawer shows a waiting/error state, never an invented trace). Extend `EvidenceDrawer` with an `example` mode (props `policy`/`metricKey` now optional): in example mode it fetches the body-less keyless GET instead of `POST /evidence`, titles the drawer "Example evidence trace" until the metric label loads, and renders a `.brief-example-note` chip reading "the canonical §26 peak-transit metric on the §28 demo congestion charge — **not** a policy you compiled". Wire an always-available "Example evidence trace ▸" button into the Outcomes `dashboard-head` (`onExampleTrace`, ungated on policy) so the §26 ladder is reachable cold; `TwinWorkspace` renders the example drawer from a dedicated `exampleTrace` flag (kept separate from the policy-driven `explainKey`, so the two never fight). Added `.dashboard-example-trace` to `globals.css` (reuses `.tile-evidence`); no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §26/§34)

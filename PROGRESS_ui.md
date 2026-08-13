@@ -1256,3 +1256,24 @@ endpoints; the button mints no numbers. `tsc --noEmit`, `next lint` (0), `npm
 test` (41 pass), and `next build` all clean. This closes the endpoint→surface
 map for every keyless example helper the engine shipped: `/brief`, `/run`,
 `/north-star`, `/backtest`, `/compare` each now have a one-click UI surface.
+
+## 2026-08-13 — M50: surface the keyless §26 causal trace (GET /evidence/example)
+Added `getEvidenceExample()` (`GET /evidence/example`) to `lib/api.ts` with the
+same throw-on-error contract as `runEvidence`, and taught `EvidenceDrawer` an
+`example` mode (policy/metricKey now optional). In example mode the drawer fetches
+the body-less keyless GET — the engine's M51 sibling of `POST /evidence`, tracing
+the canonical §26 peak-transit metric ("why does public transport demand rise?")
+on the §28 demo congestion charge — and shows a `.brief-example-note` chip
+stamping it "**not** a policy you compiled". Wired an always-available "Example
+evidence trace ▸" button into the Outcomes `dashboard-head` (ungated on policy),
+rendered by `TwinWorkspace` via a dedicated `exampleTrace` flag kept separate from
+the policy-driven `explainKey`. Before this, the Evidence Drawer was reachable
+only via a metric tile's "Evidence ▸" button, which appears only once a policy is
+compiled — so a judge landing cold couldn't open the causal ladder at all. This
+closes the endpoint→surface map for the last keyless example helper: `/brief`,
+`/run`, `/north-star`, `/backtest`, `/compare`, and now `/evidence` each have a
+one-click keyless UI surface. No numbers minted (trace copied from the
+deterministic sim, no LLM on the numeric path). `tsc --noEmit`, `next lint`,
+`next build`, and `npm test` (41 pass) all clean. Note: the backend instance
+running on :8000 is stale (returns 404 for `/evidence/example`); the UI degrades
+to an honest "Evidence unavailable" state until the engine deploy catches up.

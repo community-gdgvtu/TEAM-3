@@ -605,6 +605,42 @@ export async function runEvidence(
   return (await res.json()) as ProvenanceTrace;
 }
 
+/**
+ * Trace the canonical §26 metric (peak transit demand — *"why does public
+ * transport demand rise?"*) for the §28 demo congestion charge with no request
+ * body (`GET /evidence/example`). A body-less GET so a judge landing cold — with
+ * no compiled policy in the store — can still open the Evidence Drawer and walk
+ * the whole causal ladder with one keyless click. It compiles the demo policy and
+ * runs the *identical* `run_evidence` service `POST /evidence` uses, so this
+ * surface can never disagree with the POST endpoint; every number is copied from
+ * the deterministic simulation with no LLM on the numeric path (SPEC §26/§34).
+ * Throws on network/HTTP error so the drawer shows an honest waiting/error state
+ * instead of inventing a trace.
+ */
+export async function getEvidenceExample(
+  signal?: AbortSignal,
+): Promise<ProvenanceTrace> {
+  const res = await fetch(`${API_BASE_URL}/evidence/example`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+      else if (body.detail && typeof body.detail === "object") {
+        const d = body.detail as { error?: string };
+        if (d.error) detail = d.error;
+      }
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as ProvenanceTrace;
+}
+
 // ---------------------------------------------------------------------------
 // Simulated media — POST /media (SPEC §15)
 // ---------------------------------------------------------------------------

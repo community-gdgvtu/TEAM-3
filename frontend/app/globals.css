@@ -2484,6 +2484,14 @@ ul.assumptions {
   background: rgba(79, 195, 209, 0.08);
 }
 
+/* Keyless §26 example-trace affordance in the Outcomes head: push to the right
+   edge and drop the tile's top margin so it aligns with the heading row. */
+.dashboard-example-trace {
+  margin-top: 0;
+  margin-left: auto;
+  align-self: center;
+}
+
 .tag.observed {
   color: #7fdce6;
   border-color: #7fdce6;
