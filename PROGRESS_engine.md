@@ -547,3 +547,27 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   guard, confirming it is not a no-op.
 - **237 green** (was 234), app boots with **33 routes**. Demo credibility claim now has all
   three §34 invariants under a standing test.
+
+## 2026-08-13 (engine run — new hardening guard: cross-layer mode-choice consistency)
+- Roadmap fully checked off (28 items + stretch/extended/hardening). Verified green first:
+  **237 tests passing**, app boots with **33 routes**. Rather than a fourth identical
+  verification commit, added a genuinely new hardening guard closing a real gap.
+- **Gap closed:** the spatial (§7.7) and microsim (§7.3) layers both claim to read the *same*
+  deterministic mode-choice model as `/simulate` — spatial via `choose_mode`/`choose_mode_policy`,
+  microsim via `mode_options`/`policy_mode_options`+`pick_mode`. Nothing enforced that these paths
+  actually agree with the canonical `/simulate` split. Per-layer tests check each layer in
+  isolation, so a refactor to `choose_mode` (that the `mode_options` path no longer mirrors), or a
+  layer sampling a different population, would silently build a road network / who-gains-who-loses
+  table on a *different* mode split than the headline numbers — the exact §34-forbidden cross-layer
+  contract drift the determinism/tag/widening guards don't catch (they check reproducibility,
+  provenance tags, and fan-out — not cross-layer numeric agreement).
+- **Added `backend/tests/test_cross_layer_consistency.py`** (test-track only, zero `backend/app/**`
+  change). Computes the canonical World-A/World-B car-commuter set from the population once, then
+  over **four structurally-distinct policies** (reinvesting charge, general-fund charge,
+  pedestrianisation, behavioural no-op) asserts: (1) `/simulate` reports the exact canonical car
+  counts; (2) the microsim primitives reproduce `choose_mode`/`choose_mode_policy` **agent-by-agent**;
+  (3) `_car_demand` loads exactly the canonical car set (peak trips = canonical × rep-factor ×
+  peak-share; mutation-checked that a one-driver drift trips it); (4) a no-op is identical across
+  layers; (5) all layers partition the one synthetic population.
+- **251 green** (was 237), app boots with **33 routes**. The "one source of truth for the mode
+  split" claim that lets spatial + microsim sit next to the ABM is now under a standing test.
