@@ -1,24 +1,48 @@
 /**
  * Guided-demo plumbing (SPEC §29, the 60-second flow).
  *
- * Two pieces:
- *  - a tiny pub/sub so the tour can ask `PanelTabs` to switch to a named analysis
- *    tab without lifting that component's local state into a global store;
- *  - the ordered list of tour steps. Each step points at a DOM anchor via a
- *    `data-tour` attribute and carries only *guidance* prose — the tour never
- *    renders or invents a metric, it just walks a judge through the real UI.
+ * The lower deck lives behind an ARIA tab bar (PanelTabs), so a step that
+ * targets an analysis panel first asks PanelTabs to switch to it (`tab`),
+ * then spotlights the shared `[data-tour="tabs"]` anchor. Steps carry only
+ * *guidance* prose — the tour never renders or invents a metric, it just
+ * walks a judge through the real UI.
  */
 
-/** Analysis-tab keys the tour can request (subset of PanelTabs' TabKey). */
+/** Analysis-tab keys the tour (or a feature card) can request — mirrors PanelTabs' TabKey. */
 export type DemoTab =
+  | "northstar"
+  | "brief"
+  | "run"
+  | "world"
+  | "citizen"
+  | "business"
   | "parliament"
   | "public"
   | "press"
+  | "presser"
   | "redteam"
-  | "run"
+  | "compare"
+  | "grand"
+  | "sdg"
+  | "diffusion"
+  | "ensemble"
+  | "uncertainty"
+  | "sensitivity"
+  | "optimiser"
+  | "economy"
+  | "dynamics"
+  | "microsim"
+  | "spatial"
+  | "stress"
+  | "robustness"
+  | "analogue"
+  | "timeseries"
+  | "institutions"
+  | "backtest"
   | "registry"
   | "reproduce"
-  | "northstar";
+  | "datafabric"
+  | "assumptions";
 
 type TabListener = (tab: DemoTab) => void;
 
@@ -35,13 +59,28 @@ export function requestDemoTab(tab: DemoTab): void {
   tabListeners.forEach((fn) => fn(tab));
 }
 
+type VoidListener = () => void;
+
+const openAdvancedListeners = new Set<VoidListener>();
+
+/** Subscribe to "open the full twin" requests; returns an unsubscribe fn. */
+export function subscribeOpenAdvanced(fn: VoidListener): () => void {
+  openAdvancedListeners.add(fn);
+  return () => openAdvancedListeners.delete(fn);
+}
+
+/** Ask the Advanced disclosure to expand. No-op if none is listening. */
+export function requestOpenAdvanced(): void {
+  openAdvancedListeners.forEach((fn) => fn());
+}
+
 export interface TourStep {
-  /** CSS selector of the element to spotlight (a stable `[data-tour="…"]`). */
+  /** CSS selector of the element to spotlight. */
   selector: string;
+  /** Analysis tab to switch to before spotlighting, if any. */
+  tab?: DemoTab;
   title: string;
   body: string;
-  /** If set, switch the analysis tab bar to this panel before showing the step. */
-  tab?: DemoTab;
 }
 
 /**
@@ -95,7 +134,8 @@ export const TOUR_STEPS: TourStep[] = [
       "Five adversarial agents — Government, Opposition, Equity, Economist and a " +
       "Devil’s Advocate — debate the compiled policy with citations. Apply an " +
       "amendment and re-simulate: the map and outcomes above update from the " +
-      "amended world. That round-trip is the whole point.",
+      "amended world. That round-trip is the whole point. Ask any of them a " +
+      "direct follow-up question in \"Ask a persona\" below the debate.",
   },
   {
     selector: '[data-tour="tabs"]',

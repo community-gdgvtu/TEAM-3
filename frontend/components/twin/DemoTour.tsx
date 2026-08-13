@@ -13,7 +13,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
-import { TOUR_STEPS, requestDemoTab } from "../../lib/demo";
+import { TOUR_STEPS, requestDemoTab, requestOpenAdvanced } from "../../lib/demo";
 
 interface Box {
   top: number;
@@ -91,6 +91,9 @@ export default function DemoTour() {
   }, [open, close, next, prev]);
 
   function start() {
+    // Most steps live behind the Advanced disclosure — open it up front so
+    // its panels (and the tab bar they need) are mounted before step 5.
+    requestOpenAdvanced();
     setStep(0);
     setOpen(true);
   }

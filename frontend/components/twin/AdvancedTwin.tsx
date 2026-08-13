@@ -11,10 +11,11 @@
  * down.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import PolicyCompiler from "../../app/PolicyCompiler";
 import HealthStatus from "../../app/HealthStatus";
+import { subscribeOpenAdvanced } from "../../lib/demo";
 import DemoTour from "./DemoTour";
 import PanelTabs from "./PanelTabs";
 import TwinWorkspace from "./TwinWorkspace";
@@ -22,8 +23,12 @@ import TwinWorkspace from "./TwinWorkspace";
 export default function AdvancedTwin() {
   const [open, setOpen] = useState(false);
 
+  // Let a feature card (or the guided demo) expand this disclosure directly
+  // instead of requiring a manual click first.
+  useEffect(() => subscribeOpenAdvanced(() => setOpen(true)), []);
+
   return (
-    <section className="advanced">
+    <section id="advanced" className="advanced">
       <button
         type="button"
         className="advanced-toggle"
