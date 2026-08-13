@@ -36,6 +36,7 @@ from .routers import (
     public,
     registry,
     reproduce,
+    run,
     sdg,
     simulate,
     spatial,
@@ -92,6 +93,7 @@ def create_app() -> FastAPI:
     app.include_router(analogues.router)
     app.include_router(timeseries.router)
     app.include_router(datafabric.router)
+    app.include_router(run.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

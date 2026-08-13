@@ -97,6 +97,7 @@ GET_ROUTES = [
 # Endpoints that take the compiled Policy DSL as ``policy`` (plus optional extras).
 _P = {"policy": DEMO_POLICY}
 POST_ROUTES: list[tuple[str, dict[str, Any]]] = [
+    ("/run", _P),  # scenario orchestrator: composes the whole pipeline (§28/§29)
     ("/simulate", _P),
     ("/simulate/amend", {**_P, "amendment": {"label": "exempt low income", "exempt_low_income": True}}),
     ("/compare", {**_P, "amendments": [{"label": "halve charge", "charge_multiplier": 0.5}]}),

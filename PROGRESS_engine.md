@@ -707,3 +707,18 @@ record + harmonisation lineage the spec mandates.
   harmonisation *contract* a real deployment would exercise, and measures/labels the synthetic files
   truthfully rather than dressing them up as observations.
 - 9 tests; **284 green** (was 275), app boots with **37 routes** (was 36).
+- 2026-08-13 — Scenario orchestrator `POST /run` (SPEC §28/§29): the composition endpoint the
+  killer demo is a script for. New `backend/app/scenario/` (`schema.py` + `service.py`) +
+  `backend/app/routers/run.py` compose the full §29 narrative in ONE call — compile (NL→DSL or
+  accept a pre-compiled `policy`) → `/simulate` A/B/Δ+ledger → `/public` reaction → `/parliament`
+  debate → an auto-derived amendment re-simulation (`compare_amendment`) → `/media` feed — in one
+  mutually-consistent envelope. NO new numeric model: reuses the exact endpoint services, so the
+  composed numbers are byte-identical to the standalone endpoints (tests pin `headline == /simulate
+  delta @ horizon` and `net_support == /public`). Auto-amendment mirrors the §29 beat: flat charge
+  w/o income exemption → exempt low-income (`auto:equity`); already-equitable+full-reinvest → none;
+  caller can override (`source:'caller'`). Returns a 6-beat timecoded §29 narrative + a headline
+  dashboard (cordon traffic / CO₂ / car share / transit ridership / peak crowding at the horizon,
+  default Year 2) with direction + Δ band. Numbers Simulated, prose Generated, no LLM in any figure;
+  numeric sections deterministic (byte-identical across two runs); 422 when neither text nor policy
+  given. Added `/run` to the integration-smoke sweep. `test_scenario_run.py` (10 tests). 294 green;
+  app boots with 38 routes.
