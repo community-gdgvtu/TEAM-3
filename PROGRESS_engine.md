@@ -1247,3 +1247,22 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   `backend/app/microsim/model.py` (compute + attach),
   `backend/tests/test_constraint_compliance.py` (6 tests). **465 green** (was 459),
   `scripts/audit.py` PASS, app boots with **53 routes**. No frontend/shared files touched.
+
+## 2026-08-13 (engine, verification run)
+- **Roadmap exhausted — full-surface health verification.** This run found `ROADMAP_ENGINE.md`
+  with **0 unchecked items** across every section (M3/M5/M6/M7, Stretch, Extended, Hardening,
+  Orchestration, Demo tooling, Presentation/export, Decision support). Rather than fabricate
+  filler work, verified the engine is in a clean, complete state and cross-checked that every
+  major SPEC area maps to shipped deterministic code: simulation + timeline + event ledger
+  (§7/§9/§10), parliament + amendment loop (§11/§18), the recursive **§19 political-feedback
+  loop** (`backend/app/dynamics/` — endogenous charge amendment → weaker mode shift → less
+  revenue → slower capacity → renewed crowding, with closed- vs open-loop contrast), the
+  §21 four-way counterfactual A/B/C/D (`simulation/counterfactual.py`), §20 stress-test +
+  §22 optimiser + robustness/regret decision support, §7.3 microsim with the stated
+  low-income-burden constraint check, §26 explainability causal trace (`evidence/trace.py`),
+  §32 reproducibility, §33 model registry, and the §34 guardrail audit.
+- Verified green: **`pytest` — 465 passed** (0:04:14); **`scripts/audit.py` — PASS** on all six
+  §34 guardrail checks (every route serves 200; every provenance field §34-tagged; no LLM on
+  the numeric path; generated media labelled SIMULATED; numeric layers byte-identical on repeat;
+  uncertainty fan widens with the horizon). Working tree clean; app boots. No new engine work
+  was required or invented; no frontend/shared files touched.
