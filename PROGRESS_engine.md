@@ -232,3 +232,26 @@ Dated log of backend/simulation/data work. Newest at the bottom.
 - 2026-08-13 — Verification run: ENGINE roadmap fully complete (all M3/M5/M6/M7 + Stretch + Extended items checked). Full suite green (177 passed), app boots with 26 routes. No new engine items outstanding in ROADMAP_ENGINE.md; nothing implemented this run.
 - 2026-08-13 — Verification run (no new items): ENGINE roadmap fully complete (M3/M5/M6/M7 + Stretch + Extended all checked). Re-ran full suite → 177 passed; app boots with 26 routes. Additionally cross-checked the UI↔backend endpoint contract: every path the frontend calls (incl. `/institutions/review`, `/press-conference`, `/compare`, `/ensemble`, `/registry`, `/sdg`, `/diffusion`, `/backtest`, `/optimise`, `/uncertainty`, `/evidence`) is live in `app.main`. No mismatches, no 404 gaps. No backend code changed this run (declined to invent busywork against an exhausted roadmap; SPEC §34 guardrails all still holding).
 - 2026-08-13 09:26 UTC — Verification run (no new items): ENGINE roadmap fully complete (M3/M5/M6/M7 + Stretch + Extended all `[x]`; `grep '\[ \]'` → none). Re-ran full suite → **177 passed in ~30s**; app boots with **26 routes** (all SPEC endpoints live: /simulate, /simulate/amend, /compare, /parliament/debate, /parliament/failure-modes, /public, /media, /evidence, /uncertainty, /optimise, /backtest(+/example), /sdg, /institutions/review, /ensemble, /press-conference, /registry, /diffusion, /baseline, /policy/compile). No backend code changed — the roadmap is exhausted and inventing effects/tests against it would violate the "real working code, no busywork" contract. SPEC §34 guardrails all still hold (no LLM in any numeric path; Observed/Estimated/Simulated/Generated tags intact; media SIMULATED; uncertainty widens with horizon).
+- 2026-08-13 09:40 UTC — Economic spillover layer (SPEC §7.4): new `backend/app/economy/`
+  package (`params.py`, `schema.py`, `model.py`) + `POST /economy`. Fills a genuine SPEC
+  coverage gap — the hybrid forecast engine's §7.4 economic layer was the one MVP layer with
+  no endpoint (the roadmap's original M3–M7 + Stretch + Extended items were all complete;
+  rather than log a 5th empty verification run I implemented this real gap). Reads the
+  deterministic mode-choice sim's **Simulated** drivers (cordon-charge revenue, Δ CBD car
+  commuters, Σ Δ commuter travel-minutes, a freight-entry proxy) and translates them into five
+  transparent input-output / elasticity channels: charge transfer (household discretionary
+  withdrawal, −R×MPC), revenue recycling (full collected revenue re-spent at a local fiscal
+  multiplier — commuter Simulated + freight Estimated, so both the freight cost and its own
+  revenue are balanced), CBD footfall (car-avoidance loss vs pedestrianisation retail-amenity
+  uplift — ambiguous sign, shopper demand explicitly unmodelled), business logistics (freight
+  charge pass-through, low confidence), and commuter mode-switch travel-time cost (monetised at
+  value-of-time = 1/money_to_minutes, consistent with the GC model). Rolls up per-sector
+  exposure + a net partial-equilibrium annual estimate with a wide band, clearly Estimated and
+  NOT a GDP number. Differentiates policies sensibly (charge+reinvest net-positive, general-fund
+  near-neutral, pedestrianisation net-negative). Honest `not_modelled` surface (congestion-relief
+  time savings → needs the §7.7 spatial traffic-assignment layer; agglomeration/land-value; firm
+  relocation; shopper/tourist demand; labour-market GE; fiscal-multiplier crowding-out). Physical
+  drivers Simulated, monetary translation Estimated (SPEC §8); confidence widens with horizon;
+  fully deterministic, no LLM in the numeric path (SPEC §7.4/§34). 8 tests; **185 green**, app
+  boots with **27 routes**. Follow-up: register the new layer in the §33 model registry so the
+  transparency manifest stays complete.
