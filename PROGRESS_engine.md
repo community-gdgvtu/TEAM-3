@@ -571,3 +571,26 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   layers; (5) all layers partition the one synthetic population.
 - **251 green** (was 237), app boots with **33 routes**. The "one source of truth for the mode
   split" claim that lets spatial + microsim sit next to the ABM is now under a standing test.
+
+## 2026-08-13 (engine run — new §34 guard: rogue-LLM numeric-invariance)
+- Roadmap fully checked off (30/30). Verified green first: **251 tests passing**, app boots
+  with **33 routes**. Rather than a fourth identical verification commit, closed a real §34 gap.
+- **Gap closed:** SPEC §34 guardrail #1 — *LLMs never generate core numeric effects* — was only
+  ever exercised through the **no-key fallback path**. Every existing parliament/press test runs
+  with no LLM configured, so the entire LLM-**enabled** code path was untested: nothing proved
+  that a model that *is* wired in can't leak numbers into a response. A refactor that parsed
+  figures back out of prose, let the model rewrite an evidence point / cited ref, or recomputed a
+  tally from generated text would pass every current test.
+- **Added `backend/tests/test_llm_numeric_invariance.py`** (test-track only, zero `backend/app/**`
+  change). For each prose surface it runs the pipeline twice — honest template path vs. the LLM
+  seam monkeypatched to a **hostile model** that discards the evidence and emits fabricated
+  figures (`999%`, `42 trillion`, `7 personas`) — then asserts the two responses are byte-identical
+  after stripping only the free-text prose leaves (`speech`, `opening_statement`, the inner
+  `answer` string) and the legitimately-flipping `method` flag. A companion assertion proves the
+  rogue prose *did* change the raw output, so the guard can never pass vacuously; extra checks
+  confirm no fabricated figure reaches any `points` / `cited_refs` / `tally` / `public_mood` field.
+  Third test pins the skeleton-extractor itself (drops prose leaf, keeps `stance`/`cited_refs`).
+- Covers both `run_debate` (parliament, gated on `settings.llm_enabled`) and `run_press_conference`
+  (press, gated on the `use_llm` param) — the two surfaces where LLM prose meets Simulated numbers.
+- **254 green** (was 251), app boots with **33 routes**. "The model writes words, never numbers"
+  is now enforced against an adversarial model, not just asserted in a docstring.
