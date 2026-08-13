@@ -440,3 +440,16 @@ Dated notes, newest at the bottom. One line per shipped item.
   `frontend/README.md` endpoint map (now 23 surfaces incl. /spatial). `tsc --noEmit`
   clean, `next lint` clean (0 warnings), `next build` clean (4/4 static pages).
   **M18 complete.**
+- 2026-08-13 — Verification run (roadmap complete). No unchecked ROADMAP_UI items:
+  M4–M18 all shipped. Confirmed the frontend fully covers the backend: all 24
+  documented endpoints are wired in `lib/api.ts` (`/health`, `/policy/compile`,
+  `/baseline`, `/simulate` + `/simulate/amend`, `/parliament/debate`, `/public`,
+  `/media`, `/evidence`, `/uncertainty`, `/compare`, `/optimise`, `/backtest` +
+  `/backtest/example`, `/sdg`, `/diffusion`, `/registry`, `/press-conference`,
+  `/ensemble`, `/institutions`, `/economy`, `/dynamics`, `/spatial`, `/microsim`),
+  with the 3D-map geometry loaded from bundled static GeoJSON under
+  `public/city/` (zones, roads, CBD cordon, manifest, OD pairs) so the map renders
+  with no backend/`/city` dependency and degrades gracefully. Checks green:
+  `tsc --noEmit` clean, `next lint` clean (0 warnings/errors), `next build` clean
+  (4/4 static pages, / at 125 kB First Load JS). No UI-track work outstanding until
+  the engine track ships a new endpoint to surface.
