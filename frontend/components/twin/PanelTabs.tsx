@@ -37,6 +37,7 @@ import AnaloguePanel from "./AnaloguePanel";
 import TimeseriesPanel from "./TimeseriesPanel";
 import ReproducePanel from "./ReproducePanel";
 import DataFabricPanel from "./DataFabricPanel";
+import AssumptionsPanel from "./AssumptionsPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -63,7 +64,8 @@ type TabKey =
   | "backtest"
   | "registry"
   | "reproduce"
-  | "datafabric";
+  | "datafabric"
+  | "assumptions";
 
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "run", label: "Run" },
@@ -90,6 +92,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "registry", label: "Registry" },
   { key: "reproduce", label: "Reproduce" },
   { key: "datafabric", label: "Data Fabric" },
+  { key: "assumptions", label: "Assumptions" },
 ];
 
 export default function PanelTabs() {
@@ -193,6 +196,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "datafabric"}>
           <DataFabricPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "assumptions"}>
+          <AssumptionsPanel />
         </div>
       </div>
     </div>

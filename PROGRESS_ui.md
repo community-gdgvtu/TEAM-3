@@ -718,3 +718,29 @@ declared the UI roadmap complete — a newly unsurfaced endpoint. Added the **Ti
   natural-language fallback box; honest idle/loading/error states, never
   fabricates a narrative. `tsc --noEmit` + `next build` clean. Every documented
   engine endpoint now has a UI surface.
+
+## 2026-08-13 — M25: Change-assumptions-and-rerun tab (SPEC §34.10)
+- Surfaced the last unwired endpoint pair `GET /assumptions` +
+  `POST /assumptions/rerun` — SPEC §34's tenth guardrail ("users can change the
+  model's input assumptions and re-run"), the interactive complement to the §24
+  uncertainty fan (which sweeps the *same* knobs and only ranks them).
+- New `AssumptionsPanel.tsx`: loads the overridable-knob catalogue live from the
+  code (retryable waiting/error state), renders one slider per assumption bounded
+  to its documented [low, high] with a live default marker; dragging off default
+  pins it. Contrast-horizon selector (Y1/Y2/Y5/Y10). Re-run posts only the pinned
+  overrides and shows (a) an applied-overrides list echoing default → applied with
+  an honest **clamped-to-range** flag + note when a request left the band, and
+  (b) a per-metric contrast table: Δ(B−A) under default vs overridden assumptions,
+  the signed shift (effect of the change) with a scaled bar + %-of-default,
+  good/bad-coloured by metric direction (only transit is up=good), ≈0 shown as
+  "no change".
+- Honesty: inputs tagged Estimated, the re-run Simulated (deterministic, same
+  pipeline `/simulate` runs, no LLM on the numeric path); catalogue is the exact
+  §24 `ASSUMPTIONS` registry so the two can never disagree; idle (no policy) /
+  loading / waiting (catalogue down) / error states, never fabricates a contrast.
+- `lib/api.ts`: added `AssumptionCard`, `AssumptionCatalogue`, `AppliedOverride`,
+  `MetricContrast`, `AssumptionRerunResult` types, `UnknownAssumptionError`, and
+  `getAssumptions()` / `rerunAssumptions()`. Wired the tab into `PanelTabs.tsx`;
+  added `asm-*` styles to `globals.css` (mobile-safe). `tsc --noEmit` + `next build`
+  clean. ROADMAP_UI now 38/38.
+- Follow-up: none open — every documented engine endpoint has a UI surface again.

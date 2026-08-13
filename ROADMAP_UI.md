@@ -156,3 +156,16 @@ already exist; this tab's distinct value is proving that *consistency* in one ca
 Same rules: every number tagged, uncertainty visible, generated media SIMULATED,
 never invent one when the backend is down.
 - [x] Run tab: `POST /run` → the §29 killer demo in one call. Drive it from the compiled policy in the store (or a natural-language fallback box so the tab runs compile→pipeline standalone) with a Time-Machine horizon selector; render a consistency banner (one call / one simulation, numbers Simulated · prose Generated · no LLM in the numeric path), the ordered §29 narrative beats (timecode → stage → response section → grounded one-liner), the composed outcomes dashboard at the chosen horizon (per-metric World A→B, signed Δ + %, uncertainty band, provenance chip, good/bad colouring by metric), a net-public-support gauge, a parliament snapshot (motion + tally pills + summary, cross-linked to the Parliament tab), the amendment block (source pill + rationale + the isolated Δ(amended − original) table at the final checkpoint, ≈0 rows shown as "no change"), and a SIMULATED-stamped press snapshot (fictional outlets + disclaimer). No new numeric model — every section reads the same compiled policy and the same run; `idle`/`loading`/`error` states when the backend is down, never fabricates a narrative (SPEC §28/§29/§34)
+
+## M25 — Surface the change-assumptions-and-rerun layer (SPEC §34.10)
+The engine shipped `GET /assumptions` + `POST /assumptions/rerun` after M24
+declared the roadmap complete — the last endpoint the UI hadn't surfaced, and
+SPEC §34's tenth product guardrail ("users can change the model's input
+assumptions and re-run"). The §24 uncertainty fan already *sweeps* these knobs
+and ranks the most-influential one, but nothing let a user pin an assumption to
+a chosen value and re-run the deterministic core to watch the headline move.
+The overridable catalogue is the *same* `ASSUMPTIONS` registry the uncertainty
+engine sweeps (single source of truth), so the two can never drift. Same rules:
+inputs Estimated, outputs Simulated, no LLM on the numeric path, honest clamp +
+`waiting`/`idle`/`error` states, never fabricate a contrast when the backend is down.
+- [x] Assumptions tab: `GET /assumptions` → the overridable-knob catalogue (live from the code: label, target model, plausible [low, high] range, live default, unit) rendered as per-assumption sliders that pin off their default; a Time-Machine contrast-horizon selector (Y1/Y2/Y5/Y10); `POST /assumptions/rerun` → re-runs the exact deterministic World-A/World-B/Δ pipeline `/simulate` uses with the pinned overrides and renders (a) an applied-overrides list echoing default → applied with an honest **clamped-to-range** flag when a request fell outside the documented band (SPEC §34), and (b) a per-metric contrast table showing Δ(B−A) under default assumptions vs the overridden run, the signed shift (effect of the user's change) with a scaled bar + %-of-default, good/bad-coloured by metric direction, ≈0 rows shown as "no change". The overridable set is the same one the §24 uncertainty engine sweeps so the two never disagree; inputs Estimated, the re-run Simulated (deterministic, no LLM); `idle` (no policy) / `loading` / catalogue-`waiting` / `error` states when the backend is down, never mints a fabricated contrast (SPEC §34.10/§34)

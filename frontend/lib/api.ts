@@ -2640,3 +2640,182 @@ export async function runScenario(
   }
   return (await res.json()) as RunResponse;
 }
+
+// ---------------------------------------------------------------------------
+// Change-assumptions-and-rerun (SPEC §34.10) — GET /assumptions,
+// POST /assumptions/rerun
+// ---------------------------------------------------------------------------
+
+/**
+ * One overridable model assumption a user can pin and re-run. These are the
+ * *same* knobs the §24 uncertainty engine sweeps (single source of truth), read
+ * live from the running dataclasses so the published range can't drift from the
+ * code. Input assumptions are Estimated — never observed data (SPEC §34).
+ */
+export interface AssumptionCard {
+  /** Stable override key — send this in `overrides`. */
+  name: string;
+  /** Human-readable name (matches the §24 sensitivity list). */
+  label: string;
+  /** Which model the field lives on: `"base"` or `"sim"`. */
+  target: string;
+  /** Dataclass field the override sets. */
+  field: string;
+  /** Unit of the value where meaningful. */
+  unit: string;
+  /** Live default read from the running dataclass. */
+  default: number;
+  /** Lower edge of the documented plausible range. */
+  low: number;
+  /** Upper edge of the documented plausible range. */
+  high: number;
+  /** Always `"Estimated"` — these are input assumptions, not observed data. */
+  provenance: string;
+}
+
+/** The catalogue returned by `GET /assumptions`. */
+export interface AssumptionCatalogue {
+  note: string;
+  count: number;
+  assumptions: AssumptionCard[];
+}
+
+/** One override, echoed with what the backend actually applied (clamped). */
+export interface AppliedOverride {
+  name: string;
+  label: string;
+  unit: string;
+  default: number;
+  low: number;
+  high: number;
+  /** The value the caller asked for. */
+  requested: number;
+  /** The value actually used (clamped into [low, high]). */
+  applied: number;
+  /** Whether `requested` was within the plausible range. */
+  in_range: boolean;
+  /** True when `applied` differs from `requested` (was clamped). */
+  clamped: boolean;
+  note: string;
+}
+
+/** How overriding the assumptions moved one metric's Δ(B−A) at the horizon. */
+export interface MetricContrast {
+  key: string;
+  label: string;
+  unit: string;
+  /** Δ(B−A) under default assumptions. */
+  default_delta: number;
+  /** Δ(B−A) under the overridden assumptions. */
+  overridden_delta: number;
+  /** `overridden_delta − default_delta` — the effect of the change. */
+  shift: number;
+  /** `shift` as % of |default_delta| (null when the default is ~0). */
+  shift_pct_of_default: number | null;
+}
+
+/**
+ * World A/B/Δ re-run under user-pinned assumptions, contrasted vs the defaults
+ * (`POST /assumptions/rerun`). The `delta` is the full replot-ready Δ(B−A)
+ * trajectory under the overridden assumptions. Deterministic, no LLM on the
+ * numeric path — the re-run is the exact pipeline `/simulate` uses (SPEC §34).
+ */
+export interface AssumptionRerunResult {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  horizon: Checkpoint;
+  overrides: AppliedOverride[];
+  contrast: MetricContrast[];
+  world_a_snapshot: Record<string, unknown>;
+  world_b_snapshot: Record<string, unknown>;
+  delta: DeltaTimeSeries;
+  shocks_applied: Record<string, unknown>;
+}
+
+/**
+ * Raised when an override names an assumption not in the catalogue (HTTP 404).
+ * Carries the backend's list of overridable names so the UI can steer the user
+ * back to a valid knob instead of guessing (SPEC §34).
+ */
+export class UnknownAssumptionError extends Error {
+  overridable: string[];
+  constructor(message: string, overridable: string[]) {
+    super(message);
+    this.name = "UnknownAssumptionError";
+    this.overridable = overridable;
+  }
+}
+
+/**
+ * The catalogue of overridable model assumptions (`GET /assumptions`). Live from
+ * the code, so the ranges never drift from what actually runs. Throws on
+ * network/HTTP error so the panel can show an honest waiting state (SPEC §34).
+ */
+export async function getAssumptions(
+  signal?: AbortSignal,
+): Promise<AssumptionCatalogue> {
+  const res = await fetch(`${API_BASE_URL}/assumptions`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as AssumptionCatalogue;
+}
+
+/**
+ * Re-run the deterministic A/B/Δ core with one or more assumptions pinned to a
+ * chosen value (`POST /assumptions/rerun`, SPEC §34.10). Returns a per-metric
+ * contrast against the default-assumption run so the user sees exactly how much
+ * their change moved the headline. No new numeric model, no LLM (SPEC §34).
+ * Out-of-range values are clamped by the backend and flagged; unknown names
+ * throw `UnknownAssumptionError` (with the valid names).
+ */
+export async function rerunAssumptions(
+  policy: PolicyDSL,
+  overrides: Record<string, number>,
+  horizonMonths?: number,
+  signal?: AbortSignal,
+): Promise<AssumptionRerunResult> {
+  const res = await fetch(`${API_BASE_URL}/assumptions/rerun`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      policy,
+      overrides,
+      ...(horizonMonths != null ? { horizon_months: horizonMonths } : {}),
+    }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    if (res.status === 404) {
+      try {
+        const body = (await res.json()) as {
+          detail?: { error?: string; overridable_assumptions?: string[] };
+        };
+        const d = body.detail;
+        if (d && Array.isArray(d.overridable_assumptions)) {
+          throw new UnknownAssumptionError(
+            d.error ?? "Unknown assumption",
+            d.overridable_assumptions,
+          );
+        }
+      } catch (e) {
+        if (e instanceof UnknownAssumptionError) throw e;
+        // fall through to the generic error below
+      }
+    }
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as AssumptionRerunResult;
+}

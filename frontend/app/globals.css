@@ -8406,3 +8406,297 @@ main.wide {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Change-assumptions-and-rerun panel (SPEC §34.10)
+   --------------------------------------------------------------------------- */
+.asm-intro {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0.25rem 0 0.75rem;
+}
+.asm-intro .tag {
+  vertical-align: middle;
+}
+.asm-nopolicy {
+  margin: 0.5rem 0 0.75rem;
+}
+.asm-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+.asm-horizon {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.asm-ctl-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.asm-horizon select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+.asm-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.asm-pincount {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.asm-knobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.7rem;
+}
+.asm-knob {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+.asm-knob.pinned {
+  border-color: var(--accent);
+  background: rgba(79, 140, 255, 0.06);
+}
+.asm-knob-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+.asm-knob-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.asm-knob-default {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.7;
+}
+.asm-unpin {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  cursor: pointer;
+}
+.asm-unpin:hover {
+  background: rgba(79, 140, 255, 0.12);
+}
+.asm-knob-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.asm-knob-slider input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.asm-edge {
+  font-size: 0.68rem;
+  color: var(--muted);
+  min-width: 2.2rem;
+  text-align: center;
+}
+.asm-knob-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+.asm-knob-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.asm-knob-vs {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.asm-knob-shift {
+  color: var(--accent);
+  font-style: normal;
+}
+.asm-catnote {
+  margin-top: 0.6rem;
+}
+.asm-error {
+  margin-top: 0.6rem;
+}
+
+/* --- Re-run result --- */
+.asm-result {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.85rem;
+}
+.asm-result-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.asm-result-head h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.asm-applied {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+.asm-applied-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.asm-applied-row.clamped {
+  border-color: var(--bad);
+}
+.asm-applied-label {
+  color: var(--muted);
+}
+.asm-applied-vals {
+  text-align: right;
+}
+.asm-clamp {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--bad);
+}
+.asm-clamp-note {
+  color: var(--bad);
+  margin-bottom: 0.6rem;
+}
+
+/* --- Contrast table --- */
+.asm-contrast {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.asm-contrast-head,
+.asm-contrast-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.6fr) 0.9fr 0.9fr minmax(160px, 2fr);
+  gap: 0.6rem;
+  align-items: center;
+}
+.asm-contrast-head {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  padding: 0.2rem 0.4rem;
+}
+.asm-contrast-row {
+  padding: 0.35rem 0.4rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.asm-c-metric {
+  font-weight: 500;
+}
+.asm-c-unit {
+  color: var(--muted);
+  font-style: normal;
+  font-size: 0.75rem;
+}
+.asm-c-num {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.asm-c-shift {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.asm-shift-track {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.asm-shift-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+}
+.asm-shift-track.good .asm-shift-bar {
+  background: var(--ok);
+}
+.asm-shift-track.bad .asm-shift-bar {
+  background: var(--bad);
+}
+.asm-shift-track.flat .asm-shift-bar {
+  background: var(--muted);
+}
+.asm-shift-val {
+  font-variant-numeric: tabular-nums;
+  min-width: 5.5rem;
+  text-align: right;
+}
+.asm-shift-val.good {
+  color: var(--ok);
+}
+.asm-shift-val.bad {
+  color: var(--bad);
+}
+.asm-shift-val.flat {
+  color: var(--muted);
+}
+.asm-shift-pct {
+  font-style: normal;
+  opacity: 0.75;
+  font-size: 0.75rem;
+}
+.asm-note {
+  margin-top: 0.7rem;
+}
+
+@media (max-width: 640px) {
+  .asm-contrast-head {
+    display: none;
+  }
+  .asm-contrast-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .asm-c-shift {
+    grid-column: 1 / -1;
+  }
+}
