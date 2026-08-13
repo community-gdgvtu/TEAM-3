@@ -1282,3 +1282,21 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   `backend/tests/test_scenario_run.py` (2 tests). **467 green** (was 465),
   `scripts/audit.py` PASS (all six §34 checks; GET sweep now covers the new route),
   app boots with **54 routes** (was 53). No frontend/shared files touched.
+
+## 2026-08-13 (engine, M48)
+- **Keyless `GET /north-star/example`** (SPEC §37/§34). Completes the keyless judge-facing
+  surface across all three composed answer endpoints: `GET /brief/example`,
+  `GET /backtest/example` and (M47) `GET /run/example` already offered a no-body call, but the
+  §37 North-Star answer — the layer the Minister's Brief itself delegates to — still required a
+  hand-built `NorthStarRequest`. Added `GET /north-star/example`: composes the full §37 fixed
+  narrative for the canonical §28 demo congestion charge through the identical
+  `run_north_star()` service, using the same inputs `GET /brief/example` renders
+  (objective `reduce_transport_emissions_pct:20`, constraint `max_low_income_burden_increase_pct:2`)
+  so the two examples describe the same run.
+- Pure additive routing — a thin `run_north_star(NorthStarRequest(...))` wrapper; no new numeric
+  model, no LLM in any figure (§34). A test pins the example byte-identical to `POST /north-star`
+  with those inputs (`json.dumps(sort_keys=True)`) so it can't drift; a second asserts the fixed
+  15-line §37 narrative + non-empty `median_outcome` with no body.
+- Files: `backend/app/routers/northstar.py` (+`GET /north-star/example` + `_DEMO_TEXT`),
+  `backend/tests/test_northstar.py` (2 tests). **469 green** (was 467),
+  `scripts/audit.py` PASS, app boots with **55 routes** (was 54). No frontend/shared files touched.

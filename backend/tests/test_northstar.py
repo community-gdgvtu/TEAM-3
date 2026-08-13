@@ -190,3 +190,29 @@ def test_north_star_media_is_all_simulated() -> None:
 def test_north_star_requires_text_or_policy() -> None:
     r = client.post("/north-star", json={})
     assert r.status_code == 422, r.text
+
+
+def test_north_star_example_composes_fixed_narrative_no_body() -> None:
+    """GET /north-star/example returns the full §37 answer with no request body."""
+    r = client.get("/north-star/example")
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert d["compiled"] is not None  # example goes through the compile path
+    orders = [s["order"] for s in d["sections"]]
+    assert orders == list(range(1, 16)), orders  # the fixed 15-line §37 narrative
+    assert d["median_outcome"], "median outcome should not be empty"
+
+
+def test_north_star_example_matches_posting_the_demo_inputs() -> None:
+    """The keyless example must equal POSTing the same demo text + objective/constraints."""
+    ex = client.get("/north-star/example").json()
+    posted = client.post(
+        "/north-star",
+        json={
+            "text": DEMO_TEXT,
+            "objective": {"reduce_transport_emissions_pct": 20},
+            "constraints": {"max_low_income_burden_increase_pct": 2},
+        },
+    ).json()
+    # Deterministic answer (numbers + fixed prose via template fallback).
+    assert json.dumps(ex, sort_keys=True) == json.dumps(posted, sort_keys=True)
