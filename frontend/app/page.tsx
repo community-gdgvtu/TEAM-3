@@ -1,10 +1,7 @@
 import HealthStatus from "./HealthStatus";
 import PolicyCompiler from "./PolicyCompiler";
 import TwinWorkspace from "../components/twin/TwinWorkspace";
-import ParliamentPanel from "../components/twin/ParliamentPanel";
-import FailureModesPanel from "../components/twin/FailureModesPanel";
-import PublicReactionPanel from "../components/twin/PublicReactionPanel";
-import PressFeedPanel from "../components/twin/PressFeedPanel";
+import PanelTabs from "../components/twin/PanelTabs";
 import { TwinProvider } from "../components/twin/TwinStore";
 
 export default function Home() {
@@ -24,15 +21,11 @@ export default function Home() {
       <TwinProvider>
         <PolicyCompiler />
 
+        {/* SPEC §27 main screen: 3D world + outcomes + timeline … */}
         <TwinWorkspace />
 
-        <ParliamentPanel />
-
-        <PublicReactionPanel />
-
-        <PressFeedPanel />
-
-        <FailureModesPanel />
+        {/* … then the [Parliament] [Public] [Press] [Red Team] tabs. */}
+        <PanelTabs />
       </TwinProvider>
 
       <HealthStatus />

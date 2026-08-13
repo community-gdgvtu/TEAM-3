@@ -29,5 +29,5 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 
 ## M7 — Evidence drawer + polish (SPEC §26/§27)
 - [x] Click any dashboard metric → evidence drawer showing the provenance trace, assumptions, confidence (from the backend evidence endpoint)
-- [ ] Assemble the main screen layout per SPEC §27 (3D world + outcomes panel + timeline + [Parliament][Public][Press][Red Team] tabs) and wire the 60-second demo flow (SPEC §29)
+- [x] Assemble the main screen layout per SPEC §27 (3D world + outcomes panel + timeline + [Parliament][Public][Press][Red Team] tabs) and wire the 60-second demo flow (SPEC §29)
 - [ ] Visual polish: consistent theme, loading/empty/error states, mobile-safe

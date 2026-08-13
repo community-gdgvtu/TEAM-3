@@ -95,3 +95,14 @@ Dated notes, newest at the bottom. One line per shipped item.
   states. Every number is copied from the deterministic sim — no LLM on the
   numeric path (SPEC §34). Added tag colours for Observed/Estimated. `tsc --noEmit`
   + `next build` clean.
+- 2026-08-13 — M7.2: Main-screen assembly per SPEC §27 + demo flow (SPEC §29).
+  TwinWorkspace now lays the 3D world (left) beside the outcomes panel (right) in
+  a responsive two-column grid that collapses to one column ≤1000px, with the
+  draggable timeline + Run-counterfactual bar spanning full width below. New
+  PanelTabs component renders the [Parliament] [Public] [Press] [Red Team] tab bar
+  as the lower deck; all four panels stay mounted (toggled with `hidden`) so a
+  debate/opinion/press/register survives tab switches during the demo. Wired the
+  §29 verbs: the primary sim button reads "Run counterfactual" (then
+  "Re-simulate policy"), so the 60-second script flows compile → run counterfactual
+  → scrub → Parliament amendment + re-simulate → Press at Year 2. `tsc --noEmit`
+  + `next build` clean.

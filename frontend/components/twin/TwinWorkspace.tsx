@@ -72,8 +72,45 @@ export default function TwinWorkspace() {
 
   return (
     <div className="twin">
-      <CityMapPanel timeLabel={mapTime} />
+      {/* SPEC §27: 3D world (left) + outcomes (right). */}
+      <div className="twin-top">
+        <CityMapPanel timeLabel={mapTime} />
 
+        {status === "ready" && baseline ? (
+          <Dashboard
+            timeseries={baseline.timeseries}
+            index={index}
+            sim={sim}
+            simSource={simSource}
+            onExplain={policy ? setExplainKey : undefined}
+          />
+        ) : (
+          <section className="card dashboard">
+            <div className="dashboard-head">
+              <h2>Outcomes</h2>
+              <span className="dashboard-sub">
+                Traffic · CO₂ · Transit · Equity · Support
+              </span>
+            </div>
+            {status === "loading" ? (
+              <div className="map-placeholder" style={{ height: "auto" }}>
+                <span className="dot" /> <span>Loading baseline…</span>
+              </div>
+            ) : (
+              <div className="waiting">
+                <span className="tag muted">Waiting for backend</span>
+                <p>
+                  Outcomes need the World-A baseline from{" "}
+                  <code>GET /baseline</code>. No numbers are shown until the model
+                  responds (SPEC §34).
+                </p>
+              </div>
+            )}
+          </section>
+        )}
+      </div>
+
+      {/* SPEC §27: draggable timeline spans the full width below the two panels. */}
       <section className="card timeline-card">
         {status === "loading" && (
           <div className="map-placeholder" style={{ height: "auto" }}>
@@ -104,15 +141,13 @@ export default function TwinWorkspace() {
                 className="btn primary"
                 onClick={runSimulation}
                 disabled={!policy || simulating}
-                title={
-                  policy ? "Run World B" : "Compile a policy first"
-                }
+                title={policy ? "Run World B" : "Compile a policy first"}
               >
                 {simulating
                   ? "Simulating…"
                   : sim
                     ? "Re-simulate policy"
-                    : "Simulate policy"}
+                    : "Run counterfactual"}
               </button>
               {sim && (
                 <>
@@ -130,7 +165,7 @@ export default function TwinWorkspace() {
               )}
               {!policy && (
                 <span className="hint" style={{ margin: 0 }}>
-                  Compile a policy above to simulate World B.
+                  Compile a policy above to run the counterfactual (World B).
                 </span>
               )}
               {simError && <span className="error-text">{simError}</span>}
@@ -138,16 +173,6 @@ export default function TwinWorkspace() {
           </>
         )}
       </section>
-
-      {status === "ready" && baseline && (
-        <Dashboard
-          timeseries={baseline.timeseries}
-          index={index}
-          sim={sim}
-          simSource={simSource}
-          onExplain={policy ? setExplainKey : undefined}
-        />
-      )}
 
       {policy && explainKey && (
         <EvidenceDrawer
