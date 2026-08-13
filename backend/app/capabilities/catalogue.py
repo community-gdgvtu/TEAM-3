@@ -157,6 +157,7 @@ ENDPOINTS: list[tuple] = [
     ("/business", "Micro drill-downs", ["§17"], "Single-firm drill-down: footfall, labour accessibility, deliveries, cost, revenue proxy + adaptation decisions.", True, _E, None),
     # --- Decision support ---
     ("/optimise", "Decision support", ["§22"], "Grid-search candidate interventions under objective+constraints → 4-objective Pareto frontier + labelled picks.", True, _S, None),
+    ("/shortlist", "Decision support", ["§21", "§22"], "Rank the caller's OWN 2–8 candidate policies head-to-head: simulate each → caller-weighted composite + Pareto dominance + labelled winner/greenest/most-equitable picks.", True, _S, None),
     ("/robustness", "Decision support", ["§20", "§22"], "Decision-under-uncertainty across candidates × shock states: payoff/regret matrices + maximin/minimax-regret/Laplace picks.", True, _S, None),
     ("/sdg", "Decision support", ["§23"], "Map the sim + audit artifacts onto UN SDG 11/16/13/10 indicators (no arbitrary composite score).", True, _S, None),
     ("/stress-test", "Decision support", ["§20"], "Re-run the policy under named external shocks (recession/fuel/flood/…) → per-metric robust/weakened/reversed verdict.", True, _S, None),
@@ -175,6 +176,7 @@ ENDPOINTS: list[tuple] = [
     ("/north-star/example", "Composed answers & export", ["§37"], "Keyless: the §37 North-Star answer for the demo charge.", False, None, None),
     ("/run/example", "Composed answers & export", ["§28", "§29"], "Keyless: the full killer-demo pipeline for the demo charge, no body.", False, None, None),
     ("/robustness/objectives", "Decision support", ["§20", "§22"], "Keyless: the selectable robustness objectives + shock-state keys.", False, _O, None),
+    ("/shortlist/example", "Decision support", ["§21", "§22"], "Keyless: rank three contrasting demo policies (charge→buses vs charge→general-fund vs pedestrianise).", False, _S, None),
     ("/stress-test/catalogue", "Decision support", ["§20"], "Keyless: the named external-shock scenario catalogue with documented knobs.", False, _O, None),
 ]
 
@@ -191,5 +193,6 @@ _KEYLESS_COMPANION: dict[str, str] = {
     "/run": "/run/example",
     "/analogues": "/analogues/cases",
     "/robustness": "/robustness/objectives",
+    "/shortlist": "/shortlist/example",
     "/stress-test": "/stress-test/catalogue",
 }

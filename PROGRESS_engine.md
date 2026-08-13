@@ -1442,3 +1442,35 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   `backend/tests/test_scenarios.py` (8 tests). Pure additive — no existing `backend/app/**` behaviour
   changed. **497 green** (was 489), `scripts/audit.py` PASS, `scripts/capabilities.py` PASS, app boots
   with **60 routes** (was 58). No frontend/shared files touched.
+
+## 2026-08-13 — Policy shortlist ranker (`POST /shortlist`, SPEC §21/§22)
+- The engine could *search* a policy grid (`/optimise`) and *stress-rank* candidates across shocks
+  (`/robustness`), but nothing answered the minister's most literal decision question: **"here are
+  the 2–8 proposals already on my desk — rank them head-to-head and tell me which wins and why."**
+  This layer is that ranker.
+- `backend/app/shortlist/` + `POST /shortlist` (+ keyless `GET /shortlist/example`): each entry is an
+  **NL prompt** (compiled by the real `compile_policy`) or a **pre-compiled DSL**; every one is
+  simulated by the **same deterministic World-B + cohort-opinion model** the optimiser uses — the
+  per-candidate metric math is **reused verbatim** from `optimiser.search._evaluate`, so `/shortlist`
+  and `/optimise` can never disagree on a policy's numbers (single source of truth).
+- On top: a **transparent, caller-weighted composite** — the five decision axes (emissions cut,
+  avg-commute cost, low-income burden, net support, est_cost) are min–max normalised across the
+  shortlist (1.0 = best), then weighted by the caller's own `weights` (normalised to sum 1; all-equal
+  by default). Weights are the **only** subjective input; the metrics are all Simulated. Plus **Pareto
+  dominance** (reused `_pareto`/`_objective_vector`, names each dominator), per-axis leaders,
+  feasibility gating against the same `objective`/`constraints`, and labelled picks (winner / greenest
+  / most_equitable / cheapest / most_supported / best_balanced). `trade_offs` is deterministic,
+  number-grounded narration (no LLM prose on any number).
+- **§34:** outcome metrics Simulated, `est_cost` the same documented Estimated proxy as the optimiser,
+  no LLM on the numeric path, single long-run horizon (matches `/optimise`). Reconciled with the §33
+  manifest (both routes carded; `undocumented_routes`/`phantom_cards` empty; keyless companion wired)
+  and added to the `scripts/audit.py` sweep (served-200, provenance-tag, byte-identical determinism;
+  both entry paths exercised).
+- Note on this run: an external `/loop` cleanup stashed this work in-progress (`stash@{0}
+  loop-leftover-shortlist`) and removed the lock ~22:50; recovered cleanly via `git stash apply`, lock
+  re-acquired, verified, committed.
+- Files: `backend/app/shortlist/{__init__,schema,rank}.py`, `backend/app/routers/shortlist.py`, edits
+  to `backend/app/main.py`, `backend/app/capabilities/catalogue.py`, `scripts/audit.py`,
+  `backend/tests/test_shortlist.py` (11 tests). Pure additive — no existing `backend/app/**` behaviour
+  changed. **508 green** (was 497), `scripts/audit.py` PASS, `scripts/capabilities.py` PASS, app boots
+  with **62 routes** (was 60). No frontend/shared files touched.

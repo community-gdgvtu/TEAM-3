@@ -47,6 +47,7 @@ from .routers import (
     scenarios,
     sdg,
     sensitivity,
+    shortlist,
     simulate,
     spatial,
     stress,
@@ -114,6 +115,7 @@ def create_app() -> FastAPI:
     app.include_router(brief.router)
     app.include_router(robustness.router)
     app.include_router(scenarios.router)
+    app.include_router(shortlist.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

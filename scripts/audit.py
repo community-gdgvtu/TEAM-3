@@ -136,6 +136,7 @@ def build_report(text: str) -> dict:
         "/run/example",
         "/north-star/example",
         "/robustness/objectives",
+        "/shortlist/example",
         "/stress-test/catalogue",
         "/analogues/cases",
         "/citizen/sample",
@@ -145,6 +146,13 @@ def build_report(text: str) -> dict:
     robust_body = {
         "candidates": [{**policy, "id": "cand_a"}, {**policy, "id": "cand_b"}],
         "scenarios": ["recession", "fuel_price_spike"],
+    }
+    # Shortlist ranker: mix a compiled DSL and an NL prompt (both entry paths).
+    shortlist_body = {
+        "policies": [
+            {"label": "the demo charge", "policy": policy},
+            {"text": "pedestrianise the city centre and reinvest revenue in buses"},
+        ]
     }
     post_routes: list[tuple[str, dict]] = [
         ("/run", P),
@@ -182,6 +190,7 @@ def build_report(text: str) -> dict:
         }),
         ("/backtest", {}),
         ("/robustness", robust_body),
+        ("/shortlist", shortlist_body),
     ]
 
     # Deterministic numeric layers — must be byte-identical across two identical
@@ -204,6 +213,7 @@ def build_report(text: str) -> dict:
         ("/uncertainty", {**P, "metric_key": "traffic.daily_vehicle_km", "samples": 20}),
         ("/sensitivity", P),
         ("/robustness", robust_body),
+        ("/shortlist", shortlist_body),
     ]
 
     routes: list[dict] = []
