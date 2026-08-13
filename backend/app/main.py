@@ -19,6 +19,7 @@ from .routers import (
     baseline,
     compare,
     diffusion,
+    ensemble,
     evidence,
     health,
     media,
@@ -70,6 +71,7 @@ def create_app() -> FastAPI:
     app.include_router(diffusion.router)
     app.include_router(registry.router)
     app.include_router(press.router)
+    app.include_router(ensemble.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

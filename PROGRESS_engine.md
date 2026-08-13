@@ -185,3 +185,25 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   with a SIMULATED banner and fictional outlets/reporters only — no real bylines, no invented
   number (SPEC §16/§34). Horizon configurable (default 5 months, snapped to nearest checkpoint).
   5 tests; 167 green, app boots with 24 routes.
+- 2026-08-13 — Ensemble forecasting (SPEC §8): new `backend/app/ensemble/` package +
+  `POST /ensemble`. SPEC §7 specs a *hybrid* forecast engine and §8 wants those layers pooled
+  into an ensemble whose spread is an honest confidence signal. Implements this for the flagship
+  outcome — the reduction in vehicle trips entering the central cordon — with three genuinely
+  independent estimators: (1) **structural agent-based** (SPEC §7.5), the deterministic World-B
+  model's own Δ% at the horizon (Simulated, weight 0.5, ±15% internal range for behavioural-
+  parameter uncertainty); (2) **historical-analogue transfer** (SPEC §7.1), a Michaelis–Menten
+  saturating transfer function calibrated on real flat-cordon schemes (empirical asymptote ≈ −30%,
+  a half-saturation per-one-way charge) scaled by this policy's charge, with a 0.6–1.25× spread
+  reflecting London/Stockholm/Milan variation (Estimated; anchors are illustrative, explicitly not
+  this city's data; not applicable to a pure car ban); (3) **reduced-form elasticity** (SPEC §7.2),
+  a low out-of-pocket price elasticity of cordon car trips (≈ −0.09, range −0.06…−0.13 — low
+  precisely because real cordon charges are large vs fuel cost yet only cut ~20–30%) applied to the
+  charge as a % of daily car money cost from the baseline snapshot (Estimated; N/A when no charge).
+  Pools the applicable methods by renormalised documented weights into a central estimate, a band =
+  [min low, max high] across methods, a method-spread disagreement measure (low/moderate/high) and
+  a plain-language interpretation. All percentages clamped to the physically valid [−100, 0]%.
+  Crucially it does its job honestly: for a strong charge the ABM's ~−90% cordon collapse is far
+  more extreme than real analogues (~−18%), so the ensemble reports **high disagreement — treat the
+  magnitude as genuinely uncertain**, exactly the caveat SPEC §8 exists to surface. The ensemble
+  output is tagged Estimated (a cross-method blend, not one Simulated run); fully deterministic, no
+  LLM (SPEC §8/§34). 5 tests; 172 green, app boots with 25 routes.
