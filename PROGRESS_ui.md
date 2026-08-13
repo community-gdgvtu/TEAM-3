@@ -889,3 +889,19 @@ it can't disagree with the tabs behind it. Widened `DemoTab` with `northstar`
 `DemoTour` renderer and `[data-tour="tabs"]` anchor are untouched. The tour still
 renders zero metrics (pure guidance, SPEC §34). `tsc --noEmit` clean, `next build`
 clean (/ = 61.9 kB, First Load 150 kB). Frontend-only.
+
+## 2026-08-13 — UI-track: M30 — re-sync frontend README with the 28-tab surface
+Roadmap was 43/43 complete and every backend route (43 routes / 33 routers) already
+had a UI tab, so no new endpoint to surface. Fixed the one real drift: the
+`frontend/README.md` "Analysis surfaces → endpoint → SPEC" table still described the
+~18-endpoint era and its "every documented backend endpoint has a UI surface" claim
+had gone stale — eight flagship tabs (World, Run, North-Star, Grand A/B/C/D, Analogues,
+Time-series, Data Fabric, Change-assumptions-and-rerun) were missing from the map. A
+judge reading the README got a smaller app than the one they click, which is a §34
+honesty gap. Rewrote the intro surface list and the endpoint→SPEC table to cover all 28
+analysis tabs in tab-bar order (North-Star/Run first as the §37/§29 flagships), with
+exact paths verified against `lib/api.ts` (`/institutions/review`,
+`/parliament/failure-modes`, `/compare/grand`, `/assumptions/rerun`, `/data-fabric`, …)
+and correct SPEC sections (§37, §5/§28.2, §7.1/§7.2, §21/§22, §4, §34.10). Docs only —
+no code change; `tsc --noEmit` clean, `next build` clean (/ = 61.9 kB, First Load 150 kB).
+Frontend-only.

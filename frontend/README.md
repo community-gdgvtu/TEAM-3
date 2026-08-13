@@ -1,10 +1,13 @@
 # URBAN frontend
 
 Next.js (App Router) + TypeScript UI for the URBAN policy digital twin — a 3D city,
-a time-machine timeline, a tagged outcomes dashboard, and a tab bar of analysis surfaces
-(Parliament, Public reaction, Press, Counterfactuals, Uncertainty, Optimiser, Economy,
-Dynamics, Stress-testing, SDG, Diffusion, Ensemble, Institutions, Backtest, Registry,
-Reproduce).
+a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 28 analysis
+surfaces: the flagship North-Star answer (§37) and one-call Run pipeline (§29), the
+browsable baseline World Model (§5), Parliament, Public reaction, Press, Press
+conference, Red Team, Counterfactual + Grand A/B/C/D compare, SDG, Diffusion, Ensemble,
+Uncertainty, Optimiser, Economy, Dynamics, Microsim, Spatial, Stress-testing,
+Analogues, Time-series, Institutions, Backtest, Registry, Reproduce, Data Fabric, and
+Change-assumptions-and-rerun.
 
 ## Run
 
@@ -64,6 +67,8 @@ result feed the map overlays, the `TimelineScrubber` (T0→10y checkpoints), and
 ## Analysis surfaces → endpoint → SPEC
 
 Every documented backend endpoint has a UI surface. All fetches are typed in `lib/api.ts`.
+The core landing/canvas surfaces come first; the rest follow the analysis tab-bar order a
+judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 
 | Surface | Endpoint | SPEC |
 | --- | --- | --- |
@@ -73,13 +78,16 @@ Every documented backend endpoint has a UI surface. All fetches are typed in `li
 | Simulate / re-simulate | `POST /simulate` | §29 |
 | Outcomes dashboard tiles | (from `/simulate` + `/baseline`) | §27 |
 | Evidence drawer | `POST /evidence` | §26 |
-| Parliament debate + amendment | `POST /parliament/debate` | §11 |
-| Amendment effect Δ(amended − original) | `POST /simulate/amend` | §12 |
-| Red Team (Failure Mode Register) | (from `/parliament/debate`) | §11 |
+| North-Star answer (the minister's question) | `POST /north-star` | §37 |
+| Run — whole pipeline in one call | `POST /run` | §28/§29 |
+| Baseline World Model | `GET /world` | §5/§28.2 |
+| Parliament debate + amendment | `POST /parliament/debate`, `POST /simulate/amend` | §11/§12 |
 | Public reaction | `POST /public` | §13 |
 | Simulated press feed | `POST /media` | §15 |
 | Press conference (presser) | `POST /press-conference` | §16 |
+| Red Team (Failure Mode Register) | `POST /parliament/failure-modes` | §11 |
 | Counterfactual compare | `POST /compare` | §21 |
+| Grand A/B/C/D compare | `POST /compare/grand` | §21/§22 |
 | SDG alignment | `POST /sdg` | §23 |
 | Opinion diffusion | `POST /diffusion` | §14 |
 | Ensemble forecast | `POST /ensemble` | §8 |
@@ -90,10 +98,14 @@ Every documented backend endpoint has a UI surface. All fetches are typed in `li
 | Distributional microsimulation | `POST /microsim` | §7.3 |
 | Spatial traffic assignment | `POST /spatial` | §7.7 |
 | Stress-testing environment | `GET /stress-test/catalogue`, `POST /stress-test` | §20 |
-| Institutional review | `POST /institutions` | §18 |
+| Historical analogues (difference-in-differences) | `POST /analogues` | §7.1/§8 |
+| Time-series forecast | `POST /timeseries` | §7.2/§8 |
+| Institutional review | `POST /institutions/review` | §18 |
 | Backtest scorecard | `GET /backtest/example`, `POST /backtest` | §25 |
 | Model registry / transparency | `GET /registry` | §33 |
 | Reproducibility manifest (REPRODUCE RUN) | `POST /reproduce` | §32 |
+| Data Fabric catalogue | `GET /data-fabric` | §4 |
+| Change-assumptions-and-rerun | `GET /assumptions`, `POST /assumptions/rerun` | §34.10 |
 
 ## Honesty contract in the UI (SPEC §34)
 
