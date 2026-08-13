@@ -888,3 +888,42 @@ renders the §29 pipeline) by showing the ministerial *answer* a judge reads top
   passes with all 15 lines rendered, `--json` is a valid `/north-star` payload with 15 sections,
   guardrails hold at horizons 12 & 60).
 - `python -m pytest -q` → **345 passed** (was 340); app still boots with **43 routes**.
+
+---
+
+## 2026-08-13 — ENGINE-track: whole-surface §34 guardrail audit CLI (`scripts/audit.py`)
+
+Third demo-tooling script, and the one a judge runs to answer "prove the whole engine
+isn't AI astrology" in one command. `demo.py` audits the `/run` payload and `north_star.py`
+audits the §37 answer — each checks §34 on *one* composed response. `audit.py` drives the
+**entire HTTP surface** (compile the demo policy once, then every GET + POST route) in-process
+via `TestClient` (no server/ports) and prints a single pass/fail **compliance matrix** over the
+four load-bearing §34 claims:
+
+1. **Every route serves 200** — mirrors the integration-smoke route list, so a route that 500s
+   the night before the demo turns this red.
+2. **Nothing untagged** — recursively walks every response and asserts each `provenance` field
+   (at any depth) references an allowed tag (Observed/Estimated/Simulated/Generated).
+3. **No LLM touches a number** — every §33-registry model asserts `llm_touches_numbers=False`;
+   `/media` carries the SIMULATED banner.
+4. **Reproducible + honest about the future** — each deterministic numeric layer (`/simulate`,
+   `/spatial`, `/microsim`, `/economy`, `/dynamics`, `/sdg`, `/ensemble`, `/diffusion`, `/public`,
+   `/parliament/failure-modes`, `/stress-test`, seeded `/uncertainty`) returns **byte-identical
+   JSON** across two identical calls, and `/simulate`'s uncertainty fan **widens** (non-decreasing
+   + strictly wider at the far horizon than T0). Prose layers (media/press/debate) excluded from
+   byte-identity by design (Generated).
+
+Prints a per-route health list + the six checks, surfaces the specific offender on any failure
+(failed route / untagged provenance / LLM-numbers model / non-deterministic layer), and returns
+a **non-zero exit code** if any guardrail fails — a real pre-demo/CI gate, not a rubber stamp.
+Composes the four standing pytest guards (integration-smoke, determinism-regression, widening,
+cross-layer) into one human-runnable command. `build_report()` is importable + returns the
+structured report so tests assert on it directly. Flags: `--json`, `--text`. No new numeric model,
+no LLM (SPEC §34); pure read of existing endpoints — `demo.py` / `north_star.py` untouched.
+
+- Live run: **38 routes exercised, 15 registry layers, all six checks ✔, PASS (exit 0)**.
+- Guarded by `backend/tests/test_audit_script.py` (5 tests): script present; full-surface audit
+  passes + renders the matrix; `--json` report complete with all six checks green over ≥35 routes
+  + ≥15 registry models and empty violation lists; the pass/fail rollup **flips when any single
+  check is corrupted** (so it can't silently rubber-stamp); a pedestrianisation policy also holds.
+- `python -m pytest -q` → **350 passed** (was 345); app still boots with **43 routes**.
