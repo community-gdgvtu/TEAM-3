@@ -25,6 +25,7 @@ from .routers import (
     optimise,
     parliament,
     policy,
+    press,
     public,
     registry,
     sdg,
@@ -68,6 +69,7 @@ def create_app() -> FastAPI:
     app.include_router(sdg.router)
     app.include_router(diffusion.router)
     app.include_router(registry.router)
+    app.include_router(press.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

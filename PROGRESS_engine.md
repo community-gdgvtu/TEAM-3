@@ -167,3 +167,21 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   flat de-duplicated assumption index and summary counts. The registry is tagged **Observed**
   (it describes the code, it is not a simulation output). Fully deterministic, no LLM (SPEC
   §33/§34). 5 tests; 162 green, app boots with 23 routes.
+- 2026-08-13 — Press conference simulation (SPEC §16): new `backend/app/press/` package +
+  `POST /press-conference`. Stages the moment after a policy is announced: a government
+  spokesperson opening statement built from the run's own figures (central-traffic Δ, daily
+  commuter-CO₂ Δ, whether revenue is being reinvested) followed by five archetype journalist
+  exchanges. Public broadcaster presses on whether the mode-share change matches what was
+  promised; the business correspondent challenges delivery/access cost pass-through; the tabloid
+  runs the populist "tax on drivers" line quoting the modelled opposition share; the environment
+  correspondent argues it isn't ambitious enough on climate; and a local/opposition reporter goes
+  at distributional fairness, naming the worst-hit cohort by mean material impact. Every question
+  is anchored to a specific Δ metric / event-ledger entry / opinion figure, and every spokesperson
+  answer (stance defends / acknowledges / rebuts / commits) cites the same figures and reflects the
+  policy's actual low-income exemption + reinvestment. Reuses the `/media` horizon-state reader so
+  numbers are copied straight from the deterministic simulation; an optional LLM (`press/llm.py`,
+  same preserve-figures-verbatim contract as parliament) polishes prose only, with a template
+  fallback that is the tested default when no key is configured. Whole artifact tagged Generated
+  with a SIMULATED banner and fictional outlets/reporters only — no real bylines, no invented
+  number (SPEC §16/§34). Horizon configurable (default 5 months, snapped to nearest checkpoint).
+  5 tests; 167 green, app boots with 24 routes.
