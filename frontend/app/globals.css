@@ -1170,6 +1170,133 @@ ul.assumptions {
   font-variant-numeric: tabular-nums;
 }
 
+/* --- Public reaction (diverging Likert bars, SPEC §13) ------------------ */
+.public-body {
+  margin-top: 0.4rem;
+}
+
+.public-overall {
+  margin-top: 0.6rem;
+}
+
+.public-overall-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.public-overall-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.likert {
+  display: flex;
+  width: 100%;
+  height: 26px;
+  border-radius: 6px;
+  overflow: hidden;
+  /* 2px surface gaps between segments (dataviz mark spec). */
+  gap: 2px;
+  background: var(--border);
+}
+
+.likert-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2px;
+  overflow: hidden;
+  flex-basis: 0;
+}
+
+.likert-pct {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #0b0b0b;
+  opacity: 0.82;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.likert-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 0.7rem 0 0.2rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.public-dim {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0.9rem 0 0.5rem;
+}
+
+.cohort-rows {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.cohort-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.cohort-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cohort-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cohort-size {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.net-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.net-chip.small {
+  font-size: 0.68rem;
+}
+
+.net-chip.pos {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.net-chip.neg {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.public-note {
+  margin-top: 0.9rem;
+}
+
 .maplibregl-ctrl-group {
   background: var(--panel) !important;
 }

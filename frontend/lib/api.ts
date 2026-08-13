@@ -370,6 +370,64 @@ export async function runFailureModes(
 }
 
 // ---------------------------------------------------------------------------
+// Public reaction — POST /public (SPEC §13)
+// ---------------------------------------------------------------------------
+
+/** Support distribution over the six SPEC §13 buckets (fractions sum to ~1). */
+export interface OpinionDistribution {
+  strong_support: number;
+  support: number;
+  neutral: number;
+  oppose: number;
+  strong_oppose: number;
+  uncertain: number;
+  /** (strong_support + support) − (oppose + strong_oppose), in [-1, 1]. */
+  net_support: number;
+}
+
+export interface CohortOpinion {
+  key: string;
+  income_band: string;
+  /** `"inbound"` (commutes into CBD) or `"local"`. */
+  geography: string;
+  travel_mode: string;
+  size: number;
+  mean_material_impact: number;
+  mean_fairness: number;
+  mean_support: number;
+  distribution: OpinionDistribution;
+}
+
+export interface PublicOpinion {
+  /** Always `"Simulated"` — deterministic structural model, no poll (SPEC §34). */
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  population: number;
+  overall: OpinionDistribution;
+  cohorts: CohortOpinion[];
+  params: Record<string, unknown>;
+}
+
+/** Gauge the deterministic cohort public reaction to a policy. Throws on error. */
+export async function runPublicOpinion(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<PublicOpinion> {
+  const res = await fetch(`${API_BASE_URL}/public`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as PublicOpinion;
+}
+
+// ---------------------------------------------------------------------------
 // Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
 // ---------------------------------------------------------------------------
 

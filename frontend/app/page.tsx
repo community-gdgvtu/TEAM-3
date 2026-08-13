@@ -3,6 +3,7 @@ import PolicyCompiler from "./PolicyCompiler";
 import TwinWorkspace from "../components/twin/TwinWorkspace";
 import ParliamentPanel from "../components/twin/ParliamentPanel";
 import FailureModesPanel from "../components/twin/FailureModesPanel";
+import PublicReactionPanel from "../components/twin/PublicReactionPanel";
 import { TwinProvider } from "../components/twin/TwinStore";
 
 export default function Home() {
@@ -25,6 +26,8 @@ export default function Home() {
         <TwinWorkspace />
 
         <ParliamentPanel />
+
+        <PublicReactionPanel />
 
         <FailureModesPanel />
       </TwinProvider>

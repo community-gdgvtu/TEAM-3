@@ -24,7 +24,7 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 - [x] Failure Mode Register panel from the Devil's Advocate output
 
 ## M6 — Public reaction + media (SPEC §13/§15)
-- [ ] Public reaction view: cohort support distribution by income/geography (charts). Use the `dataviz` conventions
+- [x] Public reaction view: cohort support distribution by income/geography (charts). Use the `dataviz` conventions
 - [ ] Simulated press feed: archetype headlines at Month 5 and Year 2, each visibly stamped SIMULATED
 
 ## M7 — Evidence drawer + polish (SPEC §26/§27)

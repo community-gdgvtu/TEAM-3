@@ -61,3 +61,15 @@ Dated notes, newest at the bottom. One line per shipped item.
   "no modes raised" state rather than inventing risk (SPEC §34). Graceful
   no-policy / loading / error states. **M5 complete.** `tsc --noEmit` +
   `next build` clean.
+- 2026-08-13 — M6.1: Public reaction view (SPEC §13/§27). New PublicReactionPanel
+  convenes `POST /public` and renders the cohort opinion distribution as diverging
+  Likert bars — an overall bar (net-support chip + population) plus a switchable
+  breakdown by Income band / Geography / Travel mode, size-weighted client-side
+  from the cohort list and ordered (income low→high, else by net support). Follows
+  the dataviz conventions: opinion is a polarity scale → a diverging green(support)
+  ↔ red(oppose) ramp with a gray neutral midpoint and muted "uncertain", poles
+  dark / mid-arms light, 2px surface gaps between segments, direct % labels + a
+  shared legend + per-segment hover tooltips as secondary encoding (never colour
+  alone). Every fraction tagged Simulated — a deterministic structural model, not
+  a poll (SPEC §34). Graceful no-policy / loading / error states. `tsc --noEmit` +
+  `next build` clean.
