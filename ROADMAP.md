@@ -20,7 +20,7 @@ Demo policy: *Pedestrianise / price vehicles entering a central district and rei
 ## M2 — Baseline digital twin + synthetic population
 - [x] Generate ≥5k numerical micro-agents (origin/dest, income, car access, price sensitivity) — SPEC §6
 - [x] Baseline (World A) metrics: traffic, mode share, emissions proxy, transit demand
-- [ ] `GET /baseline` returns baseline metric time series
+- [x] `GET /baseline` returns baseline metric time series
 
 ## M3 — Policy simulation (World B) + time machine
 - [ ] Mode-choice + traffic model applying congestion charge/pedestrianisation — SPEC §7.5/§7.7

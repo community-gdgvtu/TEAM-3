@@ -7,15 +7,21 @@ emissions proxy and transit demand. No LLM touches the numeric path (SPEC §34).
 
 from .model import cached_baseline, choose_mode, compute_baseline
 from .params import DEFAULT_PARAMS, BaselineParams
-from .schema import BaselineMetrics, Metric, MetricTag
+from .schema import BaselineMetrics, BaselineTimeSeries, Metric, MetricTag
+from .timeseries import DEFAULT_TREND, BaselineTrend, build_timeseries, cached_timeseries
 
 __all__ = [
     "compute_baseline",
     "cached_baseline",
     "choose_mode",
+    "build_timeseries",
+    "cached_timeseries",
     "BaselineParams",
     "DEFAULT_PARAMS",
+    "BaselineTrend",
+    "DEFAULT_TREND",
     "BaselineMetrics",
+    "BaselineTimeSeries",
     "Metric",
     "MetricTag",
 ]
