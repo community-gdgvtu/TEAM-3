@@ -3638,3 +3638,147 @@ ul.assumptions {
 .presser-note {
   margin-top: 1rem;
 }
+
+/* --- Counterfactual compare panel (M10) ------------------------------- */
+.cmp-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.cmp-presets-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.cmp-preset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.cmp-body {
+  margin-top: 1rem;
+}
+
+.cmp-worlds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cmp-world {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  color: var(--text);
+}
+.cmp-world.base {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+.cmp-world.intervention {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cmp-world.amendment {
+  border-color: #f6be60;
+  color: #f6be60;
+}
+
+.cmp-world-changes {
+  font-size: 0.66rem;
+  opacity: 0.8;
+}
+
+.cmp-horizon {
+  margin: 0.8rem 0 0.4rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.cmp-table {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.cmp-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.6fr) repeat(calc(var(--cols) + 1), minmax(120px, 1fr));
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-top: 1px solid var(--border);
+  align-items: center;
+  min-width: max-content;
+}
+.cmp-row:first-child {
+  border-top: none;
+}
+
+.cmp-row-head {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cmp-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.cmp-metric-label {
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.cmp-metric-unit {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.cmp-baseline {
+  color: var(--muted);
+}
+
+.cmp-val {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.cmp-delta {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.cmp-delta.up {
+  color: #ff9d5c;
+}
+.cmp-delta.down {
+  color: #6fd3ff;
+}
+.cmp-delta.flat {
+  color: var(--muted);
+}
+
+.cmp-note {
+  margin-top: 1rem;
+}

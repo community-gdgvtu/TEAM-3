@@ -1029,6 +1029,79 @@ export async function runPressConference(
 }
 
 // ---------------------------------------------------------------------------
+// Counterfactual comparison (SPEC §21) — POST /compare
+// ---------------------------------------------------------------------------
+
+/** One world's value for one metric at the headline horizon. */
+export interface ComparisonCell {
+  world_id: string;
+  value: number;
+  delta_vs_baseline: number;
+  delta_pct: number | null;
+}
+
+/** One metric across all worlds at the headline horizon. */
+export interface ComparisonRow {
+  key: string;
+  label: string;
+  unit: string;
+  tag: MetricTag;
+  /** World-A value — never omitted (SPEC §21). */
+  baseline_value: number;
+  cells: ComparisonCell[];
+}
+
+/** One intervention world (B, C, D…) — meta only; snapshots typed loosely. */
+export interface CounterfactualWorld {
+  id: string;
+  /** 'intervention' | 'amendment'. */
+  role: string;
+  label: string;
+  policy_id: string;
+  changes: string[];
+}
+
+export interface CounterfactualComparison {
+  provenance: MetricTag;
+  note: string;
+  base_policy_id: string;
+  horizon: Checkpoint;
+  worlds: CounterfactualWorld[];
+  headline_table: ComparisonRow[];
+}
+
+/**
+ * Compare World A (baseline) vs World B (intervention) vs one world per amendment
+ * (C, D…) in a single deterministic payload (SPEC §21). The baseline is always
+ * present. Returns the headline table (baseline + every world + Δ per metric at
+ * one horizon) plus per-world metadata. Throws on network/HTTP error.
+ */
+export async function runCompare(
+  policy: PolicyDSL,
+  amendments: Amendment[] = [],
+  signal?: AbortSignal,
+): Promise<CounterfactualComparison> {
+  const res = await fetch(`${API_BASE_URL}/compare`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, amendments }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as CounterfactualComparison;
+}
+
+// ---------------------------------------------------------------------------
 // Institutional review panel (SPEC §18) — POST /institutions/review
 // ---------------------------------------------------------------------------
 

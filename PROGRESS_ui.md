@@ -222,3 +222,17 @@ Dated notes, newest at the bottom. One line per shipped item.
   `runPressConference` client + press types added to lib/api.ts; wired as a new
   "Presser" tab (distinct from the /media-driven "Press" headline feed).
   `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M10.2: Counterfactual compare tab (SPEC §21). New ComparePanel
+  convenes `POST /compare` on the compiled policy and renders World A (baseline)
+  vs World B (intervention) vs any amendment worlds C/D…. The user toggles a small
+  set of structured preset amendments (exempt low-income, exempt residents, +50%
+  charge) to spin up extra worlds — transparent structured edits, not free text.
+  Output: a world legend (A baseline always shown per SPEC §21, B intervention,
+  amendment worlds with their edit counts, colour-coded by role) and a horizontally
+  scrollable headline table — one row per metric, columns = baseline value + each
+  world's value with its Δ-vs-baseline (absolute + %, direction arrow, neutral
+  up/down colouring that does NOT imply good/bad since metric direction varies).
+  Honesty (SPEC §21/§34): baseline never omitted, every number Simulated, Δ =
+  world − baseline. Graceful no-policy/loading/error states. Typed `runCompare`
+  client + comparison types added to lib/api.ts (reusing the Amendment type);
+  wired as a new "Compare" tab. `tsc --noEmit` + `next build` clean.
