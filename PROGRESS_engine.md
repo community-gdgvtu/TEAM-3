@@ -984,3 +984,44 @@ no LLM (SPEC §34); pure read of existing endpoints — `demo.py` / `north_star.
 - New `backend/tests/test_citizen.py` (11 tests). `python -m pytest -q` → **370 passed**
   (was 359); app boots with **46 routes** (was 44); `scripts/audit.py` full-surface §34
   audit PASS over all routes.
+
+- 2026-08-13 — **Business View — single-firm drill-down (SPEC §17 Business View).**
+  The micro counterpart to last run's Citizen View, and the last §17 view with no
+  endpoint. SPEC §17 asks by name: "Click a firm. Show: footfall, labour
+  accessibility, deliveries, costs, revenue proxy, adaptation decisions."
+- New `backend/app/business/` (`params.py`, `schema.py`, `service.py`, `__init__.py`)
+  + `backend/app/routers/business.py` → `POST /business` (+ `GET /business/sample`).
+  **No new numeric model, no LLM** (SPEC §34) — pure reuse:
+  - **labour accessibility** = the commute generalized cost of the firm's *own
+    workers* (commuters whose `work_zone` == firm zone) under the identical
+    `mode_options`/`policy_mode_options` model `/simulate` + Citizen View use;
+    index 100 = baseline ease, <100 = worse. A test recomputes the World-A mean
+    commuter GC agent-by-agent and pins it == the index base.
+  - **footfall / deliveries / cost / revenue** reuse the *same* `EconParams`
+    coefficients as `/economy` (spend-per-visit, freight pass-through,
+    `cbd_trip_avoidance_fraction`, `pedestrianisation_retail_uplift`) + strictly
+    firm-level allocation ratios in `params.py` (customer-per-worker by sector,
+    deliveries-per-1000 m², storey height — documented Estimated).
+- **Firms = the building stock**: each commercial building in `buildings.geojson`
+  (office/tower/podium/lowrise/mixed/industrial → sectors; residential/park
+  excluded) is a firm; jobs allocated from the zone `jobs` total by gross-floor-area
+  share (test: allocated jobs never exceed the zone total).
+- **Staged over the Time Machine** (SPEC §9): footfall/access/cost/revenue
+  interpolate the three structural anchors (World A / behaviour-only B / full B) on
+  the same `_behaviour_fraction`/`_transit_fraction` curves as the aggregate
+  timeline; bands widen monotonically (guarded). Adds deterministic **adaptation
+  decisions** (absorb/consolidate deliveries, lean into pedestrian footfall under a
+  ban, staff transit passes under labour-access pressure, relocation-risk flag,
+  minimal exposure for outer firms) + a "Why?" narrative.
+- Demo £12 reinvest charge, central retail firm: ~94% of car arrivals deterred,
+  ~$173k/yr added delivery cost, labour access → ~81, net revenue proxy −12%.
+- Selectors: `firm_id` (404 on miss) or `select` (representative / most_exposed /
+  biggest_footfall_loss / pedestrian_winner / largest; 422 on unknown).
+  `GET /business/sample` = policy-independent firm picker spanning sectors.
+- Physical drivers Simulated → firm translation Estimated (`output_tag=Estimated`,
+  SPEC §8); registered in §33 registry (**18 layers**, `llm_touches_numbers=False`);
+  added to integration-smoke (POST + `/business/sample` GET) + determinism-regression
+  + `scripts/audit.py` standing guards.
+- New `backend/tests/test_business.py` (11 tests). `python -m pytest -q` →
+  **381 passed** (was 370); app boots with **48 routes** (was 46); `scripts/audit.py`
+  full-surface §34 audit PASS over all routes.

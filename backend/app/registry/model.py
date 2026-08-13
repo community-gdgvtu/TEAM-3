@@ -473,6 +473,44 @@ def _models() -> list[ModelCard]:
             assumptions=[],
         ),
         ModelCard(
+            id="business_view",
+            name="Business View (single-firm drill-down)",
+            spec_sections=["§17"],
+            layer="Economic Spillover Layer (SPEC §7.4) — per-firm projection",
+            method=(
+                "Projects one synthetic firm's footfall, labour accessibility, "
+                "deliveries, added cost and revenue proxy across the Time Machine. "
+                "Labour accessibility is the commute generalized cost of the firm's "
+                "own workers, computed with the same deterministic mode-choice model "
+                "as /simulate; footfall / deliveries / cost / revenue reuse the same "
+                "economic coefficients as /economy (spend-per-visit, freight "
+                "pass-through, car-avoidance fraction, pedestrianisation uplift). "
+                "Firms are the commercial buildings; jobs are allocated from zone "
+                "totals by floor-space share. Metrics are interpolated between three "
+                "structural anchors (World A, behaviour-only World B, fully-adapted "
+                "World B) on the same adaptation curves as the aggregate timeline; "
+                "bands widen monotonically with the horizon (SPEC §9)."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=[
+                "synthetic building/firm record",
+                "policy levers",
+                "per-work-zone commuter aggregates",
+                "economic-translation coefficients",
+                "staged-adaptation curve",
+            ],
+            outputs=[
+                "per-firm footfall / labour-accessibility / deliveries trajectory",
+                "per-firm added cost + revenue proxy (Estimated)",
+                "deterministic adaptation decisions + 'why?' narrative",
+            ],
+            output_tag=est,
+            code="app.business.service",
+            assumptions=[],
+        ),
+        ModelCard(
             id="policy_optimiser",
             name="Policy optimiser (grid search → Pareto set)",
             spec_sections=["§22"],

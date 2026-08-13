@@ -19,6 +19,7 @@ from .routers import (
     assumptions,
     backtest,
     baseline,
+    business,
     citizen,
     compare,
     datafabric,
@@ -102,6 +103,7 @@ def create_app() -> FastAPI:
     app.include_router(assumptions.router)
     app.include_router(world.router)
     app.include_router(citizen.router)
+    app.include_router(business.router)
     app.include_router(run.router)
     app.include_router(northstar.router)
 
