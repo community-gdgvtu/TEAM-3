@@ -665,3 +665,45 @@ is informative and says: "Forecast World A first. Then policy models alter the b
   regressors beyond trend/seasonality); Gaussian intervals (not a full Bayesian posterior / bootstrap);
   the behavioural response is the ABM's — the TS layer only shapes the baseline trajectory + uncertainty.
 - 9 tests; **275 green** (was 266), app boots with **36 routes** (was 35).
+
+## 2026-08-13 — Data Fabric: dataset ingestion & provenance layer (SPEC §4) [NEW LAYER]
+
+Engine roadmap was 100% checked. Rather than invent a marginal feature, closed a genuine
+remaining SPEC gap: **§4 (Data Fabric — ingestion & provenance layer)** was one of the few
+enumerated top-of-pipeline SPEC sections with no first-class endpoint. `/evidence` (§26) traces a
+single *metric*, `/registry` (§33) catalogues the *models*, `/reproduce` (§32) pins dataset byte
+hashes for one run — but nothing published the dataset-level catalogue with the full §4 provenance
+record + harmonisation lineage the spec mandates.
+
+- `backend/app/datafabric/` (`schema.py`, `model.py`, `__init__.py`) + `backend/app/routers/
+  datafabric.py` → `GET /data-fabric`. Wired in `main.py` (37 routes now, was 36).
+- **Full §4 metadata schema per dataset, built live from disk**: title / publisher / source_url /
+  retrieved_at / geographic_scope / spatial_resolution / time_start-end / frequency / units /
+  variables / license / missingness / revision / confidence / transformation_history. Record counts,
+  per-variable dtype+unit+description, **measured missingness** (scans real records — 0% on the
+  complete synthetic files, reported not assumed) and a content-addressed **`revision` = sha256 of
+  the actual file bytes** are all computed on disk at request time, so the catalogue cannot drift
+  from what the engine reads. Shared scope/licence read from `manifest.json`.
+- **Dataset cards**: zones / roads / od_pairs / population / buildings — each **Simulated**, publisher
+  = the synthetic generator, with real datasets (ONS WU03EW, 3DCityDB, Census microdata, OSM, LODES,
+  WebTAG) listed only as **schema analogues**, never as live sources (SPEC §34 honesty). Plus the
+  mode-choice **assumption-set** card (Estimated, variables introspected live from `DEFAULT_PARAMS`).
+- **§4 supported-format contract** with honest wiring status: JSON + GeoJSON `native`; CSV/XLSX
+  `adapter-ready`; GTFS / gov-APIs / census / budget / Hansard / election / consultation / survey /
+  environmental / admin `declared` (part of the ingestion contract, not exercised in the synthetic
+  demo).
+- **§4 harmonisation pipeline**, honest about what actually runs: geographic joins (all layers key on
+  `zone_id`), schema mapping (`dataset.py` typed accessors), unit normalisation (money↔minutes, km/h,
+  veh/hr), population weighting (sample→city rep-factor), provenance tracking (byte hashes +
+  MetricTags), dedup, missing-data treatment → *implemented* with the code path; time alignment /
+  inflation adjustment / outlier detection → **N/A** for a single-snapshot synthetic city, with the
+  reason, rather than faking precision. Emits the mandated `input data → transformation → model →
+  assumptions → result` lineage contract.
+- Provenance: the fabric is **Observed** about the data itself (transparency artifact, not a
+  forecast). Fully deterministic, no LLM (SPEC §4/§34). §33 registry left untouched — the fabric is
+  data-side, the registry model-side; kept separate like §32/§26. Added `/data-fabric` to the
+  integration-smoke GET sweep.
+- Honest scope: no real feed is ingested (synthetic city), so the fabric documents the ingestion +
+  harmonisation *contract* a real deployment would exercise, and measures/labels the synthetic files
+  truthfully rather than dressing them up as observations.
+- 9 tests; **284 green** (was 275), app boots with **37 routes** (was 36).

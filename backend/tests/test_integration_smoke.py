@@ -89,6 +89,7 @@ GET_ROUTES = [
     "/health",
     "/baseline",
     "/registry",
+    "/data-fabric",
     "/backtest/example",
     "/stress-test/catalogue",
 ]

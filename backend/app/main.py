@@ -19,6 +19,7 @@ from .routers import (
     backtest,
     baseline,
     compare,
+    datafabric,
     diffusion,
     dynamics,
     economy,
@@ -90,6 +91,7 @@ def create_app() -> FastAPI:
     app.include_router(stress.router)
     app.include_router(analogues.router)
     app.include_router(timeseries.router)
+    app.include_router(datafabric.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
