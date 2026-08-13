@@ -13,6 +13,7 @@ out/
 dist/
 npm-debug.log*
 yarn-error.log*
+*.tsbuildinfo
 
 # Env / secrets
 .env
