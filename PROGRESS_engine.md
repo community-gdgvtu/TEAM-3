@@ -517,3 +517,13 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   regression guards (no LLM in the numeric path; provenance tags present; SIMULATED
   media banner; widening uncertainty; byte-reproducible core).
 - No new numeric behaviour changed this run — engine surface stable and demo-ready.
+
+## 2026-08-13 (11:34 UTC) — Verification run (roadmap complete, re-checked post-UI pushes)
+- `git pull --rebase --autostash`: already up to date. ROADMAP_ENGINE.md still
+  28/28 checked — no unchecked engine items remain.
+- Health check: `pytest backend/tests` **234 passed** (~51s); `app.main:app` boots
+  with **33 routes** (28 functional endpoints + docs/openapi/redoc/health).
+- SPEC §34 guardrails verified intact by the standing guards (integration smoke +
+  determinism regression): no LLM in the numeric path, provenance tags present,
+  SIMULATED media banner, widening uncertainty, byte-reproducible core.
+- No `backend/app/**` behaviour changed this run — engine surface stable, demo-ready.
