@@ -31,6 +31,7 @@ import EconomyPanel from "./EconomyPanel";
 import DynamicsPanel from "./DynamicsPanel";
 import MicrosimPanel from "./MicrosimPanel";
 import SpatialPanel from "./SpatialPanel";
+import StressPanel from "./StressPanel";
 import ReproducePanel from "./ReproducePanel";
 import { useTwin } from "./TwinStore";
 
@@ -50,6 +51,7 @@ type TabKey =
   | "dynamics"
   | "microsim"
   | "spatial"
+  | "stress"
   | "institutions"
   | "backtest"
   | "registry"
@@ -71,6 +73,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "dynamics", label: "Dynamics" },
   { key: "microsim", label: "Microsim" },
   { key: "spatial", label: "Spatial" },
+  { key: "stress", label: "Stress" },
   { key: "institutions", label: "Institutions" },
   { key: "backtest", label: "Backtest" },
   { key: "registry", label: "Registry" },
@@ -151,6 +154,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "spatial"}>
           <SpatialPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "stress"}>
+          <StressPanel />
         </div>
         <div role="tabpanel" hidden={active !== "institutions"}>
           <InstitutionsPanel />

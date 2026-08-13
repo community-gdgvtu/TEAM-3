@@ -5830,3 +5830,453 @@ ul.assumptions {
     display: none;
   }
 }
+
+/* -------------------------------------------------------------------------
+   Stress-testing environment (SPEC §20) — StressPanel
+   ------------------------------------------------------------------------- */
+.st-shocks {
+  margin: 0.25rem 0 0.75rem;
+}
+.st-shocks-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.st-shocks-title {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.st-shocks-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+.st-mini {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.st-mini:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.st-mini:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.st-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.st-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+.st-chip:hover {
+  border-color: var(--accent);
+}
+.st-chip.on {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(79, 140, 255, 0.12);
+}
+.st-chip-label {
+  font-weight: 500;
+}
+.st-fid {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.st-fid.modelled {
+  color: var(--ok);
+  border-color: rgba(61, 220, 151, 0.4);
+}
+.st-fid.partial {
+  color: #ffcf6b;
+  border-color: rgba(255, 207, 107, 0.4);
+}
+.st-fid.proxy {
+  color: var(--bad);
+  border-color: rgba(255, 107, 107, 0.4);
+}
+
+.st-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.st-horizon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.st-horizon select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+}
+
+.st-body {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Robustness roll-up banner */
+.st-robust {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: var(--panel);
+}
+.st-robust-headline {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.st-robust-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.st-robust-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-top: 0.7rem;
+}
+.st-robust-col {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+  border-top-width: 3px;
+}
+.st-robust-col.good {
+  border-top-color: var(--ok);
+}
+.st-robust-col.mid {
+  border-top-color: #ffcf6b;
+}
+.st-robust-col.bad {
+  border-top-color: var(--bad);
+}
+.st-robust-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.st-robust-col.good .st-robust-count {
+  color: var(--ok);
+}
+.st-robust-col.mid .st-robust-count {
+  color: #ffcf6b;
+}
+.st-robust-col.bad .st-robust-count {
+  color: var(--bad);
+}
+.st-robust-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: 0.15rem 0 0.35rem;
+}
+.st-robust-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.st-robust-key {
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  color: var(--text);
+}
+.st-robust-none {
+  color: var(--muted);
+}
+
+/* Per-scenario card */
+.st-scenario {
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  background: var(--panel);
+}
+.st-scenario.good {
+  border-left-color: var(--ok);
+}
+.st-scenario.mid {
+  border-left-color: #ffcf6b;
+}
+.st-scenario.bad {
+  border-left-color: var(--bad);
+}
+.st-scenario.muted {
+  border-left-color: var(--muted);
+}
+.st-baseline {
+  background: rgba(255, 255, 255, 0.02);
+}
+.st-scen-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.st-scen-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+.st-scen-label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.st-scen-cat {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.st-scen-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.st-conf {
+  font-size: 0.7rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.st-conf.good {
+  color: var(--ok);
+}
+.st-conf.mid {
+  color: #ffcf6b;
+}
+.st-conf.bad {
+  color: var(--bad);
+}
+.st-verdict {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+.st-verdict.sm {
+  font-size: 0.64rem;
+  padding: 0.02rem 0.4rem;
+}
+.st-verdict.good {
+  color: var(--bg);
+  background: var(--ok);
+}
+.st-verdict.mid {
+  color: var(--bg);
+  background: #ffcf6b;
+}
+.st-verdict.bad {
+  color: #fff;
+  background: var(--bad);
+}
+.st-verdict.muted {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+}
+.st-scen-summary {
+  margin: 0.5rem 0 0.65rem;
+  font-size: 0.9rem;
+}
+
+/* Metric-stress table */
+.st-metric-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.st-metric-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.7fr;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.35rem 0.4rem;
+  border-radius: 6px;
+}
+.st-metric-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+.st-metric-head {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: none !important;
+}
+.st-metric-name {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+}
+.st-metric-unit {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.st-metric-delta {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+}
+.st-metric-pct {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+.st-metric-retained {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.st-retain-track {
+  position: relative;
+  flex: 1;
+  min-width: 40px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.st-retain-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 4px;
+}
+.st-retain-fill.good {
+  background: var(--ok);
+}
+.st-retain-fill.mid {
+  background: #ffcf6b;
+}
+.st-retain-fill.bad {
+  background: var(--bad);
+}
+.st-retain-fill.muted {
+  background: var(--muted);
+}
+/* 100%-of-baseline reference marker at 2/3 of the [0,150] track */
+.st-retain-100 {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 66.6%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.st-retain-val {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 2.6em;
+  text-align: right;
+}
+.st-retain-val.good {
+  color: var(--ok);
+}
+.st-retain-val.mid {
+  color: #ffcf6b;
+}
+.st-retain-val.bad {
+  color: var(--bad);
+}
+.st-retain-val.muted {
+  color: var(--muted);
+}
+.st-metric-ref {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.st-caveat {
+  margin: 0.65rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 0.5rem 0.6rem;
+  background: rgba(255, 207, 107, 0.06);
+  border: 1px solid rgba(255, 207, 107, 0.2);
+  border-radius: 6px;
+}
+.st-caveat-tag {
+  display: inline-block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #ffcf6b;
+  margin-right: 0.45rem;
+}
+.st-baseline-caveat {
+  margin: 0.5rem 0 0;
+}
+.st-overrides {
+  margin-top: 0.6rem;
+}
+.st-overrides > summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.st-ov-tag {
+  margin-left: 0.4rem;
+}
+
+@media (max-width: 620px) {
+  .st-robust-cols {
+    grid-template-columns: 1fr;
+  }
+  .st-metric-row {
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+  .st-metric-row > :nth-child(4) {
+    grid-column: 1 / -1;
+  }
+  .st-metric-head > :nth-child(4) {
+    display: none;
+  }
+}

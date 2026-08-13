@@ -2028,3 +2028,158 @@ export async function runReproduce(
   }
   return (await res.json()) as ReproManifest;
 }
+
+// ---------------------------------------------------------------------------
+// Stress-testing environment (SPEC §20) — POST /stress-test, GET /stress-test/catalogue
+// ---------------------------------------------------------------------------
+
+/**
+ * One named exogenous shock as listed by `GET /stress-test/catalogue`: the
+ * human-meaningful scenario, the transparent numeric knobs it maps onto, its
+ * model fidelity and a plain-language caveat. Magnitudes are Estimated scenario
+ * assumptions, never observed (SPEC §20/§34).
+ */
+export interface ShockCard {
+  key: string;
+  label: string;
+  /** macro | energy | climate | demographic | technology */
+  category: string;
+  description: string;
+  /** The exact `Shocks` knobs applied to BOTH worlds (auditable). */
+  overrides: Record<string, unknown>;
+  rationale: string;
+  /** modelled | partial | proxy — how faithfully the MVP core represents it. */
+  fidelity: string;
+  caveat: string;
+  provenance: string;
+}
+
+export interface ShockCatalogue {
+  provenance: string;
+  note: string;
+  scenarios: ShockCard[];
+}
+
+/**
+ * How one headline metric's policy benefit Δ(B−A) holds up under one shock. A
+ * shock is applied to both worlds, so the delta still isolates the policy;
+ * comparing the shocked delta to the no-shock baseline delta tells us whether the
+ * benefit survives (SPEC §20/§21).
+ */
+export interface MetricStress {
+  key: string;
+  label: string;
+  unit: string;
+  /** 'decrease' | 'increase' — direction of a *good* policy effect. */
+  intended_direction: string;
+  delta_baseline: number;
+  delta_baseline_pct: number | null;
+  delta_shocked: number;
+  delta_shocked_pct: number | null;
+  /** % of the no-shock benefit retained (100 = unchanged, <0 = reversed). */
+  retained_pct: number | null;
+  /** robust | strengthened | weakened | neutralised | reversed | n/a */
+  verdict: string;
+  note: string;
+}
+
+/** The policy re-run under one named scenario (or the no-shock baseline). */
+export interface ScenarioResult {
+  key: string;
+  label: string;
+  category: string;
+  /** modelled | partial | proxy */
+  fidelity: string;
+  /** high | medium | low, from fidelity × horizon. */
+  confidence: string;
+  caveat: string;
+  overrides: Record<string, unknown>;
+  metrics: MetricStress[];
+  /** holds | degrades | fails | reference */
+  verdict: string;
+  summary: string;
+}
+
+/** Roll-up: which shocks the policy withstands and which break it. */
+export interface StressRobustness {
+  robust_to: string[];
+  degrades_under: string[];
+  fails_under: string[];
+  headline: string;
+}
+
+/** Full `POST /stress-test` payload (SPEC §20). */
+export interface StressReport {
+  provenance: MetricTag;
+  policy_id: string;
+  note: string;
+  horizon_months: number;
+  horizon_label: string;
+  baseline: ScenarioResult;
+  scenarios: ScenarioResult[];
+  robustness: StressRobustness;
+}
+
+/**
+ * List the named shock toggles with their transparent overrides + fidelity
+ * caveats via `GET /stress-test/catalogue` (SPEC §20). Throws on network/HTTP
+ * error so the panel shows an honest waiting/error state.
+ */
+export async function fetchStressCatalogue(
+  signal?: AbortSignal,
+): Promise<ShockCatalogue> {
+  const res = await fetch(`${API_BASE_URL}/stress-test/catalogue`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as ShockCatalogue;
+}
+
+/**
+ * Stress-test a compiled policy across the SPEC §20 named shocks via
+ * `POST /stress-test`: re-runs the deterministic A/B/Δ core once per shock and
+ * reports where the policy's benefit holds, degrades or fails. Shocks are
+ * applied to both worlds so Δ(B−A) keeps isolating the policy; no randomness, no
+ * LLM. Throws on network/HTTP error so the panel can show an honest waiting/error
+ * state rather than inventing a robustness claim (SPEC §20/§34).
+ */
+export async function runStressTest(
+  policy: PolicyDSL,
+  scenarios?: string[] | null,
+  horizonMonths?: number | null,
+  signal?: AbortSignal,
+): Promise<StressReport> {
+  const body: Record<string, unknown> = { policy };
+  if (scenarios && scenarios.length > 0) body.scenarios = scenarios;
+  if (horizonMonths != null) body.horizon_months = horizonMonths;
+  const res = await fetch(`${API_BASE_URL}/stress-test`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const errBody = (await res.json()) as { detail?: unknown };
+      if (typeof errBody.detail === "string") {
+        detail = errBody.detail;
+      } else if (
+        errBody.detail &&
+        typeof errBody.detail === "object" &&
+        "error" in errBody.detail &&
+        typeof (errBody.detail as { error?: unknown }).error === "string"
+      ) {
+        detail = (errBody.detail as { error: string }).error;
+      }
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as StressReport;
+}

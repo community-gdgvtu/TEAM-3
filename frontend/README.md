@@ -3,7 +3,8 @@
 Next.js (App Router) + TypeScript UI for the URBAN policy digital twin — a 3D city,
 a time-machine timeline, a tagged outcomes dashboard, and a tab bar of analysis surfaces
 (Parliament, Public reaction, Press, Counterfactuals, Uncertainty, Optimiser, Economy,
-Dynamics, SDG, Diffusion, Ensemble, Institutions, Backtest, Registry, Reproduce).
+Dynamics, Stress-testing, SDG, Diffusion, Ensemble, Institutions, Backtest, Registry,
+Reproduce).
 
 ## Run
 
@@ -88,6 +89,7 @@ Every documented backend endpoint has a UI surface. All fetches are typed in `li
 | Recursive feedback loop (dynamics) | `POST /dynamics` | §7.6/§19 |
 | Distributional microsimulation | `POST /microsim` | §7.3 |
 | Spatial traffic assignment | `POST /spatial` | §7.7 |
+| Stress-testing environment | `GET /stress-test/catalogue`, `POST /stress-test` | §20 |
 | Institutional review | `POST /institutions` | §18 |
 | Backtest scorecard | `GET /backtest/example`, `POST /backtest` | §25 |
 | Model registry / transparency | `GET /registry` | §33 |
@@ -135,3 +137,15 @@ the same key), dataset + model versions, and a self-verified `output_digest`. Th
 compares digests — and `prompts` is always empty, surfacing the §34 guarantee that no LLM
 enters the numeric path. When the backend is down the panel says so rather than minting a
 fake key.
+
+The **Stress-testing** tab (`GET /stress-test/catalogue` + `POST /stress-test`, SPEC §20)
+answers "does the policy still work under a recession + fuel shock?" without over-claiming.
+Each named shock is a transparent scenario assumption applied to *both* worlds, so the
+reported Δ(B−A) still isolates the policy; policy deltas are **Simulated** (deterministic,
+no LLM) while the shock magnitudes are **Estimated** — both provenance classes are shown.
+Crucially, every shock declares a model `fidelity` (modelled / partial / proxy) and a
+plain-language caveat (a flood, heatwave or interest-rate move is only a proxy in a static
+mode-choice core), so a weakly-represented shock never masquerades as a precise result. The
+per-metric "retained" bar carries a 100%-of-baseline marker so a weakened or reversed
+benefit is visible at a glance, and when the backend is down the panel shows a
+waiting/error state rather than a fabricated robustness verdict.

@@ -476,3 +476,33 @@ Added a **Reproduce** tab exposing it end-to-end:
   + a Reproduce paragraph in the honesty-contract section + the tab list in the intro.
 Checks green: `tsc --noEmit` clean; `next build` clean (4/4 static pages, / at 127 kB First
 Load JS). Every documented engine endpoint is again surfaced in the UI.
+
+## 2026-08-13 — M20: Stress-testing tab (POST /stress-test + GET /stress-test/catalogue, SPEC §20)
+The engine shipped the external-shock stress-testing environment (`POST /stress-test`,
+`GET /stress-test/catalogue`) after the UI roadmap was declared complete — the last
+unsurfaced documented endpoint. Added a **Stress** tab exposing it end-to-end:
+- `lib/api.ts`: `ShockCard` / `ShockCatalogue` / `MetricStress` / `ScenarioResult` /
+  `StressRobustness` / `StressReport` types (matching the real payload, verified against the
+  backend TestClient) and `fetchStressCatalogue()` + `runStressTest(policy, scenarios?, horizon?)`
+  with the standard honest-error contract (throws on non-2xx incl. the 404 unknown-scenario
+  shape, so the panel shows waiting/error, never a fabricated robustness claim).
+- `components/twin/StressPanel.tsx`: policy-gated panel. Loads the shock catalogue to render
+  toggleable shock chips (each with its modelled/partial/proxy fidelity), a horizon selector
+  (1/2/5/10y, confidence widens with horizon), then on run shows: a robustness roll-up banner
+  (holds/degrades/fails counts + keys + headline), a no-shock baseline reference card, and a
+  per-scenario card each with a verdict pill, confidence + fidelity badges, the plain-language
+  caveat, a per-headline-metric stress table (Δ no-shock → Δ shocked with %, a retained-benefit
+  bar with a 100%-of-baseline marker, per-metric verdict), and the exact auditable `overrides`
+  (Estimated). Each shock is applied to BOTH worlds so Δ(B−A) still isolates the policy; policy
+  deltas Simulated, shock magnitudes Estimated — both provenance classes surfaced. Idle/loading/
+  error states when the backend is down; the currently-running server predates the endpoint, so
+  the panel correctly falls back to "test the full default set" and an honest error on run.
+- Wired into `PanelTabs.tsx` (new `stress` TabKey + tab button between Spatial and Institutions
+  + kept-mounted panel).
+- `app/globals.css`: `st-*` styles (shock chips, robustness banner, scenario cards, metric-stress
+  table with retained bar, caveat/overrides) reusing theme tokens + existing `.tag`/`.eco-*` classes.
+- `frontend/README.md`: added the endpoint pair to the panel↔endpoint↔SPEC map (now 24 rows),
+  the tab list in the intro, and a Stress paragraph in the honesty-contract section (fidelity
+  caveats + both provenance classes + retained-bar marker).
+Checks green: `tsc --noEmit` clean; `next lint` clean (0 warnings); `next build` clean (4/4
+static pages, / at 129 kB First Load JS). Every documented engine endpoint is again surfaced.
