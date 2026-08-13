@@ -559,6 +559,33 @@ def _models() -> list[ModelCard]:
             code="app.timeseries.model",
             assumptions=_timeseries_assumptions(),
         ),
+        ModelCard(
+            id="sensitivity_tornado",
+            name="Global sensitivity tornado (one-at-a-time)",
+            spec_sections=["§24", "§26"],
+            layer="Ensemble / Uncertainty (SPEC §8/§24) — explainability (§26)",
+            method=(
+                "One-at-a-time sensitivity: each documented assumption (the same set "
+                "the §24 Monte-Carlo engine sweeps) is pinned to its plausible low, "
+                "then high, edge while the others stay at default, and the resulting "
+                "swing in EVERY headline metric's policy effect Δ(B−A) is measured by "
+                "re-running the deterministic pipeline. Per metric → a tornado; per "
+                "assumption → a scale-free leverage score (mean share of each metric's "
+                "total sensitivity). Deterministic, no sampling, no LLM."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["policy", "documented assumption ranges", "horizon"],
+            outputs=[
+                "per-metric tornado (assumption swings)",
+                "global driver ranking",
+                "honest not-modelled scope (interactions, likelihood)",
+            ],
+            output_tag=est,
+            code="app.sensitivity.service",
+            assumptions=[],
+        ),
     ]
 
 

@@ -125,6 +125,7 @@ POST_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/assumptions/rerun", {**_P, "overrides": {"money_to_minutes": 10.0}}),
     ("/stress-test", {**_P, "scenarios": ["recession", "fuel_price_spike"]}),
     ("/uncertainty", {**_P, "metric_key": "traffic.daily_vehicle_km", "samples": 20}),
+    ("/sensitivity", _P),
     ("/optimise", {
         "objective": {"reduce_transport_emissions_pct": 15},
         "constraints": {"max_average_commute_increase_pct": 12, "max_budget": 120_000_000},

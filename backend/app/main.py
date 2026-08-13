@@ -40,6 +40,7 @@ from .routers import (
     reproduce,
     run,
     sdg,
+    sensitivity,
     simulate,
     spatial,
     stress,
@@ -78,6 +79,7 @@ def create_app() -> FastAPI:
     app.include_router(media.router)
     app.include_router(evidence.router)
     app.include_router(uncertainty.router)
+    app.include_router(sensitivity.router)
     app.include_router(compare.router)
     app.include_router(optimise.router)
     app.include_router(backtest.router)

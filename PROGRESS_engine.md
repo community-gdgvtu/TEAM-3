@@ -927,3 +927,28 @@ no LLM (SPEC §34); pure read of existing endpoints — `demo.py` / `north_star.
   + ≥15 registry models and empty violation lists; the pass/fail rollup **flips when any single
   check is corrupted** (so it can't silently rubber-stamp); a pedestrianisation policy also holds.
 - `python -m pytest -q` → **350 passed** (was 345); app still boots with **43 routes**.
+
+## 2026-08-13 (engine) — Global sensitivity ("tornado") layer (SPEC §24/§26)
+- Roadmap was 42/42 done; extended it with the cross-metric explainability layer the
+  engine was missing. `/uncertainty` ranks influential assumptions for **one** metric via a
+  100-sample Monte-Carlo sweep; nothing gave the cheap, deterministic, **cross-metric**
+  attribution a decision-maker needs ("which assumption is the answer resting on?").
+- New `backend/app/sensitivity/` (`schema.py`, `service.py`, `__init__.py`) + `POST /sensitivity`
+  (router). One-at-a-time sweep of the **exact `/simulate` pipeline**: each documented assumption
+  (the same `ASSUMPTIONS` set the §24 engine sweeps — single source of truth) pinned to its
+  plausible low, then high, edge; swing in **every** headline Δ(B−A) recorded at the horizon.
+- Output: (1) per-metric **tornado** (bars ranked by |swing|, each with delta-at-low/high, signed
+  swing, direction, % of default effect, scale-free `influence_share` summing to 1); (2) global
+  **driver ranking** (`global_score` = mean influence-share across metrics + plain-language note).
+- Honesty (SPEC §34): assumptions flat on every metric are flagged `matters:false`/`score 0` (the
+  §24 engine reports the same 0 swing — a consistency the tests assert), not silently ranked; a
+  no-lever policy → "structural, not assumption-driven" headline. `not_modelled` states OAT =
+  leverage-not-likelihood and ignores interactions (that's the §24 Monte-Carlo fan's job).
+- Deterministic (byte-identical repeats), Estimated, no LLM; registered in the §33 registry
+  (16 layers); added to integration-smoke + `scripts/audit.py` determinism guards.
+- New `backend/tests/test_sensitivity.py` (9 tests): endpoint 200 + Estimated, drivers ranked,
+  shares partition each metric, **consistency with the uncertainty engine's per-metric swings**,
+  byte-identical determinism, flat-assumption honesty, no-effect structural headline, subset
+  filter + fallback, registry registration.
+- `python -m pytest -q` → **359 passed** (was 350); app boots with **44 routes** (was 43);
+  `scripts/audit.py` full-surface §34 audit PASS over all 44 routes.
