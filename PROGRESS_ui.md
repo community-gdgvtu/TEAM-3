@@ -916,3 +916,17 @@ UI surface" claim still holds. `npx tsc --noEmit` clean; `npx next build` clean
 (compiled successfully, 4/4 static pages, / = 61.9 kB, First Load 150 kB). No code
 change — a green-state confirmation to keep progress visible while both tracks sit at
 feature-complete. Frontend-only.
+
+## 2026-08-13 — UI-track: verification checkpoint — honesty audit + full-surface green
+Roadmap remained 44/44 complete (M4→M30) with the engine roadmap also feature-complete,
+so no new endpoint to surface. Went beyond the prior route/build checkpoint with a SPEC §34
+honesty audit: (1) programmatically enumerated all 38 mounted backend routes (incl. multi-line
+decorators like `/north-star`, `/compare/grand`, `/simulate/amend`, `/parliament/failure-modes`,
+`/institutions/review`, `/assumptions/rerun`) and confirmed every one is referenced from
+`frontend/lib` (0 missing); (2) scanned all components/lib/app for hardcoded/fabricated/dummy
+metrics — every hit is a legitimate, clearly-labelled waiting/placeholder state (e.g. map
+traffic/support overlays carry an explicit `"Placeholder"` provenance class, MetricTile/Dashboard
+show "Awaiting model / Awaiting /simulate"), never an invented number presented as real. Build
+green: `npx tsc --noEmit` clean, `npx next build` compiled successfully (4/4 static pages,
+/ = 61.9 kB, First Load 150 kB). No code change — a green-state + honesty-contract confirmation.
+Frontend-only.
