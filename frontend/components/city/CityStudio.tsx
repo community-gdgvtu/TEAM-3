@@ -16,6 +16,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { loadCityScene } from "../../lib/city";
 import type { SceneData } from "../../lib/city";
+import { hasWebGL } from "../../lib/webgl";
+import CityFallback2D from "./CityFallback2D";
 import {
   BASELINE_SCENARIO,
   SCENARIOS,
@@ -76,6 +78,12 @@ export default function CityStudio() {
   const [year, setYear] = useState(0);
   const [showFlows, setShowFlows] = useState(true);
   const [playing, setPlaying] = useState(false);
+  // null = not yet probed; determines 3D canvas vs. 2D fallback.
+  const [webgl, setWebgl] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setWebgl(hasWebGL());
+  }, []);
   const raf = useRef<number | null>(null);
 
   useEffect(() => {
@@ -168,17 +176,27 @@ export default function CityStudio() {
       <div className="scene-frame">
         {error ? (
           <SceneMessage label={`City unavailable — ${error}`} />
-        ) : !scene || !state ? (
+        ) : !scene || !state || webgl === null ? (
           <SceneMessage label="Loading Meridia…" />
         ) : (
           <>
-            <CityCanvas
-              scene={scene}
-              year={year}
-              state={state}
-              scenario={scenario}
-              showFlows={showFlows}
-            />
+            {webgl ? (
+              <CityCanvas
+                scene={scene}
+                year={year}
+                state={state}
+                scenario={scenario}
+                showFlows={showFlows}
+              />
+            ) : (
+              <CityFallback2D
+                scene={scene}
+                year={year}
+                state={state}
+                scenario={scenario}
+                showFlows={showFlows}
+              />
+            )}
             <div className="scene-badge">
               <strong>{yearLabel(year)}</strong>
               <span>{scenario.label}</span>
@@ -197,7 +215,9 @@ export default function CityStudio() {
                 cordon
               </span>
               <span className="scene-key-note">
-                heights ×2.5 for legibility · drag to orbit
+                {webgl
+                  ? "heights ×2.5 for legibility · drag to orbit"
+                  : "2D plan · 3D view needs WebGL / hardware acceleration"}
               </span>
             </div>
           </>
