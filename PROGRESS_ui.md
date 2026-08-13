@@ -1277,3 +1277,14 @@ deterministic sim, no LLM on the numeric path). `tsc --noEmit`, `next lint`,
 `next build`, and `npm test` (41 pass) all clean. Note: the backend instance
 running on :8000 is stale (returns 404 for `/evidence/example`); the UI degrades
 to an honest "Evidence unavailable" state until the engine deploy catches up.
+
+## 2026-08-13 — M51: doc-sync — three surfaced-but-undocumented endpoints
+Audited `frontend/README.md`'s endpoint→surface table against every
+`${API_BASE_URL}/…` fetch in `lib/api.ts` and closed three gaps left by earlier
+milestones: `GET /analogues/cases` (Analogue panel case DB), `GET /compare/example`
+(M49's keyless §21 quartet on the Grand-counterfactual tab), and
+`POST /parliament/ask` (Parliament persona follow-up). All three were live UI
+calls the table hadn't caught up with. Reverse-checked too — every backend router
+prefix now maps to at least one UI fetch — so the "every documented backend
+endpoint has a UI surface" claim is literally true in both directions. Docs-only;
+no code/types/styles/endpoints touched. Build/lint/tests (41) unchanged from M50.

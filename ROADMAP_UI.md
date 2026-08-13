@@ -522,3 +522,15 @@ backend data — the button mints no numbers (the trace is copied from the
 deterministic simulation, no LLM on the numeric path) and is explicitly stamped
 **not** a policy the user compiled.
 - [x] Add `getEvidenceExample()` (`GET /evidence/example`) to `lib/api.ts` mirroring `runEvidence`'s honest throw-on-error contract (so the drawer shows a waiting/error state, never an invented trace). Extend `EvidenceDrawer` with an `example` mode (props `policy`/`metricKey` now optional): in example mode it fetches the body-less keyless GET instead of `POST /evidence`, titles the drawer "Example evidence trace" until the metric label loads, and renders a `.brief-example-note` chip reading "the canonical §26 peak-transit metric on the §28 demo congestion charge — **not** a policy you compiled". Wire an always-available "Example evidence trace ▸" button into the Outcomes `dashboard-head` (`onExampleTrace`, ungated on policy) so the §26 ladder is reachable cold; `TwinWorkspace` renders the example drawer from a dedicated `exampleTrace` flag (kept separate from the policy-driven `explainKey`, so the two never fight). Added `.dashboard-example-trace` to `globals.css` (reuses `.tile-evidence`); no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §26/§34)
+
+## M51 — Make the endpoint→surface table literally true again: three doc-sync gaps (SPEC §28/§37)
+M46–M50 kept `frontend/README.md`'s "every documented backend endpoint has a UI
+surface" table honest, but a whole-table audit against the endpoints `lib/api.ts`
+actually `fetch`es turned up three surfaced-but-undocumented routes that earlier
+milestones wired into panels without updating the table: `GET /analogues/cases`
+(the raw curated case database behind the Analogue panel, `POST /analogues`'s
+sibling), `GET /compare/example` (the keyless §21 quartet M49 surfaced on the
+Grand-counterfactual tab), and `POST /parliament/ask` (the persona follow-up
+question in the Parliament panel). All three are live UI calls; the table just
+lagged. Docs-only, no code — every claim now matches a real `fetch` in `api.ts`.
+- [x] Cross-checked every `${API_BASE_URL}/…` fetch target in `lib/api.ts` against the README endpoint→SPEC table and closed the three gaps: the Parliament row now lists `POST /parliament/ask` alongside `/parliament/debate` + `/simulate/amend`; the Grand A/B/C/D row lists `GET /compare/example` alongside `/compare/grand`; the Historical-analogues row lists `GET /analogues/cases` alongside `POST /analogues`. Reverse-checked too: every backend router prefix now maps to at least one UI `fetch`, so the "every documented endpoint has a UI surface" claim is literally true in both directions. No code, types, styles or endpoints changed; `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) remain clean from M50 (SPEC §28/§37/§34)

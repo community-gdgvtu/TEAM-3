@@ -87,13 +87,13 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Baseline World Model | `GET /world` | §5/§28.2 |
 | Citizen View (click a household) | `POST /citizen`, `GET /citizen/sample` | §17/§31 |
 | Business View (click a firm) | `POST /business`, `GET /business/sample` | §17 |
-| Parliament debate + amendment | `POST /parliament/debate`, `POST /simulate/amend` | §11/§12 |
+| Parliament debate + amendment | `POST /parliament/debate`, `POST /parliament/ask`, `POST /simulate/amend` | §11/§12 |
 | Public reaction | `POST /public` | §13 |
 | Simulated press feed | `POST /media` | §15 |
 | Press conference (presser) | `POST /press-conference` | §16 |
 | Red Team (Failure Mode Register) | `POST /parliament/failure-modes` | §11 |
 | Counterfactual compare | `POST /compare` | §21 |
-| Grand A/B/C/D compare | `POST /compare/grand` | §21/§22 |
+| Grand A/B/C/D compare | `POST /compare/grand`, `GET /compare/example` | §21/§22 |
 | SDG alignment | `POST /sdg` | §23 |
 | Opinion diffusion | `POST /diffusion` | §14 |
 | Ensemble forecast | `POST /ensemble` | §8 |
@@ -106,7 +106,7 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Spatial traffic assignment | `POST /spatial` | §7.7 |
 | Stress-testing environment | `GET /stress-test/catalogue`, `POST /stress-test` | §20 |
 | Decision under uncertainty (Robustness) | `GET /robustness/objectives`, `POST /robustness` | §20/§21/§22 |
-| Historical analogues (difference-in-differences) | `POST /analogues` | §7.1/§8 |
+| Historical analogues (difference-in-differences) | `POST /analogues`, `GET /analogues/cases` | §7.1/§8 |
 | Time-series forecast | `POST /timeseries` | §7.2/§8 |
 | Institutional review | `POST /institutions/review` | §18 |
 | Backtest scorecard | `GET /backtest/example`, `POST /backtest` | §25 |
