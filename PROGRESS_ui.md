@@ -1240,3 +1240,19 @@ row now lists `GET /north-star/example` and the Run row `GET /run/example`
 the "every documented backend endpoint has a UI surface" claim is literally true
 again. Audited backend routes vs `lib/api.ts` fetches: no other unsurfaced
 endpoint remains.
+
+## 2026-08-13 — M49: surface GET /compare/example on the Grand-counterfactual tab
+The engine track had shipped `GET /compare/example` (its M49) but the UI never
+surfaced it. Added `getCompareExample()` to `lib/api.ts` (body-less GET, same
+throw-on-error contract as `runGrandCompare`) and wired a "Load example
+comparison" button into `GrandComparePanel`. Un-gated the panel from `!policy`:
+the horizon / World-D-target selectors and the "Compose A/B/C/D" button now
+*disable* rather than disappear when no policy is compiled, so the example
+quartet is always one click away for a judge landing cold. An `isExample` flag
+stamps the result with an honest `example` chip (from `/compare/example`, **not**
+the policy above) and a fresh compiled policy clears it. Reused existing
+`.brief-example-note` + `.grand-controls` CSS — no new numeric model, types, or
+endpoints; the button mints no numbers. `tsc --noEmit`, `next lint` (0), `npm
+test` (41 pass), and `next build` all clean. This closes the endpoint→surface
+map for every keyless example helper the engine shipped: `/brief`, `/run`,
+`/north-star`, `/backtest`, `/compare` each now have a one-click UI surface.

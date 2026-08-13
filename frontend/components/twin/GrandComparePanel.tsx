@@ -25,7 +25,7 @@
 
 import { useEffect, useState } from "react";
 
-import { runGrandCompare } from "../../lib/api";
+import { getCompareExample, runGrandCompare } from "../../lib/api";
 import type {
   ComparisonRow,
   CounterfactualComparison,
@@ -78,18 +78,24 @@ export default function GrandComparePanel() {
   const [error, setError] = useState<string | null>(null);
   const [horizon, setHorizon] = useState(60);
   const [target, setTarget] = useState("balanced");
+  // True when the shown quartet is the canonical §28 demo (GET /compare/example),
+  // not the user's compiled policy — kept explicit so a judge is never shown the
+  // demo comparison as if it were the policy compiled above (honest, SPEC §34).
+  const [isExample, setIsExample] = useState(false);
 
-  // A fresh/edited policy invalidates any prior comparison.
+  // A fresh/edited policy invalidates any prior comparison (including an example).
   useEffect(() => {
     setResult(null);
     setStatus("idle");
     setError(null);
+    setIsExample(false);
   }, [policy]);
 
   async function compare() {
     if (!policy) return;
     setStatus("loading");
     setError(null);
+    setIsExample(false);
     const t = D_TARGETS.find((d) => d.key === target) ?? D_TARGETS[0];
     try {
       const r = await runGrandCompare({
@@ -106,6 +112,25 @@ export default function GrandComparePanel() {
     }
   }
 
+  // Compose the canonical §28 demo quartet (GET /compare/example) — a body-less
+  // call so the tab is usable with no compiled policy in the store. Flagged as
+  // the example rather than the policy above (honest, SPEC §21/§34). The horizon
+  // and World-D target selectors don't apply here: the keyless endpoint fixes
+  // both to the demo defaults, so the surface can never disagree with the POST.
+  async function compareExample() {
+    setStatus("loading");
+    setError(null);
+    setIsExample(true);
+    try {
+      const r = await getCompareExample();
+      setResult(r);
+      setStatus("ready");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Example comparison failed");
+      setStatus("error");
+    }
+  }
+
   const derivation = result?.derivation ?? null;
 
   return (
@@ -117,24 +142,14 @@ export default function GrandComparePanel() {
         </span>
       </div>
 
-      {!policy ? (
-        <div className="waiting">
-          <span className="tag muted">No policy yet</span>
-          <p>
-            Compile a policy above to compose the canonical four-way comparison —
-            the baseline, your policy, the opposition&rsquo;s amendment, and the
-            URBAN-optimised alternative, all from the same deterministic model.
-          </p>
-        </div>
-      ) : (
-        <>
+      <>
           <div className="grand-controls">
             <label className="asm-horizon">
               <span className="asm-ctl-label">Horizon</span>
               <select
                 value={horizon}
                 onChange={(e) => setHorizon(Number(e.target.value))}
-                disabled={status === "loading"}
+                disabled={status === "loading" || !policy}
               >
                 {HORIZONS.map((h) => (
                   <option key={h.months} value={h.months}>
@@ -148,7 +163,7 @@ export default function GrandComparePanel() {
               <select
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
-                disabled={status === "loading"}
+                disabled={status === "loading" || !policy}
               >
                 {D_TARGETS.map((d) => (
                   <option key={d.key} value={d.key}>
@@ -161,16 +176,42 @@ export default function GrandComparePanel() {
               type="button"
               className="btn primary"
               onClick={compare}
-              disabled={status === "loading"}
+              disabled={status === "loading" || !policy}
+              title={
+                policy
+                  ? "Compose the four-way comparison for the policy compiled above"
+                  : "Compile a policy above first, or load the demo example →"
+              }
             >
-              {status === "loading"
+              {status === "loading" && !isExample
                 ? "Composing worlds…"
-                : result
+                : result && !isExample
                   ? "Re-compose A/B/C/D"
                   : "Compose A/B/C/D"}
             </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={compareExample}
+              disabled={status === "loading"}
+              title="Compose the §21 quartet for the canonical demo congestion charge — no policy needed"
+            >
+              {status === "loading" && isExample
+                ? "Loading example…"
+                : "Load example comparison"}
+            </button>
             {result && <span className="tag simulated">Simulated</span>}
           </div>
+
+          {!policy && !result && (
+            <p className="hint">
+              Compile a policy above to compose your own four-way comparison — the
+              baseline, your policy, the opposition&rsquo;s amendment, and the
+              URBAN-optimised alternative — or{" "}
+              <em>Load example comparison</em> to read the canonical §28 demo
+              quartet with no policy in the store.
+            </p>
+          )}
 
           <p className="hint grand-banner">
             One deterministic model, four worlds. World C (opposition amendment)
@@ -180,6 +221,17 @@ export default function GrandComparePanel() {
 
           {status === "error" && (
             <p className="hint error-text">Couldn&rsquo;t compose: {error}</p>
+          )}
+
+          {result && status !== "loading" && isExample && (
+            <p className="hint brief-example-note">
+              <span className="tag generated">example</span>
+              The canonical §28 demo congestion charge (from{" "}
+              <code>/compare/example</code>) at the endpoint&rsquo;s fixed demo
+              horizon and best-balanced World&nbsp;D — <strong>not</strong> the
+              policy compiled above. Compile a policy and use{" "}
+              <em>Compose A/B/C/D</em> for your own quartet.
+            </p>
           )}
 
           {result && status !== "loading" && (
@@ -231,7 +283,6 @@ export default function GrandComparePanel() {
             </div>
           )}
         </>
-      )}
     </section>
   );
 }

@@ -490,3 +490,17 @@ map again: every zero-body backend example helper (`/brief`, `/run`,
 real backend data — the button mints no numbers and is explicitly stamped
 **not** the compiled policy.
 - [x] Add `getNorthStarExample()` (`GET /north-star/example`) to `lib/api.ts` mirroring `runNorthStar`'s honest throw-on-error contract (so the panel shows a waiting/error state, never an invented narrative), and wire a "Load example answer" button into `NorthStarPanel` alongside "Answer the question": it composes the body-less canonical §28 demo answer so the tab is usable with no compiled policy in the store. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading label distinguishes example-vs-policy, and (c) the error-state Retry re-runs the correct path. Reuses the existing `.brief-example-note` style — no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §37/§34)
+
+## M49 — Surface the keyless grand comparison: GET /compare/example (SPEC §21/§22/§34)
+The engine track's M49 added `GET /compare/example`: a zero-body sibling of
+`POST /compare/grand` that composes the canonical §21 A/B/C/D quartet (baseline /
+demo policy / opposition amendment / URBAN-optimised) for the §28 demo congestion
+charge, running the *identical* `compare_grand` service the POST uses so the two
+can never disagree. Until now the Grand-counterfactual tab was gated entirely
+behind a compiled policy — a judge landing on it cold saw only a "No policy yet"
+prompt and couldn't view the four-world comparison at all. This closes the
+endpoint→surface map for the last keyless example helper the engine shipped:
+`/brief`, `/run`, `/north-star`, `/backtest`, and now `/compare` each have a
+one-click UI surface. Pure surfacing of real backend data — the button mints no
+numbers and is explicitly stamped **not** the compiled policy.
+- [x] Add `getCompareExample()` (`GET /compare/example`) to `lib/api.ts` mirroring `runGrandCompare`'s honest throw-on-error contract (so the panel shows a waiting/error state, never an invented quartet), and wire a "Load example comparison" button into `GrandComparePanel` alongside "Compose A/B/C/D": it composes the body-less canonical §28 demo quartet so the tab is usable with no compiled policy in the store. Un-gated the whole panel from `!policy` (the horizon / World-D-target selectors and Compose button now disable — not vanish — until a policy exists) so the example is always reachable. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading/label text distinguishes example-vs-policy, and (c) a fresh compiled policy clears the example. Reuses the existing `.brief-example-note` + `.grand-controls` styles — no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §21/§22/§34)

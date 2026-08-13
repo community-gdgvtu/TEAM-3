@@ -1560,6 +1560,37 @@ export async function runGrandCompare(
   return (await res.json()) as CounterfactualComparison;
 }
 
+/**
+ * Compose the SPEC §21 four-world grand comparison (A baseline / B policy /
+ * C opposition amendment / D URBAN-optimised) for the canonical §28 demo
+ * congestion charge (`GET /compare/example`). A body-less GET so a judge landing
+ * on the Grand-counterfactual tab cold can read the whole quartet with no
+ * compiled policy in the store. It runs the *identical* `compare_grand` service
+ * `POST /compare/grand` uses, so it can never disagree with the POST surface;
+ * every number stays Simulated with no LLM on the numeric path (SPEC §21/§34).
+ * Throws on network/HTTP error so the panel shows an honest waiting/error state
+ * instead of inventing a comparison.
+ */
+export async function getCompareExample(
+  signal?: AbortSignal,
+): Promise<CounterfactualComparison> {
+  const res = await fetch(`${API_BASE_URL}/compare/example`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as CounterfactualComparison;
+}
+
 // ---------------------------------------------------------------------------
 // Institutional review panel (SPEC §18) — POST /institutions/review
 // ---------------------------------------------------------------------------
