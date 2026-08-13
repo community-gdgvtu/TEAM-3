@@ -24,9 +24,16 @@ from .schema import (
 
 
 def build_delta(
-    world_a: BaselineTimeSeries, world_b: WorldBTimeSeries
+    world_a: BaselineTimeSeries | WorldBTimeSeries,
+    world_b: WorldBTimeSeries,
 ) -> DeltaTimeSeries:
-    """Build the Δ(B−A) time series from aligned World-A / World-B projections."""
+    """Build a Δ time series from two aligned projections.
+
+    The canonical use is Δ(World B − World A). Because both time-series types
+    expose the same ``.series`` (:class:`~app.baseline.schema.MetricSeries`) and
+    ``.checkpoints``, the same routine also compares two World-B runs — used by
+    the amendment loop to compute Δ(amended − original) (SPEC §12).
+    """
     a_by_key = {s.key: s for s in world_a.series}
 
     series: list[DeltaSeries] = []

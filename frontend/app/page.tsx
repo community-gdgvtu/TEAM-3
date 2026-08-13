@@ -1,6 +1,6 @@
 import HealthStatus from "./HealthStatus";
 import PolicyCompiler from "./PolicyCompiler";
-import CityMapPanel from "../components/map/CityMapPanel";
+import TwinWorkspace from "../components/twin/TwinWorkspace";
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
 
       <PolicyCompiler />
 
-      <CityMapPanel />
+      <TwinWorkspace />
 
       <HealthStatus />
 

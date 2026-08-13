@@ -42,7 +42,12 @@ function MapPlaceholder({ label }: { label: string }) {
   );
 }
 
-export default function CityMapPanel() {
+export interface CityMapPanelProps {
+  /** Current Time Machine checkpoint label from the parent workspace. */
+  timeLabel?: string;
+}
+
+export default function CityMapPanel({ timeLabel }: CityMapPanelProps) {
   const [geometry, setGeometry] = useState<CityGeometry | null>(null);
   const [od, setOd] = useState<OdMatrix | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -143,6 +148,7 @@ export default function CityMapPanel() {
             extruded={extruded}
             overlayMode={overlay}
             od={od}
+            timeLabel={timeLabel}
           />
         )}
       </div>

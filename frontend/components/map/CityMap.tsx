@@ -104,6 +104,8 @@ export interface CityMapProps {
   overlayMode?: OverlayMode;
   /** Synthetic OD matrix (lazy-loaded); required for the transit overlay. */
   od?: OdMatrix | null;
+  /** Current Time Machine checkpoint label, shown as a badge. */
+  timeLabel?: string;
 }
 
 /** deck.gl overlay wired into the MapLibre map instance via a custom control. */
@@ -152,6 +154,7 @@ export default function CityMap({
   extruded = true,
   overlayMode = "none",
   od = null,
+  timeLabel,
 }: CityMapProps) {
   const { zones, roads, cbd, manifest } = geometry;
   const showBaseZones = !OVERLAY_META[overlayMode].hideBaseZones;
@@ -272,6 +275,11 @@ export default function CityMap({
     >
       <NavigationControl position="top-right" visualizePitch />
       <DeckOverlay layers={layers} />
+      {timeLabel && (
+        <div className="map-time-badge" aria-hidden>
+          {timeLabel}
+        </div>
+      )}
       {showBaseZones && (
         <div className="map-metric-badge" aria-hidden>
           {METRIC_LABEL[colorMetric]}

@@ -17,3 +17,9 @@ Dated notes, newest at the bottom. One line per shipped item.
   caption + legend. Pure metadata split into overlayMeta.ts to keep the WebGL stack
   out of SSR. OD matrix lazy-loaded (~0.4 MB) only when transit is selected.
   `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M4.3: Added the Time Machine scrubber (draggable slider + clickable
+  T0→10y ticks) inside a new TwinWorkspace parent that fetches `GET /baseline` and
+  shares the selected-checkpoint state. Scrubbing drives the map's time badge (and
+  the dashboard, next item). When the backend is down the map still renders and the
+  timeline shows an honest "waiting for backend" state — no invented numbers
+  (SPEC §34). `tsc --noEmit` + `next build` clean.

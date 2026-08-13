@@ -419,6 +419,20 @@ ul.assumptions {
   pointer-events: none;
 }
 
+.map-time-badge {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  background: rgba(79, 140, 255, 0.15);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  pointer-events: none;
+}
+
 .map-placeholder {
   display: flex;
   align-items: center;
@@ -553,6 +567,93 @@ ul.assumptions {
 .tag.placeholder {
   border-color: #d4a24a;
   color: #e0b45f;
+}
+
+/* --- Time Machine scrubber (M4.3) -------------------------------------- */
+
+.twin {
+  display: block;
+}
+
+.timeline-card {
+  margin-top: 1.25rem;
+}
+
+.timeline.disabled {
+  opacity: 0.5;
+}
+
+.timeline-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.timeline-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.timeline-now {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.timeline-sub {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.timeline-range {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.timeline-ticks {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.2rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tick {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.2rem;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.tick:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.tick.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.waiting {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.waiting p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
 }
 
 .maplibregl-ctrl-group {

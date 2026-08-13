@@ -100,3 +100,94 @@ export async function compilePolicy(
   }
   return (await res.json()) as CompileResponse;
 }
+
+// ---------------------------------------------------------------------------
+// Baseline (World A) — GET /baseline (SPEC §5/§9)
+// ---------------------------------------------------------------------------
+
+/** Provenance class for a single number (SPEC §8). */
+export type MetricTag = "Observed" | "Estimated" | "Simulated" | "Generated";
+
+export interface Checkpoint {
+  label: string;
+  t_months: number;
+  t_years: number;
+}
+
+/** A metric's central value + uncertainty band at one checkpoint (SPEC §8/§9). */
+export interface MetricPoint {
+  t_months: number;
+  value: number;
+  low: number;
+  high: number;
+}
+
+export interface MetricSeries {
+  key: string;
+  label: string;
+  unit: string;
+  tag: MetricTag;
+  method: string;
+  assumptions: string[];
+  points: MetricPoint[];
+}
+
+export interface BaselineTimeSeries {
+  provenance: MetricTag;
+  note: string;
+  checkpoints: Checkpoint[];
+  series: MetricSeries[];
+  trend: Record<string, unknown>;
+}
+
+export interface ModeShare {
+  car: number;
+  public_transit: number;
+  walk: number;
+  car_pct: number;
+  public_transit_pct: number;
+  walk_pct: number;
+}
+
+export interface BaselineSnapshot {
+  world: string;
+  provenance: MetricTag;
+  note: string;
+  population_agents: number;
+  commuters: number;
+  mode_share: ModeShare;
+  traffic: Record<string, number>;
+  emissions: Record<string, number>;
+  transit: Record<string, number>;
+  metrics: Array<{
+    key: string;
+    label: string;
+    value: number;
+    unit: string;
+    tag: MetricTag;
+    method: string;
+    assumptions: string[];
+  }>;
+  params: Record<string, unknown>;
+}
+
+export interface BaselineResponse {
+  world: string;
+  provenance: MetricTag;
+  snapshot: BaselineSnapshot;
+  timeseries: BaselineTimeSeries;
+}
+
+/** Fetch the World-A baseline snapshot + time series. Throws on error. */
+export async function getBaseline(
+  signal?: AbortSignal,
+): Promise<BaselineResponse> {
+  const res = await fetch(`${API_BASE_URL}/baseline`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as BaselineResponse;
+}

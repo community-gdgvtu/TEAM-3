@@ -15,7 +15,7 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 ## M4 — 3D map + time machine UI (the visual centerpiece, SPEC §17/§27)
 - [x] Install + render MapLibre GL + deck.gl. Draw the Meridia city from `/baseline` data (or a new `/city` endpoint if present): zones (choropleth), roads, the CBD cordon polygon
 - [x] deck.gl layers for traffic flow, transit demand, and a support/opposition heatmap (driven by sim results when available; placeholder-but-clearly-labelled otherwise)
-- [ ] Draggable timeline scrubber (T0→10y checkpoints) that drives the map + dashboard state
+- [x] Draggable timeline scrubber (T0→10y checkpoints) that drives the map + dashboard state
 - [ ] Dashboard tiles: Traffic, CO₂, Transit, Equity burden, Support — each showing value + Δ vs baseline + a visible uncertainty band; tag each with its provenance class
 
 ## M5 — Parliament view + amendment loop (SPEC §11/§27)
