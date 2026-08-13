@@ -28,7 +28,20 @@ export async function getHealth(signal?: AbortSignal): Promise<Health> {
   if (!res.ok) {
     throw new Error(`Backend returned HTTP ${res.status}`);
   }
-  return (await res.json()) as Health;
+  const body = (await res.json()) as Partial<Health>;
+  // Guard against a *different* service answering on the same host/port: a bare
+  // 200 with the wrong shape must not read as a healthy URBAN backend (SPEC §34
+  // honesty). Require the fields we actually render.
+  if (
+    typeof body?.status !== "string" ||
+    typeof body?.service !== "string" ||
+    typeof body?.version !== "string"
+  ) {
+    throw new Error(
+      "Reachable, but the response isn’t the URBAN /health payload — is another service on this port?",
+    );
+  }
+  return body as Health;
 }
 
 // ---------------------------------------------------------------------------

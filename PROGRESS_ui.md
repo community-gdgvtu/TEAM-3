@@ -106,3 +106,14 @@ Dated notes, newest at the bottom. One line per shipped item.
   "Re-simulate policy"), so the 60-second script flows compile → run counterfactual
   → scrub → Parliament amendment + re-simulate → Press at Year 2. `tsc --noEmit`
   + `next build` clean.
+- 2026-08-13 — M7.3: Visual polish + robustness. Rendered the app in headless
+  Chrome at desktop (1440w) and mobile (390w) and eyeballed it: the SPEC §27
+  two-column top (3D world + outcomes) collapses cleanly to one column, cards and
+  segmented controls wrap, the tab bar wraps, and the honest loading/waiting/empty
+  states all render (no invented numbers with the backend down). Hardened
+  `getHealth`: a foreign service answering 200 on the same host/port used to read
+  as a healthy URBAN backend with blank fields — now the client validates the
+  /health shape and surfaces a clear "another service on this port?" error instead
+  (SPEC §34 honesty). Added a ≤460px fallback so the evidence drawer's World A/B/Δ
+  result grid stacks to one column on narrow screens. **M7 complete — ROADMAP_UI
+  fully checked off.** `tsc --noEmit` + `next build` clean.
