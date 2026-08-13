@@ -19,6 +19,7 @@ import FailureModesPanel from "./FailureModesPanel";
 import SdgPanel from "./SdgPanel";
 import DiffusionPanel from "./DiffusionPanel";
 import BacktestPanel from "./BacktestPanel";
+import EnsemblePanel from "./EnsemblePanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -28,6 +29,7 @@ type TabKey =
   | "redteam"
   | "sdg"
   | "diffusion"
+  | "ensemble"
   | "backtest";
 
 const TABS: Array<{ key: TabKey; label: string }> = [
@@ -37,6 +39,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "redteam", label: "Red Team" },
   { key: "sdg", label: "SDG" },
   { key: "diffusion", label: "Diffusion" },
+  { key: "ensemble", label: "Ensemble" },
   { key: "backtest", label: "Backtest" },
 ];
 
@@ -84,6 +87,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "diffusion"}>
           <DiffusionPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "ensemble"}>
+          <EnsemblePanel />
         </div>
         <div role="tabpanel" hidden={active !== "backtest"}>
           <BacktestPanel />

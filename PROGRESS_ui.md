@@ -155,3 +155,20 @@ Dated notes, newest at the bottom. One line per shipped item.
   validation. Typed `getBacktestExample`/`runBacktest` clients + backtest types
   added to lib/api.ts. Tabbar hint notes Backtest runs without a compiled policy.
   **M8 complete.** `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M9.1: Ensemble forecast tab (SPEC §8). New EnsemblePanel convenes
+  `POST /ensemble` on the compiled policy and shows the flagship cordon effect as
+  estimated by three independent methods (structural agent-based, historical-
+  analogue transfer, reduced-form elasticity). The headline is the pooled central
+  estimate with an explicit band that spans *method disagreement* — a disagreement
+  chip (methods agree / some disagreement / methods disagree, coloured green/amber/
+  red) plus the raw spread in points makes clear a wide band means the methods
+  diverge, NOT false precision (SPEC §8). A shared-scale range chart draws each
+  method's own low…high range + central marker, staggered, with the pooled
+  ensemble band as a highlighted vertical span and a zero line; inapplicable
+  methods (weight→0) are greyed, not dropped, with an explicit note. A method
+  detail grid lists each method's central/range, ensemble weight, SPEC §7 layer,
+  approach, and provenance tag. Everything tagged Estimated (a cross-method blend,
+  not one Simulated run); no LLM on the numeric path (SPEC §34); graceful
+  no-policy/loading/error states, no invented forecast when the backend is down.
+  Typed `runEnsemble` client + Ensemble/Method types added to lib/api.ts, wired as
+  a new "Ensemble" tab in PanelTabs. `tsc --noEmit` + `next build` clean.

@@ -38,3 +38,10 @@ tab per layer; keep every number tagged and never invent one when the backend is
 - [x] SDG alignment tab: `POST /sdg` → per-goal indicator table (baseline/scenario/change/confidence, direction-aware improved/worsened), count-based headline (SPEC §23 forbids a composite score)
 - [x] Opinion-diffusion tab: `POST /diffusion` → opinion trajectories over rounds, salience + polarisation, coalitions, dominant narrative; rounds labelled as information steps (NOT the Time-Machine horizon)
 - [x] Backtest scorecard tab: `GET /backtest/example` + `POST /backtest` → forecast-vs-actual scorecard with error metrics; actuals stamped synthetic-benchmark
+
+## M9 — Surface the transparency + ensemble engine layers (SPEC §8/§33/§18)
+The engine track shipped more endpoints the UI still doesn't expose. Same rules:
+every number tagged, uncertainty visible, never invent one when the backend is down.
+- [x] Ensemble forecast tab: `POST /ensemble` → the flagship cordon effect estimated by 3 independent methods (agent-based / historical-analogue / elasticity) with per-method ranges, documented weights, and a disagreement band; band = method disagreement, not false precision (SPEC §8)
+- [ ] Model registry / transparency tab: `GET /registry` → the "how do we know this isn't AI astrology" manifest: model cards (method, determinism, LLM-role, output tag), data sources, live assumption index, and the SPEC §34 guardrail checklist with pass/fail (SPEC §33)
+- [ ] Institutional review tab: `POST /institutions` → multi-agent institutional feasibility/legal/fiscal review with per-institution verdicts (SPEC §18)

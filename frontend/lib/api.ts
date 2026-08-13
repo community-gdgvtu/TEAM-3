@@ -878,6 +878,82 @@ export async function runBacktest(
 }
 
 // ---------------------------------------------------------------------------
+// Ensemble forecast (SPEC §8) — POST /ensemble
+// ---------------------------------------------------------------------------
+
+/** One independent estimator's view of the flagship metric (a SPEC §7 layer). */
+export interface MethodEstimate {
+  method_id: string;
+  name: string;
+  spec_layer: string;
+  approach: string;
+  central_pct: number;
+  low_pct: number;
+  high_pct: number;
+  weight: number;
+  applicable: boolean;
+  tag: MetricTag;
+  assumptions: string[];
+  note: string;
+}
+
+/** The pooled ensemble estimate for one metric with a disagreement signal. */
+export interface EnsembleMetric {
+  metric_key: string;
+  label: string;
+  unit: string;
+  horizon: Checkpoint;
+  methods: MethodEstimate[];
+  ensemble_central_pct: number;
+  ensemble_low_pct: number;
+  ensemble_high_pct: number;
+  method_spread_pct: number;
+  /** 'low' | 'moderate' | 'high' agreement label. */
+  disagreement: string;
+  tag: MetricTag;
+  interpretation: string;
+}
+
+export interface EnsembleForecast {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  horizon: Checkpoint;
+  metrics: EnsembleMetric[];
+  method_weights: Record<string, number>;
+}
+
+/**
+ * Run the multi-method ensemble forecast for a compiled policy (SPEC §8). The
+ * band each metric carries spans method *disagreement*, not a single run's noise.
+ * Throws on network/HTTP error.
+ */
+export async function runEnsemble(
+  policy: PolicyDSL,
+  horizonMonths = 24,
+  signal?: AbortSignal,
+): Promise<EnsembleForecast> {
+  const res = await fetch(`${API_BASE_URL}/ensemble`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, horizon_months: horizonMonths }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as EnsembleForecast;
+}
+
+// ---------------------------------------------------------------------------
 // Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
 // ---------------------------------------------------------------------------
 

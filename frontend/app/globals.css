@@ -2527,3 +2527,259 @@ ul.assumptions {
     display: none; /* hide the Error column on very narrow screens */
   }
 }
+
+/* --- Ensemble forecast panel (M9) ------------------------------------- */
+.ens-body {
+  margin-top: 1rem;
+}
+
+.ens-metric {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.ens-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.ens-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.ens-central {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.ens-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.ens-head-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+}
+
+.ens-band {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ens-disagree {
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+}
+.ens-disagree.good {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.ens-disagree.mid {
+  color: #f6be60;
+  border-color: #f6be60;
+}
+.ens-disagree.warn {
+  color: #ff9d5c;
+  border-color: #f0834a;
+}
+
+.ens-interp {
+  margin: 0.6rem 0 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  opacity: 0.92;
+}
+
+.ens-chart {
+  margin-top: 1rem;
+}
+
+.ens-scale {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.25rem;
+  height: 1rem;
+}
+
+.ens-zero-label {
+  position: absolute;
+  transform: translateX(-50%);
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.ens-plot {
+  position: relative;
+  height: 92px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.ens-eband {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(79, 140, 255, 0.16);
+  border-left: 1px dashed rgba(79, 140, 255, 0.5);
+  border-right: 1px dashed rgba(79, 140, 255, 0.5);
+}
+
+.ens-ecentral {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-1px);
+  background: var(--accent);
+}
+
+.ens-zeroline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(231, 236, 245, 0.28);
+}
+
+.ens-mrow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+}
+
+.ens-mrange {
+  position: absolute;
+  height: 4px;
+  transform: translateY(-2px);
+  border-radius: 999px;
+  background: rgba(231, 236, 245, 0.45);
+}
+
+.ens-mcentral {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transform: translate(-5px, -5px);
+  border-radius: 50%;
+  background: var(--text);
+  border: 2px solid var(--panel);
+}
+
+.ens-mrow.off .ens-mrange,
+.ens-mrow.off .ens-mcentral {
+  opacity: 0.3;
+}
+
+.ens-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.ens-mcard {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+.ens-mcard.off {
+  opacity: 0.55;
+}
+
+.ens-mcard-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ens-mname {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.ens-mweight {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.ens-mstat {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin-top: 0.35rem;
+}
+
+.ens-mcentral-val {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.ens-mrange-val {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ens-mapproach {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.ens-mlayer {
+  color: var(--text);
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.ens-moff-note,
+.ens-mnote {
+  margin: 0.4rem 0 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.ens-inapplicable {
+  margin-top: 0.75rem;
+}
+
+.ens-note {
+  margin-top: 1rem;
+}
+
+@media (max-width: 560px) {
+  .ens-central {
+    font-size: 1.6rem;
+  }
+}
