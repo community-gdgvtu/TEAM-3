@@ -1091,3 +1091,16 @@ Frontend-only.
   add + re-apply), revenue split summing to exactly 1, and bare-policy tolerance.
   36 tests total, all green. `npx tsc --noEmit` + `npx next lint` clean; no runtime
   code changed.
+
+- 2026-08-13 — Verification checkpoint (no unchecked items remain). ROADMAP_UI.md is
+  fully complete: all 54 items across M4–M40 checked. Confirmed every documented
+  backend route (47 paths incl. /world, /citizen, /business, /robustness, /brief,
+  /north-star, /sensitivity, /compare/grand, /assumptions*) has a UI surface in
+  lib/api.ts — nothing new to expose. The one new engine commit since M40
+  (LEZ modelled as a distinct mechanism, §7.5) is a numeric-model change on
+  /simulate; it needs no UI change because PolicyCompiler is generic — it posts
+  free text to /policy/compile and renders the returned DSL (incl. the
+  low_emission_zone intervention type) through the editable-assumptions panel +
+  raw-JSON view, with no hardcoded intervention-type list to update. Full green:
+  `npx tsc --noEmit` (0), `npm test` (36 pass), `npx next lint` (clean),
+  `npx next build` (/ = 71 kB, First Load 159 kB). No runtime code changed.
