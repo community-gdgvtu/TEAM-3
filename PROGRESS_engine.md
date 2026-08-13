@@ -741,3 +741,25 @@ record + harmonisation lineage the spec mandates.
   calls); overridden Δ still widens with horizon (guarded). Numbers Simulated, assumptions Estimated;
   added `/assumptions` (GET) + `/assumptions/rerun` (POST) to the integration-smoke sweep.
   `test_assumptions.py` (10 tests). **304 green** (was 294); app boots with **40 routes** (was 38).
+
+## 2026-08-13 — Grand counterfactual A/B/C/D (SPEC §21/§22)
+- Closed the last named §21 gap: the spec defines four worlds by role — A baseline, B
+  intervention, **C opposition amendment**, **D URBAN-optimised** — but `/compare` only took
+  arbitrary caller amendments; nothing composed the canonical quartet, wired the §22 optimiser in
+  as World D, or auto-derived World C. Added `simulation/counterfactual.py::compare_grand` +
+  `POST /compare/grand`.
+- World A = baseline; World B = the compiled policy; World C = opposition amendment (caller
+  `amendment`, else deterministic equity-first default — extracted the derivation into
+  `simulation/amendment.py::propose_opposition_amendment`); World D = the §22 optimiser's
+  best-balanced pick (falls back through largest-emissions / most-equitable / cheapest / frontier),
+  its `CandidateConfig` rebuilt into a Policy DSL and **re-simulated through the same deterministic
+  path** as every other world so it can't disagree with `/simulate` or the standalone optimiser.
+- No new numeric model, no LLM (SPEC §34): pure composition of the existing baseline/world-B/
+  timeline/delta services (shared with `/compare` via an extracted `_assemble_comparison` helper —
+  the plain endpoint is byte-for-byte unchanged, guarded by a test that its response has no
+  `derivation`), plus `apply_amendment` + `optimise_policy`. Returns the full A/B/C/D headline table
+  (baseline never omitted; Δ = world − baseline, guarded) + a `derivation` audit record (amendment
+  source/rationale; optimiser objective/constraints, selection slot, chosen policy id + config,
+  feasibility, candidate counts). Deterministic (two identical calls byte-identical, guarded).
+- Added `/compare/grand` to the integration-smoke sweep. `test_grand_comparison.py` (9 tests).
+  **313 green** (was 304); app boots with **41 routes** (was 40).

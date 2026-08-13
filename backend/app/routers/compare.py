@@ -18,6 +18,7 @@ from ..simulation.amendment import Amendment
 from ..simulation.counterfactual import (
     CounterfactualComparison,
     compare_counterfactuals,
+    compare_grand,
 )
 from ..simulation.shocks import Shocks
 
@@ -46,6 +47,50 @@ def compare(req: CompareRequest) -> CounterfactualComparison:
     return compare_counterfactuals(
         req.policy,
         req.amendments,
+        shocks=req.shocks,
+        horizon_months=req.horizon_months,
+    )
+
+
+class GrandCompareRequest(BaseModel):
+    """Input to ``POST /compare/grand`` — the canonical §21 A/B/C/D comparison."""
+
+    policy: PolicyDSL = Field(description="Compiled Policy DSL — becomes World B.")
+    amendment: Amendment | None = Field(
+        default=None,
+        description="World C — opposition amendment. If omitted, a deterministic "
+        "default is derived from the policy (equity-first, SPEC §21).",
+    )
+    objective: dict = Field(
+        default_factory=dict,
+        description="Optimiser objective for World D, e.g. "
+        "{'reduce_transport_emissions_pct': 20} (SPEC §22).",
+    )
+    constraints: dict = Field(
+        default_factory=dict,
+        description="Optimiser constraints for World D, e.g. "
+        "{'max_low_income_burden_increase_pct': 2} (SPEC §22).",
+    )
+    shocks: Shocks | None = Field(default=None, description="Optional exogenous stressors.")
+    horizon_months: float | None = Field(
+        default=None,
+        description="Horizon for the headline table; snapped to nearest checkpoint "
+        "(default 5 years).",
+    )
+
+
+@router.post(
+    "/grand",
+    response_model=CounterfactualComparison,
+    summary="Canonical A/B/C/D comparison (baseline / policy / opposition / optimised)",
+)
+def compare_grand_endpoint(req: GrandCompareRequest) -> CounterfactualComparison:
+    """Return the §21 four-way comparison, composing World C/D deterministically."""
+    return compare_grand(
+        req.policy,
+        amendment=req.amendment,
+        objective=req.objective,
+        constraints=req.constraints,
         shocks=req.shocks,
         horizon_months=req.horizon_months,
     )

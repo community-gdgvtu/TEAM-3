@@ -69,6 +69,57 @@ class Amendment(BaseModel):
         return out
 
 
+def propose_opposition_amendment(
+    policy: PolicyDSL,
+) -> tuple[Amendment | None, str, str]:
+    """Deterministically derive the canonical opposition amendment (SPEC §12/§21).
+
+    This is the structured "World C — Opposition Amendment" of §21: a flat charge
+    is regressive, so the first move is to exempt low-income commuters; failing
+    that (equity already handled), redirect all revenue into transit. Returns
+    ``(amendment | None, source, rationale)``. No LLM — a rule over the DSL shape.
+    """
+    amount = policy.intervention.amount
+    has_charge = amount is not None and amount > 0
+    exemptions = [e.lower() for e in policy.exemptions]
+    has_low_income = any("income" in e for e in exemptions)
+    pt_share = policy.revenue_allocation.public_transport
+
+    if has_charge and not has_low_income:
+        return (
+            Amendment(label="exempt low-income commuters", exempt_low_income=True),
+            "auto:equity",
+            "The flat charge is regressive — the lowest-income commuters bear a "
+            "disproportionate share of the out-of-pocket burden (SPEC §13). "
+            "Exempting them preserves most traffic and climate gains while "
+            "improving distributional fairness.",
+        )
+    if has_charge and pt_share < 0.99:
+        return (
+            Amendment(
+                label="reinvest all revenue in transit", set_public_transport_share=1.0
+            ),
+            "auto:reinvestment",
+            "Directing the full charge revenue into transit funds the capacity "
+            "ramp sooner, easing the mid-run crowding the event ledger flags.",
+        )
+    if not has_charge and pt_share < 0.99:
+        return (
+            Amendment(
+                label="reinvest savings in transit", set_public_transport_share=1.0
+            ),
+            "auto:reinvestment",
+            "With no charge revenue, redirecting the freed budget into transit is "
+            "the main lever left to strengthen the transit response.",
+        )
+    return (
+        None,
+        "none",
+        "The policy already exempts low-income commuters and reinvests fully in "
+        "transit; no structural opposition amendment is proposed by default.",
+    )
+
+
 def apply_amendment(policy: PolicyDSL, amendment: Amendment) -> PolicyDSL:
     """Return a new Policy DSL with ``amendment`` applied (original untouched)."""
     amended = policy.model_copy(deep=True)

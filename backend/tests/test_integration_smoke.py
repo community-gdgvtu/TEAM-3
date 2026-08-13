@@ -102,6 +102,7 @@ POST_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/simulate", _P),
     ("/simulate/amend", {**_P, "amendment": {"label": "exempt low income", "exempt_low_income": True}}),
     ("/compare", {**_P, "amendments": [{"label": "halve charge", "charge_multiplier": 0.5}]}),
+    ("/compare/grand", {**_P, "objective": {"reduce_transport_emissions_pct": 20}}),
     ("/diffusion", {**_P, "rounds": 6}),
     ("/dynamics", _P),
     ("/economy", _P),
