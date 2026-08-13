@@ -11,7 +11,7 @@ Demo policy: *Pedestrianise / price vehicles entering a central district and rei
 - [x] Backend: FastAPI app skeleton + `/health` + CORS, `requirements.txt`
 - [x] Frontend: Next.js + TS app skeleton, landing page, calls `/health`
 - [x] Shared demo dataset: synthetic city grid (zones, roads, OD pairs) in `data/`
-- [ ] Dev runner script + basic README run instructions verified
+- [x] Dev runner script + basic README run instructions verified
 
 ## M1 — Policy compiler (NL → Policy DSL)
 - [ ] `POST /policy/compile`: NL policy text → structured Policy DSL (SPEC §3) via LLM, with fallback rule-based parser
