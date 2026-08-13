@@ -469,3 +469,29 @@ Dated log of backend/simulation/data work. Newest at the bottom.
 - Health check this run: `pytest` **227 passed** (+9); `app.main:app` boots with
   **33 routes** (+2); `/stress-test` verified end-to-end (£12 charge robust to all
   8 shocks, as expected given the large cordon effect).
+
+## 2026-08-13 — Full-pipeline integration smoke test (Hardening, SPEC §3/§34)
+- Roadmap was fully complete on entry (all 26 items ✓; 227 tests, 33 routes, boots).
+  Rather than bolt on marginal numeric layers into a green codebase near demo time,
+  added the one guard the suite lacked: a whole-engine HTTP smoke test.
+- `backend/tests/test_integration_smoke.py`:
+  - Compiles the SPEC §28 demo policy ONCE (NL→DSL via `/policy/compile`), then
+    drives that single compiled DSL through **all 33 routes** (5 GET + 22 POST,
+    incl. `/simulate/amend`, `/compare`, `/optimise`, `/uncertainty`, `/backtest`,
+    `/reproduce`, `/dynamics`, `/spatial`, `/microsim`, `/press-conference`, …).
+    Every route must return 200 — catches cross-layer contract drift (a shared
+    Policy-DSL / `Shocks` / metric-key change that 500s a downstream endpoint whose
+    own test file never re-runs against the live app). This is the failure mode the
+    per-layer unit tests structurally can't see.
+  - Enforces SPEC §34 in ONE place, globally: recursively walks every response and
+    asserts each `provenance` field references ≥1 allowed tag
+    (Observed/Estimated/Simulated/Generated). Surfaced (and accepts) the two valid
+    styles across layers — bare enum ("Simulated") and descriptive sentence that
+    embeds tags ("ABM anchors Simulated; dynamics coefficients Estimated").
+  - Plus targeted invariants: `/simulate` is Simulated with Δ=B−A pointwise across
+    checkpoints; `/policy/compile` is Generated; EVERY registry model asserts
+    `llm_touches_numbers == False` (no LLM in the numeric path); `/media` carries
+    the mandatory SIMULATED banner.
+- Pure test-track addition — no `backend/app/**` behaviour changed.
+- Health check this run: `pytest` **232 passed** (+5); `app.main:app` boots with
+  **33 routes**; whole engine verified end-to-end against the demo policy.
