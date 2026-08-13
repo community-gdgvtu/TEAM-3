@@ -4670,3 +4670,333 @@ ul.assumptions {
 .eco-note {
   margin: 0.2rem 0 0;
 }
+
+/* -------------------------------------------------------------------------
+   System Dynamics / recursive feedback panel (SPEC §7.6/§19) — POST /dynamics
+   ------------------------------------------------------------------------- */
+.dyn-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+}
+.dyn-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.dyn-toggle input {
+  accent-color: var(--accent);
+}
+.dyn-toggle-note {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.dyn-body {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* The SPEC §19 cascade, instantiated */
+.dyn-loop {
+  margin: 0;
+  padding: 0.7rem 0.9rem 0.7rem 1.9rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(155, 109, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.dyn-loop li {
+  line-height: 1.35;
+}
+
+/* Final-state summary tiles */
+.dyn-final {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.7rem;
+}
+.dyn-stat {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.dyn-stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.dyn-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.dyn-stat-value.good {
+  color: var(--ok);
+}
+.dyn-stat-value.warn {
+  color: var(--bad);
+}
+.dyn-stat-value.mid {
+  color: var(--text);
+}
+.dyn-stat-sub {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+/* Section titles reuse eco pattern */
+.dyn-sec-title {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--text);
+}
+.dyn-sec-note {
+  font-weight: 400;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+/* Charts grid */
+.dyn-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.9rem;
+}
+.dyn-chart {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.7rem 0.5rem;
+  background: var(--panel);
+}
+.dyn-chart-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.dyn-chart-unit {
+  color: var(--muted);
+  font-weight: 400;
+}
+.dyn-svg {
+  display: block;
+  height: 120px;
+  width: 100%;
+}
+.dyn-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.8rem;
+  margin-top: 0.35rem;
+  font-size: 0.73rem;
+  color: var(--muted);
+}
+.dyn-leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.dyn-leg-swatch {
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.dyn-leg-swatch-dash {
+  background: linear-gradient(90deg, #8892a6 0 60%, transparent 60% 100%);
+  background-size: 5px 100%;
+}
+
+/* Closed vs open loop contrast */
+.dyn-contrast {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.dyn-contrast-row {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.dyn-contrast-metric {
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--text);
+  text-transform: capitalize;
+}
+.dyn-contrast-vals {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+}
+.dyn-contrast-cell {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-variant-numeric: tabular-nums;
+}
+.dyn-contrast-tag {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.dyn-contrast-delta {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+.dyn-contrast-delta.good {
+  color: var(--ok);
+}
+.dyn-contrast-delta.warn {
+  color: var(--bad);
+}
+.dyn-contrast-delta.mid {
+  color: var(--muted);
+}
+.dyn-contrast-interp {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Feedback events */
+.dyn-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.dyn-event {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+  background: var(--panel);
+}
+.dyn-event-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dyn-event-glyph {
+  font-size: 0.9rem;
+}
+.dyn-event-glyph.good {
+  color: var(--ok);
+}
+.dyn-event-glyph.warn {
+  color: var(--bad);
+}
+.dyn-event-glyph.mid {
+  color: var(--muted);
+}
+.dyn-event-label {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.dyn-event-time {
+  margin-left: auto;
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.dyn-cause {
+  margin: 0.4rem 0 0;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+/* Not-modelled honesty surface */
+.dyn-notmodelled {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 107, 107, 0.04);
+}
+.dyn-nm-title {
+  font-size: 0.76rem;
+  font-weight: 650;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.dyn-notmodelled ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Provenance detail blocks */
+.dyn-provenance {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.5rem 0.8rem;
+  background: var(--panel);
+}
+.dyn-provenance summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+.dyn-prov-sub,
+.dyn-prov-count {
+  color: var(--muted);
+  font-weight: 400;
+}
+.dyn-provenance dl {
+  margin: 0.55rem 0 0.1rem;
+  display: grid;
+  grid-template-columns: minmax(140px, max-content) 1fr;
+  gap: 0.25rem 0.9rem;
+  font-size: 0.78rem;
+}
+.dyn-prov-row {
+  display: contents;
+}
+.dyn-prov-row dt {
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.dyn-prov-row dd {
+  margin: 0;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+.dyn-note {
+  margin: 0.2rem 0 0;
+}

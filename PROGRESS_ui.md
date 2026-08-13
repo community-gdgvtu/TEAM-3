@@ -347,3 +347,25 @@ Dated notes, newest at the bottom. One line per shipped item.
   theme tokens + existing `.tag.*` chips. Updated `frontend/README.md` endpoint map (now 19
   surfaces). `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4
   static pages). **M14 complete — every documented backend endpoint incl. /economy is surfaced.**
+
+- 2026-08-13 — **M15: Dynamics tab — POST /dynamics recursive feedback loop (SPEC §7.6/§19).**
+  The engine track shipped `POST /dynamics` (the stocks-and-flows loop SPEC §19 calls "central
+  to the concept") after M14 declared the UI roadmap complete; this run surfaces it. New
+  `DynamicsPanel` + `runDynamics`/`SystemDynamicsResult`/`StockPoint`/`FeedbackEvent`/
+  `FeedbackContrast` types in `lib/api.ts`, wired as a "Dynamics" tab in `PanelTabs`. The panel
+  renders: the instantiated §19 cascade (`loop_description`); final-state tiles (charge in force,
+  crowding demand/capacity, net support, amendments triggered); four pure-SVG banded stock charts
+  over the 10-year horizon (transit demand vs capacity, crowding ratio with an over-capacity=1.0
+  baseline, effective charge, net support with a neutral baseline) whose uncertainty band widens
+  as per-checkpoint confidence falls (SPEC §9); a **political-response toggle** (endogenous-
+  amendment arm ON/OFF); the closed-loop vs open-loop end-state `contrast` (the whole point of
+  §19 — same deterministic model, only the amendment rule toggled) with signed deltas +
+  interpretation; the second-order `feedback_events` with their ordered causal chains and
+  month/year stamps; the `not_modelled` honesty surface; and two collapsible provenance blocks —
+  **Simulated** structural anchors (from the ABM) and **Estimated** dynamics assumptions (the
+  temporal coefficients). Honesty contract held: trajectory is deterministic/LLM-free → Simulated,
+  couplings Estimated (both classes surfaced), bands always visible, `idle`/`loading`/`error`
+  states when the backend is down (never invents a curve). Added ~360 lines of scoped `.dyn-*`
+  CSS reusing the theme tokens + existing `.tag.*` chips. Updated `frontend/README.md` endpoint
+  map (now 20 surfaces). `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean
+  (4/4 static pages). **M15 complete — every documented backend endpoint incl. /dynamics is surfaced.**

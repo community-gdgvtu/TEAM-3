@@ -1611,3 +1611,89 @@ export async function runEconomy(
   }
   return (await res.json()) as EconomicSpilloverReport;
 }
+
+// ---------------------------------------------------------------------------
+// System Dynamics / recursive feedback loop (SPEC §7.6/§19) — POST /dynamics
+// ---------------------------------------------------------------------------
+
+/** One checkpoint of the coupled stock trajectories (SPEC §19). */
+export interface StockPoint {
+  t_months: number;
+  t_years: number;
+  charge: number;
+  support: number;
+  transit_demand: number;
+  transit_capacity: number;
+  crowding: number;
+  cumulative_reinvestment: number;
+  annual_revenue: number;
+  confidence: number;
+}
+
+/** A discrete second-order event the recursive loop produced (SPEC §10/§19). */
+export interface FeedbackEvent {
+  t_months: number;
+  type: string; // amendment | capacity_exceeded | crowding_relieved | support_recovered
+  label: string;
+  cause_chain: string[];
+  before: Record<string, unknown>;
+  after: Record<string, unknown>;
+  confidence: number;
+}
+
+/** Closed-loop (political response ON) vs open-loop (OFF) end-state contrast. */
+export interface FeedbackContrast {
+  metric: string;
+  closed_loop: number;
+  open_loop: number;
+  delta: number;
+  interpretation: string;
+}
+
+/** Full recursive stock-flow feedback simulation for a policy (SPEC §7.6/§19). */
+export interface SystemDynamicsResult {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  political_response_enabled: boolean;
+  loop_description: string[];
+  trajectory: StockPoint[];
+  feedback_events: FeedbackEvent[];
+  contrast: FeedbackContrast[];
+  final_state: StockPoint;
+  amendments_triggered: number;
+  anchors: Record<string, unknown>;
+  params: Record<string, unknown>;
+  not_modelled: string[];
+}
+
+/**
+ * Run the recursive stocks-and-flows feedback simulation via `POST /dynamics`.
+ * Builds ahead of / alongside the backend against the documented contract; throws
+ * on network/HTTP error so the panel can show an honest waiting/error state rather
+ * than inventing a trajectory (SPEC §34).
+ */
+export async function runDynamics(
+  policy: PolicyDSL,
+  politicalResponse: boolean,
+  signal?: AbortSignal,
+): Promise<SystemDynamicsResult> {
+  const res = await fetch(`${API_BASE_URL}/dynamics`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, political_response: politicalResponse }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as SystemDynamicsResult;
+}
