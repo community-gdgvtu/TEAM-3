@@ -53,3 +53,15 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   motoring) at Month 5 and Year 2 horizons. Every artifact carries the `SIMULATED — not a real outlet`
   banner, fictional outlet names (no real bylines), and `cited_refs` back to the model outputs it rests on
   (SPEC §15/§34). Deterministic, Generated media clearly labelled SIMULATED. 6 tests; 105 green. **M6 complete.**
+- 2026-08-13 — M7 evidence/provenance trace: new `backend/app/evidence/` package + `POST /evidence`.
+  Given a compiled policy + metric key, re-runs the deterministic World-A/B/Δ simulation, finds the
+  metric's Δ trajectory, and assembles the SPEC §26 causal ladder: input-data (synthetic Meridia world)
+  → transform (the behavioural levers that touch this metric — charge raises car generalized cost,
+  reinvestment cuts transit cost/raises speed; reinvestment pruned from pure-traffic metrics) →
+  mode-choice model → staged adaptation → result (World A→B, isolated Δ, band). Also returns an ASCII
+  trace ladder, the equations/parameters (BehaviouralRule levers), named assumptions (adaptation
+  time-constants + metric assumptions), illustrative real-world analogues (London 2003 / Stockholm 2007 /
+  Singapore ERP / Milan Area C — Observed, explicitly flagged "not a source of any simulated number"),
+  citations to the model modules + SPEC, and a horizon-widening confidence derived from the model's own
+  uncertainty band. Every number copied from the sim; no LLM on the numeric path (SPEC §34). Unknown key
+  → 404 listing valid keys. 7 tests; 112 green. **First M7 item complete.**

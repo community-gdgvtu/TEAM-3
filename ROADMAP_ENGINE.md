@@ -25,7 +25,7 @@ label generated media SIMULATED; uncertainty widens with horizon).
 - [x] Simulated media generator `POST /media`: reads ONLY event ledger + outcome metrics + opinion state; emits archetype headlines (public-service/business/local/tabloid/etc.), every artifact tagged `SIMULATED — not a real outlet`, no real bylines (SPEC §15) [DONE — `backend/app/media/` + `POST /media`: 6 archetype lenses × 2 horizons (Month 5 / Year 2), each headline built from ledger events + Δ metrics + opinion, SIMULATED banner, fictional outlet labels, cited_refs]
 
 ## M7 — Evidence, uncertainty, credibility (backend)
-- [ ] Evidence/provenance trace endpoint: given a metric id, return the causal trace input-data→transform→model→assumptions→result + confidence (SPEC §26)
+- [x] Evidence/provenance trace endpoint: given a metric id, return the causal trace input-data→transform→model→assumptions→result + confidence (SPEC §26) [DONE — `backend/app/evidence/` + `POST /evidence`: re-runs the deterministic A/B/Δ sim, locates the metric's Δ trajectory, and assembles the input-data→transform(levers)→mode-choice model→assumptions→result ladder + an ASCII trace, the behavioural rules/equations touching the metric, named assumptions, illustrative real-world analogues (London/Stockholm/Singapore/Milan, Observed, flagged non-source), citations, and a horizon-widening confidence. Numbers copied from the sim only — no LLM (SPEC §34). 404 lists valid keys. 7 tests; 112 green]
 - [ ] Uncertainty engine: Monte Carlo / parameter sweep over key elasticities → median + 50/80/95 intervals + most-influential-assumption ranking (SPEC §24)
 - [ ] Counterfactual comparison endpoint: World A vs B vs amended C in one payload (SPEC §21)
 
