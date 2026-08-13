@@ -41,15 +41,13 @@ def _one_way_minutes(distance_km: float, speed_kmh: float, overhead_min: float) 
     return overhead_min + (distance_km / speed_kmh) * 60.0
 
 
-def choose_mode(agent: dict, params: BaselineParams = DEFAULT_PARAMS) -> str:
-    """Pick the baseline travel mode for one commuter (argmin generalized cost).
+def mode_options(agent: dict, params: BaselineParams = DEFAULT_PARAMS) -> dict[str, float]:
+    """Generalized cost (minutes-equivalent) of each feasible mode for a commuter.
 
-    Generalized cost is expressed in minutes-equivalent: travel time plus the
-    agent's ``price_sensitivity`` applied to the monetary cost converted via
-    ``money_to_minutes``. Walking is only feasible for short trips and carries no
-    monetary cost. The population invariant (every agent has car *or* transit
-    access) guarantees at least one motorised option, so ``choose_mode`` always
-    returns a mode.
+    Cost is travel time plus the agent's ``price_sensitivity`` applied to the
+    monetary cost converted via ``money_to_minutes``. Walking is only feasible for
+    short trips and carries no monetary cost. The population invariant (every agent
+    has car *or* transit access) guarantees at least one motorised option.
     """
     dist = agent["commute_distance_km"]
     price_sens = agent["price_sensitivity"]
@@ -74,9 +72,18 @@ def choose_mode(agent: dict, params: BaselineParams = DEFAULT_PARAMS) -> str:
         money = params.transit_fare
         options[TRANSIT] = time_min + price_sens * params.money_to_minutes * money
 
-    # Deterministic tie-break: lowest generalized cost, then a fixed mode order.
+    return options
+
+
+def pick_mode(options: dict[str, float]) -> str:
+    """Deterministic argmin: lowest generalized cost, then a fixed mode order."""
     order = {CAR: 0, TRANSIT: 1, WALK: 2}
     return min(options.items(), key=lambda kv: (kv[1], order[kv[0]]))[0]
+
+
+def choose_mode(agent: dict, params: BaselineParams = DEFAULT_PARAMS) -> str:
+    """Pick the baseline travel mode for one commuter (argmin generalized cost)."""
+    return pick_mode(mode_options(agent, params))
 
 
 def _round(value: float, digits: int = 2) -> float:

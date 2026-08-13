@@ -39,3 +39,11 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   and always-present assumption fragility. Each carries risk/mechanism/severity/probability/evidence/
   mitigation; ranked by severity-weight × probability. Provenance split: risk scores Estimated, cited
   evidence Simulated (SPEC §12/§34). Extracted shared `simulate_brief()`. 6 tests; 91 green. **M5 complete.**
+- 2026-08-13 — M6 cohort opinion model: new `backend/app/opinion/` package + `POST /public`. Each
+  synthetic micro-agent's OWN modelled material impact (World A vs B generalized-cost Δ) + perceived
+  fairness (regressivity of unexempted flat charge on low incomes, exemption benefit, transit-reinvestment
+  goodwill, car-ban coercion) + income-band ideological prior → latent support → 6-bucket distribution
+  (Strong support…Strong oppose + Uncertain, uncertain mass scaled by policy_salience). Aggregated by
+  cohort (income band × geography × baseline mode) and overall. Refactored mode-choice to expose
+  `mode_options`/`policy_mode_options`/`pick_mode` (reused for material impact). Deterministic, Simulated.
+  Sanity: inbound car commuters most opposed, reinvestment-served transit users most supportive. 8 tests; 99 green.

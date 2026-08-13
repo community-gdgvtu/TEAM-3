@@ -21,7 +21,7 @@ label generated media SIMULATED; uncertainty widens with horizon).
 - [x] Devil's Advocate → ranked Failure Mode Register (risk/mechanism/severity/probability/evidence/mitigation), SPEC §12 [DONE — `backend/app/parliament/failure_modes.py` + `POST /parliament/failure-modes`: adaptation-gap / regressive-backlash / revenue-erosion / assumption-fragility modes ranked by severity×probability; Estimated scores over Simulated evidence]
 
 ## M6 — Public reaction + simulated media (backend)
-- [ ] Cohort opinion model (income decile × geography × transport mode): material impact + fairness + prior → support distribution (Strong support…Strong oppose), deterministic core (SPEC §13). Expose via `/simulate` or `POST /public`
+- [x] Cohort opinion model (income decile × geography × transport mode): material impact + fairness + prior → support distribution (Strong support…Strong oppose), deterministic core (SPEC §13). Expose via `/simulate` or `POST /public` [DONE — `backend/app/opinion/` + `POST /public`: per-agent material impact (own gc Δ) + fairness (regressivity/exemption/reinvestment/coercion) + income-band prior → 6-bucket distribution per cohort (band×geography×mode) and overall; deterministic, Simulated]
 - [ ] Simulated media generator `POST /media`: reads ONLY event ledger + outcome metrics + opinion state; emits archetype headlines (public-service/business/local/tabloid/etc.), every artifact tagged `SIMULATED — not a real outlet`, no real bylines (SPEC §15)
 
 ## M7 — Evidence, uncertainty, credibility (backend)

@@ -21,7 +21,7 @@ Guardrails (SPEC §34):
 from __future__ import annotations
 
 from .. import dataset
-from ..baseline.model import CAR, TRANSIT, WALK, _one_way_minutes, _round
+from ..baseline.model import CAR, TRANSIT, WALK, _one_way_minutes, _round, pick_mode
 from ..baseline.params import DEFAULT_PARAMS, BaselineParams
 from ..baseline.schema import (
     EmissionsMetrics,
@@ -36,16 +36,16 @@ from .levers import DEFAULT_SIM_PARAMS, PolicyLevers, SimParams, derive_levers
 from .schema import WorldBMetrics
 
 
-def choose_mode_policy(
+def policy_mode_options(
     agent: dict,
     levers: PolicyLevers,
     cbd_zone_ids: set[str],
     params: BaselineParams = DEFAULT_PARAMS,
-) -> str:
-    """Pick a commuter's travel mode under the policy (argmin generalized cost).
+) -> dict[str, float]:
+    """Generalized cost of each feasible mode under the policy.
 
-    Identical to the baseline :func:`app.baseline.model.choose_mode` except that
-    the compiled policy's levers modify the car and transit options:
+    Identical to :func:`app.baseline.model.mode_options` except that the compiled
+    policy's levers modify the car and transit options:
 
     * a CBD-bound, non-exempt car trip pays ``charge_per_one_way`` extra money;
     * under pedestrianisation the car option is removed for CBD-bound commuters;
@@ -89,8 +89,17 @@ def choose_mode_policy(
         # enter the CBD by car). This only fires under the pedestrianisation ban.
         options[WALK] = _one_way_minutes(dist, params.walk_speed_kmh, 0.0)
 
-    order = {CAR: 0, TRANSIT: 1, WALK: 2}
-    return min(options.items(), key=lambda kv: (kv[1], order[kv[0]]))[0]
+    return options
+
+
+def choose_mode_policy(
+    agent: dict,
+    levers: PolicyLevers,
+    cbd_zone_ids: set[str],
+    params: BaselineParams = DEFAULT_PARAMS,
+) -> str:
+    """Pick a commuter's travel mode under the policy (argmin generalized cost)."""
+    return pick_mode(policy_mode_options(agent, levers, cbd_zone_ids, params))
 
 
 def compute_world_b(
