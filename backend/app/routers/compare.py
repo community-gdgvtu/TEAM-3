@@ -6,6 +6,12 @@ amendment (C, D…) in a single payload — each with its Δ-vs-baseline and
 Δ-vs-intervention — plus a headline table (baseline + every world + Δ per metric
 at one horizon). The baseline is always present (SPEC §21); every number comes
 from the deterministic model (SPEC §34).
+
+``GET /compare/example`` composes the canonical §21 four-world A/B/C/D comparison
+for the §28 demo congestion charge with **no request body** — so a judge or the
+UI can pull the whole "baseline vs policy vs opposition vs optimised" table in
+one keyless call (mirrors ``GET /brief/example`` / ``GET /run/example`` /
+``GET /north-star/example``).
 """
 
 from __future__ import annotations
@@ -13,6 +19,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
+from ..policy import compile_policy
 from ..policy.dsl import PolicyDSL
 from ..simulation.amendment import Amendment
 from ..simulation.counterfactual import (
@@ -23,6 +30,19 @@ from ..simulation.counterfactual import (
 from ..simulation.shocks import Shocks
 
 router = APIRouter(prefix="/compare", tags=["compare"])
+
+#: The canonical §28 demo policy, composed by ``GET /compare/example`` (same text
+#: the other keyless examples render). World D uses the same objective/constraint
+#: the Minister's Brief / North-Star examples optimise against, so all keyless
+#: examples describe one consistent demo run.
+_DEMO_TEXT = (
+    "Introduce a $12 congestion charge for private vehicles entering the central "
+    "business district between 7:00 AM and 7:00 PM, beginning 1 January 2027. "
+    "Exempt emergency vehicles and disability permit holders. Reinvest 100% of net "
+    "proceeds into buses."
+)
+_DEMO_OBJECTIVE = {"reduce_transport_emissions_pct": 20}
+_DEMO_CONSTRAINTS = {"max_low_income_burden_increase_pct": 2}
 
 
 class CompareRequest(BaseModel):
@@ -93,4 +113,25 @@ def compare_grand_endpoint(req: GrandCompareRequest) -> CounterfactualComparison
         constraints=req.constraints,
         shocks=req.shocks,
         horizon_months=req.horizon_months,
+    )
+
+
+@router.get(
+    "/example",
+    response_model=CounterfactualComparison,
+    summary="Canonical §21 A/B/C/D comparison for the demo congestion charge (no body)",
+)
+def compare_example() -> CounterfactualComparison:
+    """Compose the §21 four-world comparison for the §28 demo policy (no body).
+
+    Compiles the canonical demo congestion charge and runs the *identical*
+    ``compare_grand`` service ``POST /compare/grand`` uses — deriving World C
+    (opposition amendment) and World D (URBAN-optimised) deterministically — so
+    this keyless surface can never disagree with the POST endpoint (SPEC §34).
+    """
+    policy = compile_policy(_DEMO_TEXT).policy
+    return compare_grand(
+        policy,
+        objective=_DEMO_OBJECTIVE,
+        constraints=_DEMO_CONSTRAINTS,
     )

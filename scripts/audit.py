@@ -128,6 +128,7 @@ def build_report(text: str) -> dict:
         "/data-fabric",
         "/assumptions",
         "/backtest/example",
+        "/compare/example",
         "/stress-test/catalogue",
         "/analogues/cases",
         "/citizen/sample",

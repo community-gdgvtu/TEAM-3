@@ -1300,3 +1300,27 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
 - Files: `backend/app/routers/northstar.py` (+`GET /north-star/example` + `_DEMO_TEXT`),
   `backend/tests/test_northstar.py` (2 tests). **469 green** (was 467),
   `scripts/audit.py` PASS, app boots with **55 routes** (was 54). No frontend/shared files touched.
+
+## 2026-08-13 (engine, M49)
+- **Keyless `GET /compare/example`** (SPEC §21/§22/§34). Completes the keyless judge-facing
+  surface for the most fundamental §21 view — *"never show intervention metrics without the
+  baseline"*. The composed answer endpoints (`/brief/example`, `/run/example`,
+  `/north-star/example`) and `/backtest/example` all offered a no-body call, but
+  `POST /compare/grand` — the canonical World A (baseline) / B (intervention) / C (opposition
+  amendment) / D (URBAN-optimised) quartet — still required a hand-compiled `PolicyDSL`.
+- Added `GET /compare/example`: compiles the canonical §28 demo congestion charge and runs the
+  identical `compare_grand()` service the POST endpoint uses (World C from the deterministic
+  opposition rule, World D from the §22 optimiser's best-balanced pick), with the same objective
+  `reduce_transport_emissions_pct:20` + constraint `max_low_income_burden_increase_pct:2` the
+  brief/north-star examples optimise against — so all keyless examples describe one consistent
+  demo run.
+- Pure additive routing — no new numeric model, no LLM in any figure (§34). Tests: byte-identical
+  to `POST /compare/grand` with the same compiled inputs (`json.dumps(sort_keys=True)`) so it can't
+  drift; World A baseline present + the three intervention worlds by role (B/C/D), every headline
+  row quoting the baseline and one cell per world, provenance Simulated; determinism across two
+  keyless calls. Added `/compare/example` to the whole-surface `scripts/audit.py` GET sweep
+  (served-200 + provenance-tag + byte-identical determinism).
+- Files: `backend/app/routers/compare.py` (+`GET /compare/example` + `_DEMO_TEXT`/objective/
+  constraints), `scripts/audit.py` (GET sweep), `backend/tests/test_compare_example.py` (3 tests).
+  **472 green** (was 469), `scripts/audit.py` PASS, app boots with **56 routes** (was 55).
+  No frontend/shared files touched.
