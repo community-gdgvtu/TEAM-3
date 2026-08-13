@@ -132,3 +132,27 @@ def test_run_provenance_and_simulated_media_banner() -> None:
     d = client.post("/run", json={"text": DEMO_TEXT}).json()
     assert any(tag in d["provenance"] for tag in ("Simulated", "Generated"))
     assert "SIMULATED" in str(d["media"]), "media must carry the SIMULATED banner (§15/§34)"
+
+
+def test_run_example_composes_full_pipeline_no_body() -> None:
+    """GET /run/example returns the whole §29 narrative with no request body."""
+    r = client.get("/run/example")
+    assert r.status_code == 200, r.text
+    d = r.json()
+    for section in ("simulation", "public", "parliament", "amendment", "media"):
+        assert section in d and d[section], f"missing section {section}"
+    assert d["compiled"] is not None  # example goes through the compile path
+    assert len(d["narrative"]) == 6  # the §29 beats
+    assert d["headline"], "headline dashboard should not be empty"
+    assert d["horizon_label"] == "2 years"  # default horizon
+
+
+def test_run_example_matches_posting_the_demo_text() -> None:
+    """The keyless example must be identical to POSTing the same demo text."""
+    ex = client.get("/run/example").json()
+    posted = client.post("/run", json={"text": DEMO_TEXT}).json()
+    # Numeric sections are deterministic and must match byte-for-byte.
+    assert ex["simulation"] == posted["simulation"]
+    assert ex["headline"] == posted["headline"]
+    assert ex["net_support"] == posted["net_support"]
+    assert ex["amendment"]["comparison"] == posted["amendment"]["comparison"]

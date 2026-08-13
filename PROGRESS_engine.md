@@ -1266,3 +1266,19 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   the numeric path; generated media labelled SIMULATED; numeric layers byte-identical on repeat;
   uncertainty fan widens with the horizon). Working tree clean; app boots. No new engine work
   was required or invented; no frontend/shared files touched.
+
+## 2026-08-13 (engine, M47)
+- **Keyless `GET /run/example`** (SPEC §28/§29/§34). The `/run` scenario orchestrator is the
+  killer demo, but it still required a hand-built `RunRequest` body — while `GET /brief/example`
+  and `GET /backtest/example` already let a judge (or the UI's first paint) pull the canonical
+  answer with no body. Closed that gap: `GET /run/example` orchestrates the canonical §28 demo
+  congestion charge through the identical `run_scenario()` service (compile → simulate → public
+  → parliament → auto-amendment → media) and returns the full §29 narrative envelope.
+- Pure additive routing — a thin `run_scenario(RunRequest(text=_DEMO_TEXT))` wrapper; no new
+  numeric model, no LLM in any figure (§34). A test pins the example's
+  `simulation`/`headline`/`net_support`/amendment `comparison` byte-identical to
+  `POST /run {"text": _DEMO_TEXT}`, so the example can never drift from the real endpoint.
+- Files: `backend/app/routers/run.py` (+`GET /run/example` + `_DEMO_TEXT`),
+  `backend/tests/test_scenario_run.py` (2 tests). **467 green** (was 465),
+  `scripts/audit.py` PASS (all six §34 checks; GET sweep now covers the new route),
+  app boots with **54 routes** (was 53). No frontend/shared files touched.
