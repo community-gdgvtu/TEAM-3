@@ -16,7 +16,7 @@ label generated media SIMULATED; uncertainty widens with horizon).
 - [x] Event ledger (SPEC §10): structured events (e.g. transit capacity exceeded, cordon load drop) with cause/affected/confidence/downstream — this is the shared truth other engines read [DONE — `backend/app/simulation/events.py` derives mode_shift / cordon_load / transit_capacity / emissions / transit_reinvestment events from Δ(B−A), each with cause/affected_agents/confidence/downstream/evidence; exposed as `event_ledger` on `POST /simulate`]
 
 ## M5 — Parliament + amendment loop (backend)
-- [ ] `backend/app/parliament/` agents: Government, Opposition, Equity, Economist, Devil's Advocate. Each produces evidence-grounded arguments that cite `/simulate` metrics + event-ledger entries (LLM for prose only, with a deterministic template fallback when no key). `POST /parliament/debate`
+- [x] `backend/app/parliament/` agents: Government, Opposition, Equity, Economist, Devil's Advocate. Each produces evidence-grounded arguments that cite `/simulate` metrics + event-ledger entries (LLM for prose only, with a deterministic template fallback when no key). `POST /parliament/debate` [DONE — `backend/app/parliament/` (personas deterministically select evidence + stance; `llm.py` polishes prose with template fallback); `POST /parliament/debate` returns 5 grounded arguments + tally + summary]
 - [ ] Amendment model + `POST /simulate` support for amended DSL (e.g. exempt bottom-30% income): recompute and return Δ vs original policy
 - [ ] Devil's Advocate → ranked Failure Mode Register (risk/mechanism/severity/probability/evidence/mitigation), SPEC §12
 

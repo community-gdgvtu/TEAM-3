@@ -20,3 +20,10 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   ramp (isolated by comparing boardings vs the short-run plateau, so it fires ~12mo not day-one).
   Each event carries cause/affected_agents/confidence(decays with horizon)/downstream/evidence,
   tagged Simulated. Exposed as `event_ledger` on `POST /simulate`. 7 new tests; 70 green. **M3 complete.**
+- 2026-08-13 — M5 parliament: new `backend/app/parliament/` package + `POST /parliament/debate`.
+  Five personas (Government/Opposition/Equity/Economist/Devil's Advocate) each deterministically
+  select evidence (Δ end-state metrics + event-ledger entries) and take a role-appropriate stance;
+  `DebateBrief` is the shared read of the sim output. Prose is LLM-polished when a key is set, with a
+  deterministic template fallback (no key → method='template') so the endpoint always returns. Every
+  quantitative claim cites a Simulated metric/event — no figure invented (SPEC §11/§34). Equity flips
+  support↔conditional on presence of a low-income/resident exemption. 8 tests; 78 green.
