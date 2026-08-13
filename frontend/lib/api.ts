@@ -2905,3 +2905,134 @@ export async function rerunAssumptions(
   }
   return (await res.json()) as AssumptionRerunResult;
 }
+
+// ---------------------------------------------------------------------------
+// Baseline World Model — GET /world (SPEC §5 / §28.2)
+//
+// World A's structural composition: the browsable digital twin the demo renders
+// (§28.2 "roads, transit, population cohorts, businesses"), organised as the six
+// SPEC §5 layers. Not a forecast — pure counts / distributions / baseline-ABM
+// aggregates. No LLM produces any number (SPEC §34); gaps are surfaced in each
+// layer's `not_modelled` list rather than fabricated.
+// ---------------------------------------------------------------------------
+
+/** A named categorical breakdown (label → count) with matching percentages. */
+export interface WorldDistribution {
+  counts: Record<string, number>;
+  pct: Record<string, number>;
+}
+
+/** SPEC §5 Population layer — who lives and commutes in World A. */
+export interface WorldPopulationLayer {
+  provenance: MetricTag;
+  total_agents: number;
+  commuters: number;
+  cbd_commuters: number;
+  age_years: Record<string, number>; // min / max / mean
+  age_bands: WorldDistribution;
+  household_size: WorldDistribution;
+  income_monthly: Record<string, number>; // min / median / mean
+  income_bands: WorldDistribution;
+  income_deciles: number[];
+  occupations: WorldDistribution;
+  mobility: Record<string, number>; // car_access_pct / transit_access_pct / both_pct
+  commute: Record<string, number>; // mean_distance_km / cbd_commuter_pct
+  behavioural_priors: Record<string, number>;
+  not_modelled: string[];
+}
+
+/** SPEC §5 Economy layer — sectors, jobs and wages in World A. */
+export interface WorldEconomyLayer {
+  provenance: MetricTag;
+  total_jobs_city: number;
+  cbd_jobs: number;
+  cbd_job_share_pct: number;
+  sectors: WorldDistribution;
+  wages_monthly_by_band: Record<string, number>;
+  note: string;
+  not_modelled: string[];
+}
+
+/** SPEC §5 Geography layer — the physical city (§28.2 render targets). */
+export interface WorldGeographyLayer {
+  provenance: MetricTag;
+  zones: number;
+  cbd_zones: number;
+  land_use: WorldDistribution;
+  roads: Record<string, number>;
+  road_classes: WorldDistribution;
+  buildings: Record<string, number>;
+  building_types: WorldDistribution;
+  business_locations: Record<string, number>;
+  transit: Record<string, number>;
+  not_modelled: string[];
+}
+
+/** SPEC §5 Environment layer — baseline emissions & land/water state. */
+export interface WorldEnvironmentLayer {
+  provenance: MetricTag;
+  commuter_co2: Record<string, number>; // daily_tonnes / annual_tonnes / kg_per_km
+  land_use: WorldDistribution;
+  green_space_zones: number;
+  water_present: boolean;
+  not_modelled: string[];
+}
+
+/** SPEC §5 Institutions layer — the governance agents that are *modelled*. */
+export interface WorldInstitutionsLayer {
+  provenance: MetricTag;
+  note: string;
+  parliament_agents: string[];
+  institutional_agents: string[];
+  not_modelled: string[];
+}
+
+/** One modelled society actor with its documented opinion prior. */
+export interface WorldSocietyActor {
+  id: string;
+  kind: string;
+  label: string;
+  prior: number; // opinion prior in [-1, 1] (Estimated)
+  rationale: string;
+}
+
+/** SPEC §5 Society layer — opinion, media and civic actors (as modelled). */
+export interface WorldSocietyLayer {
+  provenance: MetricTag;
+  note: string;
+  opinion_priors_by_income_band: Record<string, number>;
+  media_environment: string[];
+  civic_actors: WorldSocietyActor[];
+  not_modelled: string[];
+}
+
+/** The composed Baseline World Model (SPEC §5 / §28.2). */
+export interface WorldModel {
+  world: string; // 'A' = baseline, no intervention
+  provenance: MetricTag;
+  note: string;
+  layer_selection: string;
+  layers_returned: string[];
+  population?: WorldPopulationLayer | null;
+  economy?: WorldEconomyLayer | null;
+  geography?: WorldGeographyLayer | null;
+  environment?: WorldEnvironmentLayer | null;
+  institutions?: WorldInstitutionsLayer | null;
+  society?: WorldSocietyLayer | null;
+}
+
+/**
+ * Fetch the composed Baseline World Model (World A) across all six SPEC §5
+ * layers. Policy-independent and deterministic — it describes the synthetic
+ * city as it is, not a forecast. Throws on network/HTTP error.
+ */
+export async function getWorld(signal?: AbortSignal): Promise<WorldModel> {
+  const res = await fetch(`${API_BASE_URL}/world`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as WorldModel;
+}

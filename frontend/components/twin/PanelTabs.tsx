@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 
 import { subscribeDemoTab } from "../../lib/demo";
 import RunPanel from "./RunPanel";
+import WorldPanel from "./WorldPanel";
 import ParliamentPanel from "./ParliamentPanel";
 import PublicReactionPanel from "./PublicReactionPanel";
 import PressFeedPanel from "./PressFeedPanel";
@@ -43,6 +44,7 @@ import { useTwin } from "./TwinStore";
 
 type TabKey =
   | "run"
+  | "world"
   | "parliament"
   | "public"
   | "press"
@@ -71,6 +73,7 @@ type TabKey =
 
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "run", label: "Run" },
+  { key: "world", label: "World" },
   { key: "parliament", label: "Parliament" },
   { key: "public", label: "Public" },
   { key: "press", label: "Press" },
@@ -130,6 +133,9 @@ export default function PanelTabs() {
       <div className="tab-panels">
         <div role="tabpanel" hidden={active !== "run"}>
           <RunPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "world"}>
+          <WorldPanel />
         </div>
         <div role="tabpanel" hidden={active !== "parliament"}>
           <ParliamentPanel />

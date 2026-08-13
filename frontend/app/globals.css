@@ -8811,3 +8811,347 @@ main.wide {
     grid-column: 1 / -1;
   }
 }
+
+/* ==========================================================================
+   World tab (SPEC §5 / §28.2) — the browsable Baseline World Model.
+   ========================================================================== */
+.world-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.world-topline {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.world-worldchip {
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+.world-layers {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.world-note {
+  margin: 0;
+}
+.world-selection {
+  font-size: 0.82rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+}
+.world-selection summary {
+  cursor: pointer;
+  color: var(--text);
+}
+.world-selection p {
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+}
+.world-layers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 0.85rem;
+}
+.world-layer {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.015);
+  padding: 0.85rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.world-layer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.world-layer-head h3 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+.world-layer-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.world-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+.world-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.15);
+}
+.world-stat-val {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.world-stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.world-stat-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  opacity: 0.85;
+}
+.world-dist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.7rem;
+}
+.world-dist-title {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.world-hint {
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.75;
+}
+.world-dist-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.world-dist-row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr auto auto;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+}
+.world-dist-key {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.world-dist-track {
+  position: relative;
+  height: 0.55rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.world-dist-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--accent), #7fb0ff);
+  border-radius: 999px;
+}
+.world-dist-pct {
+  color: var(--muted);
+  text-align: right;
+  min-width: 3rem;
+  font-variant-numeric: tabular-nums;
+}
+.world-dist-count {
+  color: var(--muted);
+  opacity: 0.7;
+  text-align: right;
+  min-width: 3.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.world-priors,
+.world-actors {
+  border-top: 1px dashed var(--border);
+  padding-top: 0.6rem;
+}
+.world-priors-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.world-priors-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.world-prior {
+  font-size: 0.78rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+}
+.world-prior b {
+  color: var(--text);
+}
+/* Opinion prior mark on a −1…+1 axis. */
+.world-prior-row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr 3rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+}
+.world-prior-track {
+  position: relative;
+  height: 0.9rem;
+}
+.world-prior-axis {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+}
+.world-prior-track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.world-prior-mark {
+  position: absolute;
+  top: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.world-prior-mark.pos {
+  background: var(--ok);
+}
+.world-prior-mark.neg {
+  background: var(--bad);
+}
+.world-prior-val {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.world-prior-val.pos {
+  color: var(--ok);
+}
+.world-prior-val.neg {
+  color: var(--bad);
+}
+.world-priors-bands {
+  min-width: 0;
+}
+.world-agents {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.world-agent-group {
+  min-width: 0;
+}
+.world-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.world-chip {
+  font-size: 0.76rem;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  background: rgba(0, 0, 0, 0.15);
+}
+.world-actor-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.world-actor {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+}
+.world-actor-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.world-actor-label {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+.world-actor-kind {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.world-actor-prior {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.world-actor-prior.pos {
+  color: var(--ok);
+}
+.world-actor-prior.neg {
+  color: var(--bad);
+}
+.world-actor-rationale {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.world-wages {
+  min-width: 0;
+}
+.world-nm {
+  font-size: 0.78rem;
+}
+.world-nm-head {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.world-nm-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.world-foot {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+  padding-top: 0.6rem;
+  margin: 0;
+}

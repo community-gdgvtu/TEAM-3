@@ -774,3 +774,23 @@ declared the UI roadmap complete — a newly unsurfaced endpoint. Added the **Ti
   + `.cmp-world.optimised` styles to `globals.css` (mobile-safe). `tsc --noEmit` +
   `next build` clean. ROADMAP_UI now 39/39.
 - Follow-up: none open — every documented engine endpoint has a UI surface again.
+
+## 2026-08-13 — M27: Baseline World Model tab (GET /world, SPEC §5/§28.2)
+Surfaced the new `GET /world` endpoint (engine committed 30e61a2) that the UI had
+no view for. Added `WorldModel` types + `getWorld()` client to `lib/api.ts`; new
+`WorldPanel.tsx` renders World A's six SPEC §5 layers — Population (stat grid +
+income/age/household/occupation share bars + Estimated behavioural priors),
+Economy (jobs + sector/wage bars), Geography (network/zone/building stat grid +
+land-use/road-class/building-type bars), Environment (commuter-CO₂ + green space +
+water-layer flag + land-use bars), Institutions (Observed Parliament §11 +
+reviewer §18 agent chips) and Society (Estimated −1…+1 opinion priors by income
+band, media-environment chips §15, civic-actor cards §14). Each layer card shows
+its own provenance chip and a collapsible honest `not_modelled` list. New `world`
+tab wired into `PanelTabs.tsx` (2nd slot, after Run); ~230 lines of `world-*` CSS.
+Verified against the live backend payload (7,985 agents, 81 zones, 144 road links,
+etc.); provenance honesty preserved — structural counts Simulated, institutions
+Observed, society priors Estimated, no LLM on any number, honest loading/error
+states. `tsc --noEmit` clean; `next build` clean (/ = 59.7 kB). ROADMAP_UI.md M27
+checked off. Note: the currently-running dev backend predates `/world`, so it 404s
+live until the engine process restarts — the tab shows its honest error+retry
+state until then, exactly as designed.
