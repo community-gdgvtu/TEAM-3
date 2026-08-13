@@ -413,3 +413,30 @@ Dated notes, newest at the bottom. One line per shipped item.
   the theme tokens + existing `.eco-*`/`.tag.*` classes. Updated `frontend/README.md`
   endpoint map (now 22 surfaces incl. /microsim). `tsc --noEmit` clean, `next lint`
   clean (0 warnings), `next build` clean (4/4 static pages). **M17 complete.**
+
+- 2026-08-13 — **M18: Spatial traffic-assignment surface — POST /spatial (SPEC §7.7).**
+  The engine shipped `POST /spatial` (peak-hour static user-equilibrium assignment,
+  MSA + BPR, over the real Meridia road grid; car demand = the driving subset of the
+  same deterministic mode-choice agents as `/simulate`) after M17. This run surfaces
+  it. Added `NetworkState` / `ArcLoad` / `ZoneChange` / `AccessibilityReport` /
+  `PollutionReport` / `SpatialReport` types + a `runSpatial()` client to `lib/api.ts`.
+  New `SpatialPanel` renders: a headline strip (peak-hour car trips A→B, cordon-inflow
+  Δ%, network vehicle-hours Δ% with good/bad colouring); side-by-side World A
+  (baseline) vs World B (policy) network-state cards (vehicle-hours/-km, mean speed,
+  mean/max v/c, congested + overcapacity arc counts, cordon inflow); a notable-link-
+  loads table (flow A→B with signed Δ, colour-coded v/c pills, congested speed,
+  cordon-crossing chip) plus separate over-capacity bottleneck lists for B and A;
+  job-accessibility (gravity mean A→B + population-weighted Δ%, top gainer/loser
+  zones); and a road-CO₂ dispersion proxy (CBD + network totals A→B, biggest drops vs
+  biggest rises = displacement, plus the displacement note). Honesty: all numbers are
+  produced by a deterministic assignment model (no LLM) → stamped Simulated; auditable
+  `params` + explicit `not_modelled` surfaced; honest waiting/idle/error states — never
+  invents link flows when the backend is down. Fixed a percent-unit trap: the backend's
+  `_pct_change` returns percent (e.g. −12.5), so the panel uses a dedicated `deltaPct`
+  formatter (NOT `formatSignedPct`, which expects a 0..1 fraction) consistently across
+  headline, accessibility, pollution and per-zone rows. Wired a new **Spatial** tab into
+  `PanelTabs`; added ~280 lines of scoped `.sp-*` CSS (incl. a mobile-safe arc-table
+  collapse) reusing theme tokens + existing `.eco-*`/`.tag.*` classes. Updated
+  `frontend/README.md` endpoint map (now 23 surfaces incl. /spatial). `tsc --noEmit`
+  clean, `next lint` clean (0 warnings), `next build` clean (4/4 static pages).
+  **M18 complete.**

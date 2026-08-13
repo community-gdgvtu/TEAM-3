@@ -87,6 +87,7 @@ Every documented backend endpoint has a UI surface. All fetches are typed in `li
 | Economic spillover | `POST /economy` | §7.4 |
 | Recursive feedback loop (dynamics) | `POST /dynamics` | §7.6/§19 |
 | Distributional microsimulation | `POST /microsim` | §7.3 |
+| Spatial traffic assignment | `POST /spatial` | §7.7 |
 | Institutional review | `POST /institutions` | §18 |
 | Backtest scorecard | `GET /backtest/example`, `POST /backtest` | §25 |
 | Model registry / transparency | `GET /registry` | §33 |
