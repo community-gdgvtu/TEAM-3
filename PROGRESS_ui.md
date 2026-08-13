@@ -506,3 +506,21 @@ unsurfaced documented endpoint. Added a **Stress** tab exposing it end-to-end:
   caveats + both provenance classes + retained-bar marker).
 Checks green: `tsc --noEmit` clean; `next lint` clean (0 warnings); `next build` clean (4/4
 static pages, / at 129 kB First Load JS). Every documented engine endpoint is again surfaced.
+
+## 2026-08-13 — Verification run (roadmap complete, all 24 endpoints surfaced, build green)
+No unchecked items remain in ROADMAP_UI.md (M4–M20 all done). Re-audited the surface area
+against the live backend routers to confirm nothing new shipped for the UI to expose:
+- Enumerated all `@router` decorators across `backend/app/routers/*.py` (25 routers) and
+  cross-checked every path against the `fetch(`${API_BASE_URL}/…`)` calls in
+  `frontend/lib/api.ts`. Every documented route is surfaced: `/health`, `/policy/compile`,
+  `/baseline`, `/simulate` (+`/simulate/amend`), `/parliament/debate` (+`/parliament/failure-modes`),
+  `/public`, `/media`, `/evidence`, `/uncertainty`, `/compare`, `/optimise`, `/backtest`
+  (+`/backtest/example`), `/sdg`, `/diffusion`, `/registry`, `/reproduce`, `/press-conference`,
+  `/ensemble`, `/institutions/review`, `/economy`, `/dynamics`, `/spatial`, `/microsim`,
+  `/stress-test` (+`/stress-test/catalogue`). No unsurfaced engine endpoint found.
+- Checks green: `tsc --noEmit` exit 0; `next build` clean (4/4 static pages, / at 129 kB
+  First Load JS, 0 lint warnings).
+- Live-backend smoke test not possible this run: port 8000 is held by an unrelated service
+  (returns an OpenAI/vision/mongo health payload, not the twin's `HealthResponse`), so the
+  twin backend isn't up. That is exactly the "waiting for backend" path the panels handle;
+  starting the backend is the engine track's domain, so left untouched. No numbers fabricated.
