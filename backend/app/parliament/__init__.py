@@ -8,7 +8,13 @@ generates a figure (SPEC §34), and a template fallback keeps the endpoint worki
 with no API key.
 """
 
-from .debate import run_debate
+from .debate import run_debate, simulate_brief
+from .failure_modes import (
+    FailureMode,
+    FailureModeRegister,
+    Severity,
+    build_failure_register,
+)
 from .personas import DebateBrief, build_arguments
 from .schema import (
     Argument,
@@ -20,8 +26,13 @@ from .schema import (
 
 __all__ = [
     "run_debate",
+    "simulate_brief",
     "DebateBrief",
     "build_arguments",
+    "build_failure_register",
+    "FailureMode",
+    "FailureModeRegister",
+    "Severity",
     "Argument",
     "DebateRequest",
     "DebateResponse",

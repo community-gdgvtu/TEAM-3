@@ -656,6 +656,135 @@ ul.assumptions {
   font-size: 0.88rem;
 }
 
+/* --- Outcomes dashboard (M4.4) ----------------------------------------- */
+
+.dashboard {
+  margin-top: 1.25rem;
+}
+
+.dashboard-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.dashboard-head h2 {
+  margin: 0;
+}
+
+.dashboard-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.85rem;
+}
+
+.tile {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tile-title {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.tile-value {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.tile-unit {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.tile-band {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sparkline {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tile-deltas {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.15rem;
+}
+
+.delta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.delta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.delta-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.delta-val.up {
+  color: var(--bad);
+}
+
+.delta-val.down {
+  color: var(--ok);
+}
+
+.delta-val.muted {
+  color: var(--muted);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.tile-empty {
+  justify-content: flex-start;
+  border-style: dashed;
+}
+
+.tile-empty-body {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 .maplibregl-ctrl-group {
   background: var(--panel) !important;
 }

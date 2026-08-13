@@ -27,6 +27,22 @@ from .personas import DebateBrief, build_arguments
 from .schema import Argument, DebateResponse, Stance
 
 
+def simulate_brief(policy: PolicyDSL, shocks: Shocks | None = None) -> DebateBrief:
+    """Run the deterministic simulation and package it as a shared debate brief.
+
+    Reused by both the debate and the Failure Mode Register so every parliament
+    surface reads exactly the same Simulated evidence (SPEC §11/§12).
+    """
+    params, trend = apply_shocks(shocks)
+    base = compute_baseline(params)
+    base_ts = build_timeseries(base, trend)
+    b_full = compute_world_b(policy, params=params, reinvestment=True)
+    b_ts = build_world_b_timeline(policy, baseline=base, params=params, trend=trend)
+    delta = build_delta(base_ts, b_ts)
+    ledger = build_event_ledger(policy, base, delta)
+    return DebateBrief(policy, base, b_full, delta, ledger)
+
+
 def _motion(policy: PolicyDSL) -> str:
     iv = policy.intervention
     charge = (
@@ -96,16 +112,7 @@ def run_debate(
     seed: int | None = None,
 ) -> DebateResponse:
     """Run the full parliament debate for ``policy`` and return the structured result."""
-    params, trend = apply_shocks(shocks)
-
-    base = compute_baseline(params)
-    base_ts = build_timeseries(base, trend)
-    b_full = compute_world_b(policy, params=params, reinvestment=True)
-    b_ts = build_world_b_timeline(policy, baseline=base, params=params, trend=trend)
-    delta = build_delta(base_ts, b_ts)
-    ledger = build_event_ledger(policy, base, delta)
-
-    brief = DebateBrief(policy, base, b_full, delta, ledger)
+    brief = simulate_brief(policy, shocks)
     arguments = build_arguments(brief)
     method = _render_speeches(arguments)
 

@@ -16,6 +16,7 @@ import { getBaseline } from "../../lib/api";
 import type { BaselineResponse } from "../../lib/api";
 import CityMapPanel from "../map/CityMapPanel";
 import TimelineScrubber from "./TimelineScrubber";
+import Dashboard from "./Dashboard";
 
 export default function TwinWorkspace() {
   const [baseline, setBaseline] = useState<BaselineResponse | null>(null);
@@ -70,6 +71,10 @@ export default function TwinWorkspace() {
           />
         )}
       </section>
+
+      {status === "ready" && baseline && (
+        <Dashboard timeseries={baseline.timeseries} index={index} />
+      )}
     </div>
   );
 }

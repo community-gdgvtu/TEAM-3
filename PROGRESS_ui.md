@@ -23,3 +23,10 @@ Dated notes, newest at the bottom. One line per shipped item.
   the dashboard, next item). When the backend is down the map still renders and the
   timeline shows an honest "waiting for backend" state — no invented numbers
   (SPEC §34). `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M4.4: Outcomes dashboard — 5 tiles (Traffic, CO₂, Transit, Equity,
+  Support). Traffic/CO₂/Transit read the World-A baseline series at the scrubbed
+  checkpoint with an SVG sparkline showing the widening uncertainty band, ± band %,
+  provenance chip, and a "vs T0" drift delta (direction-aware colouring). Equity &
+  Support have no baseline series → explicit "awaiting /simulate" placeholders;
+  "vs baseline" delta reads "simulate a policy" until World B exists (SPEC §34).
+  **M4 complete.** `tsc --noEmit` + `next build` clean.
