@@ -2521,3 +2521,122 @@ export async function getDataFabric(signal?: AbortSignal): Promise<DataFabric> {
   }
   return (await res.json()) as DataFabric;
 }
+
+// ---------------------------------------------------------------------------
+// Scenario orchestrator — POST /run (SPEC §28/§29 — the killer demo)
+// ---------------------------------------------------------------------------
+
+/**
+ * One beat of the §29 killer-demo storyline, pointing at a response section so a
+ * judge can follow the narrative straight into the evidence.
+ */
+export interface NarrativeBeat {
+  /** Approximate demo timecode, e.g. "0–10s". */
+  timecode: string;
+  /** What happens, e.g. "Compile policy". */
+  stage: string;
+  /** Which response field carries the evidence. */
+  section: string;
+  /** One-line narration grounded in this run. */
+  description: string;
+}
+
+/**
+ * A single composed-dashboard tile: the policy effect on one metric at the
+ * chosen horizon. Numbers are Simulated — read verbatim from the same
+ * deterministic simulation the standalone `/simulate` endpoint returns.
+ */
+export interface RunHeadlineMetric {
+  key: string;
+  label: string;
+  unit: string;
+  world_a: number;
+  world_b: number;
+  delta: number;
+  delta_pct: number | null;
+  /** "down" / "up" / "flat" vs baseline (sign only, not good/bad). */
+  direction: string;
+  /** [low, high] Δ uncertainty band at the horizon. */
+  band: number[];
+  tag: MetricTag;
+}
+
+/** The parliament's amendment (auto-derived or caller-supplied) + its effect. */
+export interface RunProposedAmendment {
+  proposed: boolean;
+  /** "caller", "auto:equity", "auto:reinvestment", or "none". */
+  source: string;
+  rationale: string;
+  amendment: Amendment | null;
+  /** Δ(amended − original) across checkpoints (SPEC §12/§21). */
+  comparison: AmendmentComparison | null;
+}
+
+/**
+ * The full §29 demo narrative in one mutually-consistent payload. Every numeric
+ * section reuses an existing deterministic layer reading the *same* compiled
+ * policy and the *same* simulation, so the dashboard, parliament, amendment and
+ * media can never disagree. Numbers Simulated; debate/media prose Generated; no
+ * LLM touches any figure (SPEC §34).
+ */
+export interface RunResponse {
+  provenance: string;
+  note: string;
+  policy_id: string;
+  horizon_months: number;
+  horizon_label: string;
+  /** Compiler output when natural-language `text` was supplied (SPEC §3). */
+  compiled: CompileResponse | null;
+  narrative: NarrativeBeat[];
+  headline: RunHeadlineMetric[];
+  /** Overall net public support (support − oppose), in [-1, 1], from /public. */
+  net_support: number;
+  simulation: SimulateResponse;
+  public: PublicOpinion;
+  parliament: DebateResponse;
+  amendment: RunProposedAmendment;
+  media: MediaResponse;
+}
+
+/** Input to `POST /run`: supply *either* `policy` (compiled) or `text` (to compile). */
+export interface RunRequest {
+  text?: string;
+  policy?: PolicyDSL;
+  jurisdiction?: string;
+  /** Horizon the headline dashboard reports (nearest checkpoint). Defaults to Year 2. */
+  horizon_months?: number;
+  amendment?: Amendment;
+  seed?: number;
+}
+
+/**
+ * Run the whole §29 killer-demo pipeline in a single call (`POST /run`): compile
+ * → simulate → public reaction → parliament → amendment re-simulation → media,
+ * returned as one mutually-consistent payload. Introduces no new numeric model —
+ * every section reads the same compiled policy and the same simulation. Throws on
+ * network/HTTP error so the panel can show an honest waiting/error state instead
+ * of inventing a narrative (SPEC §28/§29/§34).
+ */
+export async function runScenario(
+  req: RunRequest,
+  signal?: AbortSignal,
+): Promise<RunResponse> {
+  const res = await fetch(`${API_BASE_URL}/run`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as RunResponse;
+}

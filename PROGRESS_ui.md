@@ -703,3 +703,18 @@ declared the UI roadmap complete — a newly unsurfaced endpoint. Added the **Ti
 - `tsc --noEmit` exit 0; `next build` clean (4/4 static, / at 50.8 kB / 138 kB First Load). Only
   `frontend/**` + ROADMAP_UI.md + this file touched. Every documented engine endpoint (27 routers
   incl. `/health`) is now surfaced in the UI.
+- 2026-08-13 — M24: Run tab — surfaced the scenario orchestrator `POST /run`
+  (SPEC §28/§29, the killer demo), the last unsurfaced engine endpoint. Added
+  `runScenario()` + `RunResponse`/`RunHeadlineMetric`/`NarrativeBeat`/
+  `RunProposedAmendment` types to `lib/api.ts` and a new `RunPanel` (first tab).
+  One call composes compile → simulate → public → parliament → amendment
+  re-sim → media into a mutually-consistent view: consistency banner (numbers
+  Simulated · prose Generated · no LLM in numeric path), §29 narrative beats,
+  composed outcomes dashboard at a selectable horizon (World A→B, signed Δ+%,
+  band, provenance chip, good/bad by metric), net-support gauge, parliament
+  snapshot (motion+tally+summary), amendment block with the isolated
+  Δ(amended−original) table at the final checkpoint (≈0 rows honest), and a
+  SIMULATED-stamped press snapshot. Drives from the store's compiled policy or a
+  natural-language fallback box; honest idle/loading/error states, never
+  fabricates a narrative. `tsc --noEmit` + `next build` clean. Every documented
+  engine endpoint now has a UI surface.

@@ -13,6 +13,7 @@
 import { useEffect, useState } from "react";
 
 import { subscribeDemoTab } from "../../lib/demo";
+import RunPanel from "./RunPanel";
 import ParliamentPanel from "./ParliamentPanel";
 import PublicReactionPanel from "./PublicReactionPanel";
 import PressFeedPanel from "./PressFeedPanel";
@@ -39,6 +40,7 @@ import DataFabricPanel from "./DataFabricPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
+  | "run"
   | "parliament"
   | "public"
   | "press"
@@ -64,6 +66,7 @@ type TabKey =
   | "datafabric";
 
 const TABS: Array<{ key: TabKey; label: string }> = [
+  { key: "run", label: "Run" },
   { key: "parliament", label: "Parliament" },
   { key: "public", label: "Public" },
   { key: "press", label: "Press" },
@@ -119,6 +122,9 @@ export default function PanelTabs() {
       </div>
 
       <div className="tab-panels">
+        <div role="tabpanel" hidden={active !== "run"}>
+          <RunPanel />
+        </div>
         <div role="tabpanel" hidden={active !== "parliament"}>
           <ParliamentPanel />
         </div>
