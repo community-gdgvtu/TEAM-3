@@ -112,3 +112,20 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   skipped. Forecast Simulated, scores exact arithmetic, deterministic, no LLM (SPEC §25/§34). Perfect-
   actuals ⇒ ~0 error/100% coverage; wrong-sign & out-of-band cases are caught. 7 tests; 140 green.
   **All ENGINE roadmap items (M3–M7 + both stretch) complete.**
+- 2026-08-13 — SDG alignment layer (SPEC §23): new `backend/app/sdg/` package + `POST /sdg`.
+  Maps a compiled policy onto UN SDG targets using measurable indicators / transparent proxies,
+  reading numbers straight from the deterministic World-A/World-B sim, the cohort-opinion
+  generalized-cost burden model, and the run's own audit artifacts. **Core** SDG 11 (sustainable
+  mode share 11.2; CBD private-vehicle trips 11.2/11.6; peak transit ridership 11.2) and SDG 16
+  (share of decision metrics published with full provenance+method+assumptions 16.6/16.10; count of
+  structured cause→effect→confidence event-ledger records 16.7 — deliberately governance-*process*
+  proxies, not transport outcomes, so URBAN's own contribution to institutional transparency is
+  measured, not invented). **Secondary** SDG 13 (transport CO₂ 13.2) and SDG 10 (excess travel-cost
+  burden on lowest-income vs average commuters 10.4, from the same burden model the optimiser uses —
+  faithfully reports the model even when the answer is progressive/regressive). Every indicator
+  carries SPEC §23's mandated shape (indicator/proxy · baseline · scenario · change · data source ·
+  confidence), confidence widens with horizon (SPEC §9/§24), and there is **no arbitrary composite
+  "SDG score"** (SPEC §23 forbids it) — the report only counts improved/worsened/unchanged. Transport
+  indicators tagged Simulated, proxy/opinion-derived ones Estimated, none Generated; fully
+  deterministic, no LLM (SPEC §23/§34). Horizon configurable + snapped to nearest checkpoint (default
+  5y). 8 tests; 148 green, app boots with 21 routes. Follow-up: SPEC §14 opinion diffusion queued next.
