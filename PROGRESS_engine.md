@@ -129,3 +129,23 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   indicators tagged Simulated, proxy/opinion-derived ones Estimated, none Generated; fully
   deterministic, no LLM (SPEC §23/§34). Horizon configurable + snapped to nearest checkpoint (default
   5y). 8 tests; 148 green, app boots with 21 routes. Follow-up: SPEC §14 opinion diffusion queued next.
+- 2026-08-13 — Social network / opinion diffusion (SPEC §14): new `backend/app/diffusion/` package
+  + `POST /diffusion`. Builds an abstract social graph — 5 citizen-cohort nodes (one per income band,
+  round-0 opinions seeded size-weighted from the deterministic cohort-opinion model) plus journalists,
+  government, opposition, business, influencers, community groups and public institutions (each with a
+  transparent, documented opinion prior derived from the policy's own structure: who proposes it, who it
+  costs, how the distributional burden falls). Edges are typed (social influence / media exposure /
+  geography / workplace / political affinity / institutional) and the incoming-influence matrix is
+  row-stochastic per node. Runs a deterministic **Friedkin–Johnsen** diffusion — x_i(t+1) = λ_i·Σ W_ij x_j(t)
+  + (1−λ_i)·x_i(0), so each actor drifts toward the weighted opinion of who it listens to while staying
+  partly anchored to its own conviction (susceptibility λ by type: citizens/journalists open, politicians
+  entrenched) — over N information rounds. Outputs: per-node opinion trajectories, issue salience
+  (mean strength of feeling) and opinion polarisation (population-weighted dispersion) per round,
+  coalition formation (support / oppose / contested blocs with citizen share + mean opinion), the
+  dominant narrative, and citizen net-support drift from round 0 → final. Optional narrative
+  **information shocks** (round · node · delta, e.g. a scandal hitting the press or a viral campaign
+  hitting influencers) durably shift the target's FJ anchor so the effect propagates instead of washing
+  out in one round. Opinions bounded [-1,1]; rounds are information-diffusion steps, explicitly NOT the
+  physical Time-Machine horizon (noted in the payload). Fully deterministic, no randomness, no LLM
+  (SPEC §14/§34). 9 tests; 157 green, app boots with 22 routes. **SPEC §14 + §23 now covered beyond the
+  original M3–M7 + stretch roadmap.**

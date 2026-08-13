@@ -18,6 +18,7 @@ from .routers import (
     backtest,
     baseline,
     compare,
+    diffusion,
     evidence,
     health,
     media,
@@ -64,6 +65,7 @@ def create_app() -> FastAPI:
     app.include_router(optimise.router)
     app.include_router(backtest.router)
     app.include_router(sdg.router)
+    app.include_router(diffusion.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
