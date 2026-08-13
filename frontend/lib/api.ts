@@ -954,6 +954,81 @@ export async function runEnsemble(
 }
 
 // ---------------------------------------------------------------------------
+// Press conference (SPEC §16) — POST /press-conference
+// ---------------------------------------------------------------------------
+
+/** One journalist's pointed, evidence-anchored question. */
+export interface PressQuestion {
+  archetype: string;
+  outlet_label: string;
+  reporter: string;
+  question: string;
+  angle: string;
+  /** 'friendly' | 'neutral' | 'hostile'. */
+  hostility: string;
+  cited_refs: string[];
+}
+
+/** The spokesperson's grounded response to one question. */
+export interface PressAnswer {
+  /** 'defends' | 'acknowledges' | 'rebuts' | 'commits'. */
+  stance: string;
+  answer: string;
+  cited_refs: string[];
+}
+
+export interface PressExchange {
+  question: PressQuestion;
+  answer: PressAnswer;
+}
+
+export interface PressConference {
+  provenance: MetricTag;
+  disclaimer: string;
+  note: string;
+  policy_id: string;
+  /** 'llm' or 'template'. */
+  method: string;
+  horizon: Checkpoint;
+  spokesperson: string;
+  opening_statement: string;
+  opening_refs: string[];
+  exchanges: PressExchange[];
+  public_mood: string;
+}
+
+/**
+ * Stage a simulated press conference for a compiled policy (SPEC §16): a
+ * spokesperson opening plus five archetype journalist exchanges, each grounded in
+ * a specific Δ metric or event. The whole thing is fictional (SIMULATED) — prose
+ * is Generated over Simulated figures; no LLM produces a number. Throws on error.
+ */
+export async function runPressConference(
+  policy: PolicyDSL,
+  horizonMonths = 5,
+  signal?: AbortSignal,
+): Promise<PressConference> {
+  const res = await fetch(`${API_BASE_URL}/press-conference`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, horizon_months: horizonMonths }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as PressConference;
+}
+
+// ---------------------------------------------------------------------------
 // Institutional review panel (SPEC §18) — POST /institutions/review
 // ---------------------------------------------------------------------------
 

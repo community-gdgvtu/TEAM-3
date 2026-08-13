@@ -206,3 +206,19 @@ Dated notes, newest at the bottom. One line per shipped item.
   `runInstitutions` client + institution types added to lib/api.ts (reusing the
   existing EvidenceCitation type); wired as a new "Institutions" tab. **M9 complete.**
   `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M10.1: Press conference tab (SPEC §16). New PressConferencePanel
+  stages `POST /press-conference` on the compiled policy: a spokesperson opening
+  statement plus five archetype journalist exchanges (public broadcaster, business
+  press, tabloid, environmental, opposition-local). Each question shows the
+  fictional outlet + reporter, an archetype chip, a hostility chip (friendly/
+  neutral/hostile, green→red), the line of attack, and the model refs it's
+  grounded in; each answer shows the spokesperson's stance (defends/acknowledges/
+  rebuts/commits, colour-coded) and its own grounding refs. A dashed SIMULATED
+  disclaimer banner sits at the top, the run is stamped SIMULATED, and the
+  header surfaces the horizon, room mood and whether the prose was LLM-polished or
+  templated. Honesty (SPEC §16/§34): fictional outlets/reporters only, prose
+  Generated over Simulated figures, every Q&A anchored to a metric/event ref, no
+  LLM-invented numbers; graceful no-policy/loading/error states. Typed
+  `runPressConference` client + press types added to lib/api.ts; wired as a new
+  "Presser" tab (distinct from the /media-driven "Press" headline feed).
+  `tsc --noEmit` + `next build` clean.

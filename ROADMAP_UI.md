@@ -45,3 +45,11 @@ every number tagged, uncertainty visible, never invent one when the backend is d
 - [x] Ensemble forecast tab: `POST /ensemble` → the flagship cordon effect estimated by 3 independent methods (agent-based / historical-analogue / elasticity) with per-method ranges, documented weights, and a disagreement band; band = method disagreement, not false precision (SPEC §8)
 - [x] Model registry / transparency tab: `GET /registry` → the "how do we know this isn't AI astrology" manifest: model cards (method, determinism, LLM-role, output tag), data sources, live assumption index, and the SPEC §34 guardrail checklist with pass/fail (SPEC §33)
 - [x] Institutional review tab: `POST /institutions` → multi-agent institutional feasibility/legal/fiscal review with per-institution verdicts (SPEC §18)
+
+## M10 — Remaining engine endpoints the UI still doesn't expose (SPEC §16/§21/§22/§24)
+Same rules: every number tagged, uncertainty visible, generated media SIMULATED,
+never invent one when the backend is down. Endpoint paths as documented.
+- [x] Press conference tab: `POST /press-conference` → spokesperson opening + 5 archetype journalist exchanges, each grounded in a Δ metric/event; whole thing stamped SIMULATED (fictional outlets), prose Generated over Simulated figures (SPEC §16)
+- [ ] Counterfactual compare tab: `POST /compare` → World A (baseline) vs B (intervention) vs amendment worlds C/D…, headline table of every world + Δ per metric at one horizon; baseline always present (SPEC §21)
+- [ ] Uncertainty fan tab: `POST /uncertainty` → Monte-Carlo median + 50/80/95% bands per horizon for a chosen metric, ranked most-influential assumptions, behavioural-regime disagreement (SPEC §24)
+- [ ] Policy optimiser tab: `POST /optimise` → objective + constraints → feasible Pareto frontier + representative picks (cheapest / most equitable / largest emissions cut / best balanced); outcomes Simulated, budget proxy Estimated (SPEC §22)

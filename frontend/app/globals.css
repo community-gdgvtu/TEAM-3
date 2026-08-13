@@ -3440,3 +3440,201 @@ ul.assumptions {
 .inst-note {
   margin-top: 1rem;
 }
+
+/* --- Press conference panel (M10) ------------------------------------- */
+.presser-body {
+  margin-top: 1rem;
+}
+
+.presser-disclaimer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px dashed #f0834a;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.8rem;
+  color: #ff9d5c;
+  background: rgba(240, 131, 74, 0.06);
+}
+
+.presser-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0.8rem 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.presser-when {
+  color: var(--text);
+}
+
+.presser-opening {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  background: rgba(79, 140, 255, 0.05);
+}
+
+.presser-speaker {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.presser-statement {
+  margin: 0.4rem 0 0;
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.presser-exchanges {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+  counter-reset: presser;
+}
+
+.presser-exchange {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.presser-q-head,
+.presser-a-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+}
+
+.presser-outlet {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.presser-reporter {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.presser-archetype {
+  font-size: 0.68rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.03rem 0.35rem;
+}
+
+.presser-hostility {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.presser-hostility.friendly {
+  color: var(--ok);
+  border-color: rgba(61, 220, 151, 0.5);
+}
+.presser-hostility.hostile {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.presser-question {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.presser-angle {
+  margin: 0.3rem 0 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.presser-a {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border);
+}
+
+.presser-a-speaker {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.presser-stance {
+  font-size: 0.7rem;
+  text-transform: capitalize;
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.presser-stance.rebuts {
+  color: var(--bad);
+  border-color: rgba(255, 107, 107, 0.5);
+}
+.presser-stance.commits,
+.presser-stance.defends {
+  color: var(--ok);
+  border-color: rgba(61, 220, 151, 0.5);
+}
+.presser-stance.acknowledges {
+  color: #f6be60;
+  border-color: rgba(246, 190, 96, 0.5);
+}
+
+.presser-answer {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.94;
+  line-height: 1.5;
+}
+
+.presser-refs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.presser-refs-label {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.presser-ref {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.05rem 0.35rem;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.presser-note {
+  margin-top: 1rem;
+}
