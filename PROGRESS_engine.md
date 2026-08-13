@@ -431,3 +431,41 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   no-LLM assertion.
 - Health check this run: `pytest` **218 passed** (+8); `app.main:app` boots with
   **31 routes**; new `/reproduce` verified end-to-end (run_id stable, reproducible=true).
+
+## 2026-08-13 (run 11:01 UTC) — SPEC §20 stress-testing environment (POST /stress-test)
+- Roadmap was fully checked (25/25) and the prior run had already closed the last
+  genuine gap (§32). Rather than a no-op verification commit, closed the next real
+  SPEC gap: **§20 external shocks / stress-testing**. The `Shocks` primitive existed
+  but only as three raw multipliers passed through `/simulate`; nothing exposed the
+  named SPEC §20 toggles or the "holds under X, fails under Y" robustness read-out
+  that §20 explicitly calls the point of the feature.
+- Added `backend/app/stress/` (`catalogue.py`, `schema.py`, `model.py`) +
+  `POST /stress-test` and `GET /stress-test/catalogue` (`backend/app/routers/stress.py`),
+  wired in `main.py`.
+  - Catalogue = the exact SPEC §20 shock set (recession, fuel-price spike, flood,
+    heatwave, population growth, migration change, technology adoption,
+    interest-rate shock), each mapped to documented `Shocks` knobs with a rationale
+    (SPEC §20: scenario assumptions, not secretly random events).
+  - Re-runs the same deterministic A/B/Δ core as `/simulate` per scenario, shock
+    applied to BOTH worlds so Δ(B−A) still isolates the policy (SPEC §21). Compares
+    the policy's benefit on 4 headline metrics under each shock vs the no-shock
+    baseline → per-metric verdict (robust/strengthened/weakened/neutralised/reversed),
+    % benefit retained, per-scenario holds/degrades/fails, and an overall
+    robust_to / degrades_under / fails_under split.
+  - Honest fidelity per SPEC §34: each scenario declares modelled/partial/proxy +
+    a caveat. Directly-modelled (fuel spike, demand-growth shocks) vs proxies
+    (flood/heatwave/interest-rate) the static commuter model represents weakly —
+    interest-rate bite really lives in the §7.4 economy layer; tech scenario
+    under-states CO₂ (tailpipe factor held constant). Confidence widens at long
+    horizons (SPEC §24).
+  - Policy deltas Simulated, shock magnitudes Estimated; deterministic, no LLM.
+    404 lists valid scenario keys. Registry (§33) left untouched — stress-test is a
+    scenario harness over existing layers (like /uncertainty, /compare), not a new
+    numeric model.
+- Tests: `backend/tests/test_stress.py` (9) — catalogue completeness, all-scenarios
+  run, shock actually moves the world, subset+horizon selection, 404 on bad key,
+  the full robust→reversed verdict classifier, retained% consistency, determinism,
+  transparent overrides.
+- Health check this run: `pytest` **227 passed** (+9); `app.main:app` boots with
+  **33 routes** (+2); `/stress-test` verified end-to-end (£12 charge robust to all
+  8 shocks, as expected given the large cordon effect).
