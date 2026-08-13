@@ -27,3 +27,9 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   deterministic template fallback (no key → method='template') so the endpoint always returns. Every
   quantitative claim cites a Simulated metric/event — no figure invented (SPEC §11/§34). Equity flips
   support↔conditional on presence of a low-income/resident exemption. 8 tests; 78 green.
+- 2026-08-13 — M5 amendment loop: `backend/app/simulation/amendment.py` — `Amendment` models a
+  structured, auditable DSL mutation (exempt low-income/residents, set/scale charge, set PT revenue
+  share); `apply_amendment` returns a new policy leaving the original untouched. `POST /simulate/amend`
+  re-simulates original + amended over one baseline and returns each policy's Δ-vs-baseline plus
+  Δ(amended−original) isolating the amendment. Generalised `build_delta` to compare two World-B runs.
+  E.g. a low-income exemption drops priced commuters 123→100 and nudges car share +1.7pp. 7 tests; 85 green.

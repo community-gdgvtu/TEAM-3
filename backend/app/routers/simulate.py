@@ -24,6 +24,7 @@ from ..baseline.model import compute_baseline
 from ..baseline.schema import BaselineMetrics, BaselineTimeSeries, MetricTag
 from ..baseline.timeseries import build_timeseries
 from ..policy.dsl import PolicyDSL
+from ..simulation.amendment import Amendment, AmendmentComparison, compare_amendment
 from ..simulation.compare import build_delta
 from ..simulation.events import build_event_ledger
 from ..simulation.model import compute_world_b
@@ -87,6 +88,16 @@ class SimulateResponse(BaseModel):
     seed: Optional[int] = None
 
 
+class AmendRequest(BaseModel):
+    """Input to ``POST /simulate/amend``."""
+
+    policy: PolicyDSL = Field(description="Original compiled Policy DSL.")
+    amendment: Amendment = Field(description="Structured change to apply (SPEC §12).")
+    shocks: Optional[Shocks] = Field(
+        default=None, description="Optional exogenous stressors applied to both worlds."
+    )
+
+
 @router.post("", response_model=SimulateResponse, summary="Simulate a policy → A / B / Δ")
 def simulate(req: SimulateRequest) -> SimulateResponse:
     """Run World A, World B and their delta for the supplied policy.
@@ -124,3 +135,18 @@ def simulate(req: SimulateRequest) -> SimulateResponse:
         shocks_applied=(req.shocks.model_dump() if req.shocks else {}),
         seed=req.seed,
     )
+
+
+@router.post(
+    "/amend",
+    response_model=AmendmentComparison,
+    summary="Amend a policy → Δ(amended − original)",
+)
+def amend(req: AmendRequest) -> AmendmentComparison:
+    """Apply a structured amendment and return its effect vs the original policy.
+
+    Both the original and amended policies are re-simulated deterministically over
+    the same baseline; the response carries each policy's Δ-vs-baseline plus the
+    Δ(amended − original) that isolates the amendment's own effect (SPEC §12/§34).
+    """
+    return compare_amendment(req.policy, req.amendment, shocks=req.shocks)

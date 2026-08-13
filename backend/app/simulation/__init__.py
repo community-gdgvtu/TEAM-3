@@ -6,6 +6,12 @@ synthetic population and re-aggregates the same headline metric families as the
 baseline. No LLM touches the numeric path (SPEC §34).
 """
 
+from .amendment import (
+    Amendment,
+    AmendmentComparison,
+    apply_amendment,
+    compare_amendment,
+)
 from .compare import build_delta
 from .events import DEFAULT_THRESHOLDS, EventThresholds, build_event_ledger
 from .levers import DEFAULT_SIM_PARAMS, PolicyLevers, SimParams, derive_levers
@@ -47,4 +53,8 @@ __all__ = [
     "LedgerEvent",
     "EventThresholds",
     "DEFAULT_THRESHOLDS",
+    "Amendment",
+    "AmendmentComparison",
+    "apply_amendment",
+    "compare_amendment",
 ]
