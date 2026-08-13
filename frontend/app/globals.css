@@ -7136,3 +7136,311 @@ main.wide {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Time-series forecast panel (SPEC §7.2) — scoped .ts-* (own prefix; no clash
+   with the .tab / .tag utility classes). World A = accent (blue), World B = ok
+   (green), synthetic history = muted. Bands widen with horizon by construction.
+   --------------------------------------------------------------------------- */
+.ts-provenance {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+.ts-body {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.ts-metric-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ts-chip {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.ts-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.ts-chip.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(79, 140, 255, 0.1);
+}
+.ts-headline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+.ts-head-cell {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.ts-head-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.ts-head-val {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.ts-head-val.ts-b {
+  color: var(--ok);
+}
+.ts-head-val.ts-down {
+  color: var(--ok);
+}
+.ts-head-val.ts-up {
+  color: var(--bad);
+}
+.ts-head-band {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+.ts-chart {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  padding: 0.4rem;
+}
+.ts-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ts-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.ts-zero {
+  stroke: rgba(231, 236, 245, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.ts-now {
+  stroke: rgba(231, 236, 245, 0.25);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+.ts-now-label {
+  fill: var(--muted);
+}
+.ts-axis {
+  fill: var(--muted);
+  font-size: 10px;
+}
+.ts-band-a95 {
+  fill: rgba(79, 140, 255, 0.12);
+  stroke: none;
+}
+.ts-band-a80 {
+  fill: rgba(79, 140, 255, 0.2);
+  stroke: none;
+}
+.ts-band-b95 {
+  fill: rgba(61, 220, 151, 0.12);
+  stroke: none;
+}
+.ts-band-b80 {
+  fill: rgba(61, 220, 151, 0.22);
+  stroke: none;
+}
+.ts-hist-line {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+.ts-line-a {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.ts-line-b {
+  stroke: var(--ok);
+  stroke-width: 2;
+}
+.ts-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.ts-leg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.ts-leg::before {
+  content: "";
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.ts-leg-hist::before {
+  background: var(--muted);
+}
+.ts-leg-a::before {
+  background: var(--accent);
+}
+.ts-leg-b::before {
+  background: var(--ok);
+}
+.ts-leg-note {
+  margin-left: auto;
+  font-style: italic;
+}
+.ts-sub {
+  margin: 0.3rem 0 0;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ts-fit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+.ts-fit-cell {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ts-fit-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.ts-fit-val {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.ts-method {
+  margin-top: 0;
+}
+.ts-shift-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ts-shift-cell {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.35rem 0.55rem;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 56px;
+}
+.ts-shift-h {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.ts-shift-v {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.ts-shift-v.ts-down {
+  color: var(--ok);
+}
+.ts-shift-v.ts-up {
+  color: var(--bad);
+}
+.ts-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.ts-toggle {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 0;
+}
+.ts-toggle:hover {
+  color: var(--text);
+}
+.ts-assum-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.ts-assum-table td {
+  border-top: 1px solid var(--border);
+  padding: 0.3rem 0.5rem;
+}
+.ts-assum-k {
+  color: var(--muted);
+  width: 60%;
+}
+.ts-assum-v {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.ts-notmodelled {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+.ts-nm-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+.ts-notmodelled ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.ts-note {
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .ts-headline {
+    grid-template-columns: 1fr;
+  }
+  .ts-leg-note {
+    margin-left: 0;
+    width: 100%;
+  }
+}

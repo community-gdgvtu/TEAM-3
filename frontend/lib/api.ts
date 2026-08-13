@@ -2328,3 +2328,93 @@ export async function fetchAnalogueCases(
   }
   return (await res.json()) as HistoricalCase[];
 }
+
+// ---------------------------------------------------------------------------
+// Time-series forecast (SPEC §7.2) — POST /timeseries
+// ---------------------------------------------------------------------------
+
+/** A forecast value with 80% / 95% prediction intervals at one horizon. */
+export interface ForecastPoint {
+  t_months: number;
+  value: number;
+  low80: number;
+  high80: number;
+  low95: number;
+  high95: number;
+}
+
+/** The fitted structural-model parameters — the model made auditable (SPEC §8). */
+export interface FitDiagnostics {
+  level: number;
+  slope_per_month: number;
+  seasonal_amplitude: number;
+  ar1_phi: number;
+  residual_sigma: number;
+  in_sample_mape_pct: number;
+  /** Out-of-sample MAPE on a held-out tail; null when the series is too short. */
+  holdout_mape_pct: number | null;
+  method: string;
+}
+
+/** World-A (baseline) and World-B (policy) forecasts for one metric. */
+export interface MetricForecast {
+  key: string;
+  label: string;
+  unit: string;
+  is_share: boolean;
+  /** Synthetic monthly history is Simulated (not real observations). */
+  history_tag: MetricTag;
+  history: number[];
+  fit: FitDiagnostics;
+  /** Statistical baseline extrapolation is Estimated. */
+  world_a_tag: MetricTag;
+  world_a: ForecastPoint[];
+  /** Baseline forecast shifted by the deterministic ABM policy Δ — Simulated. */
+  world_b_tag: MetricTag;
+  world_b: ForecastPoint[];
+  /** The ABM Δ(B−A)% applied at each checkpoint (Simulated). */
+  policy_shift_pct: number[];
+}
+
+/** Full §7.2 payload: World A fitted & forecast first, then the policy alters it. */
+export interface TimeSeriesForecast {
+  provenance: MetricTag;
+  policy_id: string;
+  note: string;
+  checkpoints: Checkpoint[];
+  metrics: MetricForecast[];
+  assumptions: Record<string, number | string | boolean>;
+  not_modelled: string[];
+}
+
+/**
+ * Structural time-series forecast for a compiled policy (SPEC §7.2): World A is
+ * fitted first (local-linear-trend + seasonal + AR(1)) over a seeded synthetic
+ * history anchored to the ABM baseline, then the deterministic ABM policy Δ(B−A)
+ * alters that trajectory to give World B. Synthetic history is Simulated, the
+ * statistical baseline Estimated, the policy shift Simulated — no LLM on the
+ * numeric path (SPEC §7.2/§8/§34). Throws on network/HTTP error.
+ */
+export async function runTimeseries(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<TimeSeriesForecast> {
+  const res = await fetch(`${API_BASE_URL}/timeseries`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const errBody = (await res.json()) as { detail?: unknown };
+      if (typeof errBody.detail === "string") detail = errBody.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as TimeSeriesForecast;
+}

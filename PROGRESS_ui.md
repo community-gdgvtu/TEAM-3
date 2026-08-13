@@ -636,3 +636,35 @@ tab, the last uncovered engine surface.
 - `tsc --noEmit` exit 0; `next build` clean (4/4 static, / at 46.7 kB / 134 kB First Load); `next lint`
   no warnings/errors. Only `frontend/**` + ROADMAP_UI.md + this file touched. Every documented engine
   endpoint is now surfaced in the UI (25 routers incl. `/health`).
+
+## 2026-08-13 (12:45 UTC) — M22: Time-series forecast tab (SPEC §7.2)
+The engine shipped `POST /timeseries` (router `timeseries.py`, commit 6119420) after M21
+declared the UI roadmap complete — a newly unsurfaced endpoint. Added the **Time-series** tab.
+- `lib/api.ts`: `ForecastPoint`, `FitDiagnostics`, `MetricForecast`, `TimeSeriesForecast`
+  interfaces + `runTimeseries(policy)` (POST). Throw-on-non-OK so the panel shows an honest
+  waiting/error state, never a fabricated trajectory (SPEC §34).
+- `components/twin/TimeseriesPanel.tsx`: per-metric selector chips; an SVG chart overlaying the
+  seeded **synthetic monthly history** (Simulated, muted line on the negative-time axis), the
+  **World A** baseline forecast (Estimated; trend + 12-month seasonal + AR(1)), and the **World B**
+  policy trajectory (Simulated; World A × the ABM Δ(B−A)), each as nested 80%/95% prediction bands
+  that visibly widen toward year 10, plus central lines and a "now → forecast" divider; a headline
+  strip (World A vs World B central @ final horizon with 80% bands + signed policy-shift Δ%); an
+  auditable fit-diagnostics grid (level, trend/month, seasonal amplitude, AR(1) φ, residual σ,
+  in-sample MAPE + honest held-out MAPE, method string); a per-horizon policy-shift row; a
+  collapsible assumptions table + `not_modelled` scope list. Three provenance classes on one chart —
+  history Simulated, statistical baseline Estimated, policy shift Simulated — all surfaced.
+- `PanelTabs.tsx`: registered the `timeseries` tab (label "Time-series") between Analogue and
+  Institutions; panel stays mounted like the others. `globals.css`: scoped `.ts-*` styles (own
+  prefix; no clash with `.tab`/`.tag`), World A = accent blue, World B = ok green, history = muted,
+  mobile-safe.
+- **Live contract check** (stood a fresh twin backend up read-only on port 8156, no backend files
+  touched; pre-existing :8139/:8000 left alone): `/timeseries` returned HTTP 200 with every key the
+  panel destructures. A £15/day cordon+reinvest policy → 8 metrics × 8 checkpoints; car-mode-share
+  fit MAPE 0.48% in-sample / 0.61% held-out, tags history=Simulated / world_a=Estimated /
+  world_b=Simulated, policy shift ramping 0 → −34.09% by year 10, and the 95% band widening
+  0.648 → 2.933 across the horizon — exactly the "uncertainty grows with horizon" story the layer
+  exists to tell (SPEC §7.2/§8). Fresh backend shut down after (running it is the engine track's
+  domain).
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static, / at 49 kB / 137 kB First Load); `next lint`
+  no warnings/errors. Only `frontend/**` + ROADMAP_UI.md + this file touched. Every documented engine
+  endpoint is now surfaced in the UI (26 routers incl. `/health`).
