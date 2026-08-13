@@ -207,3 +207,25 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   magnitude as genuinely uncertain**, exactly the caveat SPEC §8 exists to surface. The ensemble
   output is tagged Estimated (a cross-method blend, not one Simulated run); fully deterministic, no
   LLM (SPEC §8/§34). 5 tests; 172 green, app boots with 25 routes.
+- 2026-08-13 — Multi-agent institutional layer (SPEC §18): new `backend/app/institutions/`
+  package + `POST /institutions/review`. Adds the institutional agents SPEC §18 lists beyond the
+  parliament's five personas — **Climate**, **Implementation**, **Legal/Constitutional Research**
+  and **Auditor** — each assessing the policy against a professional mandate rather than arguing a
+  political stance. It reuses the parliament's `simulate_brief` + `DebateBrief` (imported, not
+  edited — parliament files untouched) so all four agents read the identical deterministic evidence
+  (Δ metrics + event ledger + provenance). Climate scores the commuter-CO₂ Δ and emissions event
+  against decarbonisation (verdict clear at ≥10% cut, otherwise conditional/concern) and flags
+  induced-demand rebound. Implementation detects the adaptation-gap (transit capacity exceeded at a
+  month earlier than the revenue-funded uplift → concern, with a front-load-interim-capacity
+  recommendation) plus car-ban access management (deliveries / emergency / blue-badge). Legal
+  reasons purely from policy structure: statutory legal base + proportionality for any charge, an
+  indirect-discrimination / proportionality concern when a flat charge carries no low-income or
+  resident exemption, and access-rights + consultation duties for pedestrianisation. The Auditor
+  assesses the *evidence itself* — every Δ metric model-derived and tagged Simulated (no LLM in the
+  numeric path), confidence bands widening to the horizon, and the event-ledger causal trail — and
+  clears on process even when the policy's own effect is weak. Each review returns structured
+  `Finding`s (severity info/watch/risk/blocker) with citations to specific metrics/events, a
+  per-agent `Verdict` (clear/conditional/concern/block), and the panel rolls up to an overall =
+  most-severe verdict, a tally and a deterministic synthesis. Review prose is Generated; every
+  cited figure is Simulated; no LLM produces a number (SPEC §18/§34). 5 tests; 177 green, app boots
+  with 26 routes.
