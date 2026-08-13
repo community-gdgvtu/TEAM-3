@@ -1,5 +1,6 @@
 import HealthStatus from "./HealthStatus";
 import PolicyCompiler from "./PolicyCompiler";
+import CityMapPanel from "../components/map/CityMapPanel";
 
 export default function Home() {
   return (
@@ -16,6 +17,8 @@ export default function Home() {
       </p>
 
       <PolicyCompiler />
+
+      <CityMapPanel />
 
       <HealthStatus />
 

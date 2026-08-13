@@ -1,0 +1,39 @@
+{
+  "title": "Meridia synthetic city grid",
+  "provenance": "Synthetic",
+  "generated_by": "data/generate_city.py",
+  "seed": 42,
+  "geographic_scope": "Fictional city 'Meridia' (not a real place)",
+  "spatial_resolution": "0.75 km grid cells",
+  "crs": "EPSG:4326 (WGS84 lon/lat)",
+  "license": "CC0 (synthetic demo data)",
+  "notes": "Input world state for the URBAN digital twin demo. Not a simulation result and not derived from any real administrative record. Numeric effects are produced later by the simulation engine, never by an LLM (SPEC \u00a734).",
+  "grid": {
+    "rows": 9,
+    "cols": 9,
+    "cell_km": 0.75
+  },
+  "center": {
+    "lat": 45.0,
+    "lon": 9.0
+  },
+  "counts": {
+    "zones": 81,
+    "cbd_zones": 9,
+    "roads": 144,
+    "cordon_crossing_links": 12,
+    "od_pairs": 2786
+  },
+  "totals": {
+    "population": 253145,
+    "jobs": 154311,
+    "daily_person_trips": 144700,
+    "daily_trips_into_cbd": 54078
+  },
+  "files": {
+    "zones": "zones.geojson",
+    "roads": "roads.geojson",
+    "od_pairs": "od_pairs.json",
+    "cbd_polygon": "cbd_polygon.geojson"
+  }
+}
