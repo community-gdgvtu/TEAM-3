@@ -581,3 +581,27 @@ Cron run; ROADMAP_UI.md 0 unchecked / 33 checked (M4–M20). Re-audited engine s
   (`provider:"openai"`, `gpt-4o-mini`), `/baseline` 404s — the twin backend isn't on that port.
   Starting it is the engine track's job; panels correctly show "waiting for backend". No numbers
   fabricated.
+
+## 2026-08-13 (12:10 UTC) — LIVE end-to-end contract verification (backend brought up locally)
+Roadmap complete (M4–M20, 33/33). Instead of another static green-build note (prior 5 runs
+couldn't reach a backend — port 8000 is held by an unrelated OpenAI/vision service), I stood
+the **twin backend up myself** on a free port (`.venv/bin/uvicorn app.main:app :8137`, read-only,
+no backend files touched) and ran a real contract smoke test replicating the exact requests
+`frontend/lib/api.ts` sends:
+- **28/28 UI-consumed endpoints returned HTTP 200 with the expected top-level shape.** Every
+  route the typed client calls — `/health`, `/baseline`, `/policy/compile`, `/simulate`,
+  `/parliament/debate` + `/failure-modes`, `/public`, `/evidence`, `/media`, `/sdg`, `/diffusion`,
+  `/backtest`(+`/example`), `/ensemble`, `/press-conference`, `/optimise`, `/uncertainty`,
+  `/compare`, `/institutions/review`, `/registry`, `/economy`, `/dynamics`, `/microsim`,
+  `/spatial`, `/reproduce`, `/stress-test`(+`/catalogue`), `/simulate/amend` — resolved live and
+  carried the keys the panels destructure (e.g. `simulate.delta`, `compare.headline_table`,
+  `reproduce.run_id`, `stress-test.robustness`). Bodies matched the client exactly (incl.
+  `metric_key` discovery via the 404 `available_metric_keys` path → `mode_share.car_pct`).
+- **Honesty contract holds against real data:** `/media` disclaimer = "SIMULATED — NOT A REAL
+  ARTICLE OR FORECAST OF A SPECIFIC OUTLET" with Generated/Simulated tags; `/simulate` delta
+  series carries per-point `low`/`high` uncertainty bands (SPEC §34). No fabricated numbers.
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static pages, / at 41.8 kB / 129 kB First Load);
+  `next lint` — no warnings/errors. No new engine endpoint since M20 (24 routers, all surfaced).
+- Backend was shut down after the test (running it is the engine track's domain); the UI's
+  "waiting for backend" states remain correct when it's down. No files outside `frontend/**` +
+  this progress file were modified.
