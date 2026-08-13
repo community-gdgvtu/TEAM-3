@@ -60,7 +60,7 @@ the prediction model works" and in `data/city/sources.json`:
 ## Stack
 
 - **Frontend:** Next.js + TypeScript, deck.gl (3D city, no basemap or tile server), timeline scrubber
-- **Backend:** Python + FastAPI, DuckDB, numerical + agent-based simulation services
+- **Backend:** Python + FastAPI, MongoDB, numerical + agent-based simulation services
 - **AI layer:** LLM agents for policy parsing, parliament debate, devil's advocate, media (never numeric effects)
 
 ## Quick start
