@@ -71,6 +71,12 @@ def load_cbd_polygon() -> dict:
 
 
 @lru_cache(maxsize=1)
+def load_buildings() -> dict:
+    """Building footprints GeoJSON FeatureCollection (3D twin render, SPEC §28.2)."""
+    return _read_json("buildings.geojson")
+
+
+@lru_cache(maxsize=1)
 def load_population() -> dict:
     """Synthetic commuter micro-agents (SPEC §6).
 
@@ -111,6 +117,7 @@ def clear_cache() -> None:
         load_roads,
         load_od_pairs,
         load_cbd_polygon,
+        load_buildings,
         load_population,
     ):
         fn.cache_clear()

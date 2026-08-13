@@ -88,6 +88,8 @@ def _assert_tags_valid(payload: Any, route: str) -> None:
 GET_ROUTES = [
     "/health",
     "/baseline",
+    "/world",
+    "/world?layers=population,geography",
     "/registry",
     "/data-fabric",
     "/assumptions",

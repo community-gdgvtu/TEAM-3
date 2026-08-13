@@ -763,3 +763,29 @@ record + harmonisation lineage the spec mandates.
   feasibility, candidate counts). Deterministic (two identical calls byte-identical, guarded).
 - Added `/compare/grand` to the integration-smoke sweep. `test_grand_comparison.py` (9 tests).
   **313 green** (was 304); app boots with **41 routes** (was 40).
+
+## 2026-08-13 — Baseline World Model composition, GET /world (SPEC §5 / §28.2)
+- All enumerated ROADMAP_ENGINE items were already complete (36/36, 313 green). Closed a real
+  remaining SPEC gap: §5 "Baseline World Model" is defined layer-by-layer (Population / Economy /
+  Geography / Environment / Institutions / Society) and §28.2 "Baseline Digital Twin" renders
+  roads/transit/population-cohorts/businesses — but nothing **composed** that structure. `/baseline`
+  gave aggregate metrics only; `/data-fabric` catalogued dataset provenance; neither exposed World A's
+  demographic/economic/geographic/institutional/society makeup the UI twin browses.
+- New `backend/app/world/` (`schema.py` + `model.py`) + `routers/world.py` → `GET /world`. Composes
+  the six §5 layers deterministically from the synthetic dataset + baseline ABM: Population (age/
+  household/income-decile/occupation/mobility/commute/behavioural distributions over 7 985 agents),
+  Economy (city jobs, CBD share, occupation→sector grouping, wage-by-band), Geography (zones/land-use,
+  roads incl. cordon-crossing + capacity, buildings by type, business proxy, transit coverage),
+  Environment (baseline commuter CO₂ from the ABM, land use, water/flood presence), Institutions
+  (the modelled parliament + institutional reviewer agents, as a transparency description),
+  Society (income-band opinion priors from the cohort model, media archetypes, typed diffusion actors).
+- Honours §5 "smallest sufficient world model": `?layers=population,geography` returns a subset;
+  unknown layer → 404 with the valid list. Every number is a synthetic-dataset count/distribution
+  (Simulated) or an ABM aggregate (Simulated) or an Observed/Estimated description of how an agent is
+  modelled — no LLM, no forecast (SPEC §34). Each layer carries an honest `not_modelled` list
+  (education/disability/tenure, firms/expenditure/tax, transit geometry & POIs, air-quality/energy/
+  temperature, individual political affiliation) instead of fabricating those fields.
+- Added `load_buildings()` to the shared `dataset.py` reader (+ cache-clear). Cached composition is
+  byte-identical across calls (guarded). Added `/world` (full + subset) to the integration-smoke GET
+  sweep so the global provenance-tag guardrail covers it. `test_world.py` (10 tests).
+  **323 green** (was 313); app boots with **42 routes** (was 41).

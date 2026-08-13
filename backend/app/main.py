@@ -44,6 +44,7 @@ from .routers import (
     stress,
     timeseries,
     uncertainty,
+    world,
 )
 
 
@@ -95,6 +96,7 @@ def create_app() -> FastAPI:
     app.include_router(timeseries.router)
     app.include_router(datafabric.router)
     app.include_router(assumptions.router)
+    app.include_router(world.router)
     app.include_router(run.router)
 
     @app.get("/", tags=["system"], summary="Service root")
