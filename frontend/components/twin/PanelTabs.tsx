@@ -16,6 +16,7 @@ import { subscribeDemoTab } from "../../lib/demo";
 import NorthStarPanel from "./NorthStarPanel";
 import RunPanel from "./RunPanel";
 import WorldPanel from "./WorldPanel";
+import CitizenPanel from "./CitizenPanel";
 import ParliamentPanel from "./ParliamentPanel";
 import PublicReactionPanel from "./PublicReactionPanel";
 import PressFeedPanel from "./PressFeedPanel";
@@ -48,6 +49,7 @@ type TabKey =
   | "northstar"
   | "run"
   | "world"
+  | "citizen"
   | "parliament"
   | "public"
   | "press"
@@ -79,6 +81,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "northstar", label: "North-Star" },
   { key: "run", label: "Run" },
   { key: "world", label: "World" },
+  { key: "citizen", label: "Citizen" },
   { key: "parliament", label: "Parliament" },
   { key: "public", label: "Public" },
   { key: "press", label: "Press" },
@@ -145,6 +148,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "world"}>
           <WorldPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "citizen"}>
+          <CitizenPanel />
         </div>
         <div role="tabpanel" hidden={active !== "parliament"}>
           <ParliamentPanel />

@@ -3263,3 +3263,147 @@ export async function runNorthStar(
   }
   return (await res.json()) as NorthStarAnswer;
 }
+
+// --------------------------------------------------------------------------- #
+// Citizen View — follow a single household (SPEC §17 / §31)
+// --------------------------------------------------------------------------- #
+
+/** The static profile of one synthetic household (SPEC §17). */
+export interface CitizenProfile {
+  agent_id: string;
+  age: number;
+  household_size: number;
+  income_monthly: number;
+  income_annual: number;
+  income_band: string;
+  occupation: string;
+  home_zone: string;
+  home_in_central_district: boolean;
+  work_zone: string;
+  commutes_into_cbd: boolean;
+  commute_distance_km: number;
+  car_access: boolean;
+  public_transit_access: boolean;
+  provenance: string;
+}
+
+/** This citizen's experience at one Time-Machine checkpoint (SPEC §17). */
+export interface CitizenSnapshot {
+  label: string;
+  t_months: number;
+  mode: string;
+  commute_minutes_one_way: number;
+  commute_minutes_low: number;
+  commute_minutes_high: number;
+  monthly_transport_cost: number;
+  monthly_transport_cost_low: number;
+  monthly_transport_cost_high: number;
+  charge_paid_monthly: number;
+  policy_support: number;
+  stance: string;
+}
+
+/** SPEC §31 core Agent-State record at one horizon `t`. */
+export interface AgentState {
+  agent_id: string;
+  t: number;
+  location: string;
+  income: number;
+  commute_minutes: number;
+  monthly_transport_cost: number;
+  policy_support: number;
+  provenance: string;
+}
+
+/** Full Citizen View for one household under a policy (SPEC §17/§31). */
+export interface CitizenView {
+  policy_id: string;
+  selector: string;
+  profile: CitizenProfile;
+  before_policy: CitizenSnapshot;
+  trajectory: CitizenSnapshot[];
+  agent_states: AgentState[];
+  headline: string;
+  explanation: string[];
+  provenance: string;
+  not_modelled: string[];
+  params: Record<string, unknown>;
+}
+
+/** A lightweight, policy-independent household card for a UI picker (SPEC §17). */
+export interface CitizenSample {
+  agent_id: string;
+  label: string;
+  income_band: string;
+  occupation: string;
+  home_zone: string;
+  commutes_into_cbd: boolean;
+  baseline_mode: string;
+  provenance: string;
+}
+
+/** The archetype selectors `POST /citizen` accepts when no `agent_id` is given. */
+export const CITIZEN_SELECTORS = [
+  "representative",
+  "most_burdened",
+  "biggest_loser",
+  "biggest_winner",
+  "median",
+] as const;
+export type CitizenSelector = (typeof CITIZEN_SELECTORS)[number];
+
+/**
+ * A diverse, policy-independent set of households for a "click a household"
+ * picker (`GET /citizen/sample`, SPEC §17). Throws on network/HTTP error so the
+ * panel can show an honest waiting/error state.
+ */
+export async function getCitizenSample(
+  limit = 6,
+  signal?: AbortSignal,
+): Promise<CitizenSample[]> {
+  const res = await fetch(`${API_BASE_URL}/citizen/sample?limit=${limit}`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as CitizenSample[];
+}
+
+/**
+ * Follow one household through the Time Machine under a compiled policy
+ * (`POST /citizen`, SPEC §17/§31). Either an explicit `agentId` or a `select`
+ * archetype is used. Every number reuses the same deterministic mode-choice
+ * model as `/simulate` and the per-agent opinion model as `/public` — no LLM on
+ * the numeric path (SPEC §34). Throws on network/HTTP error so the panel can
+ * show an honest waiting/error state.
+ */
+export async function runCitizen(
+  policy: PolicyDSL,
+  opts: { agentId?: string | null; select?: CitizenSelector } = {},
+  signal?: AbortSignal,
+): Promise<CitizenView> {
+  const res = await fetch(`${API_BASE_URL}/citizen`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      policy,
+      ...(opts.agentId ? { agent_id: opts.agentId } : {}),
+      select: opts.select ?? "representative",
+    }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as CitizenView;
+}

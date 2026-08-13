@@ -241,3 +241,18 @@ underlying Δ metrics Simulated, no LLM on the numeric path, bar length is
 leverage not likelihood, honest scope-limits, never fabricate a tornado when the
 backend is down.
 - [x] Sensitivity tab: `POST /sensitivity` → the cross-metric OAT tornado. Drive it from the compiled policy in the store with a Time-Machine horizon selector. Render a consistency banner (deterministic re-runs at documented assumption edges · no LLM · bar length = leverage-not-likelihood · interactions are the Uncertainty fan's job · same overridable set as the Uncertainty tab so they can't disagree), the plain-language `headline` of what the answer rests on, a **What-the-answer-rests-on** aggregate driver ranking (each assumption's mean influence-share across the dashboard as a leverage bar, with honest greyed-out "no effect here" rows for assumptions flat on every metric for this policy), and a **per-metric tornado** card per headline metric: its provenance tag, the default-assumption Δ(B−A), the most-influential assumption, and a signed bar per assumption spanning Δ-at-low → Δ-at-high with a default-Δ marker and the signed swing + %-of-default (up/down colouring, flat assumptions collapsed to a count). A collapsible §34 scope-limits list and the deterministic-attribution note close the tab. Analysis Estimated, underlying metrics Simulated (deterministic, no LLM); `idle` (no policy) / `loading` / `error` states when the backend is down, never mints a fabricated tornado (SPEC §24/§26/§34)
+
+## M32 — Surface the Citizen View single-household drill-down (SPEC §17/§31)
+The engine shipped `POST /citizen` (+ `GET /citizen/sample`) after M31 declared
+the roadmap complete — the one endpoint the UI hadn't surfaced. Every other tab
+aggregates the population; this exposes the SPEC §17 "click a household" view and
+the SPEC §31 Agent-State data structure: one synthetic citizen's before/after
+life through the Time Machine. It introduces **no new numeric model** — commute /
+cost / mode reuse the same deterministic mode-choice model as `/simulate`, and
+support reuses the same per-agent opinion model `/public` aggregates (the
+far-horizon support equals this agent's contribution to the Public tab), so a
+citizen's numbers can never disagree with the dashboard. Same rules: the
+household is Simulated (synthetic micro-agent, SPEC §6 — never a real person), no
+LLM on the numeric path, bands widen with the horizon, honest scope-limits,
+never fabricate a life when the backend is down.
+- [x] Citizen tab: `GET /citizen/sample` → a policy-independent "click a household" picker spanning the income spectrum, plus five archetype selectors (representative / most-burdened / biggest-loser / biggest-winner / median). `POST /citizen` → that household's staged Time-Machine trajectory: a consistency banner (same deterministic mode-choice model as `/simulate`, same per-agent opinion model as `/public`, no LLM), the household profile card (occupation / income band / age / household size / home+work zone / commute distance→CBD / car+transit access, all Simulated-tagged), a before→after topline (commute one-way, monthly transport cost, SPEC §31 policy support gauge with stance colouring), the Time-Machine table (World-A reference row + each checkpoint's mode, commute+cost with widening bands, monthly charge, support), the deterministic "Why?" narrative, a collapsible SPEC §31 Agent-State record table, and the collapsible `not_modelled` scope-limits. Everything Simulated (deterministic per-agent generalized-cost + cohort opinion model, SPEC §7.3/§13); no LLM on the numeric path; `idle` (no policy) / `loading` / `error` states + a graceful picker-unavailable fallback when the backend is down, never mints a fabricated household (SPEC §17/§31/§34)

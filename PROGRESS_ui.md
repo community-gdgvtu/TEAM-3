@@ -951,3 +951,17 @@ Frontend-only.
   live :8000 here is a different app, so the tab correctly shows its waiting state).
   Green: `npx tsc --noEmit` clean, `npx next build` compiled (4/4 static pages, / = 63.3 kB,
   First Load 151 kB). Frontend-only.
+
+- 2026-08-13 — M32: Citizen View tab (`POST /citizen` + `GET /citizen/sample`, SPEC §17/§31).
+  The engine shipped the single-household drill-down after M31 completed the roadmap; this is
+  the UI surface. Added typed `CitizenView`/`CitizenSnapshot`/`AgentState`/`CitizenProfile`/
+  `CitizenSample` types + `runCitizen()`/`getCitizenSample()` to `lib/api.ts`, a new
+  `CitizenPanel.tsx`, and wired a "Citizen" tab into `PanelTabs` (after World). Panel: a
+  policy-independent "click a household" picker + five archetype selectors; on run, a profile
+  card, before→after topline tiles (commute / cost / §31 support gauge with stance colouring),
+  the Time-Machine table (World-A row + each checkpoint's mode, commute+cost widening bands,
+  charge, support), the deterministic "Why?" narrative, a collapsible §31 Agent-State table,
+  and `not_modelled`. All Simulated (reuses `/simulate` mode-choice + `/public` opinion model,
+  no LLM); honest idle/loading/error + picker-unavailable fallback. Added `.cit-*` CSS.
+  Green: `npx tsc --noEmit` clean, `npx next build` compiled (4/4 static, / = 65.8 kB,
+  First Load 153 kB). Frontend-only.
