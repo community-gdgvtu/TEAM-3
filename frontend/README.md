@@ -1,15 +1,16 @@
 # URBAN frontend
 
 Next.js (App Router) + TypeScript UI for the URBAN policy digital twin — a 3D city,
-a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 32 analysis
+a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 33 analysis
 surfaces: the flagship North-Star answer (§37) and the Minister's Brief export that
 renders it as a printable memo (§27/§37), the one-call Run pipeline (§29), the
 browsable baseline World Model (§5), the Citizen and Business single-agent
 drill-downs (§17/§31), Parliament, Public reaction, Press, Press
 conference, Red Team, Counterfactual + Grand A/B/C/D compare, SDG, Diffusion, Ensemble,
 Uncertainty, Sensitivity, Optimiser, Economy, Dynamics, Microsim, Spatial,
-Stress-testing, Analogues, Time-series, Institutions, Backtest, Registry, Reproduce,
-Data Fabric, and Change-assumptions-and-rerun.
+Stress-testing, Decision-under-uncertainty (Robustness), Analogues, Time-series,
+Institutions, Backtest, Registry, Reproduce, Data Fabric, and
+Change-assumptions-and-rerun.
 
 ## Run
 
@@ -104,6 +105,7 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Distributional microsimulation | `POST /microsim` | §7.3 |
 | Spatial traffic assignment | `POST /spatial` | §7.7 |
 | Stress-testing environment | `GET /stress-test/catalogue`, `POST /stress-test` | §20 |
+| Decision under uncertainty (Robustness) | `GET /robustness/objectives`, `POST /robustness` | §20/§21/§22 |
 | Historical analogues (difference-in-differences) | `POST /analogues` | §7.1/§8 |
 | Time-series forecast | `POST /timeseries` | §7.2/§8 |
 | Institutional review | `POST /institutions/review` | §18 |
@@ -167,3 +169,18 @@ mode-choice core), so a weakly-represented shock never masquerades as a precise 
 per-metric "retained" bar carries a 100%-of-baseline marker so a weakened or reversed
 benefit is visible at a glance, and when the backend is down the panel shows a
 waiting/error state rather than a fabricated robustness verdict.
+
+The **Decision-under-uncertainty (Robustness)** tab (`GET /robustness/objectives` +
+`POST /robustness`, SPEC §20/§21/§22) sits one level above the Stress tab: instead of
+asking whether *one* policy holds, it compares *several candidate policies* across the
+baseline and every §20 shock and reports which candidate each classic decision rule picks —
+the headline (nominal) winner, the worst-case (maximin) choice, the least-regret (Savage)
+choice, the equal-weight (Laplace) choice and the stress-test robustness rate. The candidate
+set is the compiled policy plus **transparent design variants of it** (halve/raise the
+charge, redirect revenue, exempt low-income), each derived client-side through the same
+structured amendment loop the app already uses and re-simulated by the backend — no number
+is invented in the UI, every payoff is the same **Simulated** Δ(B−A) the Stress tab returns.
+The headline banner calls out the demo's point — whether admitting uncertainty *flips* the
+choice away from the headline winner — and a regret matrix shows, per state, how much worse
+each candidate is than the best choice for that state. When the backend is down the panel
+shows a waiting/error state rather than minting a decision.

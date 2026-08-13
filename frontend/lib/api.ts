@@ -2377,6 +2377,160 @@ export async function runStressTest(
 }
 
 // ---------------------------------------------------------------------------
+// Decision under uncertainty (SPEC §20/§21/§22) — POST /robustness,
+// GET /robustness/objectives. One level up from the stress test: given SEVERAL
+// candidate policies and a set of possible futures, which candidate should a
+// minister actually pick — the headline winner, or the one least bad when the
+// world turns out otherwise? Pure composition of the deterministic stress core;
+// every payoff is a Simulated Δ(B−A), no LLM (SPEC §22/§34).
+// ---------------------------------------------------------------------------
+
+/** One candidate's outcome in one state of the world (baseline or a shock). */
+export interface RobustnessStateResult {
+  state_key: string;
+  state_label: string;
+  category: string;
+  /** Policy benefit on the objective (signed so higher = better). Simulated Δ(B−A). */
+  payoff: number;
+  payoff_pct: number | null;
+  /** Best candidate's payoff here − this candidate's (≥0; 0 = best for this state). */
+  regret: number;
+  /** This candidate's benefit here as % of its own no-shock benefit. */
+  retained_pct: number | null;
+  /** high | medium | low (widens with the horizon). */
+  confidence: string;
+}
+
+/** A candidate policy scored across every state of the world. */
+export interface RobustnessCandidateScore {
+  policy_id: string;
+  label: string;
+  states: RobustnessStateResult[];
+  /** Baseline (no-shock) payoff — the "headline" number. */
+  nominal_payoff: number;
+  /** Minimum payoff across states (maximin input). */
+  worst_case_payoff: number;
+  best_case_payoff: number;
+  /** Mean payoff across states (Laplace / equal-weight). */
+  mean_payoff: number;
+  /** Largest regret across states (minimax-regret / Savage input; lower is better). */
+  max_regret: number;
+  /** Fraction (0..1) of shock states where it retains ≥75% of its no-shock benefit. */
+  robustness_score: number;
+  holds_under: string[];
+  fails_under: string[];
+}
+
+/** The candidate each decision criterion selects. */
+export interface RobustnessDecisionPicks {
+  /** Highest baseline payoff — the headline winner. */
+  nominal_best: string | null;
+  /** Highest worst-case payoff — best if you assume the worst state. */
+  maximin: string | null;
+  /** Lowest max-regret (Savage) — least "I wish I'd chosen otherwise". */
+  minimax_regret: string | null;
+  /** Highest robustness score (holds under most shocks). */
+  most_robust: string | null;
+  /** Highest mean payoff (equal-weight over states). */
+  laplace: string | null;
+}
+
+/** Full `POST /robustness` payload (SPEC §20/§21/§22). */
+export interface RobustnessReport {
+  provenance: MetricTag;
+  objective_key: string;
+  objective_label: string;
+  /** decrease | increase — the direction of a *good* effect. */
+  objective_direction: string;
+  horizon_months: number;
+  horizon_label: string;
+  /** State keys evaluated (baseline first). */
+  states: string[];
+  candidates: RobustnessCandidateScore[];
+  picks: RobustnessDecisionPicks;
+  /** One-line decision insight: does robustness change the choice? */
+  headline: string;
+  method: string;
+}
+
+/** `GET /robustness/objectives` — valid objective metric keys + the default. */
+export interface RobustnessObjectives {
+  provenance: MetricTag;
+  note: string;
+  objectives: string[];
+  default: string;
+}
+
+/**
+ * List the objective metric keys a robustness decision can be framed around via
+ * `GET /robustness/objectives`. Throws on network/HTTP error so the panel shows
+ * an honest waiting/error state instead of guessing objectives.
+ */
+export async function fetchRobustnessObjectives(
+  signal?: AbortSignal,
+): Promise<RobustnessObjectives> {
+  const res = await fetch(`${API_BASE_URL}/robustness/objectives`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as RobustnessObjectives;
+}
+
+/**
+ * Rank candidate policies under uncertainty via `POST /robustness`: scores each
+ * candidate under the transparent baseline plus the SPEC §20 named shocks, builds
+ * the regret matrix, and reports which candidate each decision criterion picks
+ * (nominal / maximin / minimax-regret / Laplace) plus the stress-test robustness
+ * rate. Every payoff is a deterministic Δ(B−A); no randomness, no LLM (SPEC §22).
+ * Throws on network/HTTP error so the panel can show an honest waiting/error
+ * state rather than inventing a decision (SPEC §34).
+ */
+export async function runRobustness(
+  candidates: PolicyDSL[],
+  opts?: {
+    scenarios?: string[] | null;
+    objective?: string | null;
+    horizonMonths?: number | null;
+  },
+  signal?: AbortSignal,
+): Promise<RobustnessReport> {
+  const body: Record<string, unknown> = { candidates };
+  if (opts?.scenarios && opts.scenarios.length > 0) body.scenarios = opts.scenarios;
+  if (opts?.objective) body.objective = opts.objective;
+  if (opts?.horizonMonths != null) body.horizon_months = opts.horizonMonths;
+  const res = await fetch(`${API_BASE_URL}/robustness`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const errBody = (await res.json()) as { detail?: unknown };
+      if (typeof errBody.detail === "string") {
+        detail = errBody.detail;
+      } else if (
+        errBody.detail &&
+        typeof errBody.detail === "object" &&
+        "error" in errBody.detail &&
+        typeof (errBody.detail as { error?: unknown }).error === "string"
+      ) {
+        detail = (errBody.detail as { error: string }).error;
+      }
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as RobustnessReport;
+}
+
+// ---------------------------------------------------------------------------
 // Historical Analogue / Causal Layer (SPEC §7.1) — POST /analogues, GET /analogues/cases
 // ---------------------------------------------------------------------------
 

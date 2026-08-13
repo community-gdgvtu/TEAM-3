@@ -1043,3 +1043,28 @@ Frontend-only.
   + retry that never mints a fabricated memo when the backend is down. Re-synced
   `frontend/README.md` (31→32 surfaces, new endpoint→SPEC row). `npx tsc --noEmit`,
   `npx next build` (/ = 68.7 kB, First Load 156 kB), and `npx next lint` all clean.
+
+- 2026-08-13 — M38: Decision-under-uncertainty (Robustness) tab (`GET /robustness/objectives`
+  + `POST /robustness`, SPEC §20/§21/§22). The engine shipped this decision layer after
+  M37 declared the roadmap complete — one level above Stress: instead of "does *this*
+  policy hold?", it compares *several candidate policies* across the baseline + every §20
+  shock and reports which candidate each classic decision rule picks (nominal / maximin /
+  minimax-regret-Savage / Laplace / most-robust). No new numeric model: every payoff is the
+  same deterministic **Simulated** Δ(B−A) the Stress/Simulate endpoints return, so a
+  candidate's numbers can't disagree with the tabs beside it (§34). Candidate slate = the
+  compiled policy (un-amended) + user-toggleable transparent design variants (half/higher
+  charge, transit-funded, general-fund, low-income exempt), each a compiled DSL via
+  `applyAmendment` (the app's existing structured amendment loop) re-simulated by the
+  backend — the UI invents no numbers. Renders: provenance tag, a headline banner that
+  flags whether robustness **flips** the choice away from the nominal winner, a
+  five-criterion decision-picks grid (each highlighting agree/differ vs the headline), a
+  candidate scorecard (nominal/worst-case/mean payoff, max regret, robustness rate +
+  holds/fails), a full regret matrix (candidates × states, per-state best=0 + row max-regret
+  flagged, per-state confidence widening with horizon), and a collapsible method note.
+  Objective + horizon selectors; `idle`/`loading`/`error` states + graceful objective-menu
+  fallback; never mints a decision when the backend is down. Added `RobustnessReport`/
+  `RobustnessCandidateScore`/`RobustnessStateResult`/`RobustnessDecisionPicks`/
+  `RobustnessObjectives` types + `runRobustness()`/`fetchRobustnessObjectives()` to
+  `lib/api.ts`; registered the tab right after Stress; re-synced `frontend/README.md`
+  (32→33 surfaces, endpoint→SPEC row + prose). `npx tsc --noEmit`, `npx next build`
+  (/ = 71 kB, First Load 159 kB), `npx next lint`, and `npm test` (14 pass) all clean.

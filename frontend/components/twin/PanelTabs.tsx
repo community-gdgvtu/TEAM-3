@@ -56,6 +56,7 @@ import DynamicsPanel from "./DynamicsPanel";
 import MicrosimPanel from "./MicrosimPanel";
 import SpatialPanel from "./SpatialPanel";
 import StressPanel from "./StressPanel";
+import RobustnessPanel from "./RobustnessPanel";
 import AnaloguePanel from "./AnaloguePanel";
 import TimeseriesPanel from "./TimeseriesPanel";
 import ReproducePanel from "./ReproducePanel";
@@ -88,6 +89,7 @@ type TabKey =
   | "microsim"
   | "spatial"
   | "stress"
+  | "robustness"
   | "analogue"
   | "timeseries"
   | "institutions"
@@ -122,6 +124,7 @@ const TABS: Array<{ key: TabKey; label: string; Panel: ComponentType }> = [
   { key: "microsim", label: "Microsim", Panel: MicrosimPanel },
   { key: "spatial", label: "Spatial", Panel: SpatialPanel },
   { key: "stress", label: "Stress", Panel: StressPanel },
+  { key: "robustness", label: "Robustness", Panel: RobustnessPanel },
   { key: "analogue", label: "Analogue", Panel: AnaloguePanel },
   { key: "timeseries", label: "Time-series", Panel: TimeseriesPanel },
   { key: "institutions", label: "Institutions", Panel: InstitutionsPanel },

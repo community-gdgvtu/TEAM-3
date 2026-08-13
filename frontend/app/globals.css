@@ -10146,3 +10146,269 @@ td.neutral {
   overflow-y: auto;
   margin: 0.3rem 0 0;
 }
+
+/* --------------------------------------------------------------------------
+   Decision under uncertainty (Robustness tab, SPEC §20/§21/§22)
+   -------------------------------------------------------------------------- */
+.rb-candidates {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  background: var(--panel);
+  margin-bottom: 0.85rem;
+}
+.rb-candidates-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+.rb-candidates-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.rb-candidates-note {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+.rb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.rb-chip {
+  font-size: 0.78rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease,
+    background 0.12s ease;
+}
+.rb-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.rb-chip.on {
+  border-color: var(--accent);
+  background: rgba(79, 140, 255, 0.16);
+  color: var(--text);
+}
+.rb-chip.base {
+  cursor: default;
+  border-color: var(--ok);
+  background: rgba(61, 220, 151, 0.12);
+  color: var(--text);
+}
+.rb-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.rb-field select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.82rem;
+}
+.rb-body {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Headline: does robustness change the choice? */
+.rb-headline {
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: var(--panel);
+}
+.rb-headline.flips {
+  border-left-color: #ffcf6b;
+}
+.rb-headline.agrees {
+  border-left-color: var(--ok);
+}
+.rb-headline-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  margin-bottom: 0.4rem;
+}
+.rb-headline.flips .rb-headline-badge {
+  background: rgba(255, 207, 107, 0.16);
+  color: #ffcf6b;
+}
+.rb-headline.agrees .rb-headline-badge {
+  background: rgba(61, 220, 151, 0.16);
+  color: var(--ok);
+}
+.rb-headline-text {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.rb-headline-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Decision picks grid */
+.rb-picks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem;
+}
+.rb-pick {
+  border: 1px solid var(--border);
+  border-top-width: 3px;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel);
+}
+.rb-pick.nominal {
+  border-top-color: var(--accent);
+}
+.rb-pick.agree {
+  border-top-color: var(--ok);
+}
+.rb-pick.differ {
+  border-top-color: #ffcf6b;
+}
+.rb-pick-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.rb-pick-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.2rem 0 0.15rem;
+  word-break: break-word;
+}
+.rb-pick-hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* Scorecard + regret matrix tables */
+.rb-scores h3,
+.rb-matrix h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.92rem;
+}
+.rb-matrix-sub {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.rb-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.rb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.rb-table th,
+.rb-table td {
+  padding: 0.4rem 0.55rem;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.rb-table thead th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.74rem;
+  vertical-align: bottom;
+}
+.rb-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.rb-table .rb-left {
+  text-align: left;
+}
+.rb-table .rb-row-nominal {
+  background: rgba(79, 140, 255, 0.08);
+}
+.rb-cand-label {
+  display: block;
+  font-weight: 600;
+}
+.rb-cand-id {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.rb-robust-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.rb-robust-detail {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.rb-scores-note {
+  margin-top: 0.4rem;
+}
+.rb-state-label {
+  display: block;
+}
+.rb-state-conf {
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+.rb-state-conf.good {
+  color: var(--ok);
+}
+.rb-state-conf.mid {
+  color: #ffcf6b;
+}
+.rb-state-conf.bad {
+  color: var(--bad);
+}
+.rb-matrix-table td.rb-cell.best {
+  color: var(--ok);
+  font-weight: 700;
+}
+.rb-matrix-table td.rb-cell.worst {
+  color: var(--bad);
+  font-weight: 600;
+}
+.rb-method {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.rb-method summary {
+  cursor: pointer;
+  color: var(--text);
+}
+.rb-method p {
+  margin: 0.4rem 0 0;
+}
