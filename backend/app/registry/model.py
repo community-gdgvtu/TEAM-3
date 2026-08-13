@@ -102,6 +102,8 @@ def _sim_assumptions() -> list[AssumptionRecord]:
              "share", "Fraction of the CBD-bound car fleet that pays the low-emission-zone charge", est),
         _rec("lez_clean_factor_ratio", "LEZ clean-vehicle CO₂ ratio", s.lez_clean_factor_ratio,
              "× baseline factor", "CO₂/km of a compliant replacement vehicle vs the baseline fleet factor", est),
+        _rec("parking_levy_passthrough_share", "Parking-levy employer pass-through", s.parking_levy_passthrough_share,
+             "share", "Fraction of a workplace parking levy passed from employer to commuter as a behavioural signal", est),
     ]
 
 

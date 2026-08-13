@@ -1131,3 +1131,26 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
 - Files: `backend/app/simulation/levers.py`, `backend/app/simulation/model.py`,
   `backend/app/registry/model.py`, `backend/tests/test_lez.py` (10 tests). **415 green** (was 405),
   `scripts/audit.py` PASS. No frontend/shared files touched.
+
+## 2026-08-13 (parking levy distinct mechanism)
+- Roadmap was fully checked (49/49) and green (415 tests, 52 routes, audit PASS). Continuing
+  the LEZ precedent, fixed the **sibling honesty gap it exposed**: `parking_levy` was the last
+  intervention type still aliased into `_PRICING_TYPES` alongside `road_pricing`, so a workplace
+  parking levy produced **byte-identical** traffic/emissions numbers to a full cordon charge for
+  the same amount — dishonest per §34 (it would tell a minister a parking levy cuts traffic as
+  hard as a congestion charge).
+- Real mechanism: a WPL (e.g. Nottingham's) is levied on the **employer per parking space**, who
+  absorbs some and passes only a fraction through, so the per-commuter behavioural signal is a
+  fraction of a flat cordon charge. Removed `parking_levy` from `_PRICING_TYPES` and gave it its
+  own deterministic branch: `charge_per_one_way = (amount/trips_per_day) × parking_levy_passthrough_share`
+  (0.55, Estimated), surfaced as a `parking_levy_charge` §7.5 BehaviouralRule (distinct from
+  `cordon_charge`/`lez_charge`). Leaves `co2_factor_multiplier == 1.0` (cuts emissions via km only,
+  unlike an LEZ); reinvestment still engages because it sets a positive charge.
+- The three pricing mechanisms now sit in a distinct, honest ordering on residual car share:
+  **LEZ (0.25) < parking levy (0.55) < cordon charge (full)** — pinned by a test — instead of two
+  collapsing onto identical numbers. **World A untouched, road pricing byte-identical** (regression
+  test asserts cordon charge == amount/trips_per_day). New SimParam surfaced live in the §33
+  registry so the manifest can't drift.
+- Files: `backend/app/simulation/levers.py`, `backend/app/registry/model.py`,
+  `backend/tests/test_parking_levy.py` (10 tests). **425 green** (was 415), `scripts/audit.py`
+  PASS, app boots with **52 routes**. No frontend/shared files touched.

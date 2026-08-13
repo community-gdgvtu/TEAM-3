@@ -27,6 +27,11 @@ and reinvest revenue into public transport*):
    vehicles, which lowers World B's CO₂-per-km factor. This makes an LEZ behave
    distinctly from a congestion charge — a modest traffic effect but a real
    emissions-intensity cut — instead of aliasing to the same numbers.
+5. **Workplace parking levy** — also distinct from a flat cordon charge: it is
+   levied on the *employer* per parking space, who passes only a fraction through
+   to the commuter, so its behavioural signal (and mode shift) is proportionately
+   smaller than an equivalent road-pricing charge. Unlike an LEZ it does not clean
+   the fleet — it cuts emissions purely by cutting car-km.
 """
 
 from __future__ import annotations
@@ -39,11 +44,13 @@ from .schema import BehaviouralRule
 
 # Intervention families that levy a flat per-entry charge on *every* car entering
 # the cordon. A low-emission zone is deliberately NOT here — it charges only
-# non-compliant vehicles and its main lever is a cleaner fleet, so it gets its
-# own branch in :func:`derive_levers` rather than aliasing to a flat charge.
+# non-compliant vehicles and its main lever is a cleaner fleet. A parking levy is
+# NOT here either — it is charged to the employer per parking space and only
+# partially passed through to the commuter, so its behavioural signal is a
+# fraction of a flat cordon charge. Both get their own branch in
+# :func:`derive_levers` rather than aliasing to the same numbers as road pricing.
 _PRICING_TYPES = {
     InterventionType.road_pricing,
-    InterventionType.parking_levy,
 }
 
 # Exemption phrases we can currently model against agent attributes. Anything we
@@ -75,6 +82,13 @@ class SimParams:
     #: is a CO₂ proxy for the tailpipe (NOx/PM) turnover an LEZ actually targets,
     #: so the CO₂ cut is deliberately modest, not dramatic (Estimated).
     lez_clean_factor_ratio: float = 0.40
+    #: Workplace parking levy: share of the nominal levy that reaches the
+    #: commuter as a behavioural signal. A WPL is charged to the *employer* per
+    #: parking space (e.g. Nottingham's WPL); employers absorb some and pass the
+    #: rest on, so only a fraction lands as a per-commuter cost — the mode-shift
+    #: pressure is proportionately smaller than an equivalent flat cordon charge
+    #: that every entering vehicle pays in full (Estimated).
+    parking_levy_passthrough_share: float = 0.55
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -249,6 +263,39 @@ def derive_levers(
                 source=(
                     f"(1 − {share:.2f} non-compliant) + {share:.2f} × "
                     f"{clean:.2f} clean-vehicle factor ratio"
+                ),
+            )
+        )
+
+    # --- 2c. Workplace parking levy (employer-charged, partial pass-through) -
+    # A parking levy is NOT a flat cordon charge. It is levied on the employer per
+    # parking space; employers absorb some of it and pass the rest to the
+    # commuter, so only ``parking_levy_passthrough_share`` of the nominal amount
+    # lands as a per-commuter behavioural signal → a proportionately smaller mode
+    # shift than an equivalent road-pricing cordon that every vehicle pays in
+    # full. It cuts emissions purely by cutting car-km (co2 factor stays 1.0),
+    # which is what distinguishes it from a low-emission zone.
+    if itype == InterventionType.parking_levy and amount and amount > 0:
+        passthrough = max(0.0, min(1.0, sim.parking_levy_passthrough_share))
+        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * passthrough
+        levers.charge_per_one_way = per_one_way
+        levers.rules.append(
+            BehaviouralRule(
+                name="parking_levy_charge",
+                label="Workplace parking levy passed through to commuters",
+                parameter="Currency added to car generalized cost per one-way CBD-bound trip",
+                value=round(per_one_way, 4),
+                unit=policy.intervention.currency,
+                plausible_range=[0.0, amount / max(1, sim.charge_trips_per_day)],
+                sensitivity=(
+                    f"Only the ~{passthrough:.0%} of the levy employers pass on reaches "
+                    "the commuter, so the mode shift is a fraction of an equivalent "
+                    "flat cordon charge; employers absorbing more weakens the signal."
+                ),
+                source=(
+                    f"intervention.amount ({amount} {policy.intervention.currency}) "
+                    f"amortised over {sim.charge_trips_per_day} daily trips × "
+                    f"{passthrough:.2f} employer pass-through share"
                 ),
             )
         )
