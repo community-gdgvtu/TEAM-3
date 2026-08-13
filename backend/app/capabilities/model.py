@@ -74,7 +74,13 @@ def build_capabilities(app: FastAPI) -> CapabilityManifest:
 
     undocumented = sorted(p for p in live if p not in cards_by_path)
     phantom = sorted(p for p in cards_by_path if p not in live)
-    keyless = sorted(c.path for c in endpoints.values() if "GET" in c.methods and c.path not in ("/", "/health"))
+    # Keyless = a no-body GET a judge can hit directly. Parameterised paths
+    # (``/scenarios/{scenario_id}``) need an argument, so they are not keyless.
+    keyless = sorted(
+        c.path
+        for c in endpoints.values()
+        if "GET" in c.methods and "{" not in c.path and c.path not in ("/", "/health")
+    )
 
     get_paths = [c.path for c in endpoints.values() if "GET" in c.methods]
     post_paths = [c.path for c in endpoints.values() if "POST" in c.methods]

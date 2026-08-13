@@ -117,6 +117,8 @@ ENDPOINTS: list[tuple] = [
     ("/assumptions", "System & transparency", ["§34.10"], "The overridable model-assumption catalogue (read live from the running dataclasses).", False, _O, None),
     # --- Policy input ---
     ("/policy/compile", "Policy input", ["§3"], "Compile natural-language policy text into the structured Policy DSL (LLM prose or rule fallback).", False, _G, None),
+    ("/scenarios", "Policy input", ["§3", "§28"], "The discoverable menu of canonical demo policies: NL prompt + live compiled DSL + ready-to-POST bodies for /simulate and the composed-answer endpoints.", False, _O, None),
+    ("/scenarios/{scenario_id}", "Policy input", ["§3", "§28"], "One canonical scenario by id (404 echoes the valid ids).", False, _O, None),
     # --- Baseline world ---
     ("/baseline", "Baseline world", ["§5"], "World-A aggregate baseline: mode split, traffic, CO2, transit + reference time series.", True, _S, None),
     ("/world", "Baseline world", ["§5", "§28.2"], "The composed baseline digital twin across the six §5 layers (population/economy/geography/environment/institutions/society).", False, _S, None),

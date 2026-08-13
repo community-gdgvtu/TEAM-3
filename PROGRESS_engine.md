@@ -1395,3 +1395,50 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   `scripts/audit.py` (get_routes), `backend/tests/test_capabilities.py` (9 tests).
   **484 green** (was 475), `scripts/audit.py` PASS, app boots with **58 routes** (was 57).
   No frontend/shared files touched.
+
+## 2026-08-13 (engine, M53)
+- **Capability-map CLI** — `scripts/capabilities.py` (SPEC §27/§33/§34). Completes the judge-
+  runnable CLI family (`demo.py` / `north_star.py` / `audit.py` / `robustness.py`) with a terminal
+  view of the whole HTTP surface. Where `audit.py` *proves the §34 guardrails hold* across every
+  route, this *shows a judge what the routes are*.
+- Drives `GET /capabilities` in-process (FastAPI `TestClient`, no server/ports) and prints every
+  product endpoint grouped by the 12 functional areas — each with `methods`, SPEC section(s), a
+  one-line summary, `needs_body`, a colour-coded provenance class (or `—` for prose/mixed) and its
+  no-body `keyless_example`. Header summarises counts; `--area "<name>"` filters (unknown → exit 1
+  with the valid list); `--json` prints the raw manifest.
+- Ends with a **consistency audit** (non-zero exit on failure, so it doubles as a pre-demo/CI
+  smoke check): manifest is Observed, the curated catalogue reconciles exactly with the live route
+  surface (`undocumented_routes`/`phantom_cards` empty — a new uncarded route is caught here too),
+  every `output_tag` is a §34 tag or null, byte-identical on repeat, and every advertised keyless
+  example is a served GET (200).
+- No new numeric model, no LLM (§34); pure read of `/capabilities`. Other CLIs untouched.
+- Files: `scripts/capabilities.py`, `backend/tests/test_capabilities_script.py` (5 tests).
+  Scripts/test-track only — no `backend/app/**` change. **489 green** (was 484), app boots with
+  **58 routes**. No frontend/shared files touched.
+
+## 2026-08-13 — Scenario-presets catalogue (`GET /scenarios`, SPEC §3/§27/§28)
+- The engine served 58 routes but **every policy-taking endpoint required the caller to author or
+  compile a Policy DSL first** — no discoverable menu of the demo's *own* canonical scenarios for the
+  UI/judges to one-click load. This is that menu.
+- `backend/app/scenarios/` + `GET /scenarios` (+ `GET /scenarios/{scenario_id}`): **6 curated policies
+  across 5 intervention families** — CBD congestion charge (reinvested in buses), the same charge to
+  the general fund (contrast: reinvestment, not the charge alone, drives transit gains), CBD
+  pedestrianisation, central low-emission zone, workplace parking levy, pure bus-network investment.
+- **Pure inputs, no numeric model, no LLM in any figure (§34):** each card carries only its NL prompt
+  + optimiser objective/constraints; the DSL, the intervention `family` and the reviewable assumptions
+  are produced by the **real `compile_policy`** at build time. A test recompiles every prompt and pins
+  `card.compiled == compile_policy(text)`; `family` is *derived from* the compiled DSL (id→family
+  pinned by a second test). Library tagged **Observed**; per-card `compiled.provenance` **Generated**.
+- Each card ships **two copy-paste-runnable bodies** — `simulate_body` (`{"policy": DSL}`) and
+  `answer_body` (`{"text","objective","constraints"}`) — and a test POSTs **both** for **every**
+  scenario asserting 200, so the menu is executable end-to-end. `GET /scenarios/{id}` → one card or
+  **404 echoing valid ids**; deterministic on repeat; root `/` advertises `scenarios: /scenarios`.
+- Reconciled with the §33 capability manifest: both routes carded in `capabilities/catalogue.py`
+  (undocumented/phantom stay empty), and the keyless-example derivation now **excludes parameterised
+  paths** (a one-line correctness fix in `capabilities/model.py` — `/scenarios/{id}` needs an argument
+  so it is not a no-body GET). Added to the `scripts/audit.py` GET sweep.
+- Files: `backend/app/scenarios/{__init__,schema,library}.py`, `backend/app/routers/scenarios.py`,
+  edits to `backend/app/main.py`, `backend/app/capabilities/{catalogue,model}.py`, `scripts/audit.py`,
+  `backend/tests/test_scenarios.py` (8 tests). Pure additive — no existing `backend/app/**` behaviour
+  changed. **497 green** (was 489), `scripts/audit.py` PASS, `scripts/capabilities.py` PASS, app boots
+  with **60 routes** (was 58). No frontend/shared files touched.

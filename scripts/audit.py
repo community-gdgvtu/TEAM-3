@@ -123,6 +123,7 @@ def build_report(text: str) -> dict:
     get_routes = [
         "/health",
         "/capabilities",
+        "/scenarios",
         "/baseline",
         "/world",
         "/registry",

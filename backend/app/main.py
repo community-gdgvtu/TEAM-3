@@ -44,6 +44,7 @@ from .routers import (
     reproduce,
     robustness,
     run,
+    scenarios,
     sdg,
     sensitivity,
     simulate,
@@ -112,6 +113,7 @@ def create_app() -> FastAPI:
     app.include_router(northstar.router)
     app.include_router(brief.router)
     app.include_router(robustness.router)
+    app.include_router(scenarios.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
@@ -121,6 +123,7 @@ def create_app() -> FastAPI:
             "docs": "/docs",
             "health": "/health",
             "capabilities": "/capabilities",
+            "scenarios": "/scenarios",
         }
 
     return app
