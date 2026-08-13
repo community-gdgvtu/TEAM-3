@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .routers import (
     analogues,
+    assumptions,
     backtest,
     baseline,
     compare,
@@ -93,6 +94,7 @@ def create_app() -> FastAPI:
     app.include_router(analogues.router)
     app.include_router(timeseries.router)
     app.include_router(datafabric.router)
+    app.include_router(assumptions.router)
     app.include_router(run.router)
 
     @app.get("/", tags=["system"], summary="Service root")

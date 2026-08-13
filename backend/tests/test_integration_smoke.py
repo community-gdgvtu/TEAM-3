@@ -90,6 +90,7 @@ GET_ROUTES = [
     "/baseline",
     "/registry",
     "/data-fabric",
+    "/assumptions",
     "/backtest/example",
     "/stress-test/catalogue",
 ]
@@ -117,6 +118,7 @@ POST_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/sdg", _P),
     ("/spatial", _P),
     ("/timeseries", _P),
+    ("/assumptions/rerun", {**_P, "overrides": {"money_to_minutes": 10.0}}),
     ("/stress-test", {**_P, "scenarios": ["recession", "fuel_price_spike"]}),
     ("/uncertainty", {**_P, "metric_key": "traffic.daily_vehicle_km", "samples": 20}),
     ("/optimise", {

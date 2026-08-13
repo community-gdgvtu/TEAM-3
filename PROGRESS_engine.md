@@ -722,3 +722,22 @@ record + harmonisation lineage the spec mandates.
   numeric sections deterministic (byte-identical across two runs); 422 when neither text nor policy
   given. Added `/run` to the integration-smoke sweep. `test_scenario_run.py` (10 tests). 294 green;
   app boots with 38 routes.
+- 2026-08-13 — Change-assumptions-and-rerun layer `GET /assumptions` + `POST /assumptions/rerun`
+  (SPEC §34.10): the roadmap's enumerated engine items were all complete + 294 green, so closed the
+  one SPEC §34 guardrail with no first-class endpoint — **"users can change assumptions and rerun"**.
+  New `backend/app/assumptions/` (`catalogue.py` + `schema.py` + `service.py`) + `routers/assumptions.py`.
+  The §24 uncertainty engine already *sweeps* the documented assumptions and ranks the most-influential
+  one; this lets a user **pin one to a chosen value and re-run the deterministic core** — the natural
+  next click after the sensitivity ranking. NO new numeric model, no LLM (SPEC §34): re-runs the exact
+  `/simulate` pipeline (`compute_baseline`→`compute_world_b`→`build_world_b_timeline`→`build_delta`)
+  with the assumption(s) overridden. `GET /assumptions` publishes the overridable catalogue built **live
+  from the running dataclasses** (`DEFAULT_PARAMS`/`DEFAULT_SIM_PARAMS`) and is **the same `ASSUMPTIONS`
+  registry the uncertainty engine sweeps** — a test asserts the two sets are identical so they can't
+  drift. `POST /assumptions/rerun` returns each override echoed with what was applied (**out-of-range
+  values clamped to the documented range + flagged `in_range:false`/`clamped:true`**, honest per §34,
+  not silently used), a per-metric **contrast at the horizon** (default Δ vs overridden Δ + shift + %),
+  the full overridden Δ trajectory (replot-ready), and A/B snapshots. Empty overrides reproduce the
+  default Δ exactly; unknown names 404 with the valid list; deterministic (byte-identical across two
+  calls); overridden Δ still widens with horizon (guarded). Numbers Simulated, assumptions Estimated;
+  added `/assumptions` (GET) + `/assumptions/rerun` (POST) to the integration-smoke sweep.
+  `test_assumptions.py` (10 tests). **304 green** (was 294); app boots with **40 routes** (was 38).
