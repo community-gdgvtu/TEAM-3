@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .routers import (
+    analogues,
     backtest,
     baseline,
     compare,
@@ -86,6 +87,7 @@ def create_app() -> FastAPI:
     app.include_router(spatial.router)
     app.include_router(microsim.router)
     app.include_router(stress.router)
+    app.include_router(analogues.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

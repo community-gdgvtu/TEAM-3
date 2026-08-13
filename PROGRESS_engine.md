@@ -594,3 +594,36 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   (press, gated on the `use_llm` param) — the two surfaces where LLM prose meets Simulated numbers.
 - **254 green** (was 251), app boots with **33 routes**. "The model writes words, never numbers"
   is now enforced against an adversarial model, not just asserted in a docstring.
+
+## 2026-08-13 (12:06 UTC engine run — new layer: Historical Analogue / Causal, SPEC §7.1)
+Roadmap was fully checked (30/30) and green (254 tests) at run start; verified, then added the one
+genuine remaining SPEC-layer gap. **SPEC §7.1 (Historical Analogue / Causal Layer)** existed only as
+a thin saturating transfer function *inside* `app/ensemble/model.py` — no case database, no per-scheme
+difference-in-differences, no transferability scoring, no endpoint. Now a first-class layer.
+
+- `backend/app/analogues/` (`cases.py`, `schema.py`, `model.py`) + `POST /analogues` and
+  `GET /analogues/cases`.
+- Curated 8-scheme database (London CCZ, Stockholm, Singapore ALS/ERP, Milan Area C, Gothenburg,
+  Oslo toll ring, Ghent circulation plan, Madrid Central LEZ). Each is an **illustrative/approximate
+  published** figure — tagged Observed but every card flags `source_note` "not a live data source"
+  (honest, SPEC §34). No LLM produced any figure; they are fixed auditable constants.
+- Per case: **difference-in-differences** effect = treated change − background/control trend (strips the
+  city-wide trend the scheme didn't cause). **Transferability** score from auditable factors (intervention
+  family exact/cross-pricing, coarse none/low/mod/high charge strength, revenue-recycling match, documented
+  city-context similarity) with published weights. Applicable cases pooled by `identification × transfer`
+  into a central estimate + a **CI that widens** when evidence is weak/analogues disagree. Emits the exact
+  §7.1 shape: estimated effect, CI, analogue quality, identification/parallel-trend diagnostics,
+  transferability score.
+- Behaviour: car ban pools only Ghent; a transit-only policy honestly reports **no comparable scheme**
+  (estimate 0, diagnostic) rather than inventing one; general-fund vs reinvest charge differ via the
+  revenue-recycling transfer factor.
+- **SPEC §8 honesty cross-check** (optional, on by default): on the demo £12 charge the real analogues pool
+  to ≈ **−21%** but the agent-based model predicts ≈ **−93%** → flagged **"large gap"** ("real flat cordons
+  rarely exceed ~30%; lean on the analogue range as an empirical sanity floor"). Turns the ABM's cordon
+  collapse into an explicitly-uncertain claim instead of false precision — a strong demo beat.
+- Per-case outcomes Observed, transferred estimate Estimated; deterministic, no LLM (SPEC §7.1/§8/§34).
+  Registered in the §33 model registry (`historical_analogue`, `llm_touches_numbers=False`) → **14 layers**.
+- Honest `not_modelled`: illustrative headline effects not this city's microdata; single flat cordon
+  headline (no per-corridor/distributional transfer — those are the spatial/microsim layers); transfer
+  assumes similar behavioural response; coarse charge bucket, not PPP-adjusted.
+- 12 tests; **266 green** (was 254), app boots with **35 routes** (was 33).

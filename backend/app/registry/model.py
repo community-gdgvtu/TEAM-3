@@ -475,6 +475,29 @@ def _models() -> list[ModelCard]:
             code="app.media.generator",
             assumptions=[],
         ),
+        ModelCard(
+            id="historical_analogue",
+            name="Historical analogue / causal layer",
+            spec_sections=["§7.1", "§8"],
+            layer="Historical Analogue / Causal Layer (SPEC §7.1)",
+            method=(
+                "Difference-in-differences read (treated cordon change − background "
+                "control trend) over a fixed database of real congestion-pricing / "
+                "access-restriction schemes (London, Stockholm, Singapore, Milan, "
+                "Gothenburg, Oslo, Ghent, Madrid), transferred to the input policy by "
+                "an auditable similarity score (intervention family, charge strength, "
+                "revenue recycling, city context) and pooled by identification-weighted "
+                "transferability into an estimate + widening confidence interval."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["policy DSL", "historical case database (illustrative, Observed)"],
+            outputs=["estimated_effect_pct + CI (Estimated)", "per-case DiD effects (Observed)"],
+            output_tag=MetricTag.estimated,
+            code="app.analogues.model",
+            assumptions=[],
+        ),
     ]
 
 
