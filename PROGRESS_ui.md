@@ -905,3 +905,14 @@ exact paths verified against `lib/api.ts` (`/institutions/review`,
 and correct SPEC sections (§37, §5/§28.2, §7.1/§7.2, §21/§22, §4, §34.10). Docs only —
 no code change; `tsc --noEmit` clean, `next build` clean (/ = 61.9 kB, First Load 150 kB).
 Frontend-only.
+
+## 2026-08-13 — UI-track: verification checkpoint — roadmap complete, full surface green
+No unchecked items remain in `ROADMAP_UI.md` (44/44 checked, M4→M30) and the engine
+roadmap is likewise complete, so there was no new endpoint to surface this run.
+Ran the health sweep instead: enumerated all backend routes (38 paths across 34
+routers) and cross-checked each exact path string against the frontend source — all
+38 are referenced from `lib/api.ts`, so the "every documented backend endpoint has a
+UI surface" claim still holds. `npx tsc --noEmit` clean; `npx next build` clean
+(compiled successfully, 4/4 static pages, / = 61.9 kB, First Load 150 kB). No code
+change — a green-state confirmation to keep progress visible while both tracks sit at
+feature-complete. Frontend-only.
