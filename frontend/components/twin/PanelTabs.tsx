@@ -18,6 +18,7 @@ import PressFeedPanel from "./PressFeedPanel";
 import FailureModesPanel from "./FailureModesPanel";
 import SdgPanel from "./SdgPanel";
 import DiffusionPanel from "./DiffusionPanel";
+import BacktestPanel from "./BacktestPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -26,7 +27,8 @@ type TabKey =
   | "press"
   | "redteam"
   | "sdg"
-  | "diffusion";
+  | "diffusion"
+  | "backtest";
 
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "parliament", label: "Parliament" },
@@ -35,6 +37,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "redteam", label: "Red Team" },
   { key: "sdg", label: "SDG" },
   { key: "diffusion", label: "Diffusion" },
+  { key: "backtest", label: "Backtest" },
 ];
 
 export default function PanelTabs() {
@@ -57,7 +60,9 @@ export default function PanelTabs() {
           </button>
         ))}
         {!policy && (
-          <span className="tabbar-hint">Compile a policy to activate</span>
+          <span className="tabbar-hint">
+            Compile a policy to activate (Backtest runs without one)
+          </span>
         )}
       </div>
 
@@ -79,6 +84,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "diffusion"}>
           <DiffusionPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "backtest"}>
+          <BacktestPanel />
         </div>
       </div>
     </div>

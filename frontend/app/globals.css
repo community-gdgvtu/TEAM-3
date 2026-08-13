@@ -2360,3 +2360,170 @@ ul.assumptions {
 .diff-note {
   margin-top: 1rem;
 }
+
+/* --- Backtest scorecard panel (M8) ------------------------------------ */
+
+.bt-case {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  margin: 1rem 0;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.bt-case-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.bt-case-name {
+  font-weight: 600;
+}
+
+.bt-case-desc {
+  margin: 0.4rem 0 0.3rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.bt-case-note {
+  margin: 0.2rem 0 0;
+}
+
+.bt-body {
+  margin-top: 1rem;
+}
+
+.bt-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.7rem;
+}
+
+.bt-stat {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.bt-stat.good {
+  border-color: var(--ok);
+}
+
+.bt-stat.warn {
+  border-color: #f0834a;
+}
+
+.bt-stat-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.bt-stat-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-stat-hint {
+  font-size: 0.66rem;
+  color: var(--muted);
+}
+
+.bt-actuals-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed #d4a24a;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.bt-summary {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.bt-sub {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0.6rem;
+}
+
+.bt-table {
+  display: grid;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bt-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 1.4fr) 0.5fr 0.9fr 0.9fr 0.9fr 0.5fr 0.5fr;
+  gap: 0.5rem;
+  padding: 0.4rem 0.7rem;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.bt-row:first-child {
+  border-top: none;
+}
+
+.bt-row-head {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.bt-metric-key {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bt-err.num {
+  color: var(--text);
+}
+
+.bt-err.flat {
+  color: var(--muted);
+}
+
+.bt-ok {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.bt-no {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+.bt-note {
+  margin-top: 1rem;
+}
+
+@media (max-width: 560px) {
+  .bt-row {
+    grid-template-columns: minmax(80px, 1.3fr) 0.5fr 0.9fr 0.9fr 0.5fr 0.5fr;
+  }
+  .bt-row > :nth-child(5) {
+    display: none; /* hide the Error column on very narrow screens */
+  }
+}

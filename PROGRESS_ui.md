@@ -142,3 +142,16 @@ Dated notes, newest at the bottom. One line per shipped item.
   Time-Machine horizon; everything tagged Simulated; graceful
   no-policy/loading/error states. Typed `runDiffusion` client + diffusion types
   added to lib/api.ts. `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M8.3: Backtest scorecard tab (SPEC §25). New BacktestPanel is
+  policy-independent: it loads the engine's built-in benchmark case via
+  `GET /backtest/example` (showing its name/description) and scores the forecast
+  with `POST /backtest`. Renders the scorecard as stat tiles — MAE, RMSE, MAPE,
+  direction accuracy, interval coverage (calibration), mean event-timing error —
+  plus a per-metric forecast-vs-actual table (forecast, actual, error, direction
+  ✓/✗, in-band ✓/✗). Honesty (SPEC §25/§34): the forecast is stamped Simulated,
+  and because the built-in case's *actuals* are a synthetic benchmark (not real
+  observations) that provenance is stamped prominently on the case card AND a
+  dashed banner over the scores, so a good score is never mistaken for real-world
+  validation. Typed `getBacktestExample`/`runBacktest` clients + backtest types
+  added to lib/api.ts. Tabbar hint notes Backtest runs without a compiled policy.
+  **M8 complete.** `tsc --noEmit` + `next build` clean.

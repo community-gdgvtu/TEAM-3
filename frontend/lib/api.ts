@@ -776,6 +776,108 @@ export async function runDiffusion(
 }
 
 // ---------------------------------------------------------------------------
+// Backtesting — GET /backtest/example + POST /backtest (SPEC §25)
+// ---------------------------------------------------------------------------
+
+export interface ActualObservation {
+  metric_key: string;
+  t_months: number;
+  value: number;
+  low: number | null;
+  high: number | null;
+}
+
+export interface HistoricalCase {
+  id: string;
+  name: string;
+  description: string;
+  policy: PolicyDSL;
+  implementation_date: string | null;
+  horizon_months: number;
+  observations: ActualObservation[];
+  events: Array<{ type: string; t_months: number }>;
+  /** `Observed` for real cases; the built-in demo is `Simulated` (synthetic). */
+  actuals_provenance: MetricTag;
+  actuals_note: string;
+}
+
+export interface MetricScore {
+  metric_key: string;
+  t_months: number;
+  forecast: number;
+  forecast_low: number | null;
+  forecast_high: number | null;
+  actual: number;
+  baseline: number;
+  error: number;
+  abs_error: number;
+  pct_error: number | null;
+  direction_correct: boolean;
+  within_interval: boolean;
+}
+
+export interface EventTimingScore {
+  type: string;
+  predicted_month: number | null;
+  actual_month: number | null;
+  timing_error_months: number | null;
+  matched: boolean;
+}
+
+export interface Scorecard {
+  provenance: MetricTag;
+  note: string;
+  case_id: string;
+  case_name: string;
+  /** Provenance of the ACTUALS being scored against (SPEC §25/§34). */
+  actuals_provenance: MetricTag;
+  actuals_note: string;
+  n_observations: number;
+  mae: number;
+  rmse: number;
+  mape_pct: number | null;
+  direction_accuracy_pct: number;
+  interval_coverage_pct: number;
+  mean_event_timing_error_months: number | null;
+  metric_scores: MetricScore[];
+  event_scores: EventTimingScore[];
+  geographic_accuracy: string | null;
+  summary: string;
+}
+
+/** Fetch the built-in synthetic benchmark case (its actuals are Simulated). */
+export async function getBacktestExample(
+  signal?: AbortSignal,
+): Promise<HistoricalCase> {
+  const res = await fetch(`${API_BASE_URL}/backtest/example`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as HistoricalCase;
+}
+
+/** Replay a case (or the built-in benchmark if omitted) → scorecard. Throws on error. */
+export async function runBacktest(
+  historicalCase?: HistoricalCase,
+  signal?: AbortSignal,
+): Promise<Scorecard> {
+  const res = await fetch(`${API_BASE_URL}/backtest`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(historicalCase ? { case: historicalCase } : {}),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as Scorecard;
+}
+
+// ---------------------------------------------------------------------------
 // Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
 // ---------------------------------------------------------------------------
 
