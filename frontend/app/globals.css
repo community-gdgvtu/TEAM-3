@@ -9155,3 +9155,261 @@ main.wide {
   padding-top: 0.6rem;
   margin: 0;
 }
+
+/* ==========================================================================
+   North-Star answer panel (SPEC §37) — the composed minister's answer.
+   Reuses the .run-* controls/consistency/tiles/amendment scaffolding; these
+   classes style the §37-specific pieces: the ordered narrative, the question
+   echo, the risk-amendment cards, and the assumptions/guardrail footer.
+   ========================================================================== */
+.ns-intro {
+  margin-top: 0.2rem;
+}
+
+/* Minister's question echo */
+.ns-question {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  background: var(--bg);
+  margin: 0.4rem 0 0.2rem;
+}
+
+.ns-q-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.ns-q-text {
+  margin: 0.15rem 0 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* The fixed §37 narrative, one line per §37 question */
+.ns-sections {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  counter-reset: none;
+}
+
+.ns-section {
+  display: flex;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background: var(--bg);
+}
+
+.ns-order {
+  flex: 0 0 auto;
+  width: 1.55rem;
+  height: 1.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(79, 140, 255, 0.12);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.ns-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.ns-section-q {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ns-section-tag {
+  font-weight: 400;
+}
+
+.ns-section-lead {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.ns-section-backs {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.ns-backs-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.7rem;
+}
+
+.ns-backs-xref {
+  color: var(--accent);
+}
+
+/* Risk-reducing amendments */
+.ns-amendments {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ns-amendment {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ns-amd-head {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ns-amd-label {
+  font-weight: 600;
+  font-size: 0.94rem;
+}
+
+.ns-amd-targets {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.ns-amd-targets-k {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.ns-amd-rationale {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+/* Assumptions & guardrail footer (§37.15) */
+.ns-evidence {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ns-evidence-counts {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ns-ev-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.ns-ev-chip.ok {
+  border-color: rgba(46, 160, 67, 0.5);
+}
+
+.ns-ev-chip.warn {
+  border-color: rgba(210, 153, 34, 0.6);
+}
+
+.ns-ev-n {
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.ns-ev-honesty {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+.ns-ev-honesty.ok {
+  background: rgba(46, 160, 67, 0.1);
+  border: 1px solid rgba(46, 160, 67, 0.35);
+}
+
+.ns-ev-honesty.warn {
+  background: rgba(210, 153, 34, 0.12);
+  border: 1px solid rgba(210, 153, 34, 0.5);
+}
+
+.ns-guardrails {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ns-guardrail {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  align-items: baseline;
+}
+
+.ns-guardrail-mark {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
+.ns-guardrail.ok .ns-guardrail-mark {
+  color: #2ea043;
+}
+
+.ns-guardrail.fail .ns-guardrail-mark {
+  color: #e5534b;
+}
+
+.ns-guardrail-rule {
+  color: var(--muted);
+}

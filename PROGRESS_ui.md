@@ -832,3 +832,46 @@ renderer and `[data-tour="tabs"]` anchor untouched. Tour still renders zero metr
 (SPEC §34 — pure guidance over the real UI or its honest `waiting` state). `tsc
 --noEmit` clean, `next build` clean (/ = 60 kB, First Load 148 kB). No backend/data/
 engine files touched.
+
+## 2026-08-13 — M29: surface the North-Star answer (SPEC §37, the flagship)
+Roadmap re-verified complete on entry (M4–M28, `tsc --noEmit` + `next build`
+both green) — but the engine had shipped one new endpoint the UI hadn't surfaced:
+`POST /north-star` (SPEC §37 — *the* URBAN experience). A minister asks "What
+happens if we implement this?" and the backend answers with the fixed, ordered
+15-line §37 narrative (baseline → analogues → mechanisms → median outcome →
+uncertainty → winners → losers → failure modes → opposition's strongest argument
+→ opinion evolution → media → three risk-reducing amendments → each amendment's
+effect → best-fit config → every assumption). It composes existing deterministic
+layers verbatim (no new numeric model), so the answer can never disagree with the
+deep tabs.
+Added the **North-Star tab** as the flagship (first) analysis tab:
+- `lib/api.ts`: `NorthStarSection`, `NorthStarProposedAmendment`, `NorthStarAnswer`,
+  `NorthStarRequest` types + `runNorthStar()` client (POST /north-star, JSON-detail
+  error handling like `/run`). All backing objects reuse the already-exported typed
+  interfaces (BaselineSnapshot, AnalogueEstimate, EventLedger, RunHeadlineMetric,
+  DeltaTimeSeries, UncertaintyResult, MicrosimReport, FailureModeRegister, Argument,
+  DebateResponse, DiffusionResult, MediaResponse, AmendmentComparison, OptimiserResult)
+  so the tab can never drift from the standalone endpoints' shapes.
+- `components/twin/NorthStarPanel.tsx`: compiled-policy-or-NL-fallback input +
+  Time-Machine horizon selector; provenance banner (Simulated numbers · Estimated
+  transfers · Generated prose · no LLM in numeric path); minister's-question echo;
+  the ordered §37 narrative (per line: question + deterministic one-sentence
+  synthesis + provenance chip + `backs` code + cross-link to the deep tab that
+  carries the evidence); the composed median-outcome dashboard tiles at the chosen
+  horizon (World A→B, signed Δ+%, band, provenance chip, good/bad colouring); the
+  risk-reducing amendment cards (label + targeted risk + rationale + isolated
+  Δ(amended − original) table, ≈0 rows shown as "no change"); and the §37.15
+  assumptions/guardrail footer (assumption + data-source counts, SPEC §34 guardrail
+  pass/fail tally, the explicit "no LLM produces any figure" honesty line read off
+  `evidence.llm_touches_numbers`, and the guardrail checklist). `idle`/`loading`/
+  `error` states throughout — never mints a narrative when the backend is down.
+- `components/twin/PanelTabs.tsx`: registered `northstar` TabKey + "North-Star"
+  tab (placed first) + always-mounted panel.
+- `app/globals.css`: `.ns-*` styles for the question echo, the ordered narrative
+  rows, the amendment cards and the evidence footer; reuses the `.run-*`
+  controls/consistency/tiles/amendment scaffolding for consistency.
+Health: `tsc --noEmit` clean, `next build` clean (/ = 61.7 kB, First Load 149 kB).
+Live verification against the running backend wasn't possible this run (port 8000
+still held by an unrelated app, so `/north-star` 404s) — the tab shows its honest
+error+retry state exactly as designed (SPEC §34). No backend/data/engine files
+touched. Every documented engine route (43 now) has a UI surface again.

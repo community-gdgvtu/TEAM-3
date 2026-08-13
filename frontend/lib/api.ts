@@ -3036,3 +3036,124 @@ export async function getWorld(signal?: AbortSignal): Promise<WorldModel> {
   }
   return (await res.json()) as WorldModel;
 }
+
+// ---------------------------------------------------------------------------
+// North-Star answer (SPEC §37) — POST /north-star
+// ---------------------------------------------------------------------------
+//
+// The minister's "What happens if we implement this?" answered as the fixed §37
+// narrative: baseline → analogues → mechanisms → median outcome → uncertainty →
+// winners → losers → failure modes → opposition's strongest argument → opinion
+// evolution → media narratives → three risk-reducing amendments → each
+// amendment's effect → the best-fit configuration → every assumption & piece of
+// evidence. It computes NO new number — each section embeds the *same*
+// deterministic layer output the standalone endpoints return, so the answer can
+// never disagree with the tabs behind it. Numbers Simulated/Estimated; debate &
+// media prose Generated; transparency artifacts Observed; no LLM touches a figure
+// (SPEC §34).
+
+/** One line of the fixed §37 answer: a synthesis read from the numbers + what backs it. */
+export interface NorthStarSection {
+  /** Position in the fixed §37 narrative (1..15). */
+  order: number;
+  /** The §37 line this section answers. */
+  question: string;
+  /** One-sentence synthesis read straight from the numbers (no LLM). */
+  lead: string;
+  /** Response field that carries the full evidence. */
+  backs: string;
+  /** Provenance of this section's substance. */
+  tag: MetricTag;
+}
+
+/** A risk-reducing amendment (§37 line 12) + its re-simulated isolated effect (line 13). */
+export interface NorthStarProposedAmendment {
+  label: string;
+  /** The risk this amendment is meant to reduce. */
+  targets_risk: string;
+  rationale: string;
+  /** Δ(amended − original) from the same deterministic sim path (SPEC §12). */
+  comparison: AmendmentComparison;
+}
+
+/**
+ * The complete §37 minister's answer for a single policy. Every backing field is
+ * the *same* object the standalone endpoint returns (so the answer can never
+ * disagree with the deep tabs); `sections` is the ordered narrative over them.
+ */
+export interface NorthStarAnswer {
+  provenance: string;
+  note: string;
+  policy_id: string;
+  /** The minister's question this answers. */
+  question: string;
+  horizon_months: number;
+  horizon_label: string;
+  /** Present when the policy was compiled from NL text. */
+  compiled: CompileResponse | null;
+  sections: NorthStarSection[];
+  // ---- Backing evidence (identical to the standalone endpoints) ----
+  baseline: BaselineSnapshot;
+  analogues: AnalogueEstimate;
+  mechanisms: EventLedger;
+  median_outcome: RunHeadlineMetric[];
+  delta: DeltaTimeSeries;
+  uncertainty: UncertaintyResult;
+  winners: MicrosimReport;
+  failure_modes: FailureModeRegister;
+  opposition_argument: Argument | null;
+  debate: DebateResponse;
+  opinion_evolution: DiffusionResult;
+  media: MediaResponse;
+  amendments: NorthStarProposedAmendment[];
+  best_configuration: OptimiserResult;
+  /** §37.15 — every assumption + guardrail behind the conclusions. */
+  evidence: Record<string, unknown>;
+}
+
+/** Input to `POST /north-star`: supply *either* `policy` (compiled) or `text` (to compile). */
+export interface NorthStarRequest {
+  text?: string;
+  policy?: PolicyDSL;
+  jurisdiction?: string;
+  /** The minister's question (echoed; the §37 narrative is fixed). */
+  question?: string;
+  /** Headline horizon; snapped to the nearest checkpoint. Defaults to Year 2. */
+  horizon_months?: number;
+  /** Optimiser objective for §37.14, e.g. { reduce_transport_emissions_pct: 20 }. */
+  objective?: Record<string, number>;
+  /** Optimiser constraints for §37.14, e.g. { max_low_income_burden_increase_pct: 2 }. */
+  constraints?: Record<string, number>;
+  seed?: number;
+}
+
+/**
+ * Compose the full SPEC §37 North-Star answer in one call (`POST /north-star`).
+ * Introduces no new numeric model — every section reuses an existing
+ * deterministic layer reading the same compiled policy and the same simulation.
+ * Throws on network/HTTP error so the panel can show an honest waiting/error
+ * state instead of inventing a narrative (SPEC §37/§34).
+ */
+export async function runNorthStar(
+  req: NorthStarRequest,
+  signal?: AbortSignal,
+): Promise<NorthStarAnswer> {
+  const res = await fetch(`${API_BASE_URL}/north-star`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as NorthStarAnswer;
+}
