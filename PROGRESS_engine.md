@@ -527,3 +527,23 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   determinism regression): no LLM in the numeric path, provenance tags present,
   SIMULATED media banner, widening uncertainty, byte-reproducible core.
 - No `backend/app/**` behaviour changed this run — engine surface stable, demo-ready.
+
+## 2026-08-13 (engine run — new hardening guard: uncertainty widens with horizon)
+- Roadmap was fully checked off (28 items + stretch/extended/hardening). Verified green
+  first: **234 tests passing**, app boots with **33 routes**. Rather than a third identical
+  verification commit, added a genuinely new hardening guard that closes a real gap.
+- **Gap closed:** SPEC §34 makes three numeric-core promises. Two were guarded globally
+  (determinism regression → *reproducible*; integration smoke → *tagged + LLM-free*), but
+  the third — *uncertainty widens with the horizon* — was only tested per-layer (timeline,
+  ensemble). Nothing guarded it across the forecast surface the UI actually plots, so a
+  refactor that flattened one band-series would slip through every existing test.
+- **Added `backend/tests/test_uncertainty_widening_guard.py`** (test-track only, zero
+  `backend/app/**` change). Recursively finds every band-series (t_months/low/high points)
+  in `/simulate` **and** `/simulate/amend` — including nested world_a / world_b / delta /
+  amended — and asserts: (1) band width is monotonically non-decreasing with horizon;
+  (2) the far horizon is *strictly* wider than T0 for every base-forecast series, so a
+  degenerate flat band also fails (the fan chart must actually fan out); (3)
+  low ≤ value ≤ high everywhere. Mutation-tested: a hand-crafted narrowing band trips the
+  guard, confirming it is not a no-op.
+- **237 green** (was 234), app boots with **33 routes**. Demo credibility claim now has all
+  three §34 invariants under a standing test.
