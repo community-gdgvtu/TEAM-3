@@ -810,3 +810,14 @@ This confirms the parallel UI track's pushes have **not** drifted any shared bac
 (Policy DSL / `Shocks` / metric keys) — the integration-smoke + determinism + widening-band +
 cross-layer consistency guards all still pass against the live app. Engine is green and
 demo-ready. No code change this run (test/app state verified only); no `backend/app/**` edits.
+
+---
+
+## 2026-08-13 — ENGINE-track: judge-runnable killer-demo CLI (`scripts/demo.py`)
+
+Roadmap was SPEC-complete (37/37, 323 green), so rather than invent speculative numeric layers (a §34 risk on a demo-ready engine) I added the one genuinely-missing piece of **demo tooling** — a single command that shows the whole killer demo in a terminal, and doubles as a pre-demo/CI smoke check.
+
+- New `scripts/demo.py` (own track, `scripts/**`): drives `POST /run` **in-process** via FastAPI `TestClient` (no server, no ports) and renders the §29 narrative — compiled Policy DSL (instrument/charge/zone/domain), the headline dashboard at the horizon (World A→B, Δ, %, [low,high] band, provenance tag, ▲/▼ direction per tile), net public support verdict, the parliament motion + stance tally + deterministic synthesis, the auto-proposed amendment with its concrete `changes` + re-simulated checkpoint count, and one sample SIMULATED media headline per horizon.
+- Ends with a live **§34 guardrail audit** on the composed payload: every headline metric carries a provenance tag; the Δ uncertainty band is non-decreasing across the horizon (read from `delta.series[*].points[*].low/high`); every media headline is labelled SIMULATED; debate & media prose is tagged Generated (numbers stay Simulated). Returns a **non-zero exit code** if any guardrail fails, so it's a real smoke gate, not just pretty output. Flags: `--json` (raw `/run` payload for scripting), `--text` (custom policy), `--horizon` (months). ANSI colour auto-disables when stdout isn't a TTY; progress line goes to stderr so `--json` stays pipeable.
+- **No new numeric model, no LLM** — it only reads existing endpoints (SPEC §34). Guarded by `backend/tests/test_demo_script.py` (5 tests: script present, runs + audit passes with all §29 sections rendered, `--json` is a valid `/run` payload with every composed section, guardrails hold at horizons 12 & 60).
+- `python -m pytest -q` → **328 passed** (was 323); app still boots with **42 routes**.
