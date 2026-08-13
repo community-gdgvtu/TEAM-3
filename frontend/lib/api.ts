@@ -2002,6 +2002,62 @@ export interface GroupImpact {
   pct_switched_mode: number;
 }
 
+/**
+ * Whether the policy's own stated equity constraint holds against the modelled
+ * numbers (SPEC §7.3/§34). A policy may declare
+ * `constraints.max_low_income_burden_increase_pct` — a cap the minister sets on
+ * how much the charge may raise the lowest-income decile's cost burden. The
+ * engine now *tests* that cap against the same deterministic microsim burden it
+ * reports, rather than merely asserting it in debate: a constraint you never
+ * check is theatre. `null` when the policy states no such cap.
+ */
+export interface ConstraintCheck {
+  /** The DSL constraint being checked. */
+  name: string;
+  /** Stated maximum low-income burden increase (% of income). */
+  cap_pct: number;
+  /**
+   * Modelled World-B out-of-pocket charge burden on the lowest-income decile as
+   * % of income. Baseline burden is zero (no charge), so this IS the increase
+   * the cap governs.
+   */
+  modelled_low_income_burden_pct: number;
+  /** Whether the modelled increase is within the stated cap. */
+  satisfied: boolean;
+  /** Cap − modelled: positive = headroom, negative = overshoot (pp). */
+  margin_pct: number;
+  /** Plain-language reading of the check. */
+  note: string;
+  provenance: MetricTag;
+}
+
+/** Display verdict for a {@link ConstraintCheck}. */
+export interface ConstraintVerdict {
+  /** `pass` = within cap with real burden; `fail` = overshoots; `moot` = no modelled burden. */
+  status: "pass" | "fail" | "moot";
+  /** Short badge label. */
+  label: string;
+  /** Colour class shared with the microsim styles. */
+  cls: "good" | "warn";
+}
+
+/**
+ * Map a {@link ConstraintCheck} to a display verdict (pure; unit-tested). Honesty
+ * matters here (SPEC §34): a policy that keeps the low-income decile at zero
+ * modelled burden satisfies its cap only *vacuously*, so we mark that `moot`
+ * rather than dressing it up as an actively-met promise. A real overshoot is a
+ * hard `fail` — the app never softens a policy breaking its own stated equity
+ * constraint. The 0.005% floor matches the two-decimal burden shown on screen.
+ */
+export function constraintVerdict(c: ConstraintCheck): ConstraintVerdict {
+  if (c.modelled_low_income_burden_pct <= 0.005) {
+    return { status: "moot", label: "No low-income burden", cls: "good" };
+  }
+  return c.satisfied
+    ? { status: "pass", label: "Constraint met", cls: "good" }
+    : { status: "fail", label: "Constraint violated", cls: "warn" };
+}
+
 /** Full person-level distributional microsimulation report (SPEC §7.3). */
 export interface MicrosimReport {
   policy_id: string;
@@ -2017,6 +2073,11 @@ export interface MicrosimReport {
   /** Lowest-decile ÷ highest-decile mean burden. >1 = regressive. */
   regressivity_ratio: number;
   regressivity_note: string;
+  /**
+   * Compliance of the policy's stated equity constraint against the modelled
+   * outcome (SPEC §34). `null` when the policy states no low-income burden cap.
+   */
+  constraint_check: ConstraintCheck | null;
   by_income_decile: GroupImpact[];
   by_household_type: GroupImpact[];
   by_geography: GroupImpact[];

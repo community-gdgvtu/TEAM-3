@@ -18,8 +18,12 @@
 
 import { useEffect, useState } from "react";
 
-import { runMicrosim } from "../../lib/api";
-import type { GroupImpact, MicrosimReport } from "../../lib/api";
+import { constraintVerdict, runMicrosim } from "../../lib/api";
+import type {
+  ConstraintCheck,
+  GroupImpact,
+  MicrosimReport,
+} from "../../lib/api";
 import { formatNumber } from "../../lib/format";
 import { useTwin } from "./TwinStore";
 
@@ -124,6 +128,9 @@ export default function MicrosimPanel() {
           {report && status !== "loading" && (
             <div className="ms-body">
               <WinnersHeadline r={report} />
+              {report.constraint_check && (
+                <ConstraintCheckCard c={report.constraint_check} />
+              )}
               <RegressivityCard r={report} />
 
               <GroupSection
@@ -213,6 +220,44 @@ function WinnersHeadline({ r }: { r: MicrosimReport }) {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * "Did the policy keep its own promise?" — surfaces whether the policy's stated
+ * `max_low_income_burden_increase_pct` cap actually holds against the modelled
+ * low-income burden (SPEC §7.3/§34). A stated constraint the app never checks is
+ * theatre; a violation is shown as a hard fail, never softened.
+ */
+function ConstraintCheckCard({ c }: { c: ConstraintCheck }) {
+  const v = constraintVerdict(c);
+  const glyph = v.status === "fail" ? "✕" : "✓";
+  return (
+    <div className={`ms-constraint ${v.cls}`}>
+      <div className="ms-constraint-main">
+        <span className={`ms-constraint-glyph ${v.cls}`} aria-hidden="true">
+          {glyph}
+        </span>
+        <span className="ms-constraint-label">Stated equity constraint</span>
+        <span className={`ms-constraint-verdict ${v.cls}`}>{v.label}</span>
+        <span className={`tag ${c.provenance.toLowerCase()}`}>{c.provenance}</span>
+      </div>
+      <div className="ms-constraint-meta">
+        <span>
+          cap <strong>≤ {c.cap_pct.toFixed(2)}%</strong> of income
+        </span>
+        <span>
+          modelled{" "}
+          <strong>{c.modelled_low_income_burden_pct.toFixed(2)}%</strong>
+        </span>
+        <span className={v.status === "fail" ? "warn" : "good"}>
+          {c.margin_pct >= 0
+            ? `${c.margin_pct.toFixed(2)}pp headroom`
+            : `${Math.abs(c.margin_pct).toFixed(2)}pp over`}
+        </span>
+      </div>
+      {c.note && <p className="ms-constraint-note">{c.note}</p>}
     </div>
   );
 }

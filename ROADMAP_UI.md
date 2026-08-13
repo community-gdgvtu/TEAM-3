@@ -416,3 +416,19 @@ simulates it, and the prompt was verified against the rule-based compiler
 (road_pricing 12-credit cordon, `revenue_allocation.active_travel = 0.8`,
 `public_transport = 0.0`) — the active-travel-dominant split the new lever bites on.
 - [x] Add a "Charge, fund cycling" chip (mechanism *Active-travel reinvest*) to `PolicyCompiler`'s `EXAMPLE_POLICIES`: the same 12-credit cordon but spending 80% of revenue on protected cycle lanes and wider pavements, whose `watch` frames the where-does-revenue-go comparison against the bus-funded charge (different destination for displaced trips) and the honest neutral-until-revenue guardrail (§9), never a figure. Placed between the "Bus-funded charge" and "Fund buses, no charge" chips so the three revenue-destination levers sit together. Prompt grounded in the engine's §7.5 mechanism and verified against the rule-based compiler so it yields the intended active-travel-dominant DSL (transit is matched first, so no transit percentage is mentioned — the UI invents nothing; SPEC §34). No new types, styles, or endpoints — the existing chip loader, active-example highlight, and idle-reset all apply unchanged. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean (SPEC §7.5/§9/§34)
+
+## M44 — Surface the stated-equity-constraint compliance check (SPEC §7.3/§34)
+After M43, the engine track landed a §34 honesty feature the frontend never
+surfaced (commits baf09f3/be16d16): the microsim now *tests* a policy's own
+stated `constraints.max_low_income_burden_increase_pct` cap against the modelled
+low-income-decile charge burden, returning a `constraint_check`
+(cap_pct / modelled_low_income_burden_pct / satisfied / margin_pct / note) on the
+`MicrosimReport`. Until now that cap was recorded and asserted in debate but never
+checked against the numbers — SPEC §34's "a constraint you never test is theatre."
+The `MicrosimPanel` neither typed nor rendered the field, so a judge compiling a
+policy that declares an equity cap had no way to see whether the twin's own model
+says the policy *keeps that promise* — or breaks it. Pure surfacing of real
+backend data: the card mints no numbers, shows the engine's own note verbatim, is
+tagged with the report's provenance, and disappears entirely when a policy states
+no cap.
+- [x] Type `ConstraintCheck` + `MicrosimReport.constraint_check` in `lib/api.ts` and add a pure, unit-tested `constraintVerdict` mapper that (honestly, §34) marks a zero-modelled-burden pass as *moot* rather than an actively-met promise, an in-cap real burden as *pass*, and any overshoot as a hard *fail* (never softened; trusts the engine's `satisfied` flag which carries the cap+epsilon logic). Render a `ConstraintCheckCard` in `MicrosimPanel` between the winners headline and the regressivity card — ✓/✕ glyph, pass/violated/moot verdict pill, cap-vs-modelled + signed headroom/overshoot meta, the engine's plain-language note, and the report's provenance tag — shown only when `constraint_check` is present. Added `.ms-constraint*` styles to `globals.css` mirroring the regressivity card. New `tests/microsim.test.mts` (5 tests, 41 total). `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §7.3/§34)

@@ -6204,6 +6204,76 @@ ul.assumptions {
   opacity: 0.9;
 }
 
+/* Stated-constraint compliance check (SPEC §7.3/§34) */
+.ms-constraint {
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+.ms-constraint.good {
+  border-left-color: var(--ok);
+}
+.ms-constraint.warn {
+  border-left-color: var(--bad);
+}
+.ms-constraint-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.7rem;
+}
+.ms-constraint-glyph {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.ms-constraint-glyph.good {
+  color: var(--ok);
+}
+.ms-constraint-glyph.warn {
+  color: var(--bad);
+}
+.ms-constraint-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.ms-constraint-verdict {
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid currentColor;
+}
+.ms-constraint-verdict.good {
+  color: var(--ok);
+}
+.ms-constraint-verdict.warn {
+  color: var(--bad);
+}
+.ms-constraint-meta {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.ms-constraint-meta .good {
+  color: var(--ok);
+}
+.ms-constraint-meta .warn {
+  color: var(--bad);
+}
+.ms-constraint-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text);
+  opacity: 0.9;
+}
+
 /* Group breakdown tables */
 .ms-section {
   display: flex;

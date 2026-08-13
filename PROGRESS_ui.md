@@ -1147,3 +1147,21 @@ Chip mints no numbers (§34); existing chip loader + active-highlight + idle-res
 apply unchanged; no new types/styles/endpoints. `tsc --noEmit` + `next build` +
 `next lint` + `npm test` (36) all clean.
 Follow-up: none. Frontend README has no example-count to sync (gallery lives inside the compiler surface).
+
+## 2026-08-13 — M44: stated-equity-constraint compliance card (SPEC §7.3/§34)
+Engine commits baf09f3/be16d16 made the microsim *test* a policy's own stated
+`max_low_income_burden_increase_pct` cap against the modelled low-income-decile
+charge burden, returning `constraint_check` on `MicrosimReport`. The frontend
+neither typed nor rendered it — a policy could declare an equity cap and a judge
+had no way to see whether the twin says it kept or broke that promise (SPEC §34:
+a constraint you never test is theatre). Added `ConstraintCheck` +
+`MicrosimReport.constraint_check` types and a pure `constraintVerdict` mapper
+(zero burden → *moot*, in-cap real burden → *pass*, overshoot → hard *fail*,
+never softened; trusts the engine's `satisfied` flag). `MicrosimPanel` now renders
+a `ConstraintCheckCard` (✓/✕ glyph, verdict pill, cap-vs-modelled + signed
+headroom/overshoot, the engine's verbatim note, provenance tag) between the
+winners headline and the regressivity card — shown only when the field is present.
+Added `.ms-constraint*` styles mirroring the regressivity card. New
+`tests/microsim.test.mts` (5 tests). Card mints no numbers; all values are the
+engine's. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean.
+Follow-up: none.
