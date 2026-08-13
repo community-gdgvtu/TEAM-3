@@ -1341,3 +1341,26 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
 - Scripts-track only — no `backend/app/**` change, no new numeric model, no LLM (§34). Test count
   unchanged at **472 green**, app boots with **56 routes**.
 - Files: `scripts/audit.py` (get_routes). No frontend/shared files touched.
+
+## 2026-08-13 (engine, M51)
+- **Keyless `GET /evidence/example`** (SPEC §26/§34). Completes the keyless judge-facing surface
+  for the one view the whole product is sold on — the §26 **Explainability / Evidence Drawer**
+  ("click any output → walk the causal trace all the way down to the underlying evidence"). Every
+  composed answer endpoint (`/brief/example`, `/run/example`, `/north-star/example`), the §21
+  quartet (`/compare/example`) and `/backtest/example` already offered a no-body call, but
+  `POST /evidence` — which turns a single metric into the `input-data → transform → model →
+  assumptions → result` ladder — still required a hand-compiled `PolicyDSL` *and* a metric key.
+- Added `GET /evidence/example`: compiles the canonical §28 demo congestion charge and runs the
+  *identical* `run_evidence()` service on the metric SPEC §26 itself uses to motivate the feature —
+  **peak transit demand** (`transit.peak_into_cbd_transit_trips`, "why does public transport
+  demand rise?") — so the keyless surface lands on the spec's own worked example.
+- Pure additive routing — no new numeric model, no LLM in any figure (§26/§34). Tests: byte-identical
+  to `POST /evidence` with the same compiled policy + metric (`json.dumps(sort_keys=True)`) so it
+  can't drift; full §26 causal ladder present (input-data first → result last, model present, result
+  Δ = World B − World A, renderable `ascii_trace`), provenance Simulated; determinism across two
+  keyless calls. Added `/evidence/example` to the whole-surface `scripts/audit.py` GET sweep
+  (served-200 + provenance-tag).
+- Files: `backend/app/routers/evidence.py` (+`GET /evidence/example` + `_DEMO_TEXT`/`_DEMO_METRIC`),
+  `scripts/audit.py` (get_routes), `backend/tests/test_evidence_example.py` (3 tests).
+  **475 green** (was 472), `scripts/audit.py` PASS, app boots with **57 routes** (was 56).
+  No frontend/shared files touched.
