@@ -139,3 +139,47 @@ class WorldBTimeSeries(BaseModel):
     adaptation: dict = Field(
         default_factory=dict, description="Staged-adaptation assumptions used (auditable)."
     )
+
+
+class DeltaPoint(BaseModel):
+    """World-B − World-A for one metric at one checkpoint, with a combined band."""
+
+    t_months: float
+    world_a: float = Field(description="World-A central value at this horizon.")
+    world_b: float = Field(description="World-B central value at this horizon.")
+    delta: float = Field(description="World-B − World-A (the policy effect).")
+    delta_pct: float | None = Field(
+        default=None,
+        description="Δ as % of the World-A value (None when World A is ~0).",
+    )
+    low: float = Field(description="Lower edge of the Δ uncertainty band.")
+    high: float = Field(description="Upper edge of the Δ uncertainty band.")
+
+
+class DeltaSeries(BaseModel):
+    """One metric's World-B − World-A trajectory across the timeline."""
+
+    key: str
+    label: str
+    unit: str
+    tag: MetricTag = Field(MetricTag.simulated)
+    method: str = Field(
+        default="World-B central minus World-A central at each checkpoint; band is "
+        "the two worlds' bands combined in quadrature."
+    )
+    points: list[DeltaPoint] = Field(default_factory=list)
+
+
+class DeltaTimeSeries(BaseModel):
+    """Δ(B−A) per metric across the Time Machine checkpoints (SPEC §5/§21)."""
+
+    provenance: MetricTag = Field(MetricTag.simulated)
+    note: str = Field(
+        default=(
+            "Policy effect = World B (with intervention) − World A (baseline) at "
+            "each checkpoint. Both worlds share the same exogenous background "
+            "trend, so the delta isolates the intervention. Simulated (SPEC §34)."
+        )
+    )
+    checkpoints: list[Checkpoint] = Field(default_factory=list)
+    series: list[DeltaSeries] = Field(default_factory=list)

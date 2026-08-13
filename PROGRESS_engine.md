@@ -9,3 +9,8 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   demand trend. Confidence band anchored to a fixed per-metric scale so it widens monotonically
   with the horizon (SPEC §9/§24). Added `reinvestment` gate to `compute_world_b`, `WorldBTimeSeries`
   schema, and `test_simulation_timeline.py` (7 tests). All 57 backend tests green; app boots.
+- 2026-08-13 — M3 `POST /simulate`: new `backend/app/routers/simulate.py` returns World A + World B
+  snapshots & timelines plus Δ(B−A) per metric across all checkpoints (`simulation/compare.py`).
+  Added `simulation/shocks.py` — optional fuel-price / transit-fare / background-demand shocks applied
+  to BOTH worlds so the delta still isolates the policy; `seed` accepted & echoed (model is
+  deterministic). Δ band = the two worlds' bands combined in quadrature. 6 endpoint tests; 63 green.

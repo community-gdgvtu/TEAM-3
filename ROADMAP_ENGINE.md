@@ -12,7 +12,7 @@ label generated media SIMULATED; uncertainty widens with horizon).
 ## M3 — Policy simulation (World B) + time machine
 - [x] `backend/app/simulation/` — apply the compiled Policy DSL to the mode-choice + traffic model: congestion charge raises car generalized cost inside the cordon; pedestrianisation removes car access on cordon links; revenue → bus frequency → transit access/speed improvement. Deterministic, no LLM. (SPEC §7.5/§7.7) [DONE in commit 197f244 — module is `backend/app/simulation/`, reuse it]
 - [x] Timeline checkpoints (T0,1m,3m,5m,1y,2y,5y,10y): staged adaptation (behaviour substitution short-run, transit capacity ramp funded by revenue mid-run) with confidence bands that widen with horizon (SPEC §9/§24) [DONE — `backend/app/simulation/timeline.py`: interpolates 3 structural anchors (World A, reinvestment-off B, full B) via a fast behaviour ramp + lagged transit ramp; monotone widening band]
-- [ ] `POST /simulate` — body = Policy DSL (+ optional shocks/seed); returns World A, World B, Δ(B−A) per metric across checkpoints, tagged Simulated
+- [x] `POST /simulate` — body = Policy DSL (+ optional shocks/seed); returns World A, World B, Δ(B−A) per metric across checkpoints, tagged Simulated [DONE — `backend/app/routers/simulate.py` + `simulation/compare.py` (delta) + `simulation/shocks.py` (fuel/fare/demand shocks applied to both worlds)]
 - [ ] Event ledger (SPEC §10): structured events (e.g. transit capacity exceeded, cordon load drop) with cause/affected/confidence/downstream — this is the shared truth other engines read
 
 ## M5 — Parliament + amendment loop (backend)

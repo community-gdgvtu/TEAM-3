@@ -6,9 +6,16 @@ synthetic population and re-aggregates the same headline metric families as the
 baseline. No LLM touches the numeric path (SPEC §34).
 """
 
+from .compare import build_delta
 from .levers import DEFAULT_SIM_PARAMS, PolicyLevers, SimParams, derive_levers
 from .model import choose_mode_policy, compute_world_b
-from .schema import BehaviouralRule, WorldBMetrics, WorldBTimeSeries
+from .schema import (
+    BehaviouralRule,
+    DeltaTimeSeries,
+    WorldBMetrics,
+    WorldBTimeSeries,
+)
+from .shocks import Shocks, apply_shocks
 from .timeline import (
     DEFAULT_ADAPTATION,
     AdaptationParams,
@@ -28,4 +35,8 @@ __all__ = [
     "build_world_b_timeline",
     "AdaptationParams",
     "DEFAULT_ADAPTATION",
+    "build_delta",
+    "DeltaTimeSeries",
+    "Shocks",
+    "apply_shocks",
 ]
