@@ -1110,3 +1110,24 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   picks, then a live §34 audit (Simulated tag, well-formed regret, payoffs byte-equal to the
   stress-core Δ(B−A), byte-identical on repeat, no long-horizon overclaim), non-zero exit on
   failure. Pure read of `/robustness`; no `backend/app/**` behaviour changed. 6 tests.
+
+## 2026-08-13 (LEZ distinct mechanism)
+- Roadmap was fully checked (48/48) and green (405 tests, 52 routes, audit PASS). Rather than
+  stop, found and fixed a genuine modelling gap: **`low_emission_zone` was aliased to a flat
+  congestion charge** in `simulation/levers.py::_PRICING_TYPES` — so an LEZ produced identical
+  traffic/emissions numbers to a road-pricing cordon, which is wrong on the mechanism and
+  dishonest per §34 (it would tell a minister an LEZ cuts traffic as much as a congestion charge).
+- Gave LEZ its own deterministic branch: (1) a fleet-expected charge = amount × `lez_noncompliant_share`
+  (only non-compliant vehicles pay → a fraction of the mode shift, revenue conserved); (2) a new
+  World-B-only `co2_factor_multiplier` = (1−share)+share×`lez_clean_factor_ratio` modelling fleet
+  turnover to cleaner vehicles (lower CO₂/km even for drivers who keep driving, a CO₂ proxy for the
+  NOx/PM turnover an LEZ really targets — deliberately modest). Two §7.5 `BehaviouralRule`s
+  (`lez_charge`, `lez_fleet_cleanup`) surface it for the Evidence Drawer.
+- **World A untouched; every non-LEZ policy keeps `co2_factor_multiplier == 1.0`** → all existing
+  numbers byte-identical (charge/pedestrianisation regression pinned by a test). New SimParams
+  surfaced live in the §33 registry so the manifest can't drift.
+- Demo £12: LEZ car 57.2→49.1%, factor 0.192→0.163, 2.84→2.19 tCO₂/day; charge 57.2→37.7% at
+  unchanged 0.192, 2.84→1.76 — LEZ keeps cars but cleans the fleet, charge cuts km. Distinct + honest.
+- Files: `backend/app/simulation/levers.py`, `backend/app/simulation/model.py`,
+  `backend/app/registry/model.py`, `backend/tests/test_lez.py` (10 tests). **415 green** (was 405),
+  `scripts/audit.py` PASS. No frontend/shared files touched.

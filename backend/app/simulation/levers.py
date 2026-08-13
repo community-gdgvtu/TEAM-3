@@ -14,12 +14,19 @@ Supported levers for the demo slice (*price / pedestrianise a central district
 and reinvest revenue into public transport*):
 
 1. **Cordon charge** — a per-commuter surcharge on CBD-bound car trips
-   (road-pricing / parking-levy / low-emission-zone interventions).
+   (road-pricing / parking-levy interventions).
 2. **Pedestrianisation** — cars are banned from the CBD, so CBD-bound commuters
    lose the car option entirely.
 3. **Transit reinvestment** — revenue allocated to public transport buys a
    bounded fare cut and service-speed uplift, which pulls commuters toward
    transit. Only engaged when the policy actually allocates revenue there.
+4. **Low-emission zone** — modelled by its *real* mechanism rather than as a flat
+   cordon charge: only the *non-compliant* share of the car fleet faces the daily
+   charge (so the mode-shift pressure is a fraction of an equivalent congestion
+   charge), and the zone's primary effect is fleet turnover toward cleaner
+   vehicles, which lowers World B's CO₂-per-km factor. This makes an LEZ behave
+   distinctly from a congestion charge — a modest traffic effect but a real
+   emissions-intensity cut — instead of aliasing to the same numbers.
 """
 
 from __future__ import annotations
@@ -30,11 +37,13 @@ from ..baseline.params import DEFAULT_PARAMS, BaselineParams
 from ..policy.dsl import InterventionType, PolicyDSL
 from .schema import BehaviouralRule
 
-# Intervention families that levy a per-entry charge on cars entering the cordon.
+# Intervention families that levy a flat per-entry charge on *every* car entering
+# the cordon. A low-emission zone is deliberately NOT here — it charges only
+# non-compliant vehicles and its main lever is a cleaner fleet, so it gets its
+# own branch in :func:`derive_levers` rather than aliasing to a flat charge.
 _PRICING_TYPES = {
     InterventionType.road_pricing,
     InterventionType.parking_levy,
-    InterventionType.low_emission_zone,
 }
 
 # Exemption phrases we can currently model against agent attributes. Anything we
@@ -58,6 +67,14 @@ class SimParams:
     reinvest_max_fare_cut: float = 0.30
     #: Max transit effective-speed uplift at 100% revenue reinvestment (relative).
     reinvest_max_speed_gain: float = 0.15
+    #: Low-emission-zone: share of the CBD-bound car fleet that is non-compliant
+    #: at introduction — only these vehicles face the LEZ charge (Estimated).
+    lez_noncompliant_share: float = 0.25
+    #: Low-emission-zone: CO₂-per-km of a compliant replacement vehicle as a
+    #: fraction of the baseline fleet-average factor (newer/hybrid/EV mix). This
+    #: is a CO₂ proxy for the tailpipe (NOx/PM) turnover an LEZ actually targets,
+    #: so the CO₂ cut is deliberately modest, not dramatic (Estimated).
+    lez_clean_factor_ratio: float = 0.40
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -78,6 +95,11 @@ class PolicyLevers:
     transit_fare_multiplier: float = 1.0
     #: Multiplier applied to transit effective speed (>= 1 means faster).
     transit_speed_multiplier: float = 1.0
+    #: Multiplier applied to World B's car CO₂-per-km factor (<= 1 means a cleaner
+    #: fleet). Only a low-emission zone moves this off 1.0 — every other policy
+    #: cuts emissions purely by cutting vehicle-km, so World A and World B share
+    #: the same emissions factor and existing numbers are unchanged.
+    co2_factor_multiplier: float = 1.0
     #: Exemption flags we could map to agent attributes.
     exempt_residents: bool = False
     exempt_low_income: bool = False
@@ -169,6 +191,65 @@ def derive_levers(
                     "the strongest lever on central traffic and emissions."
                 ),
                 source="intervention.type == pedestrianisation",
+            )
+        )
+
+    # --- 2b. Low-emission zone (compliance-based charge + fleet cleanup) ----
+    # An LEZ is NOT a flat cordon charge. Only the non-compliant share of the
+    # fleet pays, so the mode-shift pressure is a fraction of an equivalent
+    # congestion charge; and the zone's primary lever is fleet turnover toward
+    # cleaner vehicles, which lowers the CO₂-per-km factor in World B only.
+    if itype == InterventionType.low_emission_zone and amount and amount > 0:
+        share = max(0.0, min(1.0, sim.lez_noncompliant_share))
+        # Fleet-expected charge: amortise the daily amount over trips, then scale
+        # by the non-compliant share (compliant vehicles pay nothing). This
+        # conserves total charge revenue (share of the fleet × full charge) while
+        # applying a proportionately smaller behavioural signal to each commuter.
+        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * share
+        levers.charge_per_one_way = per_one_way
+        levers.rules.append(
+            BehaviouralRule(
+                name="lez_charge",
+                label="Low-emission-zone charge on non-compliant cars",
+                parameter="Fleet-expected currency added to car generalized cost per one-way CBD-bound trip",
+                value=round(per_one_way, 4),
+                unit=policy.intervention.currency,
+                plausible_range=[0.0, amount / max(1, sim.charge_trips_per_day)],
+                sensitivity=(
+                    f"Only the ~{share:.0%} non-compliant share of the fleet pays, so "
+                    "the mode-shift is a fraction of an equivalent flat congestion "
+                    "charge; compliant drivers keep driving (cleaner vehicles)."
+                ),
+                source=(
+                    f"intervention.amount ({amount} {policy.intervention.currency}) "
+                    f"amortised over {sim.charge_trips_per_day} daily trips × "
+                    f"{share:.2f} non-compliant share"
+                ),
+            )
+        )
+        # Fleet cleanup: the compliant share keeps the baseline factor; the
+        # non-compliant share is replaced by cleaner vehicles emitting
+        # ``lez_clean_factor_ratio`` of it → a blended World-B CO₂-per-km factor.
+        clean = max(0.0, min(1.0, sim.lez_clean_factor_ratio))
+        levers.co2_factor_multiplier = (1.0 - share) + share * clean
+        levers.rules.append(
+            BehaviouralRule(
+                name="lez_fleet_cleanup",
+                label="Cleaner vehicle fleet inside the low-emission zone",
+                parameter="Multiplier on the car CO₂-per-km factor in World B",
+                value=round(levers.co2_factor_multiplier, 4),
+                unit="× baseline factor",
+                plausible_range=[clean, 1.0],
+                sensitivity=(
+                    "The dominant LEZ lever: non-compliant vehicles are replaced by "
+                    "cleaner ones, cutting emissions intensity even for drivers who "
+                    "keep driving. Modelled as a CO₂ proxy for the tailpipe (NOx/PM) "
+                    "turnover an LEZ targets, so the CO₂ cut is modest, not dramatic."
+                ),
+                source=(
+                    f"(1 − {share:.2f} non-compliant) + {share:.2f} × "
+                    f"{clean:.2f} clean-vehicle factor ratio"
+                ),
             )
         )
 

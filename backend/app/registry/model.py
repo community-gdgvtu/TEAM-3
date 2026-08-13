@@ -98,6 +98,10 @@ def _sim_assumptions() -> list[AssumptionRecord]:
              "relative", "Transit fare reduction cap when 100% revenue → transit", est),
         _rec("reinvest_max_speed_gain", "Max speed uplift at full reinvestment", s.reinvest_max_speed_gain,
              "relative", "Transit effective-speed uplift cap when 100% revenue → transit", est),
+        _rec("lez_noncompliant_share", "LEZ non-compliant fleet share", s.lez_noncompliant_share,
+             "share", "Fraction of the CBD-bound car fleet that pays the low-emission-zone charge", est),
+        _rec("lez_clean_factor_ratio", "LEZ clean-vehicle CO₂ ratio", s.lez_clean_factor_ratio,
+             "× baseline factor", "CO₂/km of a compliant replacement vehicle vs the baseline fleet factor", est),
     ]
 
 

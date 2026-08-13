@@ -183,11 +183,16 @@ def compute_world_b(
         mean_car_commute_min=mean_car_min,
     )
 
-    daily_co2_tonnes = daily_vehicle_km * params.car_co2_kg_per_km / 1000.0
+    # World B may run a cleaner fleet than World A (a low-emission zone replaces
+    # non-compliant vehicles). For every other policy ``co2_factor_multiplier``
+    # is 1.0, so the effective factor equals the baseline and existing numbers
+    # are unchanged; only an LEZ lowers it. World A is never touched.
+    effective_co2_kg_per_km = params.car_co2_kg_per_km * levers.co2_factor_multiplier
+    daily_co2_tonnes = daily_vehicle_km * effective_co2_kg_per_km / 1000.0
     emissions = EmissionsMetrics(
         daily_co2_tonnes=_round(daily_co2_tonnes, 3),
         annual_co2_tonnes=_round(daily_co2_tonnes * params.workdays_per_year, 1),
-        co2_kg_per_km=params.car_co2_kg_per_km,
+        co2_kg_per_km=_round(effective_co2_kg_per_km, 4),
     )
 
     transit = TransitMetrics(
@@ -249,8 +254,8 @@ def compute_world_b(
             value=emissions.daily_co2_tonnes,
             unit="tCO₂/day",
             tag=MetricTag.simulated,
-            method="Policy vehicle-km × car_co2_kg_per_km (emissions proxy).",
-            assumptions=["car_co2_kg_per_km"],
+            method="Policy vehicle-km × effective car CO₂/km (baseline factor × any LEZ fleet-cleanup multiplier; emissions proxy).",
+            assumptions=["car_co2_kg_per_km", "lez_clean_factor_ratio"],
         ),
         Metric(
             key="transit.daily_transit_trips",
