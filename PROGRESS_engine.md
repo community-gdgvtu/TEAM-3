@@ -14,3 +14,9 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   Added `simulation/shocks.py` — optional fuel-price / transit-fare / background-demand shocks applied
   to BOTH worlds so the delta still isolates the policy; `seed` accepted & echoed (model is
   deterministic). Δ band = the two worlds' bands combined in quadrature. 6 endpoint tests; 63 green.
+- 2026-08-13 — M3 event ledger (SPEC §10): `backend/app/simulation/events.py` derives structured
+  events deterministically from Δ(B−A): mode_shift, cordon_load, transit_capacity (vs baseline
+  peak capacity × headroom), emissions milestone, and the mid-run revenue-funded transit_reinvestment
+  ramp (isolated by comparing boardings vs the short-run plateau, so it fires ~12mo not day-one).
+  Each event carries cause/affected_agents/confidence(decays with horizon)/downstream/evidence,
+  tagged Simulated. Exposed as `event_ledger` on `POST /simulate`. 7 new tests; 70 green. **M3 complete.**

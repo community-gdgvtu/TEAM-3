@@ -183,3 +183,62 @@ class DeltaTimeSeries(BaseModel):
     )
     checkpoints: list[Checkpoint] = Field(default_factory=list)
     series: list[DeltaSeries] = Field(default_factory=list)
+
+
+class LedgerEvent(BaseModel):
+    """One structured simulation event (SPEC §10).
+
+    Events are the *shared truth* other engines (parliament, opinion model, press
+    simulation, red team) read — narratives may cite them but must never invent
+    quantitative events absent from the ledger. Every field here is derived
+    deterministically from the World-A/World-B model output, so the ledger is
+    tagged Simulated (SPEC §34).
+    """
+
+    id: str = Field(description="Stable event id, e.g. 'ev_transit_capacity'.")
+    type: str = Field(description="Event family, e.g. 'transit_capacity'.")
+    scenario_month: float = Field(description="Months after implementation it fires.")
+    scenario_year: float = Field(description="Same horizon in years.")
+    timestamp: str | None = Field(
+        default=None,
+        description="Calendar date (implementation_date + scenario_month), if known.",
+    )
+    description: str = Field(description="One-line human-readable summary.")
+    cause: list[str] = Field(
+        default_factory=list, description="Upstream drivers (policy levers / prior events)."
+    )
+    affected_agents: int = Field(
+        0, description="Commuters/trips materially affected (modelled count)."
+    )
+    confidence: float = Field(
+        ge=0.0, le=1.0, description="Confidence it occurs — falls with the horizon."
+    )
+    downstream: list[str] = Field(
+        default_factory=list, description="Effects this event propagates into."
+    )
+    severity: str = Field(
+        default="info", description="'info' | 'notable' | 'critical' (magnitude tier)."
+    )
+    evidence: dict = Field(
+        default_factory=dict,
+        description="Metric keys + values that triggered the event (Evidence Drawer).",
+    )
+    provenance: MetricTag = Field(MetricTag.simulated)
+
+
+class EventLedger(BaseModel):
+    """Ordered ledger of simulation events for a policy run (SPEC §10)."""
+
+    provenance: MetricTag = Field(MetricTag.simulated)
+    note: str = Field(
+        default=(
+            "Deterministic event ledger derived from the World-A/World-B model. "
+            "The shared truth other engines read; narratives may cite these events "
+            "but must not invent quantitative events absent here (SPEC §10/§34)."
+        )
+    )
+    policy_id: str
+    events: list[LedgerEvent] = Field(default_factory=list)
+    thresholds: dict = Field(
+        default_factory=dict, description="Detection thresholds used (auditable)."
+    )

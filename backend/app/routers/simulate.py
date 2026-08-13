@@ -25,8 +25,14 @@ from ..baseline.schema import BaselineMetrics, BaselineTimeSeries, MetricTag
 from ..baseline.timeseries import build_timeseries
 from ..policy.dsl import PolicyDSL
 from ..simulation.compare import build_delta
+from ..simulation.events import build_event_ledger
 from ..simulation.model import compute_world_b
-from ..simulation.schema import DeltaTimeSeries, WorldBMetrics, WorldBTimeSeries
+from ..simulation.schema import (
+    DeltaTimeSeries,
+    EventLedger,
+    WorldBMetrics,
+    WorldBTimeSeries,
+)
 from ..simulation.shocks import Shocks, apply_shocks
 from ..simulation.timeline import build_world_b_timeline
 
@@ -72,6 +78,9 @@ class SimulateResponse(BaseModel):
     world_a: WorldAResult
     world_b: WorldBResult
     delta: DeltaTimeSeries
+    event_ledger: EventLedger = Field(
+        description="Structured events derived from the run — the shared truth (SPEC §10)."
+    )
     shocks_applied: dict = Field(
         default_factory=dict, description="Echo of the shocks used (auditable)."
     )
@@ -104,12 +113,14 @@ def simulate(req: SimulateRequest) -> SimulateResponse:
     )
 
     delta = build_delta(base_ts, b_ts)
+    ledger = build_event_ledger(req.policy, base, delta)
 
     return SimulateResponse(
         policy_id=req.policy.id,
         world_a=WorldAResult(snapshot=base, timeseries=base_ts),
         world_b=WorldBResult(snapshot=b_full, timeseries=b_ts),
         delta=delta,
+        event_ledger=ledger,
         shocks_applied=(req.shocks.model_dump() if req.shocks else {}),
         seed=req.seed,
     )

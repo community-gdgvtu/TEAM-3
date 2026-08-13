@@ -7,11 +7,14 @@ baseline. No LLM touches the numeric path (SPEC §34).
 """
 
 from .compare import build_delta
+from .events import DEFAULT_THRESHOLDS, EventThresholds, build_event_ledger
 from .levers import DEFAULT_SIM_PARAMS, PolicyLevers, SimParams, derive_levers
 from .model import choose_mode_policy, compute_world_b
 from .schema import (
     BehaviouralRule,
     DeltaTimeSeries,
+    EventLedger,
+    LedgerEvent,
     WorldBMetrics,
     WorldBTimeSeries,
 )
@@ -39,4 +42,9 @@ __all__ = [
     "DeltaTimeSeries",
     "Shocks",
     "apply_shocks",
+    "build_event_ledger",
+    "EventLedger",
+    "LedgerEvent",
+    "EventThresholds",
+    "DEFAULT_THRESHOLDS",
 ]
