@@ -1082,3 +1082,12 @@ Frontend-only.
   published tailpipe factor. 28 tests total, all green. `npx tsc --noEmit`,
   `npx next lint` (clean), `npx next build` (/ = 71 kB, First Load 159 kB), and
   `npm test` (28 pass) all clean. No runtime code changed.
+
+- 2026-08-13 — M40: guarded `applyAmendment` (lib/api.ts), the pure DSL transform
+  behind the "apply amendment + re-simulate" loop (§29) and the Robustness candidate
+  slate (M38). Added `frontend/tests/amendment.test.mts` (8 tests, +0 deps): input
+  immutability, labelled-id slug, set_charge_amount replace, charge_multiplier 4-dp
+  rounding, set-then-multiply compose order, case-insensitive exemption de-dup (fresh
+  add + re-apply), revenue split summing to exactly 1, and bare-policy tolerance.
+  36 tests total, all green. `npx tsc --noEmit` + `npx next lint` clean; no runtime
+  code changed.
