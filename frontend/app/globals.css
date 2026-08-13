@@ -175,6 +175,63 @@ code {
   color: var(--bad);
 }
 
+/* --- Example-policy gallery (PolicyCompiler) --------------------------- */
+
+.example-gallery {
+  margin-top: 1rem;
+}
+
+.example-gallery-hint {
+  margin: 0 0 0.5rem;
+}
+
+.example-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.example-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.example-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.example-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.example-btn.active {
+  border-color: var(--accent);
+  background: rgba(79, 140, 255, 0.12);
+}
+
+.example-btn-label {
+  font-weight: 600;
+}
+
+.example-btn.active .example-btn-mech {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.example-watch {
+  margin: 0.6rem 0 0;
+  font-style: italic;
+}
+
 /* --- App error boundary (app/error.tsx) -------------------------------- */
 
 .error-boundary {

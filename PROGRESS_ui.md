@@ -1104,3 +1104,21 @@ Frontend-only.
   raw-JSON view, with no hardcoded intervention-type list to update. Full green:
   `npx tsc --noEmit` (0), `npm test` (36 pass), `npx next lint` (clean),
   `npx next build` (/ = 71 kB, First Load 159 kB). No runtime code changed.
+
+## 2026-08-13 — UI-track: M41 — example-policy gallery (one click per mechanism, SPEC §3/§7.5/§34)
+The engine track had made three pricing families numerically distinct (cordon
+charge vs. low-emission zone vs. workplace parking levy) plus pedestrianisation
+and a transit-reinvested charge, but `PolicyCompiler` still shipped a single
+hardcoded congestion-charge "Load demo policy" button — a judge had no way to
+discover or one-click compare the mechanisms the engine works to tell apart.
+Replaced it with an example-policy gallery: `EXAMPLE_POLICIES` (five curated
+plain-language prompts, one per mechanism family; the §29 demo stays the default)
+rendered as toggle chips, each with a mechanism tag + a "what to watch" note that
+frames the *lever and the comparison to make*, never a predicted number (SPEC
+§34). Clicking a chip loads its text and resets any compiled result to `idle` so
+a prior policy's numbers can't linger under different text; a manual textarea edit
+clears the active-chip highlight. Prompts grounded in the engine's documented
+§7.5 mechanisms (verified against `ROADMAP_ENGINE.md`), so each compiles to a
+real, distinct DSL — the UI mints nothing. Added `.example-gallery`/`.example-btn`
+styles to `globals.css`. Full green: `npx tsc --noEmit` (0), `npm test` (36 pass),
+`npx next lint` (clean), `npx next build` (/ = 72 kB, First Load 160 kB).

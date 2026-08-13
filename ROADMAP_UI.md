@@ -362,3 +362,20 @@ policy, a duplicated exemption, a mis-rounded charge, or a revenue split that no
 longer sums to 1 all mean the app hands the engine a policy that isn't the one the
 label claims — and every downstream number is silently for the wrong world.
 - [x] Add `frontend/tests/amendment.test.mts` (auto-picked by the `tests/*.test.mts` glob, zero new deps) pinning `applyAmendment`: immutability of the input policy (re-simulate must be side-effect-free), the labelled-id slug (`<id>__<label with spaces→_>`), `set_charge_amount` outright replace, `charge_multiplier` scaling the existing charge with the 4-dp rounding that keeps a clean figure on screen, the compose order (set-amount **then** multiplier hits the new amount), exemptions appending without a case-insensitive duplicate (both the fresh add and the re-apply-to-an-already-exempt-policy path), the revenue split being rewritten to sum to exactly 1, and tolerance of a bare policy with no intervention/exemptions block. 8 new tests (36 total), all green; no runtime code changed; `tsc --noEmit` + `next lint` clean (SPEC §29/§34)
+
+## M41 — Example-policy gallery: one click per distinct mechanism (SPEC §3/§7.5/§34)
+M40 declared the roadmap complete again, but the engine track had meanwhile made
+three of the app's pricing families **numerically distinct** — the cordon
+congestion charge, the low-emission zone (charges only non-compliant vehicles;
+dominant lever is fleet turnover, not mode shift) and the workplace parking levy
+(levied on employers per space, only partly passed through to the commuter) — so
+the twin now gives an honestly *different* answer for each, plus pedestrianisation
+(a non-pricing access restriction) and a charge-and-reinvest transit variant. The
+compiler UI, though, shipped a single hardcoded congestion-charge "Load demo
+policy" button, so a judge had no way to discover — let alone one-click compare —
+the mechanisms the engine works hard to tell apart. This item is pure
+discoverability: worked plain-language prompts, one per mechanism. It mints **no
+numbers** — clicking a chip only fills the draft box; the backend still compiles
+and simulates, and each chip's note frames the *mechanism and the comparison to
+make*, never a predicted figure (SPEC §34).
+- [x] Replace the lone "Load demo policy" button with an example-policy gallery in `PolicyCompiler`: five curated prompts (`EXAMPLE_POLICIES`), one per mechanism family — cordon congestion charge (the §29 demo, still the default), low-emission zone, workplace parking levy, pedestrianisation, and a 100%-transit-reinvested charge — each rendered as a toggle chip carrying a mechanism tag + a `title`/inline "what to watch" note that describes the lever and the comparison, not an outcome. Clicking one loads its text and **resets any compiled result to `idle`** so a prior policy's numbers can never linger under a different policy's text; a manual textarea edit clears the active-example highlight so no chip claims to match hand-edited text. Prompts are grounded in the engine's documented §7.5 mechanisms (verified in `ROADMAP_ENGINE.md`), so each compiles to a real, distinct DSL — the UI invents nothing. Added `.example-gallery`/`.example-chips`/`.example-btn` styles to `globals.css`. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean (SPEC §3/§7.5/§34)
