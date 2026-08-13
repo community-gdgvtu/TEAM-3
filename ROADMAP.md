@@ -14,7 +14,7 @@ Demo policy: *Pedestrianise / price vehicles entering a central district and rei
 - [x] Dev runner script + basic README run instructions verified
 
 ## M1 — Policy compiler (NL → Policy DSL)
-- [ ] `POST /policy/compile`: NL policy text → structured Policy DSL (SPEC §3) via LLM, with fallback rule-based parser
+- [x] `POST /policy/compile`: NL policy text → structured Policy DSL (SPEC §3) via LLM, with fallback rule-based parser
 - [ ] Frontend policy input box + editable extracted-assumptions panel
 
 ## M2 — Baseline digital twin + synthetic population

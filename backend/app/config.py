@@ -28,6 +28,12 @@ class Settings(BaseSettings):
     # LLM key is optional at boot. Code paths that need it must degrade to a
     # rule-based fallback when it is absent (see AGENT_LOOP.md). Never hardcode.
     llm_api_key: str = ""
+    # Which provider/model to use when a key is present. The compiler only uses
+    # the LLM for language structuring, never numeric effects (SPEC §34).
+    llm_provider: str = "anthropic"
+    llm_model: str = "claude-3-5-haiku-latest"
+    llm_base_url: str = "https://api.anthropic.com"
+    llm_timeout_s: float = 20.0
 
     @property
     def cors_origin_list(self) -> list[str]:
