@@ -3535,3 +3535,83 @@ export async function runBusiness(
   }
   return (await res.json()) as BusinessView;
 }
+
+// --------------------------------------------------------------------------- #
+// Minister's Brief export (SPEC §27/§28.11/§37) — POST /brief
+// --------------------------------------------------------------------------- #
+//
+// The brief is a *rendering* of the North-Star answer, not a model. It reuses the
+// exact §37 request, then lays the composed answer out as a single, self-contained
+// Markdown memo a minister could read or print — the one-page document behind the
+// dashboard. It computes NO new number: every figure is the same object the
+// standalone endpoints return, so the brief can never disagree with the tabs
+// behind it (SPEC §34). Provenance tags travel with the text, generated media
+// stays labelled SIMULATED, and a reproducibility footer closes the memo (§32).
+
+/** One row of the provenance key printed at the top of the memo (SPEC §34). */
+export interface TagLegendEntry {
+  tag: string;
+  meaning: string;
+}
+
+/**
+ * Input to `POST /brief`: the same contract as `POST /north-star` plus two
+ * presentation-only switches. Supply *either* `policy` (compiled) or `text`.
+ */
+export interface BriefRequest extends NorthStarRequest {
+  /** Embed the full structured NorthStarAnswer alongside the Markdown. */
+  include_answer?: boolean;
+  /** Include the SIMULATED media-narratives section in the memo. */
+  include_media?: boolean;
+}
+
+/** A rendered Minister's Brief: the Markdown memo + its structured backing. */
+export interface BriefResponse {
+  note: string;
+  policy_id: string;
+  title: string;
+  question: string;
+  horizon_months: number;
+  horizon_label: string;
+  /** The endpoint whose output this document renders (always `/north-star`). */
+  generated_from: string;
+  /** Provenance key printed at the top of the memo. */
+  tag_legend: TagLegendEntry[];
+  /** Length of the rendered Markdown, in words. */
+  word_count: number;
+  /** The self-contained Markdown memo. */
+  markdown: string;
+  /** Full structured North-Star answer (present when include_answer=true). */
+  answer: NorthStarAnswer | null;
+}
+
+/**
+ * Render the Minister's Brief for a single policy (`POST /brief`). Introduces no
+ * new numeric model — the memo is a layout over the §37 North-Star answer, whose
+ * every section reuses an existing deterministic layer. Throws on network/HTTP
+ * error so the panel can show an honest waiting/error state instead of inventing
+ * a memo (SPEC §37/§34).
+ */
+export async function runBrief(
+  req: BriefRequest,
+  signal?: AbortSignal,
+): Promise<BriefResponse> {
+  const res = await fetch(`${API_BASE_URL}/brief`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as BriefResponse;
+}

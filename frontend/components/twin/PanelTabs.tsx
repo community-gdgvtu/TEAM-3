@@ -30,6 +30,7 @@ import {
 
 import { subscribeDemoTab } from "../../lib/demo";
 import NorthStarPanel from "./NorthStarPanel";
+import BriefPanel from "./BriefPanel";
 import RunPanel from "./RunPanel";
 import WorldPanel from "./WorldPanel";
 import CitizenPanel from "./CitizenPanel";
@@ -64,6 +65,7 @@ import { useTwin } from "./TwinStore";
 
 type TabKey =
   | "northstar"
+  | "brief"
   | "run"
   | "world"
   | "citizen"
@@ -97,6 +99,7 @@ type TabKey =
 
 const TABS: Array<{ key: TabKey; label: string; Panel: ComponentType }> = [
   { key: "northstar", label: "North-Star", Panel: NorthStarPanel },
+  { key: "brief", label: "Brief", Panel: BriefPanel },
   { key: "run", label: "Run", Panel: RunPanel },
   { key: "world", label: "World", Panel: WorldPanel },
   { key: "citizen", label: "Citizen", Panel: CitizenPanel },

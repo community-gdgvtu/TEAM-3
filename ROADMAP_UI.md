@@ -305,3 +305,18 @@ highest-value, easiest-to-pin units in the codebase and had no guard at all.
 Added with **zero new dependencies**: Node 22's built-in `node:test` +
 `--experimental-strip-types` runs the TypeScript tests directly.
 - [x] Add a `frontend/tests/` suite (`.test.mts`, run via `npm test` → `node --test --experimental-strip-types tests/*.test.mts`) covering `lib/format.ts` (every `formatNumber` magnitude bucket incl. sign-preservation on negatives; `formatSignedPct` sign rules — asserting the negative case uses a real U+2212 minus, not an ASCII hyphen — and the unsigned zero) and `lib/dsl.ts` (`getByPath` nested/missing/non-object-mid-path; `setByPath` leaf update **and its immutability guarantee** — original untouched, branch cloned, untouched branches independent — plus intermediate-object creation and non-object-intermediate replacement; `fieldKind` type→control mapping). 14 tests, all green; no dependency added, no runtime code changed; `tsc --noEmit` + `next build` + `next lint` still clean (SPEC §34)
+
+## M37 — Surface the Minister's Brief export (SPEC §27/§37)
+The engine shipped `POST /brief` (+ `GET /brief/example`) after M36 declared the
+roadmap complete — the one endpoint the UI hadn't surfaced, the sibling of the
+North-Star answer. Where North-Star renders the fixed §37 narrative as an
+interactive panel, the Brief renders the *same* answer as a single, printable
+Markdown memo — the one-page document a minister could read or print. It
+introduces **no new numeric model**: the memo is a pure layout over
+`/north-star`, which itself reuses every deterministic layer verbatim, so the
+brief can never disagree with the tabs behind it (SPEC §34). Same rules:
+provenance tags travel with the text, generated media stays labelled SIMULATED,
+the Markdown is shown exactly as the backend produced it (no client-side
+reformatting that could silently change a number or drop a tag), and nothing is
+minted when the backend is down.
+- [x] Brief tab: `POST /brief` → the North-Star answer as a self-contained Markdown memo. Input mirrors North-Star (compiled policy from the store, or a natural-language fallback that compiles first; horizon selector snapped to the Time-Machine checkpoints) plus an "include SIMULATED media section" toggle wired to the endpoint's `include_media`. On success: the provenance banner (Simulated numbers / Estimated transfers / Generated prose / no LLM in the numeric path) + the endpoint's own honesty `note`, a memo-meta card (title, echoed minister's question, horizon label, `policy_id`, `rendered from /north-star`, word count), the backend-supplied provenance key rendered as tagged legend rows, an export toolbar (Copy Markdown via the Clipboard API with a graceful disabled state when unavailable, Download `.md` via a Blob object-URL named `ministers-brief-<policy_id>.md`), and the memo itself in a scrollable monospace block shown **verbatim** so no figure or provenance tag can be altered client-side. Added `BriefRequest`/`BriefResponse`/`TagLegendEntry` types + `runBrief()` to `lib/api.ts`; registered the tab right after North-Star (its sibling composed-answer surface). `idle` (no policy) / `loading` / `error` states + a retry that never mints a fabricated memo when the backend is down; re-synced `frontend/README.md` (31→32 surfaces, new endpoint→SPEC row). `tsc --noEmit` + `next build` + `next lint` clean (SPEC §27/§37/§34)

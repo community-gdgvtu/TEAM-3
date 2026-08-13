@@ -1,8 +1,9 @@
 # URBAN frontend
 
 Next.js (App Router) + TypeScript UI for the URBAN policy digital twin — a 3D city,
-a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 31 analysis
-surfaces: the flagship North-Star answer (§37) and one-call Run pipeline (§29), the
+a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 32 analysis
+surfaces: the flagship North-Star answer (§37) and the Minister's Brief export that
+renders it as a printable memo (§27/§37), the one-call Run pipeline (§29), the
 browsable baseline World Model (§5), the Citizen and Business single-agent
 drill-downs (§17/§31), Parliament, Public reaction, Press, Press
 conference, Red Team, Counterfactual + Grand A/B/C/D compare, SDG, Diffusion, Ensemble,
@@ -80,6 +81,7 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Outcomes dashboard tiles | (from `/simulate` + `/baseline`) | §27 |
 | Evidence drawer | `POST /evidence` | §26 |
 | North-Star answer (the minister's question) | `POST /north-star` | §37 |
+| Minister's Brief (North-Star as a printable Markdown memo) | `POST /brief` | §27/§37 |
 | Run — whole pipeline in one call | `POST /run` | §28/§29 |
 | Baseline World Model | `GET /world` | §5/§28.2 |
 | Citizen View (click a household) | `POST /citizen`, `GET /citizen/sample` | §17/§31 |

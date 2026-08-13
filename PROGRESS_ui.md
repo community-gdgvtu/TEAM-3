@@ -1022,3 +1022,24 @@ Frontend-only.
   intermediate-object creation, non-object-intermediate replacement, and `fieldKind`'s
   type→control mapping. 14 tests, all green; no runtime code changed. `npx tsc --noEmit`,
   `npx next build` (/ = 67.3 kB, First Load 155 kB), and `npx next lint` all still clean.
+
+- 2026-08-13 — M37: Minister's Brief export tab (`POST /brief`, SPEC §27/§37).
+  The engine shipped `POST /brief` (+ `GET /brief/example`) after M36 — the one
+  endpoint the UI hadn't surfaced, sibling of the North-Star answer. Added a
+  `Brief` tab (right after North-Star) that renders the §37 answer as a
+  self-contained Markdown memo. Input mirrors North-Star (compiled policy from the
+  store, or a natural-language fallback that compiles first; horizon selector) plus
+  an "include SIMULATED media section" toggle wired to `include_media`. On success:
+  provenance banner + the endpoint's honesty `note`, a memo-meta card (title,
+  echoed question, horizon, `policy_id`, `rendered from /north-star`, word count),
+  the backend-supplied provenance key as tagged legend rows, an export toolbar
+  (Copy Markdown via the Clipboard API with a graceful disabled state, Download
+  `.md` via a Blob object-URL `ministers-brief-<policy_id>.md`), and the memo in a
+  scrollable monospace block shown **verbatim** so no figure or provenance tag can
+  be altered client-side. No new numeric model — the memo is a pure layout over
+  `/north-star`, which reuses each deterministic layer verbatim, so it can never
+  disagree with the tabs behind it (§34). Added `BriefRequest`/`BriefResponse`/
+  `TagLegendEntry` + `runBrief()` to `lib/api.ts`; `idle`/`loading`/`error` states
+  + retry that never mints a fabricated memo when the backend is down. Re-synced
+  `frontend/README.md` (31→32 surfaces, new endpoint→SPEC row). `npx tsc --noEmit`,
+  `npx next build` (/ = 68.7 kB, First Load 156 kB), and `npx next lint` all clean.

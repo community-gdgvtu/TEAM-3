@@ -10039,3 +10039,110 @@ td.neutral {
   line-height: 1.45;
   background: color-mix(in srgb, var(--panel) 70%, var(--bg));
 }
+
+/* --------------------------------------------------------------------------- */
+/* Minister's Brief export (SPEC §27/§37)                                       */
+/* --------------------------------------------------------------------------- */
+.brief-intro {
+  margin-top: 0.2rem;
+}
+
+.brief-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.brief-meta {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  background: var(--bg);
+  margin: 0.4rem 0 0.2rem;
+}
+
+.brief-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.brief-question {
+  margin: 0.15rem 0 0.4rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.brief-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.brief-legend {
+  margin: 0.6rem 0 0.2rem;
+}
+
+.brief-legend-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.brief-legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.brief-legend-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.83rem;
+}
+
+.brief-legend-meaning {
+  color: var(--muted);
+}
+
+.brief-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.6rem 0 0.2rem;
+}
+
+.brief-toolbar-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  flex: 1 1 14rem;
+}
+
+.brief-memo {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+  background: color-mix(in srgb, var(--panel) 70%, var(--bg));
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  max-height: 32rem;
+  overflow-y: auto;
+  margin: 0.3rem 0 0;
+}
