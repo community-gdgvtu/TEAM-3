@@ -191,3 +191,234 @@ export async function getBaseline(
   }
   return (await res.json()) as BaselineResponse;
 }
+
+// ---------------------------------------------------------------------------
+// Simulation (World B) — POST /simulate (SPEC §5/§7.7/§21)
+// ---------------------------------------------------------------------------
+
+/** One metric's Δ(B−A) point at a checkpoint, with a combined band. */
+export interface DeltaPoint {
+  t_months: number;
+  world_a: number;
+  world_b: number;
+  delta: number;
+  delta_pct: number | null;
+  low: number;
+  high: number;
+}
+
+export interface DeltaSeries {
+  key: string;
+  label: string;
+  unit: string;
+  tag: MetricTag;
+  method: string;
+  points: DeltaPoint[];
+}
+
+export interface DeltaTimeSeries {
+  provenance: MetricTag;
+  note: string;
+  checkpoints: Checkpoint[];
+  series: DeltaSeries[];
+}
+
+export interface LedgerEvent {
+  id: string;
+  type: string;
+  scenario_month: number;
+  scenario_year: number;
+  timestamp: string | null;
+  description: string;
+  cause: string[];
+  affected_agents: number;
+  confidence: number;
+  downstream: string[];
+  severity: string;
+  evidence: Record<string, unknown>;
+  provenance: MetricTag;
+}
+
+export interface EventLedger {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  events: LedgerEvent[];
+  thresholds: Record<string, unknown>;
+}
+
+export interface SimulateResponse {
+  provenance: MetricTag;
+  policy_id: string;
+  note: string;
+  world_a: { snapshot: BaselineSnapshot; timeseries: BaselineTimeSeries };
+  world_b: { snapshot: Record<string, unknown>; timeseries: BaselineTimeSeries };
+  delta: DeltaTimeSeries;
+  event_ledger: EventLedger;
+  shocks_applied: Record<string, unknown>;
+  seed: number | null;
+}
+
+/** Run the deterministic policy simulation for a compiled DSL. Throws on error. */
+export async function simulate(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<SimulateResponse> {
+  const res = await fetch(`${API_BASE_URL}/simulate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as SimulateResponse;
+}
+
+// ---------------------------------------------------------------------------
+// Model Parliament — POST /parliament/debate + /parliament/failure-modes
+// ---------------------------------------------------------------------------
+
+export type Stance = "support" | "oppose" | "conditional" | "challenge";
+
+export interface EvidenceCitation {
+  kind: string;
+  ref: string;
+  detail: string;
+  tag: MetricTag;
+}
+
+export interface Argument {
+  persona: string;
+  role: string;
+  stance: Stance;
+  headline: string;
+  points: string[];
+  speech: string;
+  citations: EvidenceCitation[];
+  confidence: number;
+}
+
+export interface DebateResponse {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  motion: string;
+  method: string;
+  arguments: Argument[];
+  tally: Record<string, number>;
+  summary: string;
+}
+
+/** Convene the Model Parliament to debate a compiled policy. Throws on error. */
+export async function runDebate(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<DebateResponse> {
+  const res = await fetch(`${API_BASE_URL}/parliament/debate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as DebateResponse;
+}
+
+export type Severity = "low" | "medium" | "high" | "critical";
+
+export interface FailureMode {
+  id: string;
+  risk: string;
+  mechanism: string;
+  severity: Severity;
+  probability: number;
+  risk_score: number;
+  evidence: EvidenceCitation[];
+  mitigation: string;
+  affected_agents: number;
+}
+
+export interface FailureModeRegister {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  failure_modes: FailureMode[];
+}
+
+/** Devil's Advocate → ranked Failure Mode Register for a policy. Throws on error. */
+export async function runFailureModes(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<FailureModeRegister> {
+  const res = await fetch(`${API_BASE_URL}/parliament/failure-modes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as FailureModeRegister;
+}
+
+// ---------------------------------------------------------------------------
+// Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
+// ---------------------------------------------------------------------------
+
+export interface Amendment {
+  label: string;
+  exempt_low_income?: boolean;
+  exempt_residents?: boolean;
+  set_charge_amount?: number | null;
+  charge_multiplier?: number | null;
+  set_public_transport_share?: number | null;
+}
+
+/**
+ * Apply an amendment to a compiled DSL client-side, mirroring the backend's
+ * `apply_amendment` (backend/app/simulation/amendment.py). The amended DSL is
+ * then re-run through `POST /simulate` — the killer interaction (SPEC §29): the
+ * change is a transparent structured edit, all numbers still come from the model.
+ */
+export function applyAmendment(policy: PolicyDSL, a: Amendment): PolicyDSL {
+  const amended = JSON.parse(JSON.stringify(policy)) as Record<string, unknown>;
+  const id = String((policy as Record<string, unknown>).id ?? "policy");
+  amended.id = `${id}__${a.label.replace(/ /g, "_")}`;
+
+  const exemptions = Array.isArray(amended.exemptions)
+    ? [...(amended.exemptions as string[])]
+    : [];
+  if (a.exempt_low_income && !exemptions.some((e) => e.toLowerCase().includes("income"))) {
+    exemptions.push("low-income");
+  }
+  if (a.exempt_residents && !exemptions.some((e) => e.toLowerCase().includes("resident"))) {
+    exemptions.push("residents");
+  }
+  amended.exemptions = exemptions;
+
+  const intervention = (amended.intervention as Record<string, unknown>) ?? {};
+  if (a.set_charge_amount != null) {
+    intervention.amount = a.set_charge_amount;
+  }
+  if (a.charge_multiplier != null && typeof intervention.amount === "number") {
+    intervention.amount = Math.round(intervention.amount * a.charge_multiplier * 1e4) / 1e4;
+  }
+  amended.intervention = intervention;
+
+  if (a.set_public_transport_share != null) {
+    const pt = a.set_public_transport_share;
+    amended.revenue_allocation = {
+      public_transport: pt,
+      general_fund: Math.round((1 - pt) * 1e4) / 1e4,
+    };
+  }
+  return amended as PolicyDSL;
+}

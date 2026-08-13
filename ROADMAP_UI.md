@@ -19,7 +19,7 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 - [x] Dashboard tiles: Traffic, CO₂, Transit, Equity burden, Support — each showing value + Δ vs baseline + a visible uncertainty band; tag each with its provenance class
 
 ## M5 — Parliament view + amendment loop (SPEC §11/§27)
-- [ ] Parliament screen: list the agents (Government/Opposition/Equity/Economist/Devil's Advocate) and render `/parliament/debate` transcript with citations
+- [x] Parliament screen: list the agents (Government/Opposition/Equity/Economist/Devil's Advocate) and render `/parliament/debate` transcript with citations
 - [ ] "Apply amendment + re-simulate" button → calls `/simulate` with amended DSL and updates the map/dashboard (the killer interaction, SPEC §29)
 - [ ] Failure Mode Register panel from the Devil's Advocate output
 

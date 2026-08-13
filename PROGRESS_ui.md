@@ -30,3 +30,12 @@ Dated notes, newest at the bottom. One line per shipped item.
   Support have no baseline series → explicit "awaiting /simulate" placeholders;
   "vs baseline" delta reads "simulate a policy" until World B exists (SPEC §34).
   **M4 complete.** `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M5.1: Model Parliament view. Added a shared TwinStore context (compiled
+  policy + active simulation) so the compiler publishes the DSL and downstream panels
+  consume it. ParliamentPanel convenes `POST /parliament/debate` and renders the motion,
+  stance tally, and each persona's argument (headline, speech, points, confidence bar)
+  with evidence-citation chips (metric/event + provenance) and the synthesis. Prose is
+  labelled Generated, cited figures Simulated (SPEC §34). Typed clients for /simulate,
+  /parliament/debate, /parliament/failure-modes + a client-side applyAmendment mirror
+  of the backend added to lib/api.ts. Backend contracts matched against source; graceful
+  states when it's down. `tsc --noEmit` + `next build` clean.

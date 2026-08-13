@@ -8,6 +8,7 @@ import {
   type PolicyDSL,
 } from "@/lib/api";
 import { fieldKind, getByPath, setByPath } from "@/lib/dsl";
+import { useTwin } from "@/components/twin/TwinStore";
 
 /** Prefilled demo policy matching the ROADMAP demo scenario. */
 const DEMO_POLICY =
@@ -36,6 +37,7 @@ type State =
 export default function PolicyCompiler() {
   const [text, setText] = useState(DEMO_POLICY);
   const [state, setState] = useState<State>({ kind: "idle" });
+  const { setPolicy } = useTwin();
 
   async function onCompile() {
     const trimmed = text.trim();
@@ -47,6 +49,8 @@ export default function PolicyCompiler() {
     try {
       const result = await compilePolicy({ text: trimmed });
       setState({ kind: "ok", result, policy: result.policy });
+      // Publish the compiled DSL so parliament + simulation can consume it.
+      setPolicy(result.policy);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error";
       setState({ kind: "error", message });
@@ -55,11 +59,11 @@ export default function PolicyCompiler() {
 
   /** Apply an edit to a DSL field by dotted path, keeping the DSL in state. */
   function editField(path: string, value: unknown) {
-    setState((prev) =>
-      prev.kind === "ok"
-        ? { ...prev, policy: setByPath(prev.policy, path, value) }
-        : prev,
-    );
+    if (state.kind !== "ok") return;
+    const policy = setByPath(state.policy, path, value);
+    setState({ ...state, policy });
+    // Keep the shared policy in sync so downstream re-runs use the edited DSL.
+    setPolicy(policy);
   }
 
   return (

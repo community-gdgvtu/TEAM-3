@@ -1,6 +1,8 @@
 import HealthStatus from "./HealthStatus";
 import PolicyCompiler from "./PolicyCompiler";
 import TwinWorkspace from "../components/twin/TwinWorkspace";
+import ParliamentPanel from "../components/twin/ParliamentPanel";
+import { TwinProvider } from "../components/twin/TwinStore";
 
 export default function Home() {
   return (
@@ -16,9 +18,13 @@ export default function Home() {
         uncertainty widens honestly.
       </p>
 
-      <PolicyCompiler />
+      <TwinProvider>
+        <PolicyCompiler />
 
-      <TwinWorkspace />
+        <TwinWorkspace />
+
+        <ParliamentPanel />
+      </TwinProvider>
 
       <HealthStatus />
 

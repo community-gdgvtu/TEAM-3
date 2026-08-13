@@ -785,6 +785,188 @@ ul.assumptions {
   color: var(--muted);
 }
 
+/* --- Model Parliament (M5) --------------------------------------------- */
+
+.parliament {
+  margin-top: 1.25rem;
+}
+
+.motion {
+  margin: 1rem 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.motion-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-right: 0.4rem;
+}
+
+.tally {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.stance-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.stance-chip.support {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.stance-chip.oppose {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.stance-chip.conditional {
+  color: #e0b45f;
+  border-color: #d4a24a;
+}
+
+.stance-chip.challenge {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.arguments {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.argument {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 0.95rem;
+}
+
+.argument-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.argument-persona {
+  font-weight: 700;
+}
+
+.argument-role {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.argument-headline {
+  margin: 0.2rem 0 0.5rem;
+  font-weight: 600;
+}
+
+.argument-speech {
+  margin: 0 0 0.6rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.argument-points {
+  margin: 0 0 0.6rem;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.citation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.15rem 0.45rem;
+}
+
+.citation-kind {
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.citation-detail {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.argument-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.conf-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.conf-bar {
+  flex: 1;
+  max-width: 140px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.conf-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.conf-val {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.debate-summary {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.85rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.debate-summary p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 .maplibregl-ctrl-group {
   background: var(--panel) !important;
 }
