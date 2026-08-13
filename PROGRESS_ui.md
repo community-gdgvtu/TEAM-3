@@ -1165,3 +1165,24 @@ Added `.ms-constraint*` styles mirroring the regressivity card. New
 `tests/microsim.test.mts` (5 tests). Card mints no numbers; all values are the
 engine's. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean.
 Follow-up: none.
+
+## 2026-08-13 — M45: gallery chips now apply the charge under the keyless fallback (SPEC §7.5/§29/§34)
+While confirming M44's constraint card was reachable, found a latent demo bug in
+the frontend-owned gallery prompts. With no LLM key (the env default), compilation
+falls back to the rule-based parser, whose `_find_amount` doesn't recognise "12
+credits" (only £/pounds/"charge of N"). Six of eight chips said "…12 credits to
+enter…" → compiled to `amount=None` → zero-charge policy → all-zero microsim and a
+hollow constraint card; the LEZ chip additionally mis-classified as road pricing
+(its "charges…entering" hit the `charge.*enter` rule before the LEZ rule). M41–43
+verified mechanism/coverage but never the amount, so it slipped through. Reworded
+the six charge-bearing prompts to "Introduce a charge of 12 credits on private
+vehicles entering…" (cordon variants) and "…a daily levy of 12 credits on …
+non-compliant vehicles, in force between…" (LEZ, which now avoids the road-pricing
+trigger). Verified all 8 end-to-end against the backend compiler + microsim:
+6 now parse amount=12 with the intended distinct mechanism and nonzero payers
+(92–1032); the 2 no-charge chips keep amount=None. Hours, exemptions, revenue
+splits and the 5% cap all preserved; nothing invented. `tsc --noEmit` +
+`next build` + `next lint` + `npm test` (41) all clean.
+Follow-up: engine track may want `_find_amount` to recognise "N credits" so the
+rule-based fallback is robust to natural phrasings (backend-owned; not editable
+from this track).

@@ -38,11 +38,12 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "Every entering vehicle pays in full — the baseline against which the other " +
       "pricing mechanisms below are deliberately gentler.",
     text:
-      "Charge private vehicles 12 credits to enter the central business district " +
-      "between 7am and 7pm on weekdays, starting 2026-01-01. Exempt buses, taxis, " +
-      "and blue-badge holders. Spend 70% of the revenue on public transport and " +
-      "20% on cycling and walking. The aim is to cut congestion and emissions " +
-      "without raising costs for low-income residents by more than 5%.",
+      "Introduce a charge of 12 credits on private vehicles entering the central " +
+      "business district between 7am and 7pm on weekdays, starting 2026-01-01. " +
+      "Exempt buses, taxis, and blue-badge holders. Spend 70% of the revenue on " +
+      "public transport and 20% on cycling and walking. The aim is to cut " +
+      "congestion and emissions without raising costs for low-income residents " +
+      "by more than 5%.",
   },
   {
     id: "peak-shoulder-charge",
@@ -54,11 +55,11 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "the twin attenuate the mode shift versus the all-day cordon, honestly " +
       "reflecting the hours the charge actually operates.",
     text:
-      "Charge private vehicles 12 credits to enter the central business district " +
-      "between 8:30am and 6pm on weekdays, starting 2026-01-01. Exempt buses, " +
-      "taxis, and blue-badge holders. Spend 70% of the revenue on public transport " +
-      "and 20% on cycling and walking. The aim is to cut congestion at the busiest " +
-      "times without pricing the whole working day.",
+      "Introduce a charge of 12 credits on private vehicles entering the central " +
+      "business district between 8:30am and 6pm on weekdays, starting 2026-01-01. " +
+      "Exempt buses, taxis, and blue-badge holders. Spend 70% of the revenue on " +
+      "public transport and 20% on cycling and walking. The aim is to cut " +
+      "congestion at the busiest times without pricing the whole working day.",
   },
   {
     id: "low-emission-zone",
@@ -69,8 +70,8 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "watch whether the twin keeps more cars on the road than the cordon charge " +
       "while still cutting emissions intensity.",
     text:
-      "Create a low-emission zone covering the central business district that " +
-      "charges 12 credits a day to older, non-compliant vehicles entering between " +
+      "Create a low-emission zone covering the central business district with a " +
+      "daily levy of 12 credits on older, non-compliant vehicles, in force between " +
       "7am and 7pm on weekdays, starting 2026-01-01. Exempt buses, taxis, and " +
       "blue-badge holders. Spend the revenue on public transport. The aim is to " +
       "clean up the vehicle fleet and cut tailpipe emissions.",
@@ -110,11 +111,11 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "Same cordon charge, but every credit is ploughed back into buses — watch " +
       "the reinvestment lever push the transit shift further than the charge alone.",
     text:
-      "Charge private vehicles 12 credits to enter the central business district " +
-      "between 7am and 7pm on weekdays, starting 2026-01-01. Exempt buses, taxis, " +
-      "and blue-badge holders. Spend 100% of the revenue on public transport — new " +
-      "bus routes and higher frequencies. The aim is to cut car use by making " +
-      "transit the easy choice.",
+      "Introduce a charge of 12 credits on private vehicles entering the central " +
+      "business district between 7am and 7pm on weekdays, starting 2026-01-01. " +
+      "Exempt buses, taxis, and blue-badge holders. Spend 100% of the revenue on " +
+      "public transport — new bus routes and higher frequencies. The aim is to cut " +
+      "car use by making transit the easy choice.",
   },
   {
     id: "active-travel-reinvest",
@@ -127,11 +128,11 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "trips than the bus-funded charge, and a lever that stays neutral until the " +
       "charge actually raises revenue.",
     text:
-      "Charge private vehicles 12 credits to enter the central business district " +
-      "between 7am and 7pm on weekdays, starting 2026-01-01. Exempt buses, taxis, " +
-      "and blue-badge holders. Spend 80% of the revenue on protected cycle lanes " +
-      "and wider pavements. The aim is to cut short car trips by making walking and " +
-      "cycling the easy choice.",
+      "Introduce a charge of 12 credits on private vehicles entering the central " +
+      "business district between 7am and 7pm on weekdays, starting 2026-01-01. " +
+      "Exempt buses, taxis, and blue-badge holders. Spend 80% of the revenue on " +
+      "protected cycle lanes and wider pavements. The aim is to cut short car trips " +
+      "by making walking and cycling the easy choice.",
   },
   {
     id: "standalone-transit",

@@ -432,3 +432,20 @@ backend data: the card mints no numbers, shows the engine's own note verbatim, i
 tagged with the report's provenance, and disappears entirely when a policy states
 no cap.
 - [x] Type `ConstraintCheck` + `MicrosimReport.constraint_check` in `lib/api.ts` and add a pure, unit-tested `constraintVerdict` mapper that (honestly, §34) marks a zero-modelled-burden pass as *moot* rather than an actively-met promise, an in-cap real burden as *pass*, and any overshoot as a hard *fail* (never softened; trusts the engine's `satisfied` flag which carries the cap+epsilon logic). Render a `ConstraintCheckCard` in `MicrosimPanel` between the winners headline and the regressivity card — ✓/✕ glyph, pass/violated/moot verdict pill, cap-vs-modelled + signed headroom/overshoot meta, the engine's plain-language note, and the report's provenance tag — shown only when `constraint_check` is present. Added `.ms-constraint*` styles to `globals.css` mirroring the regressivity card. New `tests/microsim.test.mts` (5 tests, 41 total). `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §7.3/§34)
+
+## M45 — Fix the gallery chips so the keyless rule-based fallback actually applies the charge (SPEC §7.5/§29/§34)
+Verifying M44's constraint card reachability surfaced a latent, high-impact demo
+bug in the gallery-chip prompts (`EXAMPLE_POLICIES`, frontend-owned). With **no
+LLM key configured** — the default in this environment — the policy compiler goes
+straight to the rule-based parser, whose `_find_amount` recognises `£12`, `12
+pounds`, or `charge/fee/levy of 12`, but **not** `12 credits` (Meridia's fictional
+currency). Six of the eight chips phrased the charge as "…12 credits to enter…",
+so they compiled to `intervention.amount = None` → a zero-charge policy →
+all-zero microsim (0 payers, 0 regressivity) and a hollow constraint card. Worse,
+the low-emission-zone chip's "…that charges 12 credits … entering…" tripped the
+`charge.*enter` road-pricing classifier *before* the LEZ rule, so it compiled as a
+plain cordon — the exact mechanism M41 claimed it was distinct from. M41–43 had
+verified mechanism/coverage/revenue-split but never the charge amount, so this
+slipped through. Pure prompt wording (frontend-only): no numbers invented, every
+DSL field re-verified against the rule-based compiler + microsim.
+- [x] Reword the six charge-bearing `EXAMPLE_POLICIES.text` prompts so the rule-based `_find_amount` extracts the 12-credit charge: the four cordon variants (default, late-start, bus-funded, cycle-funded) and the LEZ now say "Introduce a charge of 12 credits on private vehicles entering…" / "…with a daily levy of 12 credits on … non-compliant vehicles, in force between…" (the LEZ avoids the `charge.*enter` trigger so it classifies as `low_emission_zone`, not road pricing). Workplace-parking-levy ("levy of 12"), pedestrianisation and standalone-transit already parsed correctly and are unchanged. Verified end-to-end against the backend rule-based compiler + `build_microsim_report`: all six now yield `amount = 12` with their intended distinct mechanism (road_pricing ×4 / low_emission_zone / parking_levy), nonzero payers (92–1032) and live regressivity, while the two no-charge chips keep `amount = None` — so under the keyless fallback the gallery, microsim, regressivity and M44 constraint card all show real, distinct numbers instead of zeros (SPEC §34). No new types/styles/endpoints; hours, exemptions, revenue splits and the 5% low-income cap all preserved. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §7.5/§29/§34)
