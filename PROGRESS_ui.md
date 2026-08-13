@@ -524,3 +524,15 @@ against the live backend routers to confirm nothing new shipped for the UI to ex
   (returns an OpenAI/vision/mongo health payload, not the twin's `HealthResponse`), so the
   twin backend isn't up. That is exactly the "waiting for backend" path the panels handle;
   starting the backend is the engine track's domain, so left untouched. No numbers fabricated.
+
+## 2026-08-13 (11:32 UTC) — Verification run (roadmap complete, build green, no new endpoints)
+Re-ran the full check after the prior verification. No unchecked items in ROADMAP_UI.md (M4–M20
+all done). Re-audited surface area against the live backend:
+- Enumerated all 24 non-health routers under `backend/app/routers/*.py` (via router prefixes +
+  `include_router` in `main.py`) and cross-checked each documented path against `lib/api.ts` —
+  all 25 paths (incl. `/simulate/amend`, `/backtest/example`, `/stress-test/catalogue`) resolve.
+  No unsurfaced engine endpoint found.
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static pages, / at 129 kB First Load JS).
+- Live smoke test still not possible: port 8000 is held by an unrelated OpenAI/vision service
+  (not the twin `HealthResponse`), so the twin backend isn't up. Starting it is the engine
+  track's domain; panels correctly show their "waiting for backend" states. No numbers fabricated.
