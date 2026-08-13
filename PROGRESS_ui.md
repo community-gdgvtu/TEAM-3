@@ -83,3 +83,15 @@ Dated notes, newest at the bottom. One line per shipped item.
   card, tagged Generated; no real outlets/bylines and no invented figures — cards
   cite only model refs. Graceful no-policy / loading / error states. **M6
   complete.** `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M7.1: Evidence drawer (SPEC §26). Each dashboard tile with a metric
+  key now shows an "Evidence ▸" button (wired only when a policy exists) that opens
+  a slide-over drawer fetching `POST /evidence` for that metric at the scrubbed
+  horizon. The drawer walks the causal trace: World A/B/Δ result cells + band, a
+  horizon-aware confidence meter, the verbatim ascii_trace ladder, the chain nodes
+  (input-data → transform → model → assumption → result, each tagged), the
+  behavioural rules/equations (value, parameter, plausible range, sensitivity,
+  source), the named assumptions, real-world analogues (Observed, flagged
+  illustrative-only), and citations. Scrim + Escape/✕ to close; loading/error
+  states. Every number is copied from the deterministic sim — no LLM on the
+  numeric path (SPEC §34). Added tag colours for Observed/Estimated. `tsc --noEmit`
+  + `next build` clean.

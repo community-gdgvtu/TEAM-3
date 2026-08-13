@@ -33,6 +33,10 @@ export interface MetricTileProps {
   higherIsBetter?: boolean;
   /** Reason shown when there is no series (e.g. depends on /simulate). */
   placeholderNote?: string;
+  /** Dotted metric key for the evidence trace, e.g. `traffic.daily_vehicle_km`. */
+  metricKey?: string | null;
+  /** Open the evidence drawer for `metricKey` (only wired when a policy exists). */
+  onExplain?: (metricKey: string) => void;
 }
 
 export default function MetricTile({
@@ -43,7 +47,13 @@ export default function MetricTile({
   color = "#4f8cff",
   higherIsBetter = false,
   placeholderNote = "Awaiting /simulate",
+  metricKey = null,
+  onExplain,
 }: MetricTileProps) {
+  const canExplain = Boolean(metricKey && onExplain);
+  const explain = () => {
+    if (metricKey && onExplain) onExplain(metricKey);
+  };
   // --- Simulation mode: show World B + real Δ vs baseline ------------------
   if (delta && delta.points.length > 0) {
     const i = Math.min(index, delta.points.length - 1);
@@ -87,6 +97,8 @@ export default function MetricTile({
             </span>
           </span>
         </div>
+
+        {canExplain && <EvidenceButton onClick={explain} />}
       </div>
     );
   }
@@ -146,6 +158,17 @@ export default function MetricTile({
           <span className="delta-val muted">simulate a policy</span>
         </span>
       </div>
+
+      {canExplain && <EvidenceButton onClick={explain} />}
     </div>
+  );
+}
+
+/** "Trace the evidence" affordance — opens the causal provenance drawer (SPEC §26). */
+function EvidenceButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button type="button" className="tile-evidence" onClick={onClick}>
+      Evidence ▸
+    </button>
   );
 }

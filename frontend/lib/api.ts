@@ -428,6 +428,123 @@ export async function runPublicOpinion(
 }
 
 // ---------------------------------------------------------------------------
+// Evidence drawer — POST /evidence (SPEC §26)
+// ---------------------------------------------------------------------------
+
+/** One behavioural lever the policy applies to the mode-choice model (SPEC §7.5). */
+export interface BehaviouralRule {
+  name: string;
+  label: string;
+  parameter: string;
+  value: number;
+  unit: string;
+  plausible_range: number[];
+  sensitivity: string;
+  source: string;
+}
+
+/** One node on the causal trace (input-data → … → result). */
+export interface TraceStep {
+  stage: "input-data" | "transform" | "model" | "assumption" | "result" | string;
+  label: string;
+  detail: string;
+  tag: MetricTag;
+  value: number | null;
+  unit: string;
+  refs: string[];
+}
+
+export interface TraceAssumption {
+  name: string;
+  value: number | string;
+  unit: string;
+  detail: string;
+  tag: MetricTag;
+}
+
+export interface HistoricalAnalogue {
+  scheme: string;
+  city: string;
+  year: number;
+  mechanism: string;
+  relevance: string;
+  tag: MetricTag;
+  note: string;
+}
+
+export interface TraceConfidence {
+  value: number;
+  band_half_width: number;
+  band_rel_pct: number | null;
+  horizon_months: number;
+  note: string;
+}
+
+export interface TraceResult {
+  world_a: number;
+  world_b: number;
+  delta: number;
+  delta_pct: number | null;
+  low: number;
+  high: number;
+}
+
+export interface ProvenanceTrace {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  metric_key: string;
+  metric_label: string;
+  unit: string;
+  tag: MetricTag;
+  horizon: Checkpoint;
+  available_horizons_months: number[];
+  result: TraceResult;
+  confidence: TraceConfidence;
+  ascii_trace: string;
+  chain: TraceStep[];
+  rules: BehaviouralRule[];
+  assumptions: TraceAssumption[];
+  historical_analogues: HistoricalAnalogue[];
+  citations: string[];
+}
+
+/** Fetch the causal provenance trace for one metric under a policy. Throws on error. */
+export async function runEvidence(
+  policy: PolicyDSL,
+  metricKey: string,
+  horizonMonths?: number,
+  signal?: AbortSignal,
+): Promise<ProvenanceTrace> {
+  const res = await fetch(`${API_BASE_URL}/evidence`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      policy,
+      metric_key: metricKey,
+      horizon_months: horizonMonths ?? null,
+    }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+      else if (body.detail && typeof body.detail === "object") {
+        const d = body.detail as { error?: string };
+        if (d.error) detail = d.error;
+      }
+    } catch {
+      // keep generic message
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as ProvenanceTrace;
+}
+
+// ---------------------------------------------------------------------------
 // Simulated media — POST /media (SPEC §15)
 // ---------------------------------------------------------------------------
 

@@ -19,6 +19,7 @@ import type { BaselineResponse } from "../../lib/api";
 import CityMapPanel from "../map/CityMapPanel";
 import TimelineScrubber from "./TimelineScrubber";
 import Dashboard from "./Dashboard";
+import EvidenceDrawer from "./EvidenceDrawer";
 import { useTwin } from "./TwinStore";
 
 export default function TwinWorkspace() {
@@ -30,6 +31,7 @@ export default function TwinWorkspace() {
   const [index, setIndex] = useState(0);
   const [simulating, setSimulating] = useState(false);
   const [simError, setSimError] = useState<string | null>(null);
+  const [explainKey, setExplainKey] = useState<string | null>(null);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -143,6 +145,16 @@ export default function TwinWorkspace() {
           index={index}
           sim={sim}
           simSource={simSource}
+          onExplain={policy ? setExplainKey : undefined}
+        />
+      )}
+
+      {policy && explainKey && (
+        <EvidenceDrawer
+          policy={policy}
+          metricKey={explainKey}
+          horizonMonths={checkpoints[index]?.t_months}
+          onClose={() => setExplainKey(null)}
         />
       )}
     </div>

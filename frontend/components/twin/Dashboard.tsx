@@ -27,6 +27,8 @@ export interface DashboardProps {
   index: number;
   sim: SimulateResponse | null;
   simSource: SimSource | null;
+  /** Open the evidence drawer for a metric key (only when a policy exists). */
+  onExplain?: (metricKey: string) => void;
 }
 
 interface TileSpec {
@@ -67,6 +69,7 @@ export default function Dashboard({
   index,
   sim,
   simSource,
+  onExplain,
 }: DashboardProps) {
   const byKey = useMemo(() => {
     const m = new Map<string, MetricSeries>();
@@ -112,6 +115,8 @@ export default function Dashboard({
             color={t.color}
             higherIsBetter={t.higherIsBetter}
             placeholderNote={t.placeholderNote}
+            metricKey={t.key}
+            onExplain={onExplain}
           />
         ))}
       </div>

@@ -28,6 +28,6 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 - [x] Simulated press feed: archetype headlines at Month 5 and Year 2, each visibly stamped SIMULATED
 
 ## M7 — Evidence drawer + polish (SPEC §26/§27)
-- [ ] Click any dashboard metric → evidence drawer showing the provenance trace, assumptions, confidence (from the backend evidence endpoint)
+- [x] Click any dashboard metric → evidence drawer showing the provenance trace, assumptions, confidence (from the backend evidence endpoint)
 - [ ] Assemble the main screen layout per SPEC §27 (3D world + outcomes panel + timeline + [Parliament][Public][Press][Red Team] tabs) and wire the 60-second demo flow (SPEC §29)
 - [ ] Visual polish: consistent theme, loading/empty/error states, mobile-safe
