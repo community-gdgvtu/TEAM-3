@@ -1025,3 +1025,14 @@ no LLM (SPEC §34); pure read of existing endpoints — `demo.py` / `north_star.
 - New `backend/tests/test_business.py` (11 tests). `python -m pytest -q` →
   **381 passed** (was 370); app boots with **48 routes** (was 46); `scripts/audit.py`
   full-surface §34 audit PASS over all routes.
+
+## 2026-08-13 — ENGINE-track: verification checkpoint (roadmap complete)
+- ROADMAP_ENGINE.md fully checked: **45/45 items** done, zero unchecked. All M3/M5/M6/M7
+  milestones, both stretch items, all 16 Extended SPEC-coverage layers, the 4 standing
+  hardening guards, the 3 orchestration compositions (`/compare/grand`, `/north-star`, `/run`)
+  and all 3 demo-tooling CLIs (`scripts/demo.py`, `north_star.py`, `audit.py`) shipped.
+- Full suite green: `.venv/bin/python -m pytest -q` → **381 passed** (205s). App boots with
+  **48 routes**. No `backend/app/**` behaviour change this run — pure verification.
+- No new engine work remains on the roadmap; standing guards (integration-smoke,
+  determinism-regression, uncertainty-widening, cross-layer mode-choice) all pass, so the
+  §34 guardrails hold across the whole HTTP surface.
