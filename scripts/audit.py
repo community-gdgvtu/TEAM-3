@@ -133,6 +133,11 @@ def build_report(text: str) -> dict:
         "/citizen/sample",
         "/business/sample",
     ]
+    # Two candidate policies (same DSL, distinct ids) for the decision layer.
+    robust_body = {
+        "candidates": [{**policy, "id": "cand_a"}, {**policy, "id": "cand_b"}],
+        "scenarios": ["recession", "fuel_price_spike"],
+    }
     post_routes: list[tuple[str, dict]] = [
         ("/run", P),
         ("/north-star", P),
@@ -168,6 +173,7 @@ def build_report(text: str) -> dict:
             "constraints": {"max_average_commute_increase_pct": 12, "max_budget": 120_000_000},
         }),
         ("/backtest", {}),
+        ("/robustness", robust_body),
     ]
 
     # Deterministic numeric layers — must be byte-identical across two identical
@@ -189,6 +195,7 @@ def build_report(text: str) -> dict:
         ("/stress-test", {**P, "scenarios": ["recession", "fuel_price_spike"]}),
         ("/uncertainty", {**P, "metric_key": "traffic.daily_vehicle_km", "samples": 20}),
         ("/sensitivity", P),
+        ("/robustness", robust_body),
     ]
 
     routes: list[dict] = []

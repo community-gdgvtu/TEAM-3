@@ -1064,3 +1064,35 @@ item under a new **Presentation / export** section and shipped it end-to-end.
 - Full suite: `.venv/bin/python -m pytest -q` → **388 passed** (251s, was 381). App boots
   with **50 routes** (was 48). Pure additive composition — no existing `backend/app/**`
   layer changed.
+
+## 2026-08-13 — Decision-under-uncertainty layer (`POST /robustness`)
+
+Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Added a new
+**Decision support** section and shipped one item end-to-end.
+
+- **New:** `backend/app/robustness/` (`schema.py`, `model.py`, `__init__.py`) + router
+  `backend/app/routers/robustness.py` → `POST /robustness` and `GET /robustness/objectives`;
+  registered in `app/main.py`.
+- **What it is (SPEC §20/§21/§22):** the decision one level above stress-testing. Stress
+  answers "does *this* policy hold under the shocks?"; the optimiser finds a good policy
+  *under the baseline*. `/robustness` composes them into the minister's actual choice —
+  given ≥2 candidate policies and the states of the world (baseline + §20 shocks), score
+  every candidate × state, build the **regret matrix**, and apply **nominal / maximin /
+  minimax-regret (Savage) / Laplace / robustness-rate** criteria. The `headline` says plainly
+  whether robustness changes the pick (the demo's "the headline winner isn't the safe choice").
+- **§34 guardrails:** pure composition — every payoff is the exact `Δ(B−A)` from the stress
+  core's `_run_delta`, so it can never disagree with `/stress-test` or `/simulate`. A test
+  pins a robustness baseline payoff byte-equal to `/stress-test`'s baseline benefit. No new
+  numeric model, no randomness, no LLM; report tagged Simulated; confidence widens on the long
+  horizon (§24). 422 on <2 candidates; 404 on unknown objective/shock (echoes valid keys).
+- **Also touched (engine-owned):** added `/robustness` to `scripts/audit.py`'s route +
+  determinism sweeps, so the whole-surface guardrail audit now covers it (served-200,
+  provenance-tag, byte-identical determinism) — audit still PASS.
+- **Tests:** `backend/tests/test_robustness.py` (11): shape/provenance, regret matrix
+  (non-negative, zero for the per-state best), each pick agrees with its score, determinism
+  (byte-identical), payoff == stress-core delta (§34 consistency), scenario-subset + objective
+  override, confidence widening, error paths, objectives endpoint, and unit tests pinning both
+  `_headline` branches (flip vs no-trade-off).
+- Full suite: `.venv/bin/python -m pytest -q` → **399 passed** (was 388). `scripts/audit.py`
+  → PASS. App boots with **52 routes** (was 50). Pure additive — no existing `backend/app/**`
+  layer changed.
