@@ -65,3 +65,14 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   citations to the model modules + SPEC, and a horizon-widening confidence derived from the model's own
   uncertainty band. Every number copied from the sim; no LLM on the numeric path (SPEC §34). Unknown key
   → 404 listing valid keys. 7 tests; 112 green. **First M7 item complete.**
+- 2026-08-13 — M7 uncertainty engine: new `backend/app/uncertainty/` package + `POST /uncertainty`.
+  Turns one deterministic run into a fan of plausible futures. Monte-Carlo: draws each of 8 documented
+  uncertain assumptions (money→time mode-switch elasticity, transit service/bus-capacity response,
+  reinvestment fare cut, central congestion feedback, transit speed, car running cost, transit fare,
+  CO₂ factor) from a triangular(low, default, high) and re-runs the full A/B/Δ pipeline — each sample
+  yields the whole Δ trajectory, so the fan across every Time-Machine checkpoint (median + 50/80/95%
+  intervals, widening with horizon) comes for free. Sensitivity: one-at-a-time low↔high swing per
+  assumption, ranked → most-influential-assumption list with direction. Model disagreement: low/central/
+  high behavioural-regime ensemble → spread. Seeded (reproducible), samples clamped 20–500 (~3s at the
+  100-sample default). Only documented input assumptions are perturbed and the same structural code is
+  re-run; no LLM on the numeric path (SPEC §34). Unknown key → 404. 8 tests; 120 green. **Second M7 item complete.**
