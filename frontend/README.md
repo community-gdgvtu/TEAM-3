@@ -1,13 +1,13 @@
 # URBAN frontend
 
 Next.js (App Router) + TypeScript UI for the URBAN policy digital twin — a 3D city,
-a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 28 analysis
+a time-machine timeline, a tagged outcomes dashboard, and a tab bar of 29 analysis
 surfaces: the flagship North-Star answer (§37) and one-call Run pipeline (§29), the
 browsable baseline World Model (§5), Parliament, Public reaction, Press, Press
 conference, Red Team, Counterfactual + Grand A/B/C/D compare, SDG, Diffusion, Ensemble,
-Uncertainty, Optimiser, Economy, Dynamics, Microsim, Spatial, Stress-testing,
-Analogues, Time-series, Institutions, Backtest, Registry, Reproduce, Data Fabric, and
-Change-assumptions-and-rerun.
+Uncertainty, Sensitivity, Optimiser, Economy, Dynamics, Microsim, Spatial,
+Stress-testing, Analogues, Time-series, Institutions, Backtest, Registry, Reproduce,
+Data Fabric, and Change-assumptions-and-rerun.
 
 ## Run
 
@@ -92,6 +92,7 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Opinion diffusion | `POST /diffusion` | §14 |
 | Ensemble forecast | `POST /ensemble` | §8 |
 | Uncertainty fan | `POST /uncertainty` | §24 |
+| Sensitivity tornado | `POST /sensitivity` | §24/§26 |
 | Policy optimiser | `POST /optimise` | §22 |
 | Economic spillover | `POST /economy` | §7.4 |
 | Recursive feedback loop (dynamics) | `POST /dynamics` | §7.6/§19 |
