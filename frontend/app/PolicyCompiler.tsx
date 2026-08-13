@@ -45,6 +45,22 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "without raising costs for low-income residents by more than 5%.",
   },
   {
+    id: "peak-shoulder-charge",
+    label: "Late-start charge",
+    mechanism: "Time-of-day pricing",
+    watch:
+      "The same 12-credit cordon, but it only switches on at 8:30am — after the " +
+      "commute rush has begun — so it prices just part of the inbound peak. Watch " +
+      "the twin attenuate the mode shift versus the all-day cordon, honestly " +
+      "reflecting the hours the charge actually operates.",
+    text:
+      "Charge private vehicles 12 credits to enter the central business district " +
+      "between 8:30am and 6pm on weekdays, starting 2026-01-01. Exempt buses, " +
+      "taxis, and blue-badge holders. Spend 70% of the revenue on public transport " +
+      "and 20% on cycling and walking. The aim is to cut congestion at the busiest " +
+      "times without pricing the whole working day.",
+  },
+  {
     id: "low-emission-zone",
     label: "Low-emission zone",
     mechanism: "Fleet turnover",
@@ -99,6 +115,21 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "and blue-badge holders. Spend 100% of the revenue on public transport — new " +
       "bus routes and higher frequencies. The aim is to cut car use by making " +
       "transit the easy choice.",
+  },
+  {
+    id: "standalone-transit",
+    label: "Fund buses, no charge",
+    mechanism: "Transit supply",
+    watch:
+      "A pure carrot — cheaper, faster, more frequent buses with no charge and no " +
+      "ban. Watch the twin honour the missing stick: with no cost on driving, the " +
+      "pull is mostly walk→transit, so the car drop stays at or below the transit " +
+      "gain — a smaller dent in car use than any pricing scheme.",
+    text:
+      "Invest heavily in the bus and tram network: cut fares by a third, add new " +
+      "bus routes, and raise service frequencies right across the city, starting " +
+      "2026-01-01. Fund it from the general budget. The aim is to grow public " +
+      "transport use and cut car dependence.",
   },
 ];
 

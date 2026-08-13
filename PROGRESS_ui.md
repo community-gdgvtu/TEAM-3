@@ -1122,3 +1122,10 @@ clears the active-chip highlight. Prompts grounded in the engine's documented
 real, distinct DSL — the UI mints nothing. Added `.example-gallery`/`.example-btn`
 styles to `globals.css`. Full green: `npx tsc --noEmit` (0), `npm test` (36 pass),
 `npx next lint` (clean), `npx next build` (/ = 72 kB, First Load 160 kB).
+
+## 2026-08-13 — M42: gallery chips for the two new honest mechanisms (time-of-day pricing + standalone transit)
+Engine commit f5852af made two more mechanisms numerically distinct that no UI surface exposed: (1) charge `active_hours` now scale the per-trip signal by overlap with the inbound AM peak (a late-starting cordon ≠ an all-day one — previously byte-identical, dishonest per §34); (2) a standalone `transit_investment` (no charge/ban) recovered as a real supply-side lever instead of a silent no-op. Added two chips to `PolicyCompiler`'s `EXAMPLE_POLICIES`:
+- **Late-start charge** (mechanism *Time-of-day pricing*): the 12-credit cordon operating 8:30am–6pm; verified via the rule-based compiler to yield road_pricing with active_hours 08:30–18:00 → `_active_hours_coverage` 0.5 (half the AM peak). `watch` frames the timing→attenuation comparison vs the all-day cordon, no figure.
+- **Fund buses, no charge** (mechanism *Transit supply*): pure carrot (fare cut + new routes + frequencies, general-fund, no charge/ban); verified to yield transit_investment DSL. `watch` frames the honest missing-stick guardrail (car drop ≤ transit gain) vs any pricing scheme.
+Both prompts grounded in the engine's §7.5 mechanisms and compile to real, distinct DSL — the UI mints no numbers (§34). No new types/styles/endpoints; existing chip loader + active-highlight + idle-reset apply unchanged. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean.
+Follow-up: none. Frontend README has no example-count to sync (gallery is part of the compiler surface).

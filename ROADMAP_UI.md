@@ -379,3 +379,20 @@ numbers** — clicking a chip only fills the draft box; the backend still compil
 and simulates, and each chip's note frames the *mechanism and the comparison to
 make*, never a predicted figure (SPEC §34).
 - [x] Replace the lone "Load demo policy" button with an example-policy gallery in `PolicyCompiler`: five curated prompts (`EXAMPLE_POLICIES`), one per mechanism family — cordon congestion charge (the §29 demo, still the default), low-emission zone, workplace parking levy, pedestrianisation, and a 100%-transit-reinvested charge — each rendered as a toggle chip carrying a mechanism tag + a `title`/inline "what to watch" note that describes the lever and the comparison, not an outcome. Clicking one loads its text and **resets any compiled result to `idle`** so a prior policy's numbers can never linger under a different policy's text; a manual textarea edit clears the active-example highlight so no chip claims to match hand-edited text. Prompts are grounded in the engine's documented §7.5 mechanisms (verified in `ROADMAP_ENGINE.md`), so each compiles to a real, distinct DSL — the UI invents nothing. Added `.example-gallery`/`.example-chips`/`.example-btn` styles to `globals.css`. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean (SPEC §3/§7.5/§34)
+
+## M42 — Surface the two new honest mechanisms: time-of-day pricing + standalone transit (SPEC §7.5/§9/§34)
+After M41's gallery shipped, the engine track landed two more *numerically distinct*
+mechanisms (commit f5852af) that no frontend surface exposed. (1) A charge's
+`active_hours` now actually scale the per-trip signal: the engine prices only the
+overlap of the operating window with the inbound AM commute peak, so an all-day
+cordon and a late-starting one no longer produce byte-identical numbers (previously
+they did — dishonest per §34). (2) A **standalone** `transit_investment` policy
+(no charge, no ban) is recovered as a real supply-side lever (fare cut + speed
+uplift, ramped in long-run), where before it was a silent no-op. The gallery had a
+chip for neither: no way to see that *when* a charge operates changes the answer, and
+no way to try a pure-carrot policy distinct from the "charge + reinvest" chip. Pure
+discoverability — the chips mint no numbers; the backend still compiles and
+simulates each, and both prompts were verified against the rule-based compiler to
+produce the intended DSL (road_pricing @ 08:30–18:00 → coverage 0.5; transit_investment,
+general-fund, no charge).
+- [x] Add two chips to `PolicyCompiler`'s `EXAMPLE_POLICIES`: a "Late-start charge" (mechanism *Time-of-day pricing*) — the same 12-credit cordon but operating 8:30am–6pm so it covers only half the inbound peak, whose `watch` frames the timing→attenuation comparison against the all-day cordon, not a figure; and a "Fund buses, no charge" (mechanism *Transit supply*) — a pure carrot (cheaper/faster/more-frequent buses, general-fund, no charge/ban) whose `watch` frames the honest missing-stick guardrail (car drop ≤ transit gain) versus every pricing scheme. Both prompts grounded in the engine's §7.5 mechanisms and verified against the rule-based compiler so each yields the intended distinct DSL (the UI invents nothing; SPEC §34). No new types, styles, or endpoints — the existing chip loader, active-example highlight, and idle-reset all apply unchanged. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean (SPEC §7.5/§9/§34)
