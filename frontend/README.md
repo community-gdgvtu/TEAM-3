@@ -3,7 +3,7 @@
 Next.js (App Router) + TypeScript UI for the URBAN policy digital twin — a 3D city,
 a time-machine timeline, a tagged outcomes dashboard, and a tab bar of analysis surfaces
 (Parliament, Public reaction, Press, Counterfactuals, Uncertainty, Optimiser, Economy,
-Dynamics, SDG, Diffusion, Ensemble, Institutions, Backtest, Registry).
+Dynamics, SDG, Diffusion, Ensemble, Institutions, Backtest, Registry, Reproduce).
 
 ## Run
 
@@ -91,6 +91,7 @@ Every documented backend endpoint has a UI surface. All fetches are typed in `li
 | Institutional review | `POST /institutions` | §18 |
 | Backtest scorecard | `GET /backtest/example`, `POST /backtest` | §25 |
 | Model registry / transparency | `GET /registry` | §33 |
+| Reproducibility manifest (REPRODUCE RUN) | `POST /reproduce` | §32 |
 
 ## Honesty contract in the UI (SPEC §34)
 
@@ -125,3 +126,12 @@ uncertainty widens. Here is how the frontend enforces that — none of it is dec
 The **Registry** tab (`GET /registry`) is the machine-readable counterpart: model cards
 (method, determinism, LLM-role, output tag), data sources, the live assumption index, and
 the SPEC §34 guardrail checklist with pass/fail.
+
+The **Reproduce** tab (`POST /reproduce`, SPEC §32) turns a run into an auditable record:
+a content-addressed `run_id` (SHA-256 of the exact policy DSL, seed, dataset byte-hashes,
+code version and live assumptions — timestamp excluded, so identical inputs always yield
+the same key), dataset + model versions, and a self-verified `output_digest`. The
+`reproducible` flag is *proven* — the backend runs the deterministic core twice and
+compares digests — and `prompts` is always empty, surfacing the §34 guarantee that no LLM
+enters the numeric path. When the backend is down the panel says so rather than minting a
+fake key.

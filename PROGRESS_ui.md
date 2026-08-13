@@ -453,3 +453,26 @@ Dated notes, newest at the bottom. One line per shipped item.
   `tsc --noEmit` clean, `next lint` clean (0 warnings/errors), `next build` clean
   (4/4 static pages, / at 125 kB First Load JS). No UI-track work outstanding until
   the engine track ships a new endpoint to surface.
+
+## 2026-08-13 — M19: Reproducibility tab (POST /reproduce, SPEC §32)
+The engine shipped `POST /reproduce` (run reproducibility manifest, "REPRODUCE RUN")
+after the UI roadmap was declared complete — the last unsurfaced documented endpoint.
+Added a **Reproduce** tab exposing it end-to-end:
+- `lib/api.ts`: `DatasetVersion` / `ModelVersion` / `ReproManifest` types (reusing the
+  existing `AssumptionRecord` + `PolicyDSL`) and `runReproduce(policy, seed?)` with the
+  standard honest-error contract (throws on non-2xx so the panel shows waiting/error, never
+  a fabricated key).
+- `components/twin/ReproducePanel.tsx`: policy-gated panel. Headline reproduction key
+  (`run_id` + copy-to-clipboard, a *proven* reproducible ✓/✗ badge from the backend's
+  twice-run digest comparison, `output_digest`, code/app version, seed, timestamp); a
+  "how to reproduce" note; a SPEC §34 honesty line (no LLM prompt on the numeric path =
+  `prompts` empty, and no pinned model reports LLM-touched numbers); content-addressed
+  dataset versions (with `MISSING`-file guard); model versions pinned to code; and a
+  collapsible pinned-assumption table. Manifest is Observed *about* the run — no invented
+  numbers. Idle/loading/error states when the backend is down.
+- Wired into `PanelTabs.tsx` (new `reproduce` TabKey + tab button + kept-mounted panel).
+- `app/globals.css`: `repro-*` styles consistent with the Registry panel.
+- `frontend/README.md`: added the endpoint to the panel↔endpoint↔SPEC map (now 19 rows)
+  + a Reproduce paragraph in the honesty-contract section + the tab list in the intro.
+Checks green: `tsc --noEmit` clean; `next build` clean (4/4 static pages, / at 127 kB First
+Load JS). Every documented engine endpoint is again surfaced in the UI.

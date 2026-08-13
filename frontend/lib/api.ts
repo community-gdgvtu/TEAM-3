@@ -1935,3 +1935,96 @@ export async function runSpatial(
   }
   return (await res.json()) as SpatialReport;
 }
+
+// ---------------------------------------------------------------------------
+// Run reproducibility manifest (SPEC §32) — POST /reproduce
+// ---------------------------------------------------------------------------
+
+/** One pinned input dataset, content-addressed by file bytes (SPEC §4/§32). */
+export interface DatasetVersion {
+  id: string;
+  name: string;
+  provenance: MetricTag;
+  /** 'synthetic' | 'legacy' | 'live'. */
+  kind: string;
+  generated_by: string;
+  seed: unknown;
+  path: string;
+  /** SHA-256 of the file bytes — changes if the world state changes. */
+  content_sha256: string;
+  summary: Record<string, unknown>;
+}
+
+/** One model/forecast layer that participated, pinned to its code (SPEC §33). */
+export interface ModelVersion {
+  id: string;
+  name: string;
+  spec_sections: string[];
+  code: string;
+  /** 'deterministic' | 'stochastic (seeded)'. */
+  determinism: string;
+  output_tag: MetricTag;
+  /** MUST be false for numeric models (SPEC §34). */
+  llm_touches_numbers: boolean;
+}
+
+/**
+ * The complete reproducibility record for one run (SPEC §32). The `run_id` is a
+ * SHA-256 content address of the reproducing inputs (timestamp excluded), so
+ * identical inputs always yield the same key — that is the REPRODUCE RUN
+ * affordance. `reproducible` is proven, not asserted: the deterministic core is
+ * run twice and its `output_digest` compared. The manifest is Observed about the
+ * run; no LLM enters the numeric path (`prompts` is always empty, SPEC §34).
+ */
+export interface ReproManifest {
+  provenance: MetricTag;
+  note: string;
+  run_id: string;
+  reproducible: boolean;
+  output_digest: string;
+  created_at: string;
+  app_version: string;
+  code_version: string;
+  seed: number | null;
+  policy: PolicyDSL;
+  shocks: Record<string, unknown>;
+  datasets: DatasetVersion[];
+  models: ModelVersion[];
+  assumptions: AssumptionRecord[];
+  /** LLM prompts on the numeric path — always empty (SPEC §34). */
+  prompts: Array<Record<string, unknown>>;
+  inputs_fingerprint: Record<string, unknown>;
+  how_to_reproduce: string;
+}
+
+/**
+ * Fetch the content-addressed reproducibility manifest for a compiled policy via
+ * `POST /reproduce` (SPEC §32): dataset + model versions, live assumptions, seed,
+ * code version, and a self-verified output digest proving the deterministic core
+ * reproduces byte-for-byte. Deterministic, no LLM. Throws on network/HTTP error
+ * so the panel can show an honest waiting/error state rather than a fake key.
+ */
+export async function runReproduce(
+  policy: PolicyDSL,
+  seed?: number | null,
+  signal?: AbortSignal,
+): Promise<ReproManifest> {
+  const res = await fetch(`${API_BASE_URL}/reproduce`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(seed != null ? { policy, seed } : { policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as ReproManifest;
+}
