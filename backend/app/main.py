@@ -14,7 +14,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
-from .routers import baseline, health, parliament, policy, public, simulate
+from .routers import baseline, health, media, parliament, policy, public, simulate
 
 
 def create_app() -> FastAPI:
@@ -43,6 +43,7 @@ def create_app() -> FastAPI:
     app.include_router(simulate.router)
     app.include_router(parliament.router)
     app.include_router(public.router)
+    app.include_router(media.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

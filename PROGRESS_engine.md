@@ -47,3 +47,9 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   cohort (income band × geography × baseline mode) and overall. Refactored mode-choice to expose
   `mode_options`/`policy_mode_options`/`pick_mode` (reused for material impact). Deterministic, Simulated.
   Sanity: inbound car commuters most opposed, reinvestment-served transit users most supportive. 8 tests; 99 green.
+- 2026-08-13 — M6 simulated media generator: new `backend/app/media/` package + `POST /media`.
+  Reads ONLY the event ledger + outcome metrics (World A→B Δ) + opinion state; emits archetype
+  headlines across 6 fictional-outlet lenses (public-service, business, local, tabloid, transit-advocacy,
+  motoring) at Month 5 and Year 2 horizons. Every artifact carries the `SIMULATED — not a real outlet`
+  banner, fictional outlet names (no real bylines), and `cited_refs` back to the model outputs it rests on
+  (SPEC §15/§34). Deterministic, Generated media clearly labelled SIMULATED. 6 tests; 105 green. **M6 complete.**

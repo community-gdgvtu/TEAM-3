@@ -22,7 +22,7 @@ label generated media SIMULATED; uncertainty widens with horizon).
 
 ## M6 — Public reaction + simulated media (backend)
 - [x] Cohort opinion model (income decile × geography × transport mode): material impact + fairness + prior → support distribution (Strong support…Strong oppose), deterministic core (SPEC §13). Expose via `/simulate` or `POST /public` [DONE — `backend/app/opinion/` + `POST /public`: per-agent material impact (own gc Δ) + fairness (regressivity/exemption/reinvestment/coercion) + income-band prior → 6-bucket distribution per cohort (band×geography×mode) and overall; deterministic, Simulated]
-- [ ] Simulated media generator `POST /media`: reads ONLY event ledger + outcome metrics + opinion state; emits archetype headlines (public-service/business/local/tabloid/etc.), every artifact tagged `SIMULATED — not a real outlet`, no real bylines (SPEC §15)
+- [x] Simulated media generator `POST /media`: reads ONLY event ledger + outcome metrics + opinion state; emits archetype headlines (public-service/business/local/tabloid/etc.), every artifact tagged `SIMULATED — not a real outlet`, no real bylines (SPEC §15) [DONE — `backend/app/media/` + `POST /media`: 6 archetype lenses × 2 horizons (Month 5 / Year 2), each headline built from ledger events + Δ metrics + opinion, SIMULATED banner, fictional outlet labels, cited_refs]
 
 ## M7 — Evidence, uncertainty, credibility (backend)
 - [ ] Evidence/provenance trace endpoint: given a metric id, return the causal trace input-data→transform→model→assumptions→result + confidence (SPEC §26)
