@@ -1029,6 +1029,94 @@ export async function runPressConference(
 }
 
 // ---------------------------------------------------------------------------
+// Policy optimiser (SPEC §22) — POST /optimise
+// ---------------------------------------------------------------------------
+
+export interface CandidateConfig {
+  intervention_type: string;
+  charge_amount: number | null;
+  public_transport_share: number;
+  exempt_low_income: boolean;
+  pedestrianised: boolean;
+}
+
+export interface CandidateMetrics {
+  emissions_reduction_pct: number;
+  traffic_reduction_pct: number;
+  transit_gain_pct: number;
+  avg_commute_increase_pct: number;
+  low_income_burden_pct: number;
+  net_support: number;
+  /** Illustrative scheme cost — an Estimated proxy, NOT a simulated figure. */
+  est_cost: number;
+}
+
+export interface OptimiserCandidate {
+  policy_id: string;
+  label: string;
+  description: string[];
+  config: CandidateConfig;
+  metrics: CandidateMetrics;
+  feasible: boolean;
+  violated_constraints: string[];
+  pareto: boolean;
+}
+
+export interface OptimiserRecommendations {
+  cheapest: string | null;
+  most_equitable: string | null;
+  largest_emissions_reduction: string | null;
+  best_balanced: string | null;
+}
+
+export interface OptimiserResult {
+  provenance: MetricTag;
+  note: string;
+  objective: Record<string, unknown>;
+  constraints: Record<string, unknown>;
+  horizon: Checkpoint;
+  n_candidates: number;
+  n_feasible: number;
+  constraints_satisfiable: boolean;
+  pareto_front: OptimiserCandidate[];
+  recommendations: OptimiserRecommendations;
+  candidates: OptimiserCandidate[];
+  cost_model: Record<string, unknown>;
+  objective_axes: string[];
+}
+
+/**
+ * Search the candidate policy grid for a given objective + constraints and return
+ * the feasible Pareto frontier plus representative picks (SPEC §22). Outcome
+ * metrics are Simulated; the budget cost proxy is an Estimated documented
+ * constant. Policy-independent — runs without a compiled policy. Throws on error.
+ */
+export async function runOptimise(
+  objective: Record<string, unknown> = {},
+  constraints: Record<string, unknown> = {},
+  signal?: AbortSignal,
+): Promise<OptimiserResult> {
+  const res = await fetch(`${API_BASE_URL}/optimise`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ objective, constraints }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as OptimiserResult;
+}
+
+// ---------------------------------------------------------------------------
 // Uncertainty fan (SPEC §24) — POST /uncertainty
 // ---------------------------------------------------------------------------
 

@@ -253,3 +253,20 @@ Dated notes, newest at the bottom. One line per shipped item.
   Simulated, no LLM on the numeric path. Typed `runUncertainty` client +
   uncertainty types added to lib/api.ts; wired as a new "Uncertainty" tab.
   `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M10.4: Policy optimiser tab (SPEC §22). New OptimiserPanel is
+  policy-independent: it works the problem backwards via `POST /optimise` — the
+  user optionally sets constraint knobs (max commute +%, max low-income burden +%,
+  max budget $M), the backend grid-searches candidate interventions, simulates
+  each, and returns the feasible Pareto frontier. Renders: a feasibility banner
+  (n_feasible/n_candidates, frontier size, green/red on constraints_satisfiable);
+  four representative recommendation cards (cheapest / most equitable / largest
+  CO₂ cut / best balanced) resolved from policy_id to the candidate's label +
+  headline metrics; and a horizontally scrollable Pareto-frontier table (emissions
+  ↓, traffic ↓, commute ↑, low-income ↑, net support, cost) per candidate.
+  Honesty (SPEC §22/§34): outcome metrics tagged Simulated; the est_cost column is
+  explicitly flagged as an Estimated documented budget proxy (starred, with an
+  Estimated tag note), never a simulated outcome and never LLM-produced. Graceful
+  idle/loading/error states. Typed `runOptimise` client + optimiser types added to
+  lib/api.ts; wired as a new "Optimiser" tab (tabbar hint notes it runs without a
+  compiled policy). **M10 complete — every documented engine endpoint now has a UI
+  surface.** `tsc --noEmit` + `next build` clean.

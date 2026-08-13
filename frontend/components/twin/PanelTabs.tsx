@@ -25,6 +25,7 @@ import InstitutionsPanel from "./InstitutionsPanel";
 import PressConferencePanel from "./PressConferencePanel";
 import ComparePanel from "./ComparePanel";
 import UncertaintyPanel from "./UncertaintyPanel";
+import OptimiserPanel from "./OptimiserPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -38,6 +39,7 @@ type TabKey =
   | "diffusion"
   | "ensemble"
   | "uncertainty"
+  | "optimiser"
   | "institutions"
   | "backtest"
   | "registry";
@@ -53,6 +55,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "diffusion", label: "Diffusion" },
   { key: "ensemble", label: "Ensemble" },
   { key: "uncertainty", label: "Uncertainty" },
+  { key: "optimiser", label: "Optimiser" },
   { key: "institutions", label: "Institutions" },
   { key: "backtest", label: "Backtest" },
   { key: "registry", label: "Registry" },
@@ -79,7 +82,7 @@ export default function PanelTabs() {
         ))}
         {!policy && (
           <span className="tabbar-hint">
-            Compile a policy to activate (Backtest &amp; Registry run without one)
+            Compile a policy to activate (Backtest, Registry &amp; Optimiser run without one)
           </span>
         )}
       </div>
@@ -114,6 +117,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "uncertainty"}>
           <UncertaintyPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "optimiser"}>
+          <OptimiserPanel />
         </div>
         <div role="tabpanel" hidden={active !== "institutions"}>
           <InstitutionsPanel />
