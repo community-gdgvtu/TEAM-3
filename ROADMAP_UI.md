@@ -65,3 +65,11 @@ states. This milestone hardens against the failure the per-panel states can't ca
 render throw that would blank the whole app mid-demo — keeping the honesty contract intact.
 - [x] App Router error boundaries: `app/error.tsx` (segment) + `app/global-error.tsx` (root layout). A render throw — unexpected backend payload shape, deck.gl/MapLibre runtime error, deep null deref — is contained to a themed, honest recovery card (clear message + error digest + Try again / Reload) instead of Next's default crash page. Never fabricates or estimates a metric; global-error is self-contained (own html/body, inline styles) since it replaces the root layout (SPEC §34)
 - [x] Themed 404: `app/not-found.tsx` — a bad URL lands on an on-brand page with a route back to the twin instead of Next's bare default 404, completing error-surface coverage alongside the boundaries. Static, no data, no metrics
+
+## M13 — Judge-facing frontend docs (SPEC §33/§34)
+Every endpoint is surfaced and the app is crash-safe. The remaining gap is legibility for
+a reviewer reading the repo (not the running app): the frontend README covers run/config
+but not the panel↔endpoint↔SPEC map or *how* the honesty contract is implemented in the UI —
+the single most judge-relevant thing about this track ("how do we know this isn't AI astrology").
+Docs only; no fabricated numbers; accurately reflects the real code.
+- [x] Expand `frontend/README.md`: architecture overview (App Router pages, `lib/api.ts` typed client, panel components), the full analysis-tab → endpoint → SPEC-section map (all 18 endpoints), and a "Honesty contract in the UI" section documenting the `MetricTag` provenance chips (`.tag.observed/.estimated/.simulated/.generated`), visible uncertainty bands, SIMULATED media stamps, "waiting for backend" states, and the crash-safe error boundaries (SPEC §34)

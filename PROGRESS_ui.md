@@ -310,3 +310,24 @@ Dated notes, newest at the bottom. One line per shipped item.
   bare default 404 — off-brand mid-demo. Static, self-contained, no data or metrics.
   Build now emits a custom `/_not-found` route. `tsc --noEmit`, `next lint`, `next
   build` all clean. **M12 complete — the UI is crash-safe end to end.**
+- 2026-08-13 — Verification run: whole UI roadmap (M4–M12) complete; confirmed
+  `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4 static
+  pages), and all 18 documented backend endpoints surfaced in the frontend (grep of
+  `lib/api.ts` + panels: /health /baseline /policy/compile /simulate /parliament/debate
+  /public /media /evidence /uncertainty /compare /optimise /backtest /sdg /diffusion
+  /registry /press-conference /ensemble /institutions). No new backend endpoint to expose.
+- 2026-08-13 — M13: Judge-facing frontend docs (SPEC §33/§34). The app is feature- and
+  crash-complete; the remaining gap was legibility for a reviewer reading the *repo* (not
+  the running app). Rewrote `frontend/README.md` from a bare run/config guide into a
+  proper front-door: architecture overview (App Router pages, `lib/api.ts` typed client,
+  map/twin component split, TwinStore state flow), the full analysis-tab → endpoint →
+  SPEC-section map for all 18 endpoints, and a "Honesty contract in the UI" section that
+  documents *how* SPEC §34 is actually enforced in code — the `MetricTag`
+  Observed/Estimated/Simulated/Generated provenance chips (`.tag.*` classes), the
+  never-fabricate-a-Δ placeholder behaviour in MetricTile, visible uncertainty bands
+  (sparkline ±, Monte-Carlo 50/80/95%, ensemble disagreement), SIMULATED media stamps,
+  "waiting for backend" states, and the crash-safe error boundaries. Every claim verified
+  against the real code (MetricTag union in `lib/api.ts`, `.tag.observed/.estimated/`
+  `.simulated/.generated/.synthetic` in `globals.css`, evidence is POST, compile is SPEC
+  Step 2) — no fabricated numbers, docs only. Build/lint/typecheck unaffected (markdown).
+  **UI track roadmap complete through M13.**
