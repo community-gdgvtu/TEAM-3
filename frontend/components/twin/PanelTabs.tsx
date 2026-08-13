@@ -30,6 +30,7 @@ import PressConferencePanel from "./PressConferencePanel";
 import ComparePanel from "./ComparePanel";
 import GrandComparePanel from "./GrandComparePanel";
 import UncertaintyPanel from "./UncertaintyPanel";
+import SensitivityPanel from "./SensitivityPanel";
 import OptimiserPanel from "./OptimiserPanel";
 import EconomyPanel from "./EconomyPanel";
 import DynamicsPanel from "./DynamicsPanel";
@@ -58,6 +59,7 @@ type TabKey =
   | "diffusion"
   | "ensemble"
   | "uncertainty"
+  | "sensitivity"
   | "optimiser"
   | "economy"
   | "dynamics"
@@ -88,6 +90,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "diffusion", label: "Diffusion" },
   { key: "ensemble", label: "Ensemble" },
   { key: "uncertainty", label: "Uncertainty" },
+  { key: "sensitivity", label: "Sensitivity" },
   { key: "optimiser", label: "Optimiser" },
   { key: "economy", label: "Economy" },
   { key: "dynamics", label: "Dynamics" },
@@ -175,6 +178,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "uncertainty"}>
           <UncertaintyPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "sensitivity"}>
+          <SensitivityPanel />
         </div>
         <div role="tabpanel" hidden={active !== "optimiser"}>
           <OptimiserPanel />

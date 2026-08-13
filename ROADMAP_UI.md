@@ -224,3 +224,20 @@ Data Fabric (`GET /data-fabric`) and Change-assumptions-and-rerun (`GET /assumpt
 backend endpoint has a UI surface" line was no longer true. Documentation drift is a
 §34 honesty issue: the map a judge reads must match the app they click.
 - [x] Re-sync `frontend/README.md`: rewrite the intro surface list and the endpoint→SPEC table to cover all 28 analysis tabs in tab-bar order (North-Star/Run lead as the §37/§29 flagships), with exact endpoint paths verified against `lib/api.ts` (`/institutions/review`, `/parliament/failure-modes`, `/compare/grand`, `/assumptions/rerun`, …) and correct SPEC sections (§37, §5/§28.2, §7.1/§7.2, §21/§22, §4, §34.10); restore the accuracy of the "every documented backend endpoint has a UI surface" claim. Docs only, no code change; `tsc --noEmit` + `next build` already clean (SPEC §34)
+
+## M31 — Surface the global sensitivity tornado (SPEC §24/§26)
+The engine shipped `POST /sensitivity` after M30 declared the roadmap complete —
+the one endpoint the UI hadn't surfaced. Where the Uncertainty tab (`POST
+/uncertainty`) gives a Monte-Carlo fan for a *single* metric, this composes the
+cheap, deterministic, cross-metric one-at-a-time (OAT) attribution a
+decision-maker needs: sweep every documented assumption low→high edge (others at
+default) and measure the swing in *every* headline metric's policy effect Δ(B−A),
+then rank which assumptions the whole dashboard's answer rests on ("if you only
+pin two numbers, pin these"). It introduces **no new numeric model** — every
+value is a re-run of the same World-A/B/Δ path `/simulate` uses, and the swept
+set is the same `ASSUMPTIONS` registry the §24 Uncertainty fan sweeps (single
+source of truth), so the two can never disagree. Same rules: analysis Estimated,
+underlying Δ metrics Simulated, no LLM on the numeric path, bar length is
+leverage not likelihood, honest scope-limits, never fabricate a tornado when the
+backend is down.
+- [x] Sensitivity tab: `POST /sensitivity` → the cross-metric OAT tornado. Drive it from the compiled policy in the store with a Time-Machine horizon selector. Render a consistency banner (deterministic re-runs at documented assumption edges · no LLM · bar length = leverage-not-likelihood · interactions are the Uncertainty fan's job · same overridable set as the Uncertainty tab so they can't disagree), the plain-language `headline` of what the answer rests on, a **What-the-answer-rests-on** aggregate driver ranking (each assumption's mean influence-share across the dashboard as a leverage bar, with honest greyed-out "no effect here" rows for assumptions flat on every metric for this policy), and a **per-metric tornado** card per headline metric: its provenance tag, the default-assumption Δ(B−A), the most-influential assumption, and a signed bar per assumption spanning Δ-at-low → Δ-at-high with a default-Δ marker and the signed swing + %-of-default (up/down colouring, flat assumptions collapsed to a count). A collapsible §34 scope-limits list and the deterministic-attribution note close the tab. Analysis Estimated, underlying metrics Simulated (deterministic, no LLM); `idle` (no policy) / `loading` / `error` states when the backend is down, never mints a fabricated tornado (SPEC §24/§26/§34)

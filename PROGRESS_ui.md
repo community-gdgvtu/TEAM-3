@@ -930,3 +930,24 @@ show "Awaiting model / Awaiting /simulate"), never an invented number presented 
 green: `npx tsc --noEmit` clean, `npx next build` compiled successfully (4/4 static pages,
 / = 61.9 kB, First Load 150 kB). No code change — a green-state + honesty-contract confirmation.
 Frontend-only.
+
+- 2026-08-13 — M31: Surfaced the global sensitivity tornado (`POST /sensitivity`,
+  SPEC §24/§26) — the one endpoint the UI hadn't surfaced after the engine shipped
+  it. New `SensitivityPanel.tsx` (tab "Sensitivity", placed after Uncertainty in the
+  tab bar) drives the compiled policy through a Time-Machine horizon selector and
+  renders: a consistency banner (deterministic re-runs at documented assumption edges,
+  no LLM, bar-length = leverage-not-likelihood, interactions are the Uncertainty fan's
+  job, same overridable set as the Uncertainty tab), the `headline`, a
+  "what-the-answer-rests-on" aggregate driver ranking (mean influence-share leverage
+  bars, greyed "no effect here" rows for assumptions flat on this policy), and per-metric
+  tornado cards (provenance tag + default Δ(B−A) + most-influential assumption + signed
+  low→high bars with a default-Δ marker and swing/%-of-default, up/down coloured, flats
+  collapsed to a count), plus a collapsible §34 scope-limits list. Added typed
+  `AssumptionSwing`/`MetricTornado`/`AssumptionDriver`/`SensitivityResult` + `runSensitivity()`
+  to `lib/api.ts` (shapes matched verbatim to backend `sensitivity/schema.py`), wired the
+  tab into `PanelTabs.tsx`, and added scoped `.sens-*` CSS to `globals.css`. Analysis
+  Estimated, underlying metrics Simulated, no LLM on the numeric path; honest
+  idle/loading/error states — never fabricates a tornado when the backend is down (the
+  live :8000 here is a different app, so the tab correctly shows its waiting state).
+  Green: `npx tsc --noEmit` clean, `npx next build` compiled (4/4 static pages, / = 63.3 kB,
+  First Load 151 kB). Frontend-only.

@@ -1248,6 +1248,112 @@ export async function runUncertainty(
 }
 
 // ---------------------------------------------------------------------------
+// Global sensitivity tornado (SPEC §24/§26) — POST /sensitivity
+// ---------------------------------------------------------------------------
+
+/**
+ * How far one metric's policy effect Δ(B−A) moves when one assumption is swept
+ * from its documented low edge to its documented high edge (others held at
+ * default) — one bar of a tornado chart.
+ */
+export interface AssumptionSwing {
+  name: string;
+  label: string;
+  unit: string;
+  low_value: number;
+  high_value: number;
+  delta_at_low: number;
+  delta_at_high: number;
+  /** Signed high−low change in the metric's Δ. */
+  swing: number;
+  /** |swing| — the bar length for ranking. */
+  abs_swing: number;
+  /** |swing| as % of the default-assumption Δ (null when that Δ ≈ 0). */
+  pct_of_default: number | null;
+  /** This assumption's 0–1 share of THIS metric's total sensitivity. */
+  influence_share: number;
+  /** 'up' | 'down' | 'flat'. */
+  direction: string;
+}
+
+/** One headline metric's tornado: its default effect + every assumption swing. */
+export interface MetricTornado {
+  key: string;
+  label: string;
+  unit: string;
+  tag: MetricTag;
+  default_delta: number;
+  total_abs_swing: number;
+  most_influential: string | null;
+  bars: AssumptionSwing[];
+}
+
+/** One assumption's aggregate leverage across the whole dashboard. */
+export interface AssumptionDriver {
+  name: string;
+  label: string;
+  unit: string;
+  /** Mean influence_share across all metrics (0–1). */
+  global_score: number;
+  max_pct_of_default: number | null;
+  top_metric: string | null;
+  /** False when this assumption is flat on every metric for this policy. */
+  matters: boolean;
+  note: string;
+}
+
+/** Global one-at-a-time sensitivity tornado across all headline metrics. */
+export interface SensitivityResult {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  horizon: Checkpoint;
+  swept_assumptions: string[];
+  drivers: AssumptionDriver[];
+  tornados: MetricTornado[];
+  headline: string;
+  not_modelled: string[];
+}
+
+/**
+ * Cross-metric one-at-a-time sensitivity tornado for a compiled policy
+ * (`POST /sensitivity`, SPEC §24/§26). Where `/uncertainty` gives a Monte-Carlo
+ * fan for a *single* metric, this ranks which assumptions the whole dashboard's
+ * answer rests on. Every value is a re-run of the deterministic model at
+ * documented assumption edges — no LLM on the numeric path (SPEC §34). Throws on
+ * network/HTTP error so the panel can show an honest waiting/error state.
+ */
+export async function runSensitivity(
+  policy: PolicyDSL,
+  horizonMonths?: number | null,
+  metricKeys?: string[] | null,
+  signal?: AbortSignal,
+): Promise<SensitivityResult> {
+  const res = await fetch(`${API_BASE_URL}/sensitivity`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      policy,
+      ...(horizonMonths != null ? { horizon_months: horizonMonths } : {}),
+      ...(metricKeys && metricKeys.length > 0 ? { metric_keys: metricKeys } : {}),
+    }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as SensitivityResult;
+}
+
+// ---------------------------------------------------------------------------
 // Counterfactual comparison (SPEC §21) — POST /compare
 // ---------------------------------------------------------------------------
 

@@ -9413,3 +9413,225 @@ main.wide {
 .ns-guardrail-rule {
   color: var(--muted);
 }
+
+/* ------------------------------------------------------------------ */
+/* Sensitivity tornado (SPEC §24/§26) — global OAT leverage map        */
+/* ------------------------------------------------------------------ */
+.sens-consistency {
+  margin: 0.4rem 0 0.2rem;
+}
+.sens-body {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+.sens-headline {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+.sens-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+.sens-sub {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0.1rem;
+  color: var(--text);
+}
+.sens-sub-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 0 0 0.3rem;
+}
+
+/* Aggregate driver ranking */
+.sens-drivers {
+  display: grid;
+  gap: 0.35rem;
+}
+.sens-driver {
+  display: grid;
+  grid-template-columns: 22px minmax(140px, 1.4fr) 3fr minmax(120px, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+}
+.sens-driver.flat {
+  opacity: 0.55;
+}
+.sens-driver-rank {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.sens-driver-label {
+  font-size: 0.82rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sens-driver-unit {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+.sens-flat-tag {
+  margin-left: 0.4rem;
+  font-size: 0.68rem;
+}
+.sens-driver-track {
+  position: relative;
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+.sens-driver-bar {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.8;
+}
+.sens-driver-score {
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Per-metric tornado cards */
+.sens-tornados {
+  display: grid;
+  gap: 0.7rem;
+}
+.sens-metric {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+.sens-metric-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.sens-metric-label {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.sens-metric-unit {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.78rem;
+}
+.sens-metric-default {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+.sens-metric-default strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.sens-tor {
+  display: grid;
+  gap: 0.35rem;
+}
+.sens-tor-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.2fr) 3fr minmax(96px, 0.9fr);
+  align-items: center;
+  gap: 0.6rem;
+}
+.sens-tor-label {
+  font-size: 0.8rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sens-tor-track {
+  position: relative;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.sens-tor-mid {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(231, 236, 245, 0.3);
+}
+.sens-tor-bar {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.75;
+}
+.sens-tor-bar.up {
+  background: var(--accent);
+}
+.sens-tor-bar.down {
+  background: #b98bff;
+}
+.sens-tor-default {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 2px;
+  background: var(--text);
+  opacity: 0.85;
+}
+.sens-tor-swing {
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.sens-flat-note {
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+}
+.sens-notmodelled {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.sens-notmodelled summary {
+  cursor: pointer;
+  color: var(--text);
+}
+.sens-notmodelled ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+}
+.sens-note {
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .sens-driver {
+    grid-template-columns: 18px 1fr;
+    grid-template-areas:
+      "rank label"
+      "track track"
+      "score score";
+  }
+  .sens-tor-row {
+    grid-template-columns: 1fr 2fr minmax(80px, 0.8fr);
+  }
+}
