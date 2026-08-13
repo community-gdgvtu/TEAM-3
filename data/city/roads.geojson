@@ -1,0 +1,4182 @@
+{
+  "type": "FeatureCollection",
+  "name": "meridia_roads",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "L000",
+      "properties": {
+        "link_id": "L000",
+        "from_zone": "Z000",
+        "to_zone": "Z001",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.026949
+          ],
+          [
+            8.971416,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L001",
+      "properties": {
+        "link_id": "L001",
+        "from_zone": "Z000",
+        "to_zone": "Z009",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.026949
+          ],
+          [
+            8.961888,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L002",
+      "properties": {
+        "link_id": "L002",
+        "from_zone": "Z001",
+        "to_zone": "Z002",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.026949
+          ],
+          [
+            8.980944,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L003",
+      "properties": {
+        "link_id": "L003",
+        "from_zone": "Z001",
+        "to_zone": "Z010",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.026949
+          ],
+          [
+            8.971416,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L004",
+      "properties": {
+        "link_id": "L004",
+        "from_zone": "Z002",
+        "to_zone": "Z003",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.026949
+          ],
+          [
+            8.990472,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L005",
+      "properties": {
+        "link_id": "L005",
+        "from_zone": "Z002",
+        "to_zone": "Z011",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.026949
+          ],
+          [
+            8.980944,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L006",
+      "properties": {
+        "link_id": "L006",
+        "from_zone": "Z003",
+        "to_zone": "Z004",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.026949
+          ],
+          [
+            9.0,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L007",
+      "properties": {
+        "link_id": "L007",
+        "from_zone": "Z003",
+        "to_zone": "Z012",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.026949
+          ],
+          [
+            8.990472,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L008",
+      "properties": {
+        "link_id": "L008",
+        "from_zone": "Z004",
+        "to_zone": "Z005",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.026949
+          ],
+          [
+            9.009528,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L009",
+      "properties": {
+        "link_id": "L009",
+        "from_zone": "Z004",
+        "to_zone": "Z013",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.026949
+          ],
+          [
+            9.0,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L010",
+      "properties": {
+        "link_id": "L010",
+        "from_zone": "Z005",
+        "to_zone": "Z006",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.026949
+          ],
+          [
+            9.019056,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L011",
+      "properties": {
+        "link_id": "L011",
+        "from_zone": "Z005",
+        "to_zone": "Z014",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.026949
+          ],
+          [
+            9.009528,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L012",
+      "properties": {
+        "link_id": "L012",
+        "from_zone": "Z006",
+        "to_zone": "Z007",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.026949
+          ],
+          [
+            9.028584,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L013",
+      "properties": {
+        "link_id": "L013",
+        "from_zone": "Z006",
+        "to_zone": "Z015",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.026949
+          ],
+          [
+            9.019056,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L014",
+      "properties": {
+        "link_id": "L014",
+        "from_zone": "Z007",
+        "to_zone": "Z008",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7488,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.026949
+          ],
+          [
+            9.038112,
+            45.026949
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L015",
+      "properties": {
+        "link_id": "L015",
+        "from_zone": "Z007",
+        "to_zone": "Z016",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.026949
+          ],
+          [
+            9.028584,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L016",
+      "properties": {
+        "link_id": "L016",
+        "from_zone": "Z008",
+        "to_zone": "Z017",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            45.026949
+          ],
+          [
+            9.038112,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L017",
+      "properties": {
+        "link_id": "L017",
+        "from_zone": "Z009",
+        "to_zone": "Z010",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.020212
+          ],
+          [
+            8.971416,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L018",
+      "properties": {
+        "link_id": "L018",
+        "from_zone": "Z009",
+        "to_zone": "Z018",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.020212
+          ],
+          [
+            8.961888,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L019",
+      "properties": {
+        "link_id": "L019",
+        "from_zone": "Z010",
+        "to_zone": "Z011",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.020212
+          ],
+          [
+            8.980944,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L020",
+      "properties": {
+        "link_id": "L020",
+        "from_zone": "Z010",
+        "to_zone": "Z019",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.020212
+          ],
+          [
+            8.971416,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L021",
+      "properties": {
+        "link_id": "L021",
+        "from_zone": "Z011",
+        "to_zone": "Z012",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.020212
+          ],
+          [
+            8.990472,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L022",
+      "properties": {
+        "link_id": "L022",
+        "from_zone": "Z011",
+        "to_zone": "Z020",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.020212
+          ],
+          [
+            8.980944,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L023",
+      "properties": {
+        "link_id": "L023",
+        "from_zone": "Z012",
+        "to_zone": "Z013",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.020212
+          ],
+          [
+            9.0,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L024",
+      "properties": {
+        "link_id": "L024",
+        "from_zone": "Z012",
+        "to_zone": "Z021",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.020212
+          ],
+          [
+            8.990472,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L025",
+      "properties": {
+        "link_id": "L025",
+        "from_zone": "Z013",
+        "to_zone": "Z014",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.020212
+          ],
+          [
+            9.009528,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L026",
+      "properties": {
+        "link_id": "L026",
+        "from_zone": "Z013",
+        "to_zone": "Z022",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.020212
+          ],
+          [
+            9.0,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L027",
+      "properties": {
+        "link_id": "L027",
+        "from_zone": "Z014",
+        "to_zone": "Z015",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.020212
+          ],
+          [
+            9.019056,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L028",
+      "properties": {
+        "link_id": "L028",
+        "from_zone": "Z014",
+        "to_zone": "Z023",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.020212
+          ],
+          [
+            9.009528,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L029",
+      "properties": {
+        "link_id": "L029",
+        "from_zone": "Z015",
+        "to_zone": "Z016",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.020212
+          ],
+          [
+            9.028584,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L030",
+      "properties": {
+        "link_id": "L030",
+        "from_zone": "Z015",
+        "to_zone": "Z024",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.020212
+          ],
+          [
+            9.019056,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L031",
+      "properties": {
+        "link_id": "L031",
+        "from_zone": "Z016",
+        "to_zone": "Z017",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7489,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.020212
+          ],
+          [
+            9.038112,
+            45.020212
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L032",
+      "properties": {
+        "link_id": "L032",
+        "from_zone": "Z016",
+        "to_zone": "Z025",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.020212
+          ],
+          [
+            9.028584,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L033",
+      "properties": {
+        "link_id": "L033",
+        "from_zone": "Z017",
+        "to_zone": "Z026",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            45.020212
+          ],
+          [
+            9.038112,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L034",
+      "properties": {
+        "link_id": "L034",
+        "from_zone": "Z018",
+        "to_zone": "Z019",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.013475
+          ],
+          [
+            8.971416,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L035",
+      "properties": {
+        "link_id": "L035",
+        "from_zone": "Z018",
+        "to_zone": "Z027",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.013475
+          ],
+          [
+            8.961888,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L036",
+      "properties": {
+        "link_id": "L036",
+        "from_zone": "Z019",
+        "to_zone": "Z020",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.013475
+          ],
+          [
+            8.980944,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L037",
+      "properties": {
+        "link_id": "L037",
+        "from_zone": "Z019",
+        "to_zone": "Z028",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.013475
+          ],
+          [
+            8.971416,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L038",
+      "properties": {
+        "link_id": "L038",
+        "from_zone": "Z020",
+        "to_zone": "Z021",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.013475
+          ],
+          [
+            8.990472,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L039",
+      "properties": {
+        "link_id": "L039",
+        "from_zone": "Z020",
+        "to_zone": "Z029",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.013475
+          ],
+          [
+            8.980944,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L040",
+      "properties": {
+        "link_id": "L040",
+        "from_zone": "Z021",
+        "to_zone": "Z022",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.013475
+          ],
+          [
+            9.0,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L041",
+      "properties": {
+        "link_id": "L041",
+        "from_zone": "Z021",
+        "to_zone": "Z030",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.013475
+          ],
+          [
+            8.990472,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L042",
+      "properties": {
+        "link_id": "L042",
+        "from_zone": "Z022",
+        "to_zone": "Z023",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.013475
+          ],
+          [
+            9.009528,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L043",
+      "properties": {
+        "link_id": "L043",
+        "from_zone": "Z022",
+        "to_zone": "Z031",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.013475
+          ],
+          [
+            9.0,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L044",
+      "properties": {
+        "link_id": "L044",
+        "from_zone": "Z023",
+        "to_zone": "Z024",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.013475
+          ],
+          [
+            9.019056,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L045",
+      "properties": {
+        "link_id": "L045",
+        "from_zone": "Z023",
+        "to_zone": "Z032",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.013475
+          ],
+          [
+            9.009528,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L046",
+      "properties": {
+        "link_id": "L046",
+        "from_zone": "Z024",
+        "to_zone": "Z025",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.013475
+          ],
+          [
+            9.028584,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L047",
+      "properties": {
+        "link_id": "L047",
+        "from_zone": "Z024",
+        "to_zone": "Z033",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.013475
+          ],
+          [
+            9.019056,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L048",
+      "properties": {
+        "link_id": "L048",
+        "from_zone": "Z025",
+        "to_zone": "Z026",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.749,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.013475
+          ],
+          [
+            9.038112,
+            45.013475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L049",
+      "properties": {
+        "link_id": "L049",
+        "from_zone": "Z025",
+        "to_zone": "Z034",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.013475
+          ],
+          [
+            9.028584,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L050",
+      "properties": {
+        "link_id": "L050",
+        "from_zone": "Z026",
+        "to_zone": "Z035",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            45.013475
+          ],
+          [
+            9.038112,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L051",
+      "properties": {
+        "link_id": "L051",
+        "from_zone": "Z027",
+        "to_zone": "Z028",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.006737
+          ],
+          [
+            8.971416,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L052",
+      "properties": {
+        "link_id": "L052",
+        "from_zone": "Z027",
+        "to_zone": "Z036",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.006737
+          ],
+          [
+            8.961888,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L053",
+      "properties": {
+        "link_id": "L053",
+        "from_zone": "Z028",
+        "to_zone": "Z029",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.006737
+          ],
+          [
+            8.980944,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L054",
+      "properties": {
+        "link_id": "L054",
+        "from_zone": "Z028",
+        "to_zone": "Z037",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.006737
+          ],
+          [
+            8.971416,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L055",
+      "properties": {
+        "link_id": "L055",
+        "from_zone": "Z029",
+        "to_zone": "Z030",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.006737
+          ],
+          [
+            8.990472,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L056",
+      "properties": {
+        "link_id": "L056",
+        "from_zone": "Z029",
+        "to_zone": "Z038",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.006737
+          ],
+          [
+            8.980944,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L057",
+      "properties": {
+        "link_id": "L057",
+        "from_zone": "Z030",
+        "to_zone": "Z031",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.006737
+          ],
+          [
+            9.0,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L058",
+      "properties": {
+        "link_id": "L058",
+        "from_zone": "Z030",
+        "to_zone": "Z039",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.006737
+          ],
+          [
+            8.990472,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L059",
+      "properties": {
+        "link_id": "L059",
+        "from_zone": "Z031",
+        "to_zone": "Z032",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.006737
+          ],
+          [
+            9.009528,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L060",
+      "properties": {
+        "link_id": "L060",
+        "from_zone": "Z031",
+        "to_zone": "Z040",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.006737
+          ],
+          [
+            9.0,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L061",
+      "properties": {
+        "link_id": "L061",
+        "from_zone": "Z032",
+        "to_zone": "Z033",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.006737
+          ],
+          [
+            9.019056,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L062",
+      "properties": {
+        "link_id": "L062",
+        "from_zone": "Z032",
+        "to_zone": "Z041",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.006737
+          ],
+          [
+            9.009528,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L063",
+      "properties": {
+        "link_id": "L063",
+        "from_zone": "Z033",
+        "to_zone": "Z034",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.006737
+          ],
+          [
+            9.028584,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L064",
+      "properties": {
+        "link_id": "L064",
+        "from_zone": "Z033",
+        "to_zone": "Z042",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.006737
+          ],
+          [
+            9.019056,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L065",
+      "properties": {
+        "link_id": "L065",
+        "from_zone": "Z034",
+        "to_zone": "Z035",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.006737
+          ],
+          [
+            9.038112,
+            45.006737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L066",
+      "properties": {
+        "link_id": "L066",
+        "from_zone": "Z034",
+        "to_zone": "Z043",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.006737
+          ],
+          [
+            9.028584,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L067",
+      "properties": {
+        "link_id": "L067",
+        "from_zone": "Z035",
+        "to_zone": "Z044",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            45.006737
+          ],
+          [
+            9.038112,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L068",
+      "properties": {
+        "link_id": "L068",
+        "from_zone": "Z036",
+        "to_zone": "Z037",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.0
+          ],
+          [
+            8.971416,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L069",
+      "properties": {
+        "link_id": "L069",
+        "from_zone": "Z036",
+        "to_zone": "Z045",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            45.0
+          ],
+          [
+            8.961888,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L070",
+      "properties": {
+        "link_id": "L070",
+        "from_zone": "Z037",
+        "to_zone": "Z038",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.0
+          ],
+          [
+            8.980944,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L071",
+      "properties": {
+        "link_id": "L071",
+        "from_zone": "Z037",
+        "to_zone": "Z046",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            45.0
+          ],
+          [
+            8.971416,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L072",
+      "properties": {
+        "link_id": "L072",
+        "from_zone": "Z038",
+        "to_zone": "Z039",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.0
+          ],
+          [
+            8.990472,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L073",
+      "properties": {
+        "link_id": "L073",
+        "from_zone": "Z038",
+        "to_zone": "Z047",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            45.0
+          ],
+          [
+            8.980944,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L074",
+      "properties": {
+        "link_id": "L074",
+        "from_zone": "Z039",
+        "to_zone": "Z040",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.0
+          ],
+          [
+            9.0,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L075",
+      "properties": {
+        "link_id": "L075",
+        "from_zone": "Z039",
+        "to_zone": "Z048",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            45.0
+          ],
+          [
+            8.990472,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L076",
+      "properties": {
+        "link_id": "L076",
+        "from_zone": "Z040",
+        "to_zone": "Z041",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.0
+          ],
+          [
+            9.009528,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L077",
+      "properties": {
+        "link_id": "L077",
+        "from_zone": "Z040",
+        "to_zone": "Z049",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            45.0
+          ],
+          [
+            9.0,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L078",
+      "properties": {
+        "link_id": "L078",
+        "from_zone": "Z041",
+        "to_zone": "Z042",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.0
+          ],
+          [
+            9.019056,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L079",
+      "properties": {
+        "link_id": "L079",
+        "from_zone": "Z041",
+        "to_zone": "Z050",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            45.0
+          ],
+          [
+            9.009528,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L080",
+      "properties": {
+        "link_id": "L080",
+        "from_zone": "Z042",
+        "to_zone": "Z043",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.0
+          ],
+          [
+            9.028584,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L081",
+      "properties": {
+        "link_id": "L081",
+        "from_zone": "Z042",
+        "to_zone": "Z051",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            45.0
+          ],
+          [
+            9.019056,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L082",
+      "properties": {
+        "link_id": "L082",
+        "from_zone": "Z043",
+        "to_zone": "Z044",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.0
+          ],
+          [
+            9.038112,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L083",
+      "properties": {
+        "link_id": "L083",
+        "from_zone": "Z043",
+        "to_zone": "Z052",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            45.0
+          ],
+          [
+            9.028584,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L084",
+      "properties": {
+        "link_id": "L084",
+        "from_zone": "Z044",
+        "to_zone": "Z053",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            45.0
+          ],
+          [
+            9.038112,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L085",
+      "properties": {
+        "link_id": "L085",
+        "from_zone": "Z045",
+        "to_zone": "Z046",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.993263
+          ],
+          [
+            8.971416,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L086",
+      "properties": {
+        "link_id": "L086",
+        "from_zone": "Z045",
+        "to_zone": "Z054",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.993263
+          ],
+          [
+            8.961888,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L087",
+      "properties": {
+        "link_id": "L087",
+        "from_zone": "Z046",
+        "to_zone": "Z047",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.993263
+          ],
+          [
+            8.980944,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L088",
+      "properties": {
+        "link_id": "L088",
+        "from_zone": "Z046",
+        "to_zone": "Z055",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.993263
+          ],
+          [
+            8.971416,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L089",
+      "properties": {
+        "link_id": "L089",
+        "from_zone": "Z047",
+        "to_zone": "Z048",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.993263
+          ],
+          [
+            8.990472,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L090",
+      "properties": {
+        "link_id": "L090",
+        "from_zone": "Z047",
+        "to_zone": "Z056",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.993263
+          ],
+          [
+            8.980944,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L091",
+      "properties": {
+        "link_id": "L091",
+        "from_zone": "Z048",
+        "to_zone": "Z049",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.993263
+          ],
+          [
+            9.0,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L092",
+      "properties": {
+        "link_id": "L092",
+        "from_zone": "Z048",
+        "to_zone": "Z057",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.993263
+          ],
+          [
+            8.990472,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L093",
+      "properties": {
+        "link_id": "L093",
+        "from_zone": "Z049",
+        "to_zone": "Z050",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": false,
+        "interior_cbd": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.993263
+          ],
+          [
+            9.009528,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L094",
+      "properties": {
+        "link_id": "L094",
+        "from_zone": "Z049",
+        "to_zone": "Z058",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.993263
+          ],
+          [
+            9.0,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L095",
+      "properties": {
+        "link_id": "L095",
+        "from_zone": "Z050",
+        "to_zone": "Z051",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.993263
+          ],
+          [
+            9.019056,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L096",
+      "properties": {
+        "link_id": "L096",
+        "from_zone": "Z050",
+        "to_zone": "Z059",
+        "road_class": "arterial",
+        "lanes": 2,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 1800,
+        "free_flow_speed_kmh": 40,
+        "crosses_cordon": true,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.993263
+          ],
+          [
+            9.009528,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L097",
+      "properties": {
+        "link_id": "L097",
+        "from_zone": "Z051",
+        "to_zone": "Z052",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.993263
+          ],
+          [
+            9.028584,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L098",
+      "properties": {
+        "link_id": "L098",
+        "from_zone": "Z051",
+        "to_zone": "Z060",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.993263
+          ],
+          [
+            9.019056,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L099",
+      "properties": {
+        "link_id": "L099",
+        "from_zone": "Z052",
+        "to_zone": "Z053",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.993263
+          ],
+          [
+            9.038112,
+            44.993263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L100",
+      "properties": {
+        "link_id": "L100",
+        "from_zone": "Z052",
+        "to_zone": "Z061",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.993263
+          ],
+          [
+            9.028584,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L101",
+      "properties": {
+        "link_id": "L101",
+        "from_zone": "Z053",
+        "to_zone": "Z062",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7492,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            44.993263
+          ],
+          [
+            9.038112,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L102",
+      "properties": {
+        "link_id": "L102",
+        "from_zone": "Z054",
+        "to_zone": "Z055",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.986525
+          ],
+          [
+            8.971416,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L103",
+      "properties": {
+        "link_id": "L103",
+        "from_zone": "Z054",
+        "to_zone": "Z063",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.986525
+          ],
+          [
+            8.961888,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L104",
+      "properties": {
+        "link_id": "L104",
+        "from_zone": "Z055",
+        "to_zone": "Z056",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.986525
+          ],
+          [
+            8.980944,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L105",
+      "properties": {
+        "link_id": "L105",
+        "from_zone": "Z055",
+        "to_zone": "Z064",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.986525
+          ],
+          [
+            8.971416,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L106",
+      "properties": {
+        "link_id": "L106",
+        "from_zone": "Z056",
+        "to_zone": "Z057",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.986525
+          ],
+          [
+            8.990472,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L107",
+      "properties": {
+        "link_id": "L107",
+        "from_zone": "Z056",
+        "to_zone": "Z065",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.986525
+          ],
+          [
+            8.980944,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L108",
+      "properties": {
+        "link_id": "L108",
+        "from_zone": "Z057",
+        "to_zone": "Z058",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.986525
+          ],
+          [
+            9.0,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L109",
+      "properties": {
+        "link_id": "L109",
+        "from_zone": "Z057",
+        "to_zone": "Z066",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.986525
+          ],
+          [
+            8.990472,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L110",
+      "properties": {
+        "link_id": "L110",
+        "from_zone": "Z058",
+        "to_zone": "Z059",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.986525
+          ],
+          [
+            9.009528,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L111",
+      "properties": {
+        "link_id": "L111",
+        "from_zone": "Z058",
+        "to_zone": "Z067",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.986525
+          ],
+          [
+            9.0,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L112",
+      "properties": {
+        "link_id": "L112",
+        "from_zone": "Z059",
+        "to_zone": "Z060",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.986525
+          ],
+          [
+            9.019056,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L113",
+      "properties": {
+        "link_id": "L113",
+        "from_zone": "Z059",
+        "to_zone": "Z068",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.986525
+          ],
+          [
+            9.009528,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L114",
+      "properties": {
+        "link_id": "L114",
+        "from_zone": "Z060",
+        "to_zone": "Z061",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.986525
+          ],
+          [
+            9.028584,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L115",
+      "properties": {
+        "link_id": "L115",
+        "from_zone": "Z060",
+        "to_zone": "Z069",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.986525
+          ],
+          [
+            9.019056,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L116",
+      "properties": {
+        "link_id": "L116",
+        "from_zone": "Z061",
+        "to_zone": "Z062",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7493,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.986525
+          ],
+          [
+            9.038112,
+            44.986525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L117",
+      "properties": {
+        "link_id": "L117",
+        "from_zone": "Z061",
+        "to_zone": "Z070",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.986525
+          ],
+          [
+            9.028584,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L118",
+      "properties": {
+        "link_id": "L118",
+        "from_zone": "Z062",
+        "to_zone": "Z071",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            44.986525
+          ],
+          [
+            9.038112,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L119",
+      "properties": {
+        "link_id": "L119",
+        "from_zone": "Z063",
+        "to_zone": "Z064",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.979788
+          ],
+          [
+            8.971416,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L120",
+      "properties": {
+        "link_id": "L120",
+        "from_zone": "Z063",
+        "to_zone": "Z072",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.979788
+          ],
+          [
+            8.961888,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L121",
+      "properties": {
+        "link_id": "L121",
+        "from_zone": "Z064",
+        "to_zone": "Z065",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.979788
+          ],
+          [
+            8.980944,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L122",
+      "properties": {
+        "link_id": "L122",
+        "from_zone": "Z064",
+        "to_zone": "Z073",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.979788
+          ],
+          [
+            8.971416,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L123",
+      "properties": {
+        "link_id": "L123",
+        "from_zone": "Z065",
+        "to_zone": "Z066",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.979788
+          ],
+          [
+            8.990472,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L124",
+      "properties": {
+        "link_id": "L124",
+        "from_zone": "Z065",
+        "to_zone": "Z074",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.979788
+          ],
+          [
+            8.980944,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L125",
+      "properties": {
+        "link_id": "L125",
+        "from_zone": "Z066",
+        "to_zone": "Z067",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.979788
+          ],
+          [
+            9.0,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L126",
+      "properties": {
+        "link_id": "L126",
+        "from_zone": "Z066",
+        "to_zone": "Z075",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.979788
+          ],
+          [
+            8.990472,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L127",
+      "properties": {
+        "link_id": "L127",
+        "from_zone": "Z067",
+        "to_zone": "Z068",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.979788
+          ],
+          [
+            9.009528,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L128",
+      "properties": {
+        "link_id": "L128",
+        "from_zone": "Z067",
+        "to_zone": "Z076",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.979788
+          ],
+          [
+            9.0,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L129",
+      "properties": {
+        "link_id": "L129",
+        "from_zone": "Z068",
+        "to_zone": "Z069",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.979788
+          ],
+          [
+            9.019056,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L130",
+      "properties": {
+        "link_id": "L130",
+        "from_zone": "Z068",
+        "to_zone": "Z077",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.979788
+          ],
+          [
+            9.009528,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L131",
+      "properties": {
+        "link_id": "L131",
+        "from_zone": "Z069",
+        "to_zone": "Z070",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.979788
+          ],
+          [
+            9.028584,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L132",
+      "properties": {
+        "link_id": "L132",
+        "from_zone": "Z069",
+        "to_zone": "Z078",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.979788
+          ],
+          [
+            9.019056,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L133",
+      "properties": {
+        "link_id": "L133",
+        "from_zone": "Z070",
+        "to_zone": "Z071",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7494,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.979788
+          ],
+          [
+            9.038112,
+            44.979788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L134",
+      "properties": {
+        "link_id": "L134",
+        "from_zone": "Z070",
+        "to_zone": "Z079",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.979788
+          ],
+          [
+            9.028584,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L135",
+      "properties": {
+        "link_id": "L135",
+        "from_zone": "Z071",
+        "to_zone": "Z080",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7491,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.038112,
+            44.979788
+          ],
+          [
+            9.038112,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L136",
+      "properties": {
+        "link_id": "L136",
+        "from_zone": "Z072",
+        "to_zone": "Z073",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.961888,
+            44.973051
+          ],
+          [
+            8.971416,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L137",
+      "properties": {
+        "link_id": "L137",
+        "from_zone": "Z073",
+        "to_zone": "Z074",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.971416,
+            44.973051
+          ],
+          [
+            8.980944,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L138",
+      "properties": {
+        "link_id": "L138",
+        "from_zone": "Z074",
+        "to_zone": "Z075",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.980944,
+            44.973051
+          ],
+          [
+            8.990472,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L139",
+      "properties": {
+        "link_id": "L139",
+        "from_zone": "Z075",
+        "to_zone": "Z076",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            8.990472,
+            44.973051
+          ],
+          [
+            9.0,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L140",
+      "properties": {
+        "link_id": "L140",
+        "from_zone": "Z076",
+        "to_zone": "Z077",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.0,
+            44.973051
+          ],
+          [
+            9.009528,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L141",
+      "properties": {
+        "link_id": "L141",
+        "from_zone": "Z077",
+        "to_zone": "Z078",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.009528,
+            44.973051
+          ],
+          [
+            9.019056,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L142",
+      "properties": {
+        "link_id": "L142",
+        "from_zone": "Z078",
+        "to_zone": "Z079",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.019056,
+            44.973051
+          ],
+          [
+            9.028584,
+            44.973051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "L143",
+      "properties": {
+        "link_id": "L143",
+        "from_zone": "Z079",
+        "to_zone": "Z080",
+        "road_class": "local",
+        "lanes": 1,
+        "length_km": 0.7495,
+        "capacity_veh_per_hr": 900,
+        "free_flow_speed_kmh": 50,
+        "crosses_cordon": false,
+        "interior_cbd": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.028584,
+            44.973051
+          ],
+          [
+            9.038112,
+            44.973051
+          ]
+        ]
+      }
+    }
+  ]
+}

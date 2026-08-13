@@ -1,0 +1,3651 @@
+{
+  "type": "FeatureCollection",
+  "name": "meridia_zones",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "Z000",
+      "properties": {
+        "zone_id": "Z000",
+        "row": 0,
+        "col": 0,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1134,
+        "households": 502,
+        "jobs": 2184,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              45.02358
+            ],
+            [
+              8.966652,
+              45.02358
+            ],
+            [
+              8.966652,
+              45.030318
+            ],
+            [
+              8.957124,
+              45.030318
+            ],
+            [
+              8.957124,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z001",
+      "properties": {
+        "zone_id": "Z001",
+        "row": 0,
+        "col": 1,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1498,
+        "households": 693,
+        "jobs": 2776,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              45.02358
+            ],
+            [
+              8.97618,
+              45.02358
+            ],
+            [
+              8.97618,
+              45.030318
+            ],
+            [
+              8.966652,
+              45.030318
+            ],
+            [
+              8.966652,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z002",
+      "properties": {
+        "zone_id": "Z002",
+        "row": 0,
+        "col": 2,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3734,
+        "households": 1521,
+        "jobs": 798,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              45.02358
+            ],
+            [
+              8.985708,
+              45.02358
+            ],
+            [
+              8.985708,
+              45.030318
+            ],
+            [
+              8.97618,
+              45.030318
+            ],
+            [
+              8.97618,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z003",
+      "properties": {
+        "zone_id": "Z003",
+        "row": 0,
+        "col": 3,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4045,
+        "households": 1630,
+        "jobs": 953,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              45.02358
+            ],
+            [
+              8.995236,
+              45.02358
+            ],
+            [
+              8.995236,
+              45.030318
+            ],
+            [
+              8.985708,
+              45.030318
+            ],
+            [
+              8.985708,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z004",
+      "properties": {
+        "zone_id": "Z004",
+        "row": 0,
+        "col": 4,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4764,
+        "households": 2263,
+        "jobs": 1011,
+        "centroid_lon": 9.0,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              45.02358
+            ],
+            [
+              9.004764,
+              45.02358
+            ],
+            [
+              9.004764,
+              45.030318
+            ],
+            [
+              8.995236,
+              45.030318
+            ],
+            [
+              8.995236,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z005",
+      "properties": {
+        "zone_id": "Z005",
+        "row": 0,
+        "col": 5,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 377,
+        "households": 170,
+        "jobs": 168,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              45.02358
+            ],
+            [
+              9.014292,
+              45.02358
+            ],
+            [
+              9.014292,
+              45.030318
+            ],
+            [
+              9.004764,
+              45.030318
+            ],
+            [
+              9.004764,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z006",
+      "properties": {
+        "zone_id": "Z006",
+        "row": 0,
+        "col": 6,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 327,
+        "households": 150,
+        "jobs": 150,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              45.02358
+            ],
+            [
+              9.02382,
+              45.02358
+            ],
+            [
+              9.02382,
+              45.030318
+            ],
+            [
+              9.014292,
+              45.030318
+            ],
+            [
+              9.014292,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z007",
+      "properties": {
+        "zone_id": "Z007",
+        "row": 0,
+        "col": 7,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 364,
+        "households": 139,
+        "jobs": 202,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              45.02358
+            ],
+            [
+              9.033348,
+              45.02358
+            ],
+            [
+              9.033348,
+              45.030318
+            ],
+            [
+              9.02382,
+              45.030318
+            ],
+            [
+              9.02382,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z008",
+      "properties": {
+        "zone_id": "Z008",
+        "row": 0,
+        "col": 8,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1664,
+        "households": 669,
+        "jobs": 2283,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 45.026949
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              45.02358
+            ],
+            [
+              9.042876,
+              45.02358
+            ],
+            [
+              9.042876,
+              45.030318
+            ],
+            [
+              9.033348,
+              45.030318
+            ],
+            [
+              9.033348,
+              45.02358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z009",
+      "properties": {
+        "zone_id": "Z009",
+        "row": 1,
+        "col": 0,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 366,
+        "households": 146,
+        "jobs": 206,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              45.016843
+            ],
+            [
+              8.966652,
+              45.016843
+            ],
+            [
+              8.966652,
+              45.023581
+            ],
+            [
+              8.957124,
+              45.023581
+            ],
+            [
+              8.957124,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z010",
+      "properties": {
+        "zone_id": "Z010",
+        "row": 1,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4976,
+        "households": 2202,
+        "jobs": 736,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              45.016843
+            ],
+            [
+              8.97618,
+              45.016843
+            ],
+            [
+              8.97618,
+              45.023581
+            ],
+            [
+              8.966652,
+              45.023581
+            ],
+            [
+              8.966652,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z011",
+      "properties": {
+        "zone_id": "Z011",
+        "row": 1,
+        "col": 2,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4212,
+        "households": 1861,
+        "jobs": 748,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              45.016843
+            ],
+            [
+              8.985708,
+              45.016843
+            ],
+            [
+              8.985708,
+              45.023581
+            ],
+            [
+              8.97618,
+              45.023581
+            ],
+            [
+              8.97618,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z012",
+      "properties": {
+        "zone_id": "Z012",
+        "row": 1,
+        "col": 3,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3865,
+        "households": 1518,
+        "jobs": 820,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              45.016843
+            ],
+            [
+              8.995236,
+              45.016843
+            ],
+            [
+              8.995236,
+              45.023581
+            ],
+            [
+              8.985708,
+              45.023581
+            ],
+            [
+              8.985708,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z013",
+      "properties": {
+        "zone_id": "Z013",
+        "row": 1,
+        "col": 4,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4351,
+        "households": 1936,
+        "jobs": 853,
+        "centroid_lon": 9.0,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              45.016843
+            ],
+            [
+              9.004764,
+              45.016843
+            ],
+            [
+              9.004764,
+              45.023581
+            ],
+            [
+              8.995236,
+              45.023581
+            ],
+            [
+              8.995236,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z014",
+      "properties": {
+        "zone_id": "Z014",
+        "row": 1,
+        "col": 5,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4171,
+        "households": 1633,
+        "jobs": 1057,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              45.016843
+            ],
+            [
+              9.014292,
+              45.016843
+            ],
+            [
+              9.014292,
+              45.023581
+            ],
+            [
+              9.004764,
+              45.023581
+            ],
+            [
+              9.004764,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z015",
+      "properties": {
+        "zone_id": "Z015",
+        "row": 1,
+        "col": 6,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4800,
+        "households": 1838,
+        "jobs": 781,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              45.016843
+            ],
+            [
+              9.02382,
+              45.016843
+            ],
+            [
+              9.02382,
+              45.023581
+            ],
+            [
+              9.014292,
+              45.023581
+            ],
+            [
+              9.014292,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z016",
+      "properties": {
+        "zone_id": "Z016",
+        "row": 1,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3980,
+        "households": 1425,
+        "jobs": 856,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              45.016843
+            ],
+            [
+              9.033348,
+              45.016843
+            ],
+            [
+              9.033348,
+              45.023581
+            ],
+            [
+              9.02382,
+              45.023581
+            ],
+            [
+              9.02382,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z017",
+      "properties": {
+        "zone_id": "Z017",
+        "row": 1,
+        "col": 8,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1431,
+        "households": 531,
+        "jobs": 2577,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 45.020212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              45.016843
+            ],
+            [
+              9.042876,
+              45.016843
+            ],
+            [
+              9.042876,
+              45.023581
+            ],
+            [
+              9.033348,
+              45.023581
+            ],
+            [
+              9.033348,
+              45.016843
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z018",
+      "properties": {
+        "zone_id": "Z018",
+        "row": 2,
+        "col": 0,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1248,
+        "households": 537,
+        "jobs": 1950,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              45.010106
+            ],
+            [
+              8.966652,
+              45.010106
+            ],
+            [
+              8.966652,
+              45.016844
+            ],
+            [
+              8.957124,
+              45.016844
+            ],
+            [
+              8.957124,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z019",
+      "properties": {
+        "zone_id": "Z019",
+        "row": 2,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4172,
+        "households": 1511,
+        "jobs": 795,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              45.010106
+            ],
+            [
+              8.97618,
+              45.010106
+            ],
+            [
+              8.97618,
+              45.016844
+            ],
+            [
+              8.966652,
+              45.016844
+            ],
+            [
+              8.966652,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z020",
+      "properties": {
+        "zone_id": "Z020",
+        "row": 2,
+        "col": 2,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3681,
+        "households": 1438,
+        "jobs": 2407,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              45.010106
+            ],
+            [
+              8.985708,
+              45.010106
+            ],
+            [
+              8.985708,
+              45.016844
+            ],
+            [
+              8.97618,
+              45.016844
+            ],
+            [
+              8.97618,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z021",
+      "properties": {
+        "zone_id": "Z021",
+        "row": 2,
+        "col": 3,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3066,
+        "households": 1266,
+        "jobs": 3031,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              45.010106
+            ],
+            [
+              8.995236,
+              45.010106
+            ],
+            [
+              8.995236,
+              45.016844
+            ],
+            [
+              8.985708,
+              45.016844
+            ],
+            [
+              8.985708,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z022",
+      "properties": {
+        "zone_id": "Z022",
+        "row": 2,
+        "col": 4,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2899,
+        "households": 1162,
+        "jobs": 2336,
+        "centroid_lon": 9.0,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              45.010106
+            ],
+            [
+              9.004764,
+              45.010106
+            ],
+            [
+              9.004764,
+              45.016844
+            ],
+            [
+              8.995236,
+              45.016844
+            ],
+            [
+              8.995236,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z023",
+      "properties": {
+        "zone_id": "Z023",
+        "row": 2,
+        "col": 5,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2896,
+        "households": 1061,
+        "jobs": 2687,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              45.010106
+            ],
+            [
+              9.014292,
+              45.010106
+            ],
+            [
+              9.014292,
+              45.016844
+            ],
+            [
+              9.004764,
+              45.016844
+            ],
+            [
+              9.004764,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z024",
+      "properties": {
+        "zone_id": "Z024",
+        "row": 2,
+        "col": 6,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3071,
+        "households": 1097,
+        "jobs": 2308,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              45.010106
+            ],
+            [
+              9.02382,
+              45.010106
+            ],
+            [
+              9.02382,
+              45.016844
+            ],
+            [
+              9.014292,
+              45.016844
+            ],
+            [
+              9.014292,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z025",
+      "properties": {
+        "zone_id": "Z025",
+        "row": 2,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4617,
+        "households": 2164,
+        "jobs": 752,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              45.010106
+            ],
+            [
+              9.033348,
+              45.010106
+            ],
+            [
+              9.033348,
+              45.016844
+            ],
+            [
+              9.02382,
+              45.016844
+            ],
+            [
+              9.02382,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z026",
+      "properties": {
+        "zone_id": "Z026",
+        "row": 2,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4834,
+        "households": 2017,
+        "jobs": 1005,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 45.013475
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              45.010106
+            ],
+            [
+              9.042876,
+              45.010106
+            ],
+            [
+              9.042876,
+              45.016844
+            ],
+            [
+              9.033348,
+              45.016844
+            ],
+            [
+              9.033348,
+              45.010106
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z027",
+      "properties": {
+        "zone_id": "Z027",
+        "row": 3,
+        "col": 0,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4382,
+        "households": 1773,
+        "jobs": 1078,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              45.003368
+            ],
+            [
+              8.966652,
+              45.003368
+            ],
+            [
+              8.966652,
+              45.010106
+            ],
+            [
+              8.957124,
+              45.010106
+            ],
+            [
+              8.957124,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z028",
+      "properties": {
+        "zone_id": "Z028",
+        "row": 3,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5466,
+        "households": 2592,
+        "jobs": 1029,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              45.003368
+            ],
+            [
+              8.97618,
+              45.003368
+            ],
+            [
+              8.97618,
+              45.010106
+            ],
+            [
+              8.966652,
+              45.010106
+            ],
+            [
+              8.966652,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z029",
+      "properties": {
+        "zone_id": "Z029",
+        "row": 3,
+        "col": 2,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3482,
+        "households": 1406,
+        "jobs": 2788,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              45.003368
+            ],
+            [
+              8.985708,
+              45.003368
+            ],
+            [
+              8.985708,
+              45.010106
+            ],
+            [
+              8.97618,
+              45.010106
+            ],
+            [
+              8.97618,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z030",
+      "properties": {
+        "zone_id": "Z030",
+        "row": 3,
+        "col": 3,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 816,
+        "households": 374,
+        "jobs": 6549,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              45.003368
+            ],
+            [
+              8.995236,
+              45.003368
+            ],
+            [
+              8.995236,
+              45.010106
+            ],
+            [
+              8.985708,
+              45.010106
+            ],
+            [
+              8.985708,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z031",
+      "properties": {
+        "zone_id": "Z031",
+        "row": 3,
+        "col": 4,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 876,
+        "households": 316,
+        "jobs": 6085,
+        "centroid_lon": 9.0,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              45.003368
+            ],
+            [
+              9.004764,
+              45.003368
+            ],
+            [
+              9.004764,
+              45.010106
+            ],
+            [
+              8.995236,
+              45.010106
+            ],
+            [
+              8.995236,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z032",
+      "properties": {
+        "zone_id": "Z032",
+        "row": 3,
+        "col": 5,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 1035,
+        "households": 422,
+        "jobs": 5613,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              45.003368
+            ],
+            [
+              9.014292,
+              45.003368
+            ],
+            [
+              9.014292,
+              45.010106
+            ],
+            [
+              9.004764,
+              45.010106
+            ],
+            [
+              9.004764,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z033",
+      "properties": {
+        "zone_id": "Z033",
+        "row": 3,
+        "col": 6,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2788,
+        "households": 1029,
+        "jobs": 3029,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              45.003368
+            ],
+            [
+              9.02382,
+              45.003368
+            ],
+            [
+              9.02382,
+              45.010106
+            ],
+            [
+              9.014292,
+              45.010106
+            ],
+            [
+              9.014292,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z034",
+      "properties": {
+        "zone_id": "Z034",
+        "row": 3,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4229,
+        "households": 1674,
+        "jobs": 950,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              45.003368
+            ],
+            [
+              9.033348,
+              45.003368
+            ],
+            [
+              9.033348,
+              45.010106
+            ],
+            [
+              9.02382,
+              45.010106
+            ],
+            [
+              9.02382,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z035",
+      "properties": {
+        "zone_id": "Z035",
+        "row": 3,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5083,
+        "households": 1921,
+        "jobs": 914,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 45.006737
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              45.003368
+            ],
+            [
+              9.042876,
+              45.003368
+            ],
+            [
+              9.042876,
+              45.010106
+            ],
+            [
+              9.033348,
+              45.010106
+            ],
+            [
+              9.033348,
+              45.003368
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z036",
+      "properties": {
+        "zone_id": "Z036",
+        "row": 4,
+        "col": 0,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1120,
+        "households": 529,
+        "jobs": 2231,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              44.996631
+            ],
+            [
+              8.966652,
+              44.996631
+            ],
+            [
+              8.966652,
+              45.003369
+            ],
+            [
+              8.957124,
+              45.003369
+            ],
+            [
+              8.957124,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z037",
+      "properties": {
+        "zone_id": "Z037",
+        "row": 4,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5389,
+        "households": 2009,
+        "jobs": 1036,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              44.996631
+            ],
+            [
+              8.97618,
+              44.996631
+            ],
+            [
+              8.97618,
+              45.003369
+            ],
+            [
+              8.966652,
+              45.003369
+            ],
+            [
+              8.966652,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z038",
+      "properties": {
+        "zone_id": "Z038",
+        "row": 4,
+        "col": 2,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2953,
+        "households": 1087,
+        "jobs": 2140,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              44.996631
+            ],
+            [
+              8.985708,
+              44.996631
+            ],
+            [
+              8.985708,
+              45.003369
+            ],
+            [
+              8.97618,
+              45.003369
+            ],
+            [
+              8.97618,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z039",
+      "properties": {
+        "zone_id": "Z039",
+        "row": 4,
+        "col": 3,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 1060,
+        "households": 434,
+        "jobs": 5172,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              44.996631
+            ],
+            [
+              8.995236,
+              44.996631
+            ],
+            [
+              8.995236,
+              45.003369
+            ],
+            [
+              8.985708,
+              45.003369
+            ],
+            [
+              8.985708,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z040",
+      "properties": {
+        "zone_id": "Z040",
+        "row": 4,
+        "col": 4,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 744,
+        "households": 282,
+        "jobs": 6846,
+        "centroid_lon": 9.0,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              44.996631
+            ],
+            [
+              9.004764,
+              44.996631
+            ],
+            [
+              9.004764,
+              45.003369
+            ],
+            [
+              8.995236,
+              45.003369
+            ],
+            [
+              8.995236,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z041",
+      "properties": {
+        "zone_id": "Z041",
+        "row": 4,
+        "col": 5,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 766,
+        "households": 308,
+        "jobs": 6138,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              44.996631
+            ],
+            [
+              9.014292,
+              44.996631
+            ],
+            [
+              9.014292,
+              45.003369
+            ],
+            [
+              9.004764,
+              45.003369
+            ],
+            [
+              9.004764,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z042",
+      "properties": {
+        "zone_id": "Z042",
+        "row": 4,
+        "col": 6,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2899,
+        "households": 1209,
+        "jobs": 2987,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              44.996631
+            ],
+            [
+              9.02382,
+              44.996631
+            ],
+            [
+              9.02382,
+              45.003369
+            ],
+            [
+              9.014292,
+              45.003369
+            ],
+            [
+              9.014292,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z043",
+      "properties": {
+        "zone_id": "Z043",
+        "row": 4,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4069,
+        "households": 1558,
+        "jobs": 914,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              44.996631
+            ],
+            [
+              9.033348,
+              44.996631
+            ],
+            [
+              9.033348,
+              45.003369
+            ],
+            [
+              9.02382,
+              45.003369
+            ],
+            [
+              9.02382,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z044",
+      "properties": {
+        "zone_id": "Z044",
+        "row": 4,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4253,
+        "households": 1664,
+        "jobs": 1078,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 45.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              44.996631
+            ],
+            [
+              9.042876,
+              44.996631
+            ],
+            [
+              9.042876,
+              45.003369
+            ],
+            [
+              9.033348,
+              45.003369
+            ],
+            [
+              9.033348,
+              44.996631
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z045",
+      "properties": {
+        "zone_id": "Z045",
+        "row": 5,
+        "col": 0,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4632,
+        "households": 2052,
+        "jobs": 763,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              44.989894
+            ],
+            [
+              8.966652,
+              44.989894
+            ],
+            [
+              8.966652,
+              44.996632
+            ],
+            [
+              8.957124,
+              44.996632
+            ],
+            [
+              8.957124,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z046",
+      "properties": {
+        "zone_id": "Z046",
+        "row": 5,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4302,
+        "households": 1902,
+        "jobs": 931,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              44.989894
+            ],
+            [
+              8.97618,
+              44.989894
+            ],
+            [
+              8.97618,
+              44.996632
+            ],
+            [
+              8.966652,
+              44.996632
+            ],
+            [
+              8.966652,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z047",
+      "properties": {
+        "zone_id": "Z047",
+        "row": 5,
+        "col": 2,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2841,
+        "households": 1117,
+        "jobs": 2153,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              44.989894
+            ],
+            [
+              8.985708,
+              44.989894
+            ],
+            [
+              8.985708,
+              44.996632
+            ],
+            [
+              8.97618,
+              44.996632
+            ],
+            [
+              8.97618,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z048",
+      "properties": {
+        "zone_id": "Z048",
+        "row": 5,
+        "col": 3,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 802,
+        "households": 296,
+        "jobs": 7205,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              44.989894
+            ],
+            [
+              8.995236,
+              44.989894
+            ],
+            [
+              8.995236,
+              44.996632
+            ],
+            [
+              8.985708,
+              44.996632
+            ],
+            [
+              8.985708,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z049",
+      "properties": {
+        "zone_id": "Z049",
+        "row": 5,
+        "col": 4,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 745,
+        "households": 290,
+        "jobs": 5550,
+        "centroid_lon": 9.0,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              44.989894
+            ],
+            [
+              9.004764,
+              44.989894
+            ],
+            [
+              9.004764,
+              44.996632
+            ],
+            [
+              8.995236,
+              44.996632
+            ],
+            [
+              8.995236,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z050",
+      "properties": {
+        "zone_id": "Z050",
+        "row": 5,
+        "col": 5,
+        "category": "cbd",
+        "land_use": "commercial",
+        "is_cbd": true,
+        "area_km2": 0.5625,
+        "population": 797,
+        "households": 289,
+        "jobs": 5288,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              44.989894
+            ],
+            [
+              9.014292,
+              44.989894
+            ],
+            [
+              9.014292,
+              44.996632
+            ],
+            [
+              9.004764,
+              44.996632
+            ],
+            [
+              9.004764,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z051",
+      "properties": {
+        "zone_id": "Z051",
+        "row": 5,
+        "col": 6,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3290,
+        "households": 1241,
+        "jobs": 2571,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              44.989894
+            ],
+            [
+              9.02382,
+              44.989894
+            ],
+            [
+              9.02382,
+              44.996632
+            ],
+            [
+              9.014292,
+              44.996632
+            ],
+            [
+              9.014292,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z052",
+      "properties": {
+        "zone_id": "Z052",
+        "row": 5,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5165,
+        "households": 2382,
+        "jobs": 788,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              44.989894
+            ],
+            [
+              9.033348,
+              44.989894
+            ],
+            [
+              9.033348,
+              44.996632
+            ],
+            [
+              9.02382,
+              44.996632
+            ],
+            [
+              9.02382,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z053",
+      "properties": {
+        "zone_id": "Z053",
+        "row": 5,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4459,
+        "households": 1708,
+        "jobs": 888,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 44.993263
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              44.989894
+            ],
+            [
+              9.042876,
+              44.989894
+            ],
+            [
+              9.042876,
+              44.996632
+            ],
+            [
+              9.033348,
+              44.996632
+            ],
+            [
+              9.033348,
+              44.989894
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z054",
+      "properties": {
+        "zone_id": "Z054",
+        "row": 6,
+        "col": 0,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1671,
+        "households": 701,
+        "jobs": 2014,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              44.983156
+            ],
+            [
+              8.966652,
+              44.983156
+            ],
+            [
+              8.966652,
+              44.989894
+            ],
+            [
+              8.957124,
+              44.989894
+            ],
+            [
+              8.957124,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z055",
+      "properties": {
+        "zone_id": "Z055",
+        "row": 6,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4304,
+        "households": 1892,
+        "jobs": 1030,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              44.983156
+            ],
+            [
+              8.97618,
+              44.983156
+            ],
+            [
+              8.97618,
+              44.989894
+            ],
+            [
+              8.966652,
+              44.989894
+            ],
+            [
+              8.966652,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z056",
+      "properties": {
+        "zone_id": "Z056",
+        "row": 6,
+        "col": 2,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2803,
+        "households": 1170,
+        "jobs": 2546,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              44.983156
+            ],
+            [
+              8.985708,
+              44.983156
+            ],
+            [
+              8.985708,
+              44.989894
+            ],
+            [
+              8.97618,
+              44.989894
+            ],
+            [
+              8.97618,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z057",
+      "properties": {
+        "zone_id": "Z057",
+        "row": 6,
+        "col": 3,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2916,
+        "households": 1061,
+        "jobs": 2339,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              44.983156
+            ],
+            [
+              8.995236,
+              44.983156
+            ],
+            [
+              8.995236,
+              44.989894
+            ],
+            [
+              8.985708,
+              44.989894
+            ],
+            [
+              8.985708,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z058",
+      "properties": {
+        "zone_id": "Z058",
+        "row": 6,
+        "col": 4,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3127,
+        "households": 1258,
+        "jobs": 2975,
+        "centroid_lon": 9.0,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              44.983156
+            ],
+            [
+              9.004764,
+              44.983156
+            ],
+            [
+              9.004764,
+              44.989894
+            ],
+            [
+              8.995236,
+              44.989894
+            ],
+            [
+              8.995236,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z059",
+      "properties": {
+        "zone_id": "Z059",
+        "row": 6,
+        "col": 5,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 2624,
+        "households": 977,
+        "jobs": 3119,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              44.983156
+            ],
+            [
+              9.014292,
+              44.983156
+            ],
+            [
+              9.014292,
+              44.989894
+            ],
+            [
+              9.004764,
+              44.989894
+            ],
+            [
+              9.004764,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z060",
+      "properties": {
+        "zone_id": "Z060",
+        "row": 6,
+        "col": 6,
+        "category": "inner",
+        "land_use": "mixed",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3800,
+        "households": 1410,
+        "jobs": 3043,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              44.983156
+            ],
+            [
+              9.02382,
+              44.983156
+            ],
+            [
+              9.02382,
+              44.989894
+            ],
+            [
+              9.014292,
+              44.989894
+            ],
+            [
+              9.014292,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z061",
+      "properties": {
+        "zone_id": "Z061",
+        "row": 6,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3986,
+        "households": 1771,
+        "jobs": 894,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              44.983156
+            ],
+            [
+              9.033348,
+              44.983156
+            ],
+            [
+              9.033348,
+              44.989894
+            ],
+            [
+              9.02382,
+              44.989894
+            ],
+            [
+              9.02382,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z062",
+      "properties": {
+        "zone_id": "Z062",
+        "row": 6,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 3787,
+        "households": 1357,
+        "jobs": 856,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 44.986525
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              44.983156
+            ],
+            [
+              9.042876,
+              44.983156
+            ],
+            [
+              9.042876,
+              44.989894
+            ],
+            [
+              9.033348,
+              44.989894
+            ],
+            [
+              9.033348,
+              44.983156
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z063",
+      "properties": {
+        "zone_id": "Z063",
+        "row": 7,
+        "col": 0,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5122,
+        "households": 2137,
+        "jobs": 883,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              44.976419
+            ],
+            [
+              8.966652,
+              44.976419
+            ],
+            [
+              8.966652,
+              44.983157
+            ],
+            [
+              8.957124,
+              44.983157
+            ],
+            [
+              8.957124,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z064",
+      "properties": {
+        "zone_id": "Z064",
+        "row": 7,
+        "col": 1,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5441,
+        "households": 2185,
+        "jobs": 1078,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              44.976419
+            ],
+            [
+              8.97618,
+              44.976419
+            ],
+            [
+              8.97618,
+              44.983157
+            ],
+            [
+              8.966652,
+              44.983157
+            ],
+            [
+              8.966652,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z065",
+      "properties": {
+        "zone_id": "Z065",
+        "row": 7,
+        "col": 2,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5001,
+        "households": 2167,
+        "jobs": 775,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              44.976419
+            ],
+            [
+              8.985708,
+              44.976419
+            ],
+            [
+              8.985708,
+              44.983157
+            ],
+            [
+              8.97618,
+              44.983157
+            ],
+            [
+              8.97618,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z066",
+      "properties": {
+        "zone_id": "Z066",
+        "row": 7,
+        "col": 3,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5462,
+        "households": 2202,
+        "jobs": 928,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              44.976419
+            ],
+            [
+              8.995236,
+              44.976419
+            ],
+            [
+              8.995236,
+              44.983157
+            ],
+            [
+              8.985708,
+              44.983157
+            ],
+            [
+              8.985708,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z067",
+      "properties": {
+        "zone_id": "Z067",
+        "row": 7,
+        "col": 4,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5056,
+        "households": 2015,
+        "jobs": 740,
+        "centroid_lon": 9.0,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              44.976419
+            ],
+            [
+              9.004764,
+              44.976419
+            ],
+            [
+              9.004764,
+              44.983157
+            ],
+            [
+              8.995236,
+              44.983157
+            ],
+            [
+              8.995236,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z068",
+      "properties": {
+        "zone_id": "Z068",
+        "row": 7,
+        "col": 5,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4605,
+        "households": 2083,
+        "jobs": 1026,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              44.976419
+            ],
+            [
+              9.014292,
+              44.976419
+            ],
+            [
+              9.014292,
+              44.983157
+            ],
+            [
+              9.004764,
+              44.983157
+            ],
+            [
+              9.004764,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z069",
+      "properties": {
+        "zone_id": "Z069",
+        "row": 7,
+        "col": 6,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5447,
+        "households": 2442,
+        "jobs": 748,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              44.976419
+            ],
+            [
+              9.02382,
+              44.976419
+            ],
+            [
+              9.02382,
+              44.983157
+            ],
+            [
+              9.014292,
+              44.983157
+            ],
+            [
+              9.014292,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z070",
+      "properties": {
+        "zone_id": "Z070",
+        "row": 7,
+        "col": 7,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4774,
+        "households": 2108,
+        "jobs": 963,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              44.976419
+            ],
+            [
+              9.033348,
+              44.976419
+            ],
+            [
+              9.033348,
+              44.983157
+            ],
+            [
+              9.02382,
+              44.983157
+            ],
+            [
+              9.02382,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z071",
+      "properties": {
+        "zone_id": "Z071",
+        "row": 7,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5318,
+        "households": 2113,
+        "jobs": 808,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 44.979788
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              44.976419
+            ],
+            [
+              9.042876,
+              44.976419
+            ],
+            [
+              9.042876,
+              44.983157
+            ],
+            [
+              9.033348,
+              44.983157
+            ],
+            [
+              9.033348,
+              44.976419
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z072",
+      "properties": {
+        "zone_id": "Z072",
+        "row": 8,
+        "col": 0,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1354,
+        "households": 549,
+        "jobs": 2480,
+        "centroid_lon": 8.961888,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.957124,
+              44.969682
+            ],
+            [
+              8.966652,
+              44.969682
+            ],
+            [
+              8.966652,
+              44.97642
+            ],
+            [
+              8.957124,
+              44.97642
+            ],
+            [
+              8.957124,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z073",
+      "properties": {
+        "zone_id": "Z073",
+        "row": 8,
+        "col": 1,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 308,
+        "households": 135,
+        "jobs": 195,
+        "centroid_lon": 8.971416,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.966652,
+              44.969682
+            ],
+            [
+              8.97618,
+              44.969682
+            ],
+            [
+              8.97618,
+              44.97642
+            ],
+            [
+              8.966652,
+              44.97642
+            ],
+            [
+              8.966652,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z074",
+      "properties": {
+        "zone_id": "Z074",
+        "row": 8,
+        "col": 2,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4915,
+        "households": 2117,
+        "jobs": 827,
+        "centroid_lon": 8.980944,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.97618,
+              44.969682
+            ],
+            [
+              8.985708,
+              44.969682
+            ],
+            [
+              8.985708,
+              44.97642
+            ],
+            [
+              8.97618,
+              44.97642
+            ],
+            [
+              8.97618,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z075",
+      "properties": {
+        "zone_id": "Z075",
+        "row": 8,
+        "col": 3,
+        "category": "industrial",
+        "land_use": "industrial",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 1160,
+        "households": 414,
+        "jobs": 2359,
+        "centroid_lon": 8.990472,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.985708,
+              44.969682
+            ],
+            [
+              8.995236,
+              44.969682
+            ],
+            [
+              8.995236,
+              44.97642
+            ],
+            [
+              8.985708,
+              44.97642
+            ],
+            [
+              8.985708,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z076",
+      "properties": {
+        "zone_id": "Z076",
+        "row": 8,
+        "col": 4,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 290,
+        "households": 126,
+        "jobs": 159,
+        "centroid_lon": 9.0,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.995236,
+              44.969682
+            ],
+            [
+              9.004764,
+              44.969682
+            ],
+            [
+              9.004764,
+              44.97642
+            ],
+            [
+              8.995236,
+              44.97642
+            ],
+            [
+              8.995236,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z077",
+      "properties": {
+        "zone_id": "Z077",
+        "row": 8,
+        "col": 5,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 403,
+        "households": 170,
+        "jobs": 207,
+        "centroid_lon": 9.009528,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.004764,
+              44.969682
+            ],
+            [
+              9.014292,
+              44.969682
+            ],
+            [
+              9.014292,
+              44.97642
+            ],
+            [
+              9.004764,
+              44.97642
+            ],
+            [
+              9.004764,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z078",
+      "properties": {
+        "zone_id": "Z078",
+        "row": 8,
+        "col": 6,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 5214,
+        "households": 2062,
+        "jobs": 973,
+        "centroid_lon": 9.019056,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.014292,
+              44.969682
+            ],
+            [
+              9.02382,
+              44.969682
+            ],
+            [
+              9.02382,
+              44.97642
+            ],
+            [
+              9.014292,
+              44.97642
+            ],
+            [
+              9.014292,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z079",
+      "properties": {
+        "zone_id": "Z079",
+        "row": 8,
+        "col": 7,
+        "category": "green",
+        "land_use": "green_space",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 371,
+        "households": 138,
+        "jobs": 144,
+        "centroid_lon": 9.028584,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.02382,
+              44.969682
+            ],
+            [
+              9.033348,
+              44.969682
+            ],
+            [
+              9.033348,
+              44.97642
+            ],
+            [
+              9.02382,
+              44.97642
+            ],
+            [
+              9.02382,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "Z080",
+      "properties": {
+        "zone_id": "Z080",
+        "row": 8,
+        "col": 8,
+        "category": "residential",
+        "land_use": "residential",
+        "is_cbd": false,
+        "area_km2": 0.5625,
+        "population": 4900,
+        "households": 2233,
+        "jobs": 1058,
+        "centroid_lon": 9.038112,
+        "centroid_lat": 44.973051
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              9.033348,
+              44.969682
+            ],
+            [
+              9.042876,
+              44.969682
+            ],
+            [
+              9.042876,
+              44.97642
+            ],
+            [
+              9.033348,
+              44.97642
+            ],
+            [
+              9.033348,
+              44.969682
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
