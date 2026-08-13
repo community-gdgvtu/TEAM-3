@@ -50,3 +50,14 @@ Dated notes, newest at the bottom. One line per shipped item.
   banner naming the active amendment; the map time badge switches to "World B".
   "Show baseline" reverts. Every number comes from the model — no fabricated
   effects (SPEC §34). `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M5.3: Failure Mode Register (Devil's Advocate "Red Team" panel,
+  SPEC §12/§27). New FailureModesPanel convenes `POST /parliament/failure-modes`
+  on the compiled policy and renders the ranked register: each mode shows a
+  severity chip (low→critical), an estimated-likelihood meter, the composite risk
+  score (severity weight × probability, the ranking key), the causal mechanism, a
+  concrete mitigation callout, modelled exposure (commuters/trips), and the
+  Simulated evidence chips it rests on. Provenance stated honestly — risk scores
+  Estimated, cited figures Simulated; an empty register renders an explicit
+  "no modes raised" state rather than inventing risk (SPEC §34). Graceful
+  no-policy / loading / error states. **M5 complete.** `tsc --noEmit` +
+  `next build` clean.

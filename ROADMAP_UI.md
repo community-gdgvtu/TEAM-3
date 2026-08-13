@@ -21,7 +21,7 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 ## M5 — Parliament view + amendment loop (SPEC §11/§27)
 - [x] Parliament screen: list the agents (Government/Opposition/Equity/Economist/Devil's Advocate) and render `/parliament/debate` transcript with citations
 - [x] "Apply amendment + re-simulate" button → calls `/simulate` with amended DSL and updates the map/dashboard (the killer interaction, SPEC §29)
-- [ ] Failure Mode Register panel from the Devil's Advocate output
+- [x] Failure Mode Register panel from the Devil's Advocate output
 
 ## M6 — Public reaction + media (SPEC §13/§15)
 - [ ] Public reaction view: cohort support distribution by income/geography (charts). Use the `dataviz` conventions
