@@ -288,3 +288,19 @@ Dated notes, newest at the bottom. One line per shipped item.
   it never renders or invents a metric, it only points at what the backend produced
   (or its "waiting for backend" state) and narrates the flow. `tsc --noEmit` +
   `next build` clean.
+- 2026-08-13 — M12.1: Demo resilience — App Router error boundaries (SPEC §34).
+  With every documented engine endpoint surfaced and each panel already handling
+  its own fetch idle/loading/error states, the remaining gap was a *render* throw:
+  an unexpected backend payload shape, a deck.gl/MapLibre runtime error, or a deep
+  null deref inside a chart is not caught by a panel's try/catch and would blank the
+  whole app to Next's default crash page — reading, mid-demo, as "the product broke".
+  Added `app/error.tsx` (segment boundary, renders inside the root layout so it reuses
+  globals.css theme tokens + .card/.btn/.eyebrow utilities; logs to console; offers
+  Try again = reset() and Reload = location.reload) and `app/global-error.tsx` (root
+  boundary for a layout-level throw — it replaces the whole document, so it renders its
+  own <html>/<body> with self-contained inline styles matching the brand palette and a
+  reset() reload). Both keep the honesty contract: a clear failure message + the error
+  digest for debugging, and NEVER a fabricated or estimated number (SPEC §34). Added two
+  small utility classes (.error-boundary, .error-actions) to globals.css. Verified full
+  suite: `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4
+  static pages). **M12 complete.**

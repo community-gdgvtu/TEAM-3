@@ -58,3 +58,9 @@ never invent one when the backend is down. Endpoint paths as documented.
 Every documented engine endpoint now has a UI surface. This milestone makes the
 whole thing legible to a judge in 60 seconds without inventing any numbers.
 - [x] Guided demo tour: a floating launcher runs a spotlight walkthrough of the real UI — draft → compile → run counterfactual → scrub time → read tagged outcomes → Parliament debate/amendment → Red Team → transparency Registry. Pure guidance (never renders/fabricates a metric); drives the analysis tab bar; keyboard + Esc nav (SPEC §29)
+
+## M12 — Demo resilience (crash safety, SPEC §34)
+Every endpoint is now surfaced and every panel handles its own fetch idle/loading/error
+states. This milestone hardens against the failure the per-panel states can't catch — a
+render throw that would blank the whole app mid-demo — keeping the honesty contract intact.
+- [x] App Router error boundaries: `app/error.tsx` (segment) + `app/global-error.tsx` (root layout). A render throw — unexpected backend payload shape, deck.gl/MapLibre runtime error, deep null deref — is contained to a themed, honest recovery card (clear message + error digest + Try again / Reload) instead of Next's default crash page. Never fabricates or estimates a metric; global-error is self-contained (own html/body, inline styles) since it replaces the root layout (SPEC §34)
