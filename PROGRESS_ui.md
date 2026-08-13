@@ -1129,3 +1129,21 @@ Engine commit f5852af made two more mechanisms numerically distinct that no UI s
 - **Fund buses, no charge** (mechanism *Transit supply*): pure carrot (fare cut + new routes + frequencies, general-fund, no charge/ban); verified to yield transit_investment DSL. `watch` frames the honest missing-stick guardrail (car drop ≤ transit gain) vs any pricing scheme.
 Both prompts grounded in the engine's §7.5 mechanisms and compile to real, distinct DSL — the UI mints no numbers (§34). No new types/styles/endpoints; existing chip loader + active-highlight + idle-reset apply unchanged. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean.
 Follow-up: none. Frontend README has no example-count to sync (gallery is part of the compiler surface).
+
+## 2026-08-13 — M43: active-travel reinvestment chip (SPEC §7.5/§9/§34)
+Engine commit 61dd8ec made `revenue_allocation.active_travel` actually bite (an
+`active_travel_speed_multiplier = 1 + share·0.20` scales active-travel speed + max
+walk/cycle distance in World B, pulling nearest-margin short-trip commuters onto
+foot/bike; engages only when the charge raises revenue, ramps over the horizon).
+No gallery chip exposed it. Added one to `PolicyCompiler.EXAMPLE_POLICIES`:
+- **Charge, fund cycling** (mechanism *Active-travel reinvest*): 12-credit cordon
+  spending 80% of revenue on protected cycle lanes + wider pavements. Verified via
+  `.venv/bin/python parse_policy` → road_pricing, `active_travel = 0.8`,
+  `public_transport = 0.0` (transit is matched first, so no transit % is named).
+  `watch` frames the revenue-destination comparison vs the bus-funded charge and the
+  neutral-until-revenue guardrail (§9), no figure. Placed between "Bus-funded charge"
+  and "Fund buses, no charge" so the three revenue-destination levers sit together.
+Chip mints no numbers (§34); existing chip loader + active-highlight + idle-reset
+apply unchanged; no new types/styles/endpoints. `tsc --noEmit` + `next build` +
+`next lint` + `npm test` (36) all clean.
+Follow-up: none. Frontend README has no example-count to sync (gallery lives inside the compiler surface).

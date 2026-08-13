@@ -117,6 +117,23 @@ const EXAMPLE_POLICIES: ExamplePolicy[] = [
       "transit the easy choice.",
   },
   {
+    id: "active-travel-reinvest",
+    label: "Charge, fund cycling",
+    mechanism: "Active-travel reinvest",
+    watch:
+      "Same cordon charge, but the revenue builds protected cycle lanes and wider " +
+      "pavements instead of buses. Watch the twin pull the nearest short-trip " +
+      "commuters onto foot and bike — a different destination for the displaced " +
+      "trips than the bus-funded charge, and a lever that stays neutral until the " +
+      "charge actually raises revenue.",
+    text:
+      "Charge private vehicles 12 credits to enter the central business district " +
+      "between 7am and 7pm on weekdays, starting 2026-01-01. Exempt buses, taxis, " +
+      "and blue-badge holders. Spend 80% of the revenue on protected cycle lanes " +
+      "and wider pavements. The aim is to cut short car trips by making walking and " +
+      "cycling the easy choice.",
+  },
+  {
     id: "standalone-transit",
     label: "Fund buses, no charge",
     mechanism: "Transit supply",

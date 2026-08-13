@@ -396,3 +396,23 @@ simulates each, and both prompts were verified against the rule-based compiler t
 produce the intended DSL (road_pricing @ 08:30–18:00 → coverage 0.5; transit_investment,
 general-fund, no charge).
 - [x] Add two chips to `PolicyCompiler`'s `EXAMPLE_POLICIES`: a "Late-start charge" (mechanism *Time-of-day pricing*) — the same 12-credit cordon but operating 8:30am–6pm so it covers only half the inbound peak, whose `watch` frames the timing→attenuation comparison against the all-day cordon, not a figure; and a "Fund buses, no charge" (mechanism *Transit supply*) — a pure carrot (cheaper/faster/more-frequent buses, general-fund, no charge/ban) whose `watch` frames the honest missing-stick guardrail (car drop ≤ transit gain) versus every pricing scheme. Both prompts grounded in the engine's §7.5 mechanisms and verified against the rule-based compiler so each yields the intended distinct DSL (the UI invents nothing; SPEC §34). No new types, styles, or endpoints — the existing chip loader, active-example highlight, and idle-reset all apply unchanged. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean (SPEC §7.5/§9/§34)
+
+## M43 — Surface the active-travel reinvestment mechanism (SPEC §7.5/§9/§34)
+After M42's two chips shipped, the engine track landed one more *numerically
+distinct* mechanism (commit 61dd8ec): `revenue_allocation.active_travel` — a
+first-class, LLM-extractable DSL field — used to be a silent no-op (the
+revenue→service lever read only `public_transport`), so a policy spending 100% of
+charge revenue on cycle lanes/pavements produced byte-identical traffic/emissions
+to banking it in the general fund. It now drives an
+`active_travel_speed_multiplier = 1 + share·0.20` (Estimated) that scales
+active-travel speed and the max walkable/cyclable distance in World B, pulling the
+nearest-margin short-trip car/transit commuters onto foot/bike — engaging only when
+the charge actually raises revenue and ramping over the horizon like transit
+reinvestment (§9). The gallery had no chip for it: no way to see that *where* a
+charge's revenue goes (buses vs. bike lanes) changes which trips move and how.
+Pure discoverability — the chip mints no numbers; the backend still compiles and
+simulates it, and the prompt was verified against the rule-based compiler
+(`.venv/bin/python … parse_policy`) to yield the intended distinct DSL
+(road_pricing 12-credit cordon, `revenue_allocation.active_travel = 0.8`,
+`public_transport = 0.0`) — the active-travel-dominant split the new lever bites on.
+- [x] Add a "Charge, fund cycling" chip (mechanism *Active-travel reinvest*) to `PolicyCompiler`'s `EXAMPLE_POLICIES`: the same 12-credit cordon but spending 80% of revenue on protected cycle lanes and wider pavements, whose `watch` frames the where-does-revenue-go comparison against the bus-funded charge (different destination for displaced trips) and the honest neutral-until-revenue guardrail (§9), never a figure. Placed between the "Bus-funded charge" and "Fund buses, no charge" chips so the three revenue-destination levers sit together. Prompt grounded in the engine's §7.5 mechanism and verified against the rule-based compiler so it yields the intended active-travel-dominant DSL (transit is matched first, so no transit percentage is mentioned — the UI invents nothing; SPEC §34). No new types, styles, or endpoints — the existing chip loader, active-example highlight, and idle-reset all apply unchanged. `tsc --noEmit` + `next build` + `next lint` + `npm test` (36) all clean (SPEC §7.5/§9/§34)
