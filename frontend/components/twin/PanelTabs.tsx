@@ -26,6 +26,7 @@ import RegistryPanel from "./RegistryPanel";
 import InstitutionsPanel from "./InstitutionsPanel";
 import PressConferencePanel from "./PressConferencePanel";
 import ComparePanel from "./ComparePanel";
+import GrandComparePanel from "./GrandComparePanel";
 import UncertaintyPanel from "./UncertaintyPanel";
 import OptimiserPanel from "./OptimiserPanel";
 import EconomyPanel from "./EconomyPanel";
@@ -48,6 +49,7 @@ type TabKey =
   | "presser"
   | "redteam"
   | "compare"
+  | "grand"
   | "sdg"
   | "diffusion"
   | "ensemble"
@@ -75,6 +77,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "presser", label: "Presser" },
   { key: "redteam", label: "Red Team" },
   { key: "compare", label: "Compare" },
+  { key: "grand", label: "Grand A/B/C/D" },
   { key: "sdg", label: "SDG" },
   { key: "diffusion", label: "Diffusion" },
   { key: "ensemble", label: "Ensemble" },
@@ -145,6 +148,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "compare"}>
           <ComparePanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "grand"}>
+          <GrandComparePanel />
         </div>
         <div role="tabpanel" hidden={active !== "sdg"}>
           <SdgPanel />

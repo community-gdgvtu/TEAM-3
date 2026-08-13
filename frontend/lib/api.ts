@@ -1287,6 +1287,60 @@ export interface CounterfactualComparison {
   horizon: Checkpoint;
   worlds: CounterfactualWorld[];
   headline_table: ComparisonRow[];
+  /**
+   * How the C/D worlds were derived — present only on the grand A/B/C/D
+   * comparison (`POST /compare/grand`); `null`/absent on a plain `/compare`.
+   */
+  derivation?: GrandDerivation | null;
+}
+
+/** Optimiser candidate config underlying World D (from the §22 optimiser). */
+export interface OptimiserCandidateConfig {
+  intervention_type: string;
+  charge_amount: number | null;
+  public_transport_share: number;
+  exempt_low_income: boolean;
+  pedestrianised: boolean;
+}
+
+/** World C audit record: how the opposition amendment was derived (SPEC §21). */
+export interface GrandWorldC {
+  role: string;
+  /** 'caller' (supplied) or a deterministic-default source label. */
+  source: string;
+  proposed: boolean;
+  amendment: Amendment | null;
+  rationale: string;
+}
+
+/** World D audit record: the §22 optimiser's best-balanced pick (SPEC §21/§22). */
+export interface GrandWorldD {
+  role: string;
+  objective: Record<string, number>;
+  constraints: Record<string, number>;
+  constraints_satisfiable: boolean;
+  /** Which recommendation slot supplied World D (e.g. 'best_balanced'). */
+  selection: string;
+  chosen_policy_id: string | null;
+  config: OptimiserCandidateConfig | null;
+  feasible: boolean | null;
+  n_candidates: number;
+  n_feasible: number;
+}
+
+/** The `derivation` audit block returned only by `POST /compare/grand`. */
+export interface GrandDerivation {
+  world_c?: GrandWorldC;
+  world_d?: GrandWorldD;
+}
+
+/** Request body for `POST /compare/grand`. */
+export interface GrandCompareRequest {
+  policy: PolicyDSL;
+  amendment?: Amendment | null;
+  objective?: Record<string, number>;
+  constraints?: Record<string, number>;
+  horizon_months?: number | null;
 }
 
 /**
@@ -1304,6 +1358,38 @@ export async function runCompare(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ policy, amendments }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as CounterfactualComparison;
+}
+
+/**
+ * Grand counterfactual (SPEC §21/§22): the canonical four-way comparison —
+ * World A (baseline) vs B (the compiled policy) vs C (opposition amendment,
+ * auto-derived when none is supplied) vs D (the URBAN-optimised best-balanced
+ * pick). Same deterministic payload as `/compare` plus a `derivation` audit
+ * block explaining how C/D were composed. The baseline is always present; every
+ * number is Simulated, no LLM on the numeric path (SPEC §34). Throws on error.
+ */
+export async function runGrandCompare(
+  req: GrandCompareRequest,
+  signal?: AbortSignal,
+): Promise<CounterfactualComparison> {
+  const res = await fetch(`${API_BASE_URL}/compare/grand`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
     signal,
     cache: "no-store",
   });

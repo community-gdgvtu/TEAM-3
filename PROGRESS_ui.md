@@ -744,3 +744,33 @@ declared the UI roadmap complete — a newly unsurfaced endpoint. Added the **Ti
   added `asm-*` styles to `globals.css` (mobile-safe). `tsc --noEmit` + `next build`
   clean. ROADMAP_UI now 38/38.
 - Follow-up: none open — every documented engine endpoint has a UI surface again.
+
+## 2026-08-13 — M26: Grand counterfactual A/B/C/D tab (SPEC §21/§22)
+- Surfaced the engine's newest endpoint `POST /compare/grand` — the canonical §21
+  four-way comparison the plain Compare tab never composed. `/compare` takes
+  arbitrary caller amendments; the grand endpoint names the quartet by role
+  (A baseline / B policy / C opposition amendment / D URBAN-optimised), auto-derives
+  World C, wires the §22 optimiser in as World D, and adds a `derivation` audit.
+- New `GrandComparePanel.tsx`: drives off the store's compiled policy with a
+  Time-Machine horizon selector (Y1/Y2/Y5/Y10) and a World-D optimiser-target
+  selector (best-balanced / cut-emissions-20% / protect-low-income — each a
+  transparent objective+constraints pair). Renders a consistency banner (one
+  deterministic model, four worlds; C/D re-simulated through the same path as B;
+  no new numeric model, no LLM), role-coloured A/B/C/D world chips, the headline
+  table (baseline value + each world's value + Δ-vs-baseline per metric at the
+  horizon), and the **derivation audit**: a World C card (amendment source
+  caller/auto-derived + structured edits + rationale, or an honest "no amendment
+  applies" state) and a World D card (which optimiser recommendation slot was
+  picked, objective/constraints, feasibility + candidate counts, and the chosen
+  config re-expressed as concrete policy edits).
+- Honesty: every world Simulated (deterministic, re-simulated identically to B);
+  amendment/optimiser inputs Estimated — both provenance classes surfaced; World A
+  always present; `idle` (no policy) / `loading` / `error` states when the backend
+  is down, never fabricates a comparison.
+- `lib/api.ts`: extended `CounterfactualComparison` with the optional `derivation`
+  block, added `OptimiserCandidateConfig`, `GrandWorldC`, `GrandWorldD`,
+  `GrandDerivation`, `GrandCompareRequest` types and `runGrandCompare()`. Wired the
+  tab into `PanelTabs.tsx` (label "Grand A/B/C/D", next to Compare); added `grand-*`
+  + `.cmp-world.optimised` styles to `globals.css` (mobile-safe). `tsc --noEmit` +
+  `next build` clean. ROADMAP_UI now 39/39.
+- Follow-up: none open — every documented engine endpoint has a UI surface again.

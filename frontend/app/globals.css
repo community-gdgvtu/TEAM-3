@@ -3910,6 +3910,117 @@ ul.assumptions {
   margin-top: 1rem;
 }
 
+/* --- Grand counterfactual A/B/C/D (M26, SPEC §21/§22) ----------------- */
+.cmp-world.optimised {
+  border-color: #7ee0a0;
+  color: #7ee0a0;
+}
+
+.grand-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.grand-banner {
+  margin-top: 0.6rem;
+}
+
+.grand-derivation {
+  margin-top: 1.1rem;
+}
+.grand-derivation h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.grand-deriv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.7rem;
+}
+
+.grand-deriv-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.grand-deriv-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.grand-deriv-role {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.grand-deriv-name {
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.grand-deriv-name.muted {
+  color: var(--muted);
+}
+
+.grand-deriv-list {
+  margin: 0.3rem 0;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.grand-deriv-rationale {
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.grand-deriv-kv {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.7rem;
+  margin: 0.2rem 0 0.4rem;
+}
+.grand-deriv-kv > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+.grand-deriv-kv dt {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+.grand-deriv-kv dd {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  .grand-deriv-kv {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* --- Uncertainty fan panel (M10) -------------------------------------- */
 .unc-controls {
   display: flex;
