@@ -1297,6 +1297,157 @@ ul.assumptions {
   margin-top: 0.9rem;
 }
 
+/* --- Simulated press feed (SPEC §15) ----------------------------------- */
+.press-body {
+  margin-top: 0.5rem;
+}
+
+.press-disclaimer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: rgba(224, 180, 95, 0.08);
+  border: 1px solid #d4a24a;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.press-scenario {
+  margin-bottom: 1.1rem;
+}
+
+.press-scenario-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+.press-horizon {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.press-count {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.press-card {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.press-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.press-outlet {
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.press-arch {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.press-headline {
+  margin: 0.1rem 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.press-standfirst {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.press-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.sentiment-chip {
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.sentiment-chip.pos {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.sentiment-chip.neg {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.sentiment-chip.mixed {
+  color: #e0b45f;
+  border-color: #d4a24a;
+}
+
+.press-angle {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.press-refs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.press-refs-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.press-stamp {
+  margin-top: 0.35rem;
+}
+
+.press-note {
+  margin-top: 0.4rem;
+}
+
 .maplibregl-ctrl-group {
   background: var(--panel) !important;
 }

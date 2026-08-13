@@ -4,6 +4,7 @@ import TwinWorkspace from "../components/twin/TwinWorkspace";
 import ParliamentPanel from "../components/twin/ParliamentPanel";
 import FailureModesPanel from "../components/twin/FailureModesPanel";
 import PublicReactionPanel from "../components/twin/PublicReactionPanel";
+import PressFeedPanel from "../components/twin/PressFeedPanel";
 import { TwinProvider } from "../components/twin/TwinStore";
 
 export default function Home() {
@@ -28,6 +29,8 @@ export default function Home() {
         <ParliamentPanel />
 
         <PublicReactionPanel />
+
+        <PressFeedPanel />
 
         <FailureModesPanel />
       </TwinProvider>

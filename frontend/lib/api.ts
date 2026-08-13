@@ -428,6 +428,72 @@ export async function runPublicOpinion(
 }
 
 // ---------------------------------------------------------------------------
+// Simulated media — POST /media (SPEC §15)
+// ---------------------------------------------------------------------------
+
+export type MediaArchetype =
+  | "public_broadcaster"
+  | "business_press"
+  | "local_news"
+  | "tabloid"
+  | "environmental"
+  | "industry";
+
+export type MediaSentiment = "positive" | "critical" | "mixed" | string;
+
+export interface Headline {
+  archetype: MediaArchetype;
+  /** Fictional generic outlet name — never a real outlet. */
+  outlet_label: string;
+  headline: string;
+  standfirst: string;
+  angle: string;
+  sentiment: MediaSentiment;
+  /** Event ids / metric keys the story is built on. */
+  cited_refs: string[];
+  /** Mandatory SIMULATED banner (SPEC §15). */
+  label: string;
+  /** Always `"Generated"`. */
+  provenance: MetricTag;
+}
+
+export interface MediaScenario {
+  /** Horizon label, e.g. "Month 5". */
+  label: string;
+  scenario_month: number;
+  headlines: Headline[];
+}
+
+export interface MediaResponse {
+  /** `"Generated"` — media prose is generated; cited figures are Simulated. */
+  provenance: MetricTag;
+  disclaimer: string;
+  note: string;
+  policy_id: string;
+  /** `"llm"` or `"template"`. */
+  method: string;
+  scenarios: MediaScenario[];
+}
+
+/** Generate clearly-labelled SIMULATED media coverage for a policy. Throws on error. */
+export async function runMedia(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<MediaResponse> {
+  const res = await fetch(`${API_BASE_URL}/media`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as MediaResponse;
+}
+
+// ---------------------------------------------------------------------------
 // Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
 // ---------------------------------------------------------------------------
 

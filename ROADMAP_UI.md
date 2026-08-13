@@ -25,7 +25,7 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 
 ## M6 — Public reaction + media (SPEC §13/§15)
 - [x] Public reaction view: cohort support distribution by income/geography (charts). Use the `dataviz` conventions
-- [ ] Simulated press feed: archetype headlines at Month 5 and Year 2, each visibly stamped SIMULATED
+- [x] Simulated press feed: archetype headlines at Month 5 and Year 2, each visibly stamped SIMULATED
 
 ## M7 — Evidence drawer + polish (SPEC §26/§27)
 - [ ] Click any dashboard metric → evidence drawer showing the provenance trace, assumptions, confidence (from the backend evidence endpoint)

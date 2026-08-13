@@ -73,3 +73,13 @@ Dated notes, newest at the bottom. One line per shipped item.
   alone). Every fraction tagged Simulated — a deterministic structural model, not
   a poll (SPEC §34). Graceful no-policy / loading / error states. `tsc --noEmit` +
   `next build` clean.
+- 2026-08-13 — M6.2: Simulated press feed (SPEC §15/§27). New PressFeedPanel
+  convenes `POST /media` and renders archetype coverage grouped by horizon
+  (Month 5 / Year 2). Each card shows the fictional generic outlet, its archetype
+  (public broadcaster / business press / local / tabloid / environmental /
+  industry), the headline + standfirst, a sentiment chip, the archetype's angle,
+  and the event-ledger/metric refs it was "built from". Guardrail (SPEC §15/§34):
+  a persistent SIMULATED disclaimer banner up top plus a SIMULATED stamp on every
+  card, tagged Generated; no real outlets/bylines and no invented figures — cards
+  cite only model refs. Graceful no-policy / loading / error states. **M6
+  complete.** `tsc --noEmit` + `next build` clean.
