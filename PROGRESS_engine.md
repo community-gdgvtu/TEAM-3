@@ -299,3 +299,13 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   routes**. Honest `not_modelled`: continuous charge optimisation (amendments are discrete
   cuts), ridership suppression from crowding (demand stays latent, crowding hits support
   only), capacity depreciation, horizon shocks, spatial/per-corridor detail (needs §7.7).
+- 2026-08-13 10:09 UTC — **Verification run — engine roadmap complete.** No unchecked
+  items remain in `ROADMAP_ENGINE.md` (M3, M5–M7, Stretch, and every Extended SPEC-coverage
+  layer are `[x]`). Confirmed the tree is healthy for this run: full backend suite **193
+  passed** (~32s), FastAPI app boots clean with **28 routes**, and smoke checks of the core
+  deterministic endpoints pass — `POST /simulate` → 200 with an `event_ledger`, `GET
+  /registry` → 200 cataloguing **11 forecast layers** (all asserting no-LLM-in-numbers per
+  SPEC §34). Nothing actionable left on this track without new SPEC scope; not scope-creeping
+  into speculative features (would risk the §34 guardrails and collide with the UI track /
+  shared files this track must not edit). Held to the loop contract: verify + record, release
+  the lock. Backend is in a clean, demo-ready state.
