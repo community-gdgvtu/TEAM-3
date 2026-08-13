@@ -1324,3 +1324,20 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   constraints), `scripts/audit.py` (GET sweep), `backend/tests/test_compare_example.py` (3 tests).
   **472 green** (was 469), `scripts/audit.py` PASS, app boots with **56 routes** (was 55).
   No frontend/shared files touched.
+
+## 2026-08-13 (engine, M50)
+- **Truly whole-surface audit GET sweep** (SPEC §34). The `scripts/audit.py` whole-surface §34
+  gate is meant to hit every GET + POST route, but its `get_routes` list had fallen behind the
+  keyless-example surface: it swept only `/backtest/example` (+ M49's `/compare/example`), while
+  `/brief/example`, `/run/example`, `/north-star/example` (M46–M48) and `/robustness/objectives`
+  were never included — so the M47/M48 notes claiming "the audit GET sweep now covers it" were
+  inaccurate, and the heaviest composed payloads (full §29 pipeline, §37 15-line answer, one-page
+  ministerial memo) went unaudited by the standing pre-demo gate.
+- Added all four to `get_routes`. The audit's three GET checks — served-200, every `provenance`
+  field carries a §34 tag (recursive walk over the large composed envelopes), per-route health
+  list — now cover the entire live GET surface. Verified `scripts/audit.py` still PASS (six §34
+  checks green) and `test_audit_script.py` (5 tests incl. ≥35-routes + rubber-stamp-flip) still
+  green.
+- Scripts-track only — no `backend/app/**` change, no new numeric model, no LLM (§34). Test count
+  unchanged at **472 green**, app boots with **56 routes**.
+- Files: `scripts/audit.py` (get_routes). No frontend/shared files touched.
