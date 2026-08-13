@@ -34,6 +34,7 @@ from .routers import (
     registry,
     sdg,
     simulate,
+    spatial,
     uncertainty,
 )
 
@@ -78,6 +79,7 @@ def create_app() -> FastAPI:
     app.include_router(institutions.router)
     app.include_router(economy.router)
     app.include_router(dynamics.router)
+    app.include_router(spatial.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:

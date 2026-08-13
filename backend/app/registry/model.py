@@ -16,6 +16,7 @@ from ..economy.params import DEFAULT_ECON_PARAMS
 from ..opinion.params import OpinionParams
 from ..simulation.levers import DEFAULT_SIM_PARAMS
 from ..simulation.timeline import DEFAULT_ADAPTATION
+from ..spatial.params import DEFAULT_SPATIAL_PARAMS
 from .schema import (
     AssumptionRecord,
     DataSourceCard,
@@ -159,6 +160,28 @@ def _dynamics_assumptions() -> list[AssumptionRecord]:
              "Consecutive months below threshold before a charge cut is forced", est),
         _rec("charge_cut_factor", "Amendment charge cut", d.charge_cut_factor, "×",
              "Fraction the charge is cut to when an amendment fires", est),
+    ]
+
+
+def _spatial_assumptions() -> list[AssumptionRecord]:
+    s = DEFAULT_SPATIAL_PARAMS
+    est = MetricTag.estimated
+    return [
+        _rec("peak_hour_share", "Peak-hour share of commute trips", s.peak_hour_share,
+             "share", "Fraction of a car commuter's inbound trip in the busiest hour", est),
+        _rec("car_occupancy", "Car occupancy", s.car_occupancy, "persons/veh",
+             "Persons per vehicle — converts person trips to vehicle trips", est),
+        _rec("bpr_alpha", "BPR α", s.bpr_alpha, "coefficient",
+             "US Bureau of Public Roads volume-delay coefficient", est),
+        _rec("bpr_beta", "BPR β", s.bpr_beta, "exponent",
+             "US Bureau of Public Roads volume-delay exponent", est),
+        _rec("assignment_iterations", "MSA iterations", s.assignment_iterations, "iterations",
+             "Method-of-Successive-Averages steps toward static user equilibrium", est),
+        _rec("access_decay_per_min", "Accessibility impedance decay", s.access_decay_per_min,
+             "1/min", "Gravity job-accessibility decay per minute of congested car time", est),
+        _rec("pollution_neighbour_share", "Pollution dispersion smoothing",
+             s.pollution_neighbour_share, "share",
+             "Share of a zone's road CO₂ spread to grid neighbours (proxy, not a plume model)", est),
     ]
 
 
@@ -338,6 +361,35 @@ def _models() -> list[ModelCard]:
             assumptions=_dynamics_assumptions(),
         ),
         ModelCard(
+            id="spatial_assignment",
+            name="Spatial traffic-assignment layer",
+            spec_sections=["§7.7"],
+            layer="Spatial Layer (SPEC §7.7)",
+            method=(
+                "Loads the car demand from the deterministic mode-choice model onto "
+                "the real Meridia road grid and solves an approximate static user "
+                "equilibrium (Method of Successive Averages over all-or-nothing "
+                "assignments, BPR volume-delay). Reads out congested link flows, "
+                "cordon inflow, network vehicle-hours, gravity job accessibility by "
+                "congested car time and a per-zone road-CO₂ dispersion proxy — each "
+                "as World A vs World B. Sample demand is expanded to city scale by a "
+                "representation factor read live from the OD table."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["road network", "OD car demand from mode-choice model", "spatial params"],
+            outputs=[
+                "congested link flows / speeds",
+                "cordon inflow + network vehicle-hours",
+                "job accessibility",
+                "road-CO₂ dispersion proxy",
+            ],
+            output_tag=sim,
+            code="app.spatial.model / app.spatial.assignment",
+            assumptions=_spatial_assumptions(),
+        ),
+        ModelCard(
             id="policy_optimiser",
             name="Policy optimiser (grid search → Pareto set)",
             spec_sections=["§22"],
@@ -446,9 +498,10 @@ def _guardrails() -> list[GuardrailCheck]:
             rule="LLMs never generate core numeric simulation effects.",
             enforced_by=(
                 "All numeric models (baseline, world_b, timeline, uncertainty, "
-                "opinion, diffusion, economic spillover, system dynamics, "
-                "optimiser) are pure deterministic/seeded code; LLM use is confined to prose "
-                "(parliament, media) and language structuring (policy compiler)."
+                "opinion, diffusion, economic spillover, system dynamics, spatial "
+                "assignment, optimiser) are pure deterministic/seeded code; LLM use "
+                "is confined to prose (parliament, media) and language structuring "
+                "(policy compiler)."
             ),
             holds=True,
         ),
