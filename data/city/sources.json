@@ -1,0 +1,53 @@
+{
+  "title": "Meridia \u2014 data lineage",
+  "note": "Meridia is a synthetic city. It is not a real place and contains no real administrative record. The two entries below are the real-world data models this synthetic city and its prediction model are shaped like: an open 3D city model standard for the geometry, and a national origin-destination commuting dataset for the travel demand.",
+  "sources": [
+    {
+      "id": "3dcitydb-web-map",
+      "role": "3D city geometry",
+      "name": "3DCityDB Web Map Client",
+      "publisher": "3D City Database project (TU Munich / virtualcitysystems)",
+      "url": "https://github.com/3dcitydb/3dcitydb-web-map",
+      "docs": "https://www.3dcitydb.org/3dcitydb/documentation/",
+      "license": "Apache-2.0",
+      "formats": [
+        "CityGML",
+        "Cesium 3D Tiles",
+        "COLLADA/KML/glTF",
+        "CZML",
+        "GeoJSON",
+        "I3S"
+      ],
+      "how_used": "Meridia's building layer follows the same semantic model a 3DCityDB export uses at LOD1: one footprint polygon per building with a measured height attribute, grouped by zone. Swapping in a real city means replacing buildings.geojson with a CityGML/3D-Tiles export from a 3DCityDB instance \u2014 the scene reads footprint + height and nothing else."
+    },
+    {
+      "id": "uk-census-wu03ew",
+      "role": "origin-destination travel demand",
+      "name": "2011 Census origin-destination flows, table WU03EW",
+      "full_name": "Location of usual residence and place of work by method of travel to work (WU03EW)",
+      "publisher": "Office for National Statistics (UK)",
+      "country": "United Kingdom",
+      "url": "https://www.nomisweb.co.uk/census/2011/wu03ew",
+      "license": "Open Government Licence v3.0",
+      "how_used": "The shape of the demand model: home-zone \u2192 work-zone daily commuter flows split by mode (car, public transport, walk). Meridia's od_pairs.json is a destination-constrained gravity model fitted to the same schema, so a real WU03EW extract drops straight into the same pipeline."
+    }
+  ],
+  "model": {
+    "name": "Cordon demand-response model",
+    "class": "reduced-form mechanistic (deterministic, no LLM)",
+    "inputs": [
+      "od_pairs.json \u2014 daily person-trips per origin\u2192destination pair",
+      "zones.geojson \u2014 population, jobs, land use",
+      "roads.geojson \u2014 capacity, free-flow speed, cordon-crossing flag",
+      "buildings.geojson \u2014 footprints, heights, 10-year pipeline"
+    ],
+    "mechanism": "Trips crossing the cordon respond to the generalised cost of the charge with a constant-elasticity demand curve; suppressed car trips are reallocated to transit, walking and rerouting in fixed proportions, subject to transit capacity. Effects ramp in over roughly two years (behavioural adjustment), then land-use responds: transit-oriented development near the core, and pedestrianised kerbside converting to public realm.",
+    "counts": {
+      "buildings": 1033,
+      "parks": 217,
+      "pipeline_buildings": 80,
+      "greenable_lots": 87,
+      "tallest_m": 238.0
+    }
+  }
+}

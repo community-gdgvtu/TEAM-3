@@ -13,9 +13,53 @@ pedestrianisation demo that proves the closed loop:
 policy → baseline twin → simulation → time machine → parliament → amendment → re-sim → media
 ```
 
+## The screen
+
+The default view is deliberately small: **pick one of three policies, drag ten
+years, watch the city change.**
+
+Meridia is a *prebuilt* 3D city bundled in this repo — ~1,000 building footprints
+with real heights, a street grid, a river, parks and a charge cordon. Dragging
+the scrubber morphs it:
+
+| you drag | the city does |
+| --- | --- |
+| any year | pipeline buildings break ground (amber) and top out |
+| transit is funded | towers near the core grow — transit-oriented development |
+| pedestrianisation lands | low-rise central kerbside converts to plazas and pocket parks |
+| traffic responds | street trails thin out and speed up; the cordon recolours |
+| mode split shifts | the commute arcs go from car-amber to transit-blue |
+
+That projection runs **in the browser** (`frontend/lib/cityModel.ts`) so scrubbing
+is instant and the demo works with the backend down. It is a closed-form summary
+of the same mechanism the FastAPI engine runs step-wise, off the same OD matrix
+and the same input assumptions (`backend/app/baseline/params.py`).
+
+Everything else — the plain-language policy compiler, the agent-based engine with
+uncertainty bands, the evidence drawer, parliament / public / press / red team /
+optimiser — is unchanged and sits behind the **Advanced** disclosure at the
+bottom of the page. It needs the backend running.
+
+### Data lineage
+
+Meridia is synthetic — not a real place, no real administrative record. It is
+shaped like two real, open data models, cited in-app under "Data sources & how
+the prediction model works" and in `data/city/sources.json`:
+
+- **3D geometry** — [3DCityDB Web Map Client](https://github.com/3dcitydb/3dcitydb-web-map)
+  (Apache-2.0; CityGML / Cesium 3D Tiles / glTF). The building layer follows the
+  same LOD1 shape a 3DCityDB export uses: one footprint polygon per building with
+  a height attribute, grouped by zone. Swapping in a real city means replacing
+  `buildings.geojson` with a 3DCityDB export — the scene reads footprint + height
+  and nothing else.
+- **Travel demand** — [ONS 2011 Census origin–destination table WU03EW](https://www.nomisweb.co.uk/census/2011/wu03ew)
+  (UK, Open Government Licence v3.0): home-zone → work-zone daily commuter flows
+  by mode. `data/city/od_pairs.json` is a destination-constrained gravity model
+  written to the same schema, so a real WU03EW extract drops into the same pipeline.
+
 ## Stack
 
-- **Frontend:** Next.js + TypeScript, MapLibre + deck.gl (3D map), timeline scrubber
+- **Frontend:** Next.js + TypeScript, deck.gl (3D city, no basemap or tile server), timeline scrubber
 - **Backend:** Python + FastAPI, DuckDB, numerical + agent-based simulation services
 - **AI layer:** LLM agents for policy parsing, parliament debate, devil's advocate, media (never numeric effects)
 

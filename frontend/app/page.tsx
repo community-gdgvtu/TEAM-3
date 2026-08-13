@@ -1,43 +1,26 @@
-import HealthStatus from "./HealthStatus";
-import PolicyCompiler from "./PolicyCompiler";
-import TwinWorkspace from "../components/twin/TwinWorkspace";
-import PanelTabs from "../components/twin/PanelTabs";
-import DemoTour from "../components/twin/DemoTour";
+import CityStudio from "../components/city/CityStudio";
+import AdvancedTwin from "../components/twin/AdvancedTwin";
 import { TwinProvider } from "../components/twin/TwinStore";
 
 export default function Home() {
   return (
-    <main>
+    <main className="wide">
       <p className="eyebrow">URBAN · Policy Digital Twin</p>
-      <h1>Simulate the city before you change it.</h1>
+      <h1>Drag ten years. Watch the city change.</h1>
       <p className="lede">
-        Draft a policy in plain language, then watch two worlds diverge — a
-        baseline city and one where the policy takes effect — across traffic,
-        emissions, transit demand, equity and public support. Every number is
-        tagged <strong>Observed</strong>, <strong>Estimated</strong>,{" "}
-        <strong>Simulated</strong> or <strong>Generated</strong>, and long-run
-        uncertainty widens honestly.
+        Meridia is a prebuilt 3D city. Pick a policy, then scrub the decade:
+        traffic thins, buildings rise where transit is funded, and central
+        kerbside turns into public realm. The projection is a mechanistic model
+        run over an origin–destination commute matrix — tagged{" "}
+        <strong>Simulated</strong>, never presented as fact, and never produced
+        by a language model.
       </p>
+
+      <CityStudio />
 
       <TwinProvider>
-        <PolicyCompiler />
-
-        {/* SPEC §27 main screen: 3D world + outcomes + timeline … */}
-        <TwinWorkspace />
-
-        {/* … then the [Parliament] [Public] [Press] [Red Team] tabs. */}
-        <PanelTabs />
-
-        {/* Floating launcher for the SPEC §29 60-second guided walkthrough. */}
-        <DemoTour />
+        <AdvancedTwin />
       </TwinProvider>
-
-      <HealthStatus />
-
-      <p className="hint">
-        Demo policy: pedestrianise / price vehicles entering a central district
-        and reinvest the revenue into public transport.
-      </p>
     </main>
   );
 }

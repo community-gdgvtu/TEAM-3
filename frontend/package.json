@@ -2,7 +2,7 @@
   "name": "urban-frontend",
   "version": "0.1.0",
   "private": true,
-  "description": "URBAN policy digital twin — Next.js + TypeScript frontend.",
+  "description": "URBAN policy digital twin \u2014 Next.js + TypeScript frontend.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,6 +11,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@deck.gl/core": "^9.3.10",
+    "@deck.gl/geo-layers": "^9.3.10",
+    "@deck.gl/layers": "^9.3.10",
+    "@deck.gl/react": "^9.3.10",
     "deck.gl": "^9.3.10",
     "maplibre-gl": "^4.7.1",
     "next": "14.2.5",

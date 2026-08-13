@@ -61,6 +61,12 @@ setup_backend() {
     log "generating synthetic population"
     "$py" "$ROOT/data/generate_population.py"
   fi
+  # Generate the prebuilt 3D city if it's missing. Also mirrors into
+  # frontend/public/city/, which is what the 3D scene fetches.
+  if [ ! -f "$ROOT/frontend/public/city/buildings.geojson" ]; then
+    log "generating prebuilt 3D city"
+    "$py" "$ROOT/data/generate_buildings.py"
+  fi
   ok "backend ready"
 }
 
