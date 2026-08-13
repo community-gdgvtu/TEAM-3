@@ -15,7 +15,9 @@ export type DemoTab =
   | "public"
   | "press"
   | "redteam"
-  | "registry";
+  | "run"
+  | "registry"
+  | "reproduce";
 
 type TabListener = (tab: DemoTab) => void;
 
@@ -43,8 +45,10 @@ export interface TourStep {
 
 /**
  * The demo narrative. Mirrors SPEC §29: draft → compile → simulate two worlds →
- * scrub time → read tagged outcomes → adversarial debate → red-team → and finally
- * the transparency manifest that answers "how do we know this isn't AI astrology".
+ * scrub time → read tagged outcomes → adversarial debate → red-team → the whole
+ * pipeline composed in one consistent call (§28/§29) → the transparency manifest
+ * that answers "how do we know this isn't AI astrology" → and the content-addressed
+ * reproducibility receipt (§32) that lets a judge re-run to the identical digest.
  */
 export const TOUR_STEPS: TourStep[] = [
   {
@@ -101,12 +105,35 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     selector: '[data-tour="tabs"]',
+    tab: "run",
+    title: "7 · The whole pipeline in one call",
+    body:
+      "Run composes the entire demo — compile → simulate two worlds → public → " +
+      "parliament → amendment re-simulation → press — into a single call, all " +
+      "reading the same simulation. The outcomes dashboard, the debate tally, the " +
+      "amendment Δ and the SIMULATED press snapshot can’t disagree, because there " +
+      "is exactly one run behind them. Numbers Simulated, prose Generated, no LLM " +
+      "on the numeric path.",
+  },
+  {
+    selector: '[data-tour="tabs"]',
     tab: "registry",
-    title: "7 · “Is this AI astrology?” — the receipts",
+    title: "8 · “Is this AI astrology?” — the receipts",
     body:
       "The Registry is the transparency manifest: model cards, data sources, the " +
       "live assumption index and the SPEC §34 guardrail checklist with pass/fail. " +
       "LLMs structure language and write prose — they never generate the core " +
       "numbers. That is what makes the twin trustworthy.",
+  },
+  {
+    selector: '[data-tour="tabs"]',
+    tab: "reproduce",
+    title: "9 · Reproduce it — the content-addressed receipt",
+    body:
+      "Reproduce hands back the run’s manifest: a content-addressed run id, the " +
+      "output digest, the pinned code, data and seeds behind it, and a " +
+      "proven-reproducible badge the backend earns by running twice and diffing " +
+      "the digests. Same inputs, same numbers, every time — determinism you can " +
+      "check, not take on trust.",
   },
 ];

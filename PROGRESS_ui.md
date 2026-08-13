@@ -813,3 +813,22 @@ API, so the twin's endpoints 404. That's the designed-for case: every tab shows 
 honest `waiting/error` state rather than minting numbers (SPEC §34). Nothing new to
 surface — the engine roadmap is likewise complete (42 routes) and every one is exposed.
 No code change this checkpoint; UI track is caught up and green.
+
+## 2026-08-13 — M28: guided demo now reaches the killer Run + Reproduce beats
+Roadmap re-verified complete (M1–M27, all 42 backend routes surfaced) and both
+`tsc --noEmit` + `next build` were green on entry — but the SPEC §29 guided tour
+(`lib/demo.ts`) predated the newest flagship tabs and ended at Registry, so a judge
+taking the walkthrough never saw **Run** (M24, the whole pipeline composed into one
+mutually-consistent call — §28/§29) or **Reproduce** (M19, the content-addressed run
+receipt — §32). Extended the tour: inserted a Run step after Red Team ("the whole
+pipeline in one call": compile→simulate→public→parliament→amendment→press all reading
+one simulation, so the dashboard/tally/amendment-Δ/SIMULATED press can't disagree;
+numbers Simulated, prose Generated, no LLM on the numeric path), and added a closing
+Reproduce step ("the content-addressed receipt": run id, output digest, pinned
+code/data/seeds, proven-reproducible badge from the backend's twice-run digest diff).
+Widened `DemoTab` with `run`/`reproduce` (both already `PanelTabs` TabKeys → tab
+switching stays type-safe), renumbered captions to 7/8/9, left the generic `DemoTour`
+renderer and `[data-tour="tabs"]` anchor untouched. Tour still renders zero metrics
+(SPEC §34 — pure guidance over the real UI or its honest `waiting` state). `tsc
+--noEmit` clean, `next build` clean (/ = 60 kB, First Load 148 kB). No backend/data/
+engine files touched.
