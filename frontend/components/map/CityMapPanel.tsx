@@ -4,17 +4,21 @@
  * Client wrapper for the 3D city map.
  *
  * The map (MapLibre + deck.gl) touches `window` at import, so it is dynamically
- * imported with SSR disabled. This wrapper owns geometry loading + loading/empty/
- * error states, the choropleth-metric switcher, the legend, and the provenance
- * stamp (the geometry is Synthetic world input, SPEC §34).
+ * imported with SSR disabled. This wrapper owns geometry + OD loading, the
+ * choropleth-metric switcher, the overlay switcher (Traffic / Transit / Support),
+ * loading/empty/error states, the legend, and the provenance stamp — every
+ * overlay is labelled with its provenance class so no placeholder reads as real
+ * (SPEC §34).
  */
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 
-import { loadCityGeometry } from "../../lib/city";
-import type { CityGeometry } from "../../lib/city";
+import { loadCityGeometry, loadOdMatrix } from "../../lib/city";
+import type { CityGeometry, OdMatrix } from "../../lib/city";
 import type { ChoroplethMetric } from "./CityMap";
+import { OVERLAY_META } from "./overlayMeta";
+import type { OverlayMode } from "./overlayMeta";
 
 const CityMap = dynamic(() => import("./CityMap"), {
   ssr: false,
@@ -27,6 +31,8 @@ const METRICS: Array<{ key: ChoroplethMetric; label: string }> = [
   { key: "job_density", label: "Job density" },
 ];
 
+const OVERLAYS: OverlayMode[] = ["none", "traffic", "transit", "support"];
+
 function MapPlaceholder({ label }: { label: string }) {
   return (
     <div className="map-placeholder">
@@ -38,9 +44,11 @@ function MapPlaceholder({ label }: { label: string }) {
 
 export default function CityMapPanel() {
   const [geometry, setGeometry] = useState<CityGeometry | null>(null);
+  const [od, setOd] = useState<OdMatrix | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [metric, setMetric] = useState<ChoroplethMetric>("population");
   const [extruded, setExtruded] = useState(true);
+  const [overlay, setOverlay] = useState<OverlayMode>("none");
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -53,7 +61,22 @@ export default function CityMapPanel() {
     return () => ctrl.abort();
   }, []);
 
+  // Lazily fetch the (~0.4 MB) OD matrix the first time the transit overlay is used.
+  useEffect(() => {
+    if (overlay !== "transit" || od) return;
+    const ctrl = new AbortController();
+    loadOdMatrix(ctrl.signal)
+      .then(setOd)
+      .catch(() => {
+        /* transit overlay stays empty; caption notes it. */
+      });
+    return () => ctrl.abort();
+  }, [overlay, od]);
+
   const totals = useMemo(() => geometry?.manifest.totals ?? {}, [geometry]);
+  const meta = OVERLAY_META[overlay];
+  const showChoroplethControls = !meta.hideBaseZones;
+  const transitLoading = overlay === "transit" && !od;
 
   return (
     <section className="map-section card">
@@ -67,6 +90,24 @@ export default function CityMapPanel() {
           </p>
         </div>
         <div className="map-controls">
+          <div className="seg" role="group" aria-label="Overlay">
+            {OVERLAYS.map((o) => (
+              <button
+                key={o}
+                className={`seg-btn${overlay === o ? " active" : ""}`}
+                onClick={() => setOverlay(o)}
+                type="button"
+              >
+                {OVERLAY_META[o].label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {showChoroplethControls && (
+        <div className="map-subcontrols">
+          <span className="ctrl-label">Colour zones by</span>
           <div className="seg" role="group" aria-label="Colour zones by">
             {METRICS.map((m) => (
               <button
@@ -88,7 +129,7 @@ export default function CityMapPanel() {
             3D
           </label>
         </div>
-      </div>
+      )}
 
       <div className="map-canvas">
         {error ? (
@@ -96,22 +137,55 @@ export default function CityMapPanel() {
         ) : !geometry ? (
           <MapPlaceholder label="Loading Meridia…" />
         ) : (
-          <CityMap geometry={geometry} colorMetric={metric} extruded={extruded} />
+          <CityMap
+            geometry={geometry}
+            colorMetric={metric}
+            extruded={extruded}
+            overlayMode={overlay}
+            od={od}
+          />
         )}
       </div>
 
-      <div className="map-footer">
-        <div className="map-legend">
-          <span className="legend-label">Low</span>
-          <span className="legend-ramp" aria-hidden />
-          <span className="legend-label">High</span>
-          <span className="legend-item">
-            <span className="swatch cordon" /> CBD cordon
+      {overlay !== "none" && (
+        <div className={`overlay-banner prov-${meta.provenance.toLowerCase()}`}>
+          <span className={`tag ${meta.provenance.toLowerCase()}`}>
+            {meta.provenance}
           </span>
-          <span className="legend-item">
-            <span className="swatch cross" /> Cordon-crossing road
+          <span className="overlay-caption">
+            {transitLoading ? "Loading synthetic origin–destination demand…" : meta.caption}
           </span>
+          {meta.legend.length > 0 && !transitLoading && (
+            <span className="overlay-legend">
+              {meta.legend.map((l) => (
+                <span key={l.label} className="legend-item">
+                  <span
+                    className="swatch"
+                    style={{ background: l.color }}
+                    aria-hidden
+                  />
+                  {l.label}
+                </span>
+              ))}
+            </span>
+          )}
         </div>
+      )}
+
+      <div className="map-footer">
+        {overlay === "none" && (
+          <div className="map-legend">
+            <span className="legend-label">Low</span>
+            <span className="legend-ramp" aria-hidden />
+            <span className="legend-label">High</span>
+            <span className="legend-item">
+              <span className="swatch cordon" /> CBD cordon
+            </span>
+            <span className="legend-item">
+              <span className="swatch cross" /> Cordon-crossing road
+            </span>
+          </div>
+        )}
         <div className="map-provenance">
           <span className="tag muted">Synthetic</span>
           <span>

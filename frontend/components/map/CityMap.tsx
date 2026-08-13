@@ -26,9 +26,13 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type {
   CbdProps,
   CityGeometry,
+  OdMatrix,
   RoadProps,
   ZoneProps,
 } from "../../lib/city";
+import { OVERLAY_META } from "./overlayMeta";
+import type { OverlayMode } from "./overlayMeta";
+import { buildOverlayLayers } from "./overlays";
 
 /** A tile-free MapLibre style — a single dark background, no external sources. */
 const BASE_STYLE: StyleSpecification = {
@@ -96,10 +100,10 @@ export interface CityMapProps {
   colorMetric?: ChoroplethMetric;
   /** Extrude zones by the chosen metric for a genuine 3D read. */
   extruded?: boolean;
-  /** Extra deck.gl layers drawn above the base city (data-driven overlays). */
-  overlays?: Layer[];
-  /** Hide the base choropleth/roads when an overlay wants the stage to itself. */
-  showBaseZones?: boolean;
+  /** Which data-driven overlay to draw above the base city. */
+  overlayMode?: OverlayMode;
+  /** Synthetic OD matrix (lazy-loaded); required for the transit overlay. */
+  od?: OdMatrix | null;
 }
 
 /** deck.gl overlay wired into the MapLibre map instance via a custom control. */
@@ -146,10 +150,11 @@ export default function CityMap({
   geometry,
   colorMetric = "population",
   extruded = true,
-  overlays = [],
-  showBaseZones = true,
+  overlayMode = "none",
+  od = null,
 }: CityMapProps) {
   const { zones, roads, cbd, manifest } = geometry;
+  const showBaseZones = !OVERLAY_META[overlayMode].hideBaseZones;
 
   const maxMetric = useMemo(() => {
     let m = 0;
@@ -235,8 +240,20 @@ export default function CityMap({
       }),
     );
 
-    return [...base, ...overlays];
-  }, [zones, roads, cbd, colorMetric, maxMetric, extruded, overlays, showBaseZones]);
+    const overlayLayers = buildOverlayLayers(overlayMode, geometry, od);
+    return [...base, ...overlayLayers];
+  }, [
+    zones,
+    roads,
+    cbd,
+    geometry,
+    colorMetric,
+    maxMetric,
+    extruded,
+    overlayMode,
+    od,
+    showBaseZones,
+  ]);
 
   return (
     <Map
@@ -255,9 +272,11 @@ export default function CityMap({
     >
       <NavigationControl position="top-right" visualizePitch />
       <DeckOverlay layers={layers} />
-      <div className="map-metric-badge" aria-hidden>
-        {METRIC_LABEL[colorMetric]}
-      </div>
+      {showBaseZones && (
+        <div className="map-metric-badge" aria-hidden>
+          {METRIC_LABEL[colorMetric]}
+        </div>
+      )}
     </Map>
   );
 }

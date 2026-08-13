@@ -97,3 +97,41 @@ export async function loadCityGeometry(
   ]);
   return { zones, roads, cbd, manifest };
 }
+
+// ---------------------------------------------------------------------------
+// Origin–destination trip matrix (synthetic world input, SPEC §34)
+// ---------------------------------------------------------------------------
+
+export interface OdPair {
+  origin: string;
+  destination: string;
+  daily_person_trips: number;
+  distance_km: number;
+  dest_is_cbd: boolean;
+}
+
+export interface OdMatrix {
+  name: string;
+  units: string;
+  model: string;
+  interpretation: string;
+  pairs: OdPair[];
+}
+
+/**
+ * Load the synthetic origin–destination commute matrix. Loaded lazily (~0.4 MB)
+ * only when an overlay that needs real demand asks for it. This is world input,
+ * not a simulation result.
+ */
+export async function loadOdMatrix(signal?: AbortSignal): Promise<OdMatrix> {
+  return fetchJson<OdMatrix>("od_pairs.json", signal);
+}
+
+/** Sum daily inflow (trip attraction) per destination zone from the OD matrix. */
+export function inflowByZone(od: OdMatrix): Map<string, number> {
+  const m = new Map<string, number>();
+  for (const p of od.pairs) {
+    m.set(p.destination, (m.get(p.destination) ?? 0) + p.daily_person_trips);
+  }
+  return m;
+}

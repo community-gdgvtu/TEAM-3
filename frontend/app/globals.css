@@ -498,6 +498,63 @@ ul.assumptions {
   padding-top: 0.85rem;
 }
 
+.map-subcontrols {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.ctrl-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.overlay-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.overlay-banner.prov-placeholder {
+  border-color: #b58a3a;
+}
+
+.overlay-caption {
+  flex: 1 1 16rem;
+}
+
+.overlay-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.tag.synthetic {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.tag.simulated {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tag.placeholder {
+  border-color: #d4a24a;
+  color: #e0b45f;
+}
+
 .maplibregl-ctrl-group {
   background: var(--panel) !important;
 }
