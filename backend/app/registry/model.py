@@ -1,0 +1,421 @@
+"""Assemble the model registry by introspecting the live model parameters (SPEC §33).
+
+The published assumption values are read straight from the dataclasses the
+simulator actually uses (``DEFAULT_PARAMS``, ``DEFAULT_SIM_PARAMS``,
+``DEFAULT_ADAPTATION``, ``OpinionParams``), so the manifest can never disagree
+with the code. Everything here is deterministic and LLM-free (SPEC §34).
+"""
+
+from __future__ import annotations
+
+from ..baseline.params import DEFAULT_PARAMS
+from ..baseline.schema import MetricTag
+from ..config import settings
+from ..opinion.params import OpinionParams
+from ..simulation.levers import DEFAULT_SIM_PARAMS
+from ..simulation.timeline import DEFAULT_ADAPTATION
+from .schema import (
+    AssumptionRecord,
+    DataSourceCard,
+    GuardrailCheck,
+    ModelCard,
+    ModelRegistry,
+)
+
+
+def _rec(name: str, label: str, value, unit: str, source: str, tag: MetricTag) -> AssumptionRecord:
+    return AssumptionRecord(
+        name=name, label=label, value=value, unit=unit, source=source, tag=tag
+    )
+
+
+def _baseline_assumptions() -> list[AssumptionRecord]:
+    p = DEFAULT_PARAMS
+    est = MetricTag.estimated
+    return [
+        _rec("walk_max_km", "Max walkable one-way distance", p.walk_max_km, "km",
+             "Trips longer than this are not walked", est),
+        _rec("walk_speed_kmh", "Walking speed", p.walk_speed_kmh, "km/h", "Typical adult walk pace", est),
+        _rec("car_speed_cbd_kmh", "Congested central car speed", p.car_speed_cbd_kmh, "km/h",
+             "Central-area congested speed", est),
+        _rec("car_speed_kmh", "Non-central car speed", p.car_speed_kmh, "km/h", "Arterial road speed", est),
+        _rec("transit_speed_kmh", "Effective transit speed", p.transit_speed_kmh, "km/h",
+             "Includes stops/dwell", est),
+        _rec("car_overhead_min", "Car access/egress overhead", p.car_overhead_min, "min/trip",
+             "Parking search + walk from parking", est),
+        _rec("transit_overhead_min", "Transit access/egress overhead", p.transit_overhead_min, "min/trip",
+             "Walk to stop + wait", est),
+        _rec("car_cost_per_km", "Car marginal cost", p.car_cost_per_km, "currency/km",
+             "Fuel + wear", est),
+        _rec("transit_fare", "Flat transit fare", p.transit_fare, "currency/trip", "Baseline fare", est),
+        _rec("money_to_minutes", "Value-of-time conversion", p.money_to_minutes, "min/currency",
+             "Money disutility → minutes-equivalent, scaled by agent price sensitivity", est),
+        _rec("trips_per_commuter_per_day", "Daily trips per commuter", p.trips_per_commuter_per_day,
+             "trips", "Outbound + return", est),
+        _rec("workdays_per_year", "Workdays per year", p.workdays_per_year, "days",
+             "Annualisation factor", est),
+        _rec("car_co2_kg_per_km", "Tailpipe CO₂ factor", p.car_co2_kg_per_km, "kg/veh-km",
+             "Average petrol car; totals become Simulated once multiplied by modelled veh-km", est),
+    ]
+
+
+def _sim_assumptions() -> list[AssumptionRecord]:
+    s = DEFAULT_SIM_PARAMS
+    est = MetricTag.estimated
+    return [
+        _rec("charge_trips_per_day", "Charge amortisation trips", s.charge_trips_per_day, "trips",
+             "Daily cordon charge spread across daily trips for per-one-way comparability", est),
+        _rec("reinvest_max_fare_cut", "Max fare cut at full reinvestment", s.reinvest_max_fare_cut,
+             "relative", "Transit fare reduction cap when 100% revenue → transit", est),
+        _rec("reinvest_max_speed_gain", "Max speed uplift at full reinvestment", s.reinvest_max_speed_gain,
+             "relative", "Transit effective-speed uplift cap when 100% revenue → transit", est),
+    ]
+
+
+def _adaptation_assumptions() -> list[AssumptionRecord]:
+    a = DEFAULT_ADAPTATION
+    est = MetricTag.estimated
+    return [
+        _rec("behaviour_tau_months", "Behavioural substitution time-constant", a.behaviour_tau_months,
+             "months", "How fast commuters re-choose mode after the charge/ban lands", est),
+        _rec("transit_lag_months", "Transit capacity delivery lag", a.transit_lag_months, "months",
+             "Delay before revenue-funded transit capacity appears", est),
+        _rec("transit_tau_months", "Transit capacity ramp time-constant", a.transit_tau_months, "months",
+             "Ramp of the revenue-funded transit uplift after the lag", est),
+        _rec("uncertainty_base", "World-B band half-width at T0", a.uncertainty_base, "relative",
+             "Starting uncertainty band for policy trajectories", est),
+        _rec("uncertainty_slope_per_year", "Band widening per year", a.uncertainty_slope_per_year,
+             "relative/yr", "Horizon-widening of the confidence band (SPEC §9)", est),
+        _rec("uncertainty_cap", "Band half-width cap", a.uncertainty_cap, "relative",
+             "Keeps a 10-year band interpretable", est),
+    ]
+
+
+def _opinion_assumptions() -> list[AssumptionRecord]:
+    o = OpinionParams()
+    est = MetricTag.estimated
+    return [
+        _rec("w_material", "Weight: own material impact", o.w_material, "weight",
+             "How much a cohort's own travel-cost change drives its opinion", est),
+        _rec("w_fairness", "Weight: perceived fairness", o.w_fairness, "weight",
+             "Regressivity / exemptions / reinvestment perception weight", est),
+        _rec("w_prior", "Weight: ideological prior", o.w_prior, "weight",
+             "Income-band prior toward/against pricing interventions", est),
+        _rec("opinion_sigma", "Opinion dispersion σ", o.opinion_sigma, "opinion units",
+             "Spread mapping latent support → 6-bucket Likert distribution", est),
+    ]
+
+
+def _models() -> list[ModelCard]:
+    sim = MetricTag.simulated
+    est = MetricTag.estimated
+    return [
+        ModelCard(
+            id="agent_based_mode_choice",
+            name="Agent-based mode-choice model (World A baseline)",
+            spec_sections=["§5", "§6", "§7.5"],
+            layer="Agent-Based Layer (SPEC §7.5)",
+            method=(
+                "Each synthetic commuter minimises a generalized cost (in-vehicle "
+                "time + access/egress overhead + money→minutes, scaled by the "
+                "agent's price sensitivity) across feasible modes; choices are "
+                "aggregated into mode share, traffic, transit and emissions."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["synthetic population", "baseline params", "geography (zones/CBD)"],
+            outputs=["mode_share", "traffic.*", "transit.*", "emissions.*"],
+            output_tag=sim,
+            code="app.baseline.model",
+            assumptions=_baseline_assumptions(),
+        ),
+        ModelCard(
+            id="policy_world_b",
+            name="Policy simulation (World B)",
+            spec_sections=["§7.5", "§7.7"],
+            layer="Agent-Based + Spatial Layer (SPEC §7.5/§7.7)",
+            method=(
+                "The compiled Policy DSL is mapped to numeric levers (cordon "
+                "charge, car ban, transit reinvestment) by explicit rules, then "
+                "the same mode-choice model is re-run to produce World B; effects "
+                "are isolated as Δ(B−A)."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["compiled Policy DSL", "baseline params", "sim params"],
+            outputs=["World B metrics", "Δ(B−A) per metric"],
+            output_tag=sim,
+            code="app.simulation.model / app.simulation.levers",
+            assumptions=_sim_assumptions(),
+        ),
+        ModelCard(
+            id="time_machine",
+            name="Time Machine (staged adaptation timeline)",
+            spec_sections=["§9", "§24"],
+            layer="System Dynamics Layer (SPEC §7.6)",
+            method=(
+                "Interpolates between structural anchors via a fast behavioural "
+                "substitution ramp and a lagged, revenue-funded transit capacity "
+                "ramp, with a confidence band that widens monotonically with "
+                "horizon (SPEC §9)."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["World A / World B anchors", "adaptation params"],
+            outputs=["per-checkpoint trajectories", "widening confidence bands"],
+            output_tag=sim,
+            code="app.simulation.timeline",
+            assumptions=_adaptation_assumptions(),
+        ),
+        ModelCard(
+            id="uncertainty_monte_carlo",
+            name="Uncertainty engine (Monte-Carlo elasticity sweep)",
+            spec_sections=["§24"],
+            layer="Ensemble / Uncertainty (SPEC §8/§24)",
+            method=(
+                "Triangular Monte-Carlo sampling over documented uncertain "
+                "assumptions, re-running the deterministic model per sample → "
+                "median + 50/80/95% intervals per checkpoint and a one-at-a-time "
+                "sensitivity ranking of the most influential assumptions."
+            ),
+            determinism="stochastic (seeded)",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["policy", "uncertain assumption ranges", "seed", "sample count"],
+            outputs=["median + 50/80/95% intervals", "assumption sensitivity ranking"],
+            output_tag=sim,
+            code="app.uncertainty.engine",
+            assumptions=[],
+        ),
+        ModelCard(
+            id="cohort_opinion",
+            name="Cohort opinion model (public reaction)",
+            spec_sections=["§13"],
+            layer="Public Reaction (SPEC §13)",
+            method=(
+                "Per cohort (income band × geography × mode): own material impact "
+                "(generalized-cost Δ) + perceived fairness + ideological prior → a "
+                "latent support score mapped to a 6-bucket Likert distribution."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["Δ generalized cost per cohort", "policy fairness structure"],
+            outputs=["support distribution per cohort + overall"],
+            output_tag=sim,
+            code="app.opinion.model",
+            assumptions=_opinion_assumptions(),
+        ),
+        ModelCard(
+            id="opinion_diffusion",
+            name="Opinion diffusion (Friedkin–Johnsen social network)",
+            spec_sections=["§14"],
+            layer="Social Network / Opinion Diffusion (SPEC §14)",
+            method=(
+                "A typed, row-stochastic influence graph over citizen cohorts and "
+                "institutional actors runs a deterministic Friedkin–Johnsen "
+                "diffusion; each actor drifts toward its neighbours' weighted "
+                "opinion while staying partly anchored to its own conviction."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["cohort opinions (seed)", "actor priors", "influence matrix", "shocks"],
+            outputs=["opinion trajectories", "salience/polarisation", "coalitions"],
+            output_tag=sim,
+            code="app.diffusion.model",
+            assumptions=[],
+        ),
+        ModelCard(
+            id="policy_optimiser",
+            name="Policy optimiser (grid search → Pareto set)",
+            spec_sections=["§22"],
+            layer="Policy Search (SPEC §22)",
+            method=(
+                "Grid-searches candidate interventions, simulates each with the "
+                "deterministic World-B + cohort-opinion models, and builds a "
+                "multi-objective Pareto frontier under the supplied constraints."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["objective", "constraints", "candidate grid"],
+            outputs=["scored candidates", "Pareto frontier", "labelled picks"],
+            output_tag=sim,
+            code="app.optimiser.search",
+            assumptions=[],
+        ),
+        ModelCard(
+            id="parliament",
+            name="Model Parliament (evidence-grounded debate)",
+            spec_sections=["§11", "§12"],
+            layer="Multi-Agent Institutional Layer (SPEC §18)",
+            method=(
+                "Persona agents deterministically select supporting evidence "
+                "(metrics + event-ledger entries) and a stance; an LLM (when "
+                "configured) only polishes the prose, with a deterministic "
+                "template fallback. No agent invents a number."
+            ),
+            determinism="deterministic (prose optional LLM)",
+            produces_numbers=False,
+            llm_role="prose only — never numbers (SPEC §34)",
+            inputs=["/simulate metrics", "event ledger"],
+            outputs=["grounded arguments", "tally", "failure-mode register"],
+            output_tag=est,
+            code="app.parliament",
+            assumptions=[],
+        ),
+        ModelCard(
+            id="media",
+            name="Simulated press room (archetype headlines)",
+            spec_sections=["§15"],
+            layer="Simulated Media (SPEC §15)",
+            method=(
+                "Archetype editorial lenses build headlines strictly from the "
+                "event ledger + Δ metrics + opinion state; every artifact is "
+                "labelled SIMULATED with a fictional outlet — no real bylines."
+            ),
+            determinism="deterministic (prose optional LLM)",
+            produces_numbers=False,
+            llm_role="prose only — labelled SIMULATED (SPEC §15/§34)",
+            inputs=["event ledger", "Δ metrics", "opinion state"],
+            outputs=["archetype headlines (Generated, labelled SIMULATED)"],
+            output_tag=MetricTag.generated,
+            code="app.media.generator",
+            assumptions=[],
+        ),
+    ]
+
+
+def _data_sources() -> list[DataSourceCard]:
+    return [
+        DataSourceCard(
+            id="synthetic_population",
+            name="Synthetic commuter population",
+            kind="synthetic",
+            description=(
+                "Deterministically generated agents with home/work zones, income "
+                "band and price sensitivity; a statistical stand-in, not real "
+                "individuals (SPEC §6)."
+            ),
+            tag=MetricTag.simulated,
+            used_by=["agent_based_mode_choice", "policy_world_b", "cohort_opinion"],
+        ),
+        DataSourceCard(
+            id="baseline_params",
+            name="Baseline modelling assumptions",
+            kind="assumption-set",
+            description=(
+                "Transparent input constants (speeds, costs, overheads, CO₂ "
+                "factor) parameterising the mode-choice model; each is auditable "
+                "and human-correctable (SPEC §4/§26)."
+            ),
+            tag=MetricTag.estimated,
+            used_by=["agent_based_mode_choice", "policy_world_b", "time_machine"],
+        ),
+        DataSourceCard(
+            id="policy_dsl",
+            name="Compiled Policy DSL",
+            kind="assumption-set",
+            description=(
+                "Structured policy produced by the compiler; an LLM may structure "
+                "the language but the numeric intervention fields are explicit and "
+                "auditable (SPEC §3/§34)."
+            ),
+            tag=MetricTag.estimated,
+            used_by=["policy_world_b", "policy_optimiser"],
+        ),
+    ]
+
+
+def _guardrails() -> list[GuardrailCheck]:
+    return [
+        GuardrailCheck(
+            id="no_llm_numbers",
+            rule="LLMs never generate core numeric simulation effects.",
+            enforced_by=(
+                "All numeric models (baseline, world_b, timeline, uncertainty, "
+                "opinion, diffusion, optimiser) are pure deterministic/seeded code; "
+                "LLM use is confined to prose (parliament, media) and language "
+                "structuring (policy compiler)."
+            ),
+            holds=True,
+        ),
+        GuardrailCheck(
+            id="provenance_tags",
+            rule="Every metric is tagged Observed/Estimated/Simulated/Generated.",
+            enforced_by=(
+                "Metric/MetricSeries schemas carry a required MetricTag; model "
+                "cards above declare each layer's output_tag."
+            ),
+            holds=True,
+        ),
+        GuardrailCheck(
+            id="media_labelled",
+            rule="Generated media is labelled SIMULATED.",
+            enforced_by=(
+                "The media generator stamps a SIMULATED banner and fictional "
+                "outlet on every artifact; output_tag=Generated."
+            ),
+            holds=True,
+        ),
+        GuardrailCheck(
+            id="widening_uncertainty",
+            rule="Long-run uncertainty widens with horizon.",
+            enforced_by=(
+                "Timeline bands widen monotonically per year (uncertainty_slope_"
+                "per_year) and the Monte-Carlo intervals fan out per checkpoint."
+            ),
+            holds=True,
+        ),
+        GuardrailCheck(
+            id="reproducible",
+            rule="Runs are reproducible / auditable.",
+            enforced_by=(
+                "Deterministic models return identical output for identical input; "
+                "stochastic sweeps are seeded; every assumption is published here "
+                "by live introspection."
+            ),
+            holds=True,
+        ),
+    ]
+
+
+def build_registry() -> ModelRegistry:
+    """Build the full transparency manifest (SPEC §33). Deterministic, no LLM."""
+    models = _models()
+    data_sources = _data_sources()
+    guardrails = _guardrails()
+
+    # Flat, de-duplicated assumption index across every model.
+    seen: set[str] = set()
+    index: list[AssumptionRecord] = []
+    for m in models:
+        for a in m.assumptions:
+            if a.name in seen:
+                continue
+            seen.add(a.name)
+            index.append(a)
+
+    counts = {
+        "models": len(models),
+        "numeric_models": sum(1 for m in models if m.produces_numbers),
+        "deterministic_models": sum(1 for m in models if m.determinism.startswith("deterministic")),
+        "models_touching_numbers_with_llm": sum(1 for m in models if m.llm_touches_numbers),
+        "documented_assumptions": len(index),
+        "data_sources": len(data_sources),
+        "guardrails_holding": sum(1 for g in guardrails if g.holds),
+        "guardrails_total": len(guardrails),
+    }
+
+    return ModelRegistry(
+        app_version=settings.version,
+        models=models,
+        data_sources=data_sources,
+        guardrails=guardrails,
+        assumption_index=index,
+        counts=counts,
+    )

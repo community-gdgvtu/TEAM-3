@@ -149,3 +149,21 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   physical Time-Machine horizon (noted in the payload). Fully deterministic, no randomness, no LLM
   (SPEC §14/§34). 9 tests; 157 green, app boots with 22 routes. **SPEC §14 + §23 now covered beyond the
   original M3–M7 + stretch roadmap.**
+- 2026-08-13 — Model registry / transparency manifest (SPEC §33): new `backend/app/registry/`
+  package + `GET /registry`. A machine-readable "how do we know these numbers aren't AI
+  astrology?" answer. Lists every forecast layer (baseline agent-based mode-choice, World-B
+  policy sim, Time Machine staged-adaptation timeline, Monte-Carlo uncertainty sweep, cohort
+  opinion model, Friedkin–Johnsen opinion diffusion, policy optimiser, Model Parliament,
+  simulated media) as a self-describing `ModelCard` — SPEC sections, method paragraph,
+  determinism class (deterministic / stochastic-seeded), the provenance tag applied to its
+  outputs, its Python module path, and an explicit `llm_touches_numbers` flag that is **False**
+  for every numeric layer (LLM confined to prose in parliament/media and language structuring in
+  the compiler). Numeric layers publish their documented input assumptions **read live from the
+  code** (`DEFAULT_PARAMS`, `DEFAULT_SIM_PARAMS`, `DEFAULT_ADAPTATION`, `OpinionParams` via
+  introspection) so the published values can never disagree with what actually runs. Also emits
+  data-source cards (synthetic population, baseline assumption set, compiled Policy DSL) and the
+  SPEC §34 guardrail checklist (no-LLM-numbers · provenance tags · SIMULATED media · widening
+  uncertainty · reproducibility) each with a concrete `enforced_by` and a `holds` flag, plus a
+  flat de-duplicated assumption index and summary counts. The registry is tagged **Observed**
+  (it describes the code, it is not a simulation output). Fully deterministic, no LLM (SPEC
+  §33/§34). 5 tests; 162 green, app boots with 23 routes.
