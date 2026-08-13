@@ -1,16 +1,32 @@
 "use client";
 
 /**
- * Lower deck of the main screen (SPEC §27): the [Parliament] [Public] [Press]
- * [Red Team] tab bar and the panel it selects.
+ * Lower deck of the main screen (SPEC §27): the analysis tab bar and the panel
+ * it selects.
  *
- * All four panels stay mounted (toggled with `hidden`) so a debate, opinion run,
+ * All panels stay mounted (toggled with `hidden`) so a debate, opinion run,
  * press batch or risk register survives switching tabs — the demo can flip
  * between them without re-fetching. A shared "no policy yet" hint sits above the
  * bar until the compiler publishes a DSL (each panel also guards itself).
+ *
+ * The bar implements the WAI-ARIA Tabs pattern (APG): a single tab stop with a
+ * roving `tabIndex`, ArrowLeft/ArrowRight/Home/End keyboard navigation with
+ * automatic activation, and `aria-controls`/`aria-labelledby` wiring each tab to
+ * its panel. With 31 panels a flat bar is hard to scan, so a filter box narrows
+ * the visible tabs by label (the active tab always stays visible so a filtered
+ * view can never orphan the panel on screen). Keyboard navigation traverses only
+ * the currently-visible tabs.
  */
 
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 
 import { subscribeDemoTab } from "../../lib/demo";
 import NorthStarPanel from "./NorthStarPanel";
@@ -79,163 +95,181 @@ type TabKey =
   | "datafabric"
   | "assumptions";
 
-const TABS: Array<{ key: TabKey; label: string }> = [
-  { key: "northstar", label: "North-Star" },
-  { key: "run", label: "Run" },
-  { key: "world", label: "World" },
-  { key: "citizen", label: "Citizen" },
-  { key: "business", label: "Business" },
-  { key: "parliament", label: "Parliament" },
-  { key: "public", label: "Public" },
-  { key: "press", label: "Press" },
-  { key: "presser", label: "Presser" },
-  { key: "redteam", label: "Red Team" },
-  { key: "compare", label: "Compare" },
-  { key: "grand", label: "Grand A/B/C/D" },
-  { key: "sdg", label: "SDG" },
-  { key: "diffusion", label: "Diffusion" },
-  { key: "ensemble", label: "Ensemble" },
-  { key: "uncertainty", label: "Uncertainty" },
-  { key: "sensitivity", label: "Sensitivity" },
-  { key: "optimiser", label: "Optimiser" },
-  { key: "economy", label: "Economy" },
-  { key: "dynamics", label: "Dynamics" },
-  { key: "microsim", label: "Microsim" },
-  { key: "spatial", label: "Spatial" },
-  { key: "stress", label: "Stress" },
-  { key: "analogue", label: "Analogue" },
-  { key: "timeseries", label: "Time-series" },
-  { key: "institutions", label: "Institutions" },
-  { key: "backtest", label: "Backtest" },
-  { key: "registry", label: "Registry" },
-  { key: "reproduce", label: "Reproduce" },
-  { key: "datafabric", label: "Data Fabric" },
-  { key: "assumptions", label: "Assumptions" },
+const TABS: Array<{ key: TabKey; label: string; Panel: ComponentType }> = [
+  { key: "northstar", label: "North-Star", Panel: NorthStarPanel },
+  { key: "run", label: "Run", Panel: RunPanel },
+  { key: "world", label: "World", Panel: WorldPanel },
+  { key: "citizen", label: "Citizen", Panel: CitizenPanel },
+  { key: "business", label: "Business", Panel: BusinessPanel },
+  { key: "parliament", label: "Parliament", Panel: ParliamentPanel },
+  { key: "public", label: "Public", Panel: PublicReactionPanel },
+  { key: "press", label: "Press", Panel: PressFeedPanel },
+  { key: "presser", label: "Presser", Panel: PressConferencePanel },
+  { key: "redteam", label: "Red Team", Panel: FailureModesPanel },
+  { key: "compare", label: "Compare", Panel: ComparePanel },
+  { key: "grand", label: "Grand A/B/C/D", Panel: GrandComparePanel },
+  { key: "sdg", label: "SDG", Panel: SdgPanel },
+  { key: "diffusion", label: "Diffusion", Panel: DiffusionPanel },
+  { key: "ensemble", label: "Ensemble", Panel: EnsemblePanel },
+  { key: "uncertainty", label: "Uncertainty", Panel: UncertaintyPanel },
+  { key: "sensitivity", label: "Sensitivity", Panel: SensitivityPanel },
+  { key: "optimiser", label: "Optimiser", Panel: OptimiserPanel },
+  { key: "economy", label: "Economy", Panel: EconomyPanel },
+  { key: "dynamics", label: "Dynamics", Panel: DynamicsPanel },
+  { key: "microsim", label: "Microsim", Panel: MicrosimPanel },
+  { key: "spatial", label: "Spatial", Panel: SpatialPanel },
+  { key: "stress", label: "Stress", Panel: StressPanel },
+  { key: "analogue", label: "Analogue", Panel: AnaloguePanel },
+  { key: "timeseries", label: "Time-series", Panel: TimeseriesPanel },
+  { key: "institutions", label: "Institutions", Panel: InstitutionsPanel },
+  { key: "backtest", label: "Backtest", Panel: BacktestPanel },
+  { key: "registry", label: "Registry", Panel: RegistryPanel },
+  { key: "reproduce", label: "Reproduce", Panel: ReproducePanel },
+  { key: "datafabric", label: "Data Fabric", Panel: DataFabricPanel },
+  { key: "assumptions", label: "Assumptions", Panel: AssumptionsPanel },
 ];
+
+const tabId = (key: TabKey) => `tab-${key}`;
+const panelId = (key: TabKey) => `panel-${key}`;
 
 export default function PanelTabs() {
   const { policy } = useTwin();
   const [active, setActive] = useState<TabKey>("parliament");
+  const [filter, setFilter] = useState("");
+  const tabRefs = useRef<Partial<Record<TabKey, HTMLButtonElement | null>>>({});
 
   // Let the guided demo drive the tab bar (its keys are a subset of TabKey).
-  useEffect(() => subscribeDemoTab((tab) => setActive(tab)), []);
+  // Clear any filter so the requested tab (and its neighbours) are in view.
+  useEffect(
+    () =>
+      subscribeDemoTab((tab) => {
+        setActive(tab);
+        setFilter("");
+      }),
+    [],
+  );
+
+  // Tabs currently shown in the bar: those matching the filter, but the active
+  // tab is always kept visible so a narrow filter can never orphan the panel.
+  const visibleTabs = useMemo(() => {
+    const q = filter.trim().toLowerCase();
+    if (!q) return TABS;
+    return TABS.filter((t) => t.label.toLowerCase().includes(q) || t.key === active);
+  }, [filter, active]);
+
+  const focusTab = useCallback((key: TabKey) => {
+    setActive(key);
+    // Focus after the roving tabIndex updates so the moved-to tab is the tab stop.
+    requestAnimationFrame(() => tabRefs.current[key]?.focus());
+  }, []);
+
+  const onKeyDown = useCallback(
+    (event: ReactKeyboardEvent<HTMLButtonElement>, key: TabKey) => {
+      const list = visibleTabs;
+      const count = list.length;
+      if (count === 0) return;
+      const current = list.findIndex((t) => t.key === key);
+      const start = current === -1 ? 0 : current;
+      let next = -1;
+      switch (event.key) {
+        case "ArrowRight":
+        case "ArrowDown":
+          next = (start + 1) % count;
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          next = (start - 1 + count) % count;
+          break;
+        case "Home":
+          next = 0;
+          break;
+        case "End":
+          next = count - 1;
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+      focusTab(list[next].key);
+    },
+    [visibleTabs, focusTab],
+  );
 
   return (
     <div className="panel-tabs" data-tour="tabs">
-      <div className="tabbar" role="tablist" aria-label="Analysis panels">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            role="tab"
-            aria-selected={active === t.key}
-            className={`tab${active === t.key ? " active" : ""}`}
-            onClick={() => setActive(t.key)}
-          >
-            {t.label}
-          </button>
-        ))}
-        {!policy && (
-          <span className="tabbar-hint">
-            Compile a policy to activate (Backtest, Registry &amp; Optimiser run without one)
+      <div className="tabbar-row">
+        <div className="tabbar" role="tablist" aria-label="Analysis panels">
+          {visibleTabs.map((t) => {
+            const selected = active === t.key;
+            return (
+              <button
+                key={t.key}
+                ref={(el) => {
+                  tabRefs.current[t.key] = el;
+                }}
+                type="button"
+                role="tab"
+                id={tabId(t.key)}
+                aria-selected={selected}
+                aria-controls={panelId(t.key)}
+                tabIndex={selected ? 0 : -1}
+                className={`tab${selected ? " active" : ""}`}
+                onClick={() => setActive(t.key)}
+                onKeyDown={(e) => onKeyDown(e, t.key)}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+          {visibleTabs.length === 0 && (
+            <span className="tabbar-hint" role="status">
+              No panel matches “{filter.trim()}”.
+            </span>
+          )}
+          {!policy && visibleTabs.length > 0 && (
+            <span className="tabbar-hint">
+              Compile a policy to activate (Backtest, Registry &amp; Optimiser run without one)
+            </span>
+          )}
+        </div>
+        <div className="tab-filter">
+          <label className="sr-only" htmlFor="tab-filter-input">
+            Filter analysis panels
+          </label>
+          <input
+            id="tab-filter-input"
+            type="search"
+            className="tab-filter-input"
+            placeholder={`Filter ${TABS.length} panels…`}
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            aria-describedby="tab-filter-count"
+          />
+          <span id="tab-filter-count" className="tab-filter-count">
+            {filter.trim()
+              ? `${visibleTabs.filter((t) => t.label.toLowerCase().includes(filter.trim().toLowerCase())).length}/${TABS.length}`
+              : `${TABS.length}`}
           </span>
-        )}
+        </div>
       </div>
 
       <div className="tab-panels">
-        <div role="tabpanel" hidden={active !== "northstar"}>
-          <NorthStarPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "run"}>
-          <RunPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "world"}>
-          <WorldPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "citizen"}>
-          <CitizenPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "business"}>
-          <BusinessPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "parliament"}>
-          <ParliamentPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "public"}>
-          <PublicReactionPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "press"}>
-          <PressFeedPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "presser"}>
-          <PressConferencePanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "redteam"}>
-          <FailureModesPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "compare"}>
-          <ComparePanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "grand"}>
-          <GrandComparePanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "sdg"}>
-          <SdgPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "diffusion"}>
-          <DiffusionPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "ensemble"}>
-          <EnsemblePanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "uncertainty"}>
-          <UncertaintyPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "sensitivity"}>
-          <SensitivityPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "optimiser"}>
-          <OptimiserPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "economy"}>
-          <EconomyPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "dynamics"}>
-          <DynamicsPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "microsim"}>
-          <MicrosimPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "spatial"}>
-          <SpatialPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "stress"}>
-          <StressPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "analogue"}>
-          <AnaloguePanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "timeseries"}>
-          <TimeseriesPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "institutions"}>
-          <InstitutionsPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "backtest"}>
-          <BacktestPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "registry"}>
-          <RegistryPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "reproduce"}>
-          <ReproducePanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "datafabric"}>
-          <DataFabricPanel />
-        </div>
-        <div role="tabpanel" hidden={active !== "assumptions"}>
-          <AssumptionsPanel />
-        </div>
+        {TABS.map((t) => {
+          const { Panel } = t;
+          const selected = active === t.key;
+          return (
+            <div
+              key={t.key}
+              role="tabpanel"
+              id={panelId(t.key)}
+              aria-labelledby={tabId(t.key)}
+              tabIndex={selected ? 0 : -1}
+              hidden={!selected}
+            >
+              <Panel />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

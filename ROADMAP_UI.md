@@ -282,3 +282,14 @@ silently under-claimed and the "every documented backend endpoint has a UI
 surface" line was no longer true. Documentation drift is a §34 honesty issue: the
 map a judge reads must match the app they click.
 - [x] Re-sync `frontend/README.md`: bump the intro "29 analysis surfaces" to 31 and add the Citizen/Business drill-downs to the intro list; add the two missing rows to the endpoint→SPEC table in tab-bar order (Citizen after World: `POST /citizen`, `GET /citizen/sample`, §17/§31; Business next: `POST /business`, `GET /business/sample`, §17), restoring the accuracy of the "every documented backend endpoint has a UI surface" claim. Docs only, no code change; `tsc --noEmit` + `next build` already clean (SPEC §34)
+
+## M35 — Accessible, filterable analysis tab bar (SPEC §27 usability + a11y)
+The lower-deck tab bar (SPEC §27) had grown to **31 panels** but was still a flat
+row of plain buttons: it declared `role="tablist"`/`role="tab"` yet never
+implemented the WAI-ARIA Tabs keyboard pattern, so a keyboard or screen-reader
+user had to Tab through all 31 controls to reach a panel, tabs weren't linked to
+their panels, and there was no way to find a panel by name. This is both a
+usability wall for the demo and a real accessibility gap. Frontend-only, no new
+endpoint, no numbers touched — a pure interaction/a11y upgrade to an existing
+surface.
+- [x] Upgrade `PanelTabs` to the ARIA APG Tabs pattern: a single tab stop with a **roving `tabIndex`** (only the selected tab is focusable), **ArrowLeft/ArrowRight/ArrowUp/ArrowDown/Home/End** navigation with automatic activation (wrapping, over only the currently-visible tabs), each tab wired to its panel via `id` + `aria-controls` + `aria-labelledby`, and the active `tabpanel` made focusable (`tabIndex=0`) so keyboard users can reach panel content; add a visible `:focus-visible` ring. Add a **filter box** (`type=search`, screen-reader-labelled, live `matched/total` count) that narrows the 31 tabs by label substring while always keeping the active tab visible (a narrow filter can never orphan the on-screen panel), with a "No panel matches …" status when empty; the guided demo clears the filter when it drives a tab so the requested panel stays in view. Refactored the 31 hand-written panel wrappers into a single `TABS` map (tab↔panel ids can't drift). Frontend-only; `tsc --noEmit` + `next build` + `next lint` clean (SPEC §27/§34)

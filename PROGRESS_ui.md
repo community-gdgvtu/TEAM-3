@@ -991,3 +991,19 @@ Frontend-only.
   surfaces + listed the two drill-downs, and added `POST /citizen`+`GET /citizen/sample`
   (§17/§31) and `POST /business`+`GET /business/sample` (§17) rows in tab-bar order. Docs
   only; verified all 44 backend paths are referenced in lib/api.ts (0 unsurfaced).
+
+- 2026-08-13 — M35: accessible, filterable analysis tab bar (SPEC §27 usability + a11y).
+  The lower-deck tab bar had reached 31 panels but was a flat row of plain buttons that
+  only *declared* `role="tablist"`/`role="tab"` — no keyboard pattern, no tab↔panel links,
+  no way to find a panel by name. Rewrote `PanelTabs.tsx` to the WAI-ARIA APG Tabs pattern:
+  roving `tabIndex` (single tab stop), Arrow/Home/End navigation with automatic activation
+  over only the visible tabs (wrapping), each tab wired to its panel via `id` +
+  `aria-controls` + `aria-labelledby`, active `tabpanel` focusable, plus a visible
+  `:focus-visible` ring. Added a `type=search` filter box (sr-only label, live matched/total
+  count, "No panel matches …" status) that narrows the 31 tabs by label while always keeping
+  the active tab visible so a filter can't orphan the on-screen panel; the guided demo clears
+  the filter when it drives a tab. Refactored the 31 hand-written panel wrappers into one
+  `TABS` map so tab/panel ids can't drift. New `.tabbar-row`/`.tab-filter*`/`.sr-only` CSS +
+  `.tab:focus-visible`. Frontend-only, no endpoint/number touched. Green: `npx tsc --noEmit`
+  clean, `npx next build` compiled (4/4 static, / = 67.3 kB, First Load 155 kB),
+  `npx next lint` no warnings.
