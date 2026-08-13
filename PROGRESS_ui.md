@@ -875,3 +875,17 @@ Live verification against the running backend wasn't possible this run (port 800
 still held by an unrelated app, so `/north-star` 404s) — the tab shows its honest
 error+retry state exactly as designed (SPEC §34). No backend/data/engine files
 touched. Every documented engine route (43 now) has a UI surface again.
+
+## 2026-08-13 — M29 follow-up: North-Star is now the guided-tour capstone
+Extended the SPEC §29 guided tour (`lib/demo.ts`) with a closing **step 10** after
+Reproduce that spotlights the new North-Star tab and frames it as the §37
+culmination: every layer the judge just walked through (baseline, analogues,
+mechanisms, median outcome, uncertainty, winners/losers, failure modes,
+opposition, opinion, media, risk amendments + effects, best-fit config,
+assumptions) fused into the single ordered answer to the one question that
+started it — "What happens if we implement this?" — with nothing new computed, so
+it can't disagree with the tabs behind it. Widened `DemoTab` with `northstar`
+(already a `PanelTabs` TabKey → tab switching stays type-safe); the generic
+`DemoTour` renderer and `[data-tour="tabs"]` anchor are untouched. The tour still
+renders zero metrics (pure guidance, SPEC §34). `tsc --noEmit` clean, `next build`
+clean (/ = 61.9 kB, First Load 150 kB). Frontend-only.

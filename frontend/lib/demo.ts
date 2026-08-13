@@ -17,7 +17,8 @@ export type DemoTab =
   | "redteam"
   | "run"
   | "registry"
-  | "reproduce";
+  | "reproduce"
+  | "northstar";
 
 type TabListener = (tab: DemoTab) => void;
 
@@ -47,8 +48,10 @@ export interface TourStep {
  * The demo narrative. Mirrors SPEC §29: draft → compile → simulate two worlds →
  * scrub time → read tagged outcomes → adversarial debate → red-team → the whole
  * pipeline composed in one consistent call (§28/§29) → the transparency manifest
- * that answers "how do we know this isn't AI astrology" → and the content-addressed
- * reproducibility receipt (§32) that lets a judge re-run to the identical digest.
+ * that answers "how do we know this isn't AI astrology" → the content-addressed
+ * reproducibility receipt (§32) that lets a judge re-run to the identical digest →
+ * and the §37 North-Star: every layer fused into the single ordered answer to the
+ * one question that started it, "What happens if we implement this?".
  */
 export const TOUR_STEPS: TourStep[] = [
   {
@@ -135,5 +138,19 @@ export const TOUR_STEPS: TourStep[] = [
       "proven-reproducible badge the backend earns by running twice and diffing " +
       "the digests. Same inputs, same numbers, every time — determinism you can " +
       "check, not take on trust.",
+  },
+  {
+    selector: '[data-tour="tabs"]',
+    tab: "northstar",
+    title: "10 · North-Star — the whole thing, as one answer",
+    body:
+      "This is where it all lands: a minister asks “What happens if we implement " +
+      "this?” and North-Star answers with the fixed §37 narrative — baseline, " +
+      "analogues, mechanisms, the median outcome, uncertainty, who wins, who " +
+      "loses, where it fails, the opposition’s strongest argument, how opinion " +
+      "shifts, the media, three risk-reducing amendments and their effects, the " +
+      "best-fit configuration, and every assumption. Nothing new is computed — " +
+      "each line embeds the same layer you just saw, so the answer can’t disagree " +
+      "with the tabs behind it. One question, the whole answer.",
   },
 ];
