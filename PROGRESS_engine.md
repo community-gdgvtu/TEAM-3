@@ -1364,3 +1364,34 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   `scripts/audit.py` (get_routes), `backend/tests/test_evidence_example.py` (3 tests).
   **475 green** (was 472), `scripts/audit.py` PASS, app boots with **57 routes** (was 56).
   No frontend/shared files touched.
+
+## 2026-08-13 (engine, M52)
+- **Service capability manifest** — `GET /capabilities` (SPEC §27/§33/§34). The engine serves
+  50+ routes but nothing described the **HTTP surface itself**: `/registry` (§33) catalogues the
+  *models*, `/data-fabric` (§4) the *datasets*, `/openapi.json` is a raw schema dump with no SPEC
+  mapping. A judge or the UI had no single call answering *what can this engine do, which SPEC
+  section does each endpoint implement, which return numbers vs prose, and which have a no-body
+  example I can hit right now.*
+- Added `backend/app/capabilities/` + `GET /capabilities`: every product route grouped into 12
+  functional areas, each card carrying `methods`, `spec_sections`, one-line `summary`,
+  `needs_body`, `output_tag` (provenance class of that route's numbers, or null for prose/mixed/
+  metadata) and its `keyless_example` companion; plus a flat `keyless_examples` list and summary
+  `counts`.
+- **Can't-drift by construction:** the manifest is reconciled *live* against the running app's
+  routes — `live_route_methods(app)` walks `app.routes` (methods read live, not hand-copied),
+  joined to a curated catalogue for the SPEC mapping. Any live route with no card surfaces in
+  `undocumented_routes`, any card for a deleted route in `phantom_cards`, and a standing test
+  asserts both empty — same discipline as the §33 registry reading params live. FastAPI docs
+  infra (`/docs`, `/redoc`, `/openapi.json`, `/docs/oauth2-redirect`) is deliberately excluded
+  as non-product.
+- Manifest is **Observed** about the service (transparency artifact, not a forecast). The
+  per-endpoint tag field is named `output_tag` (not `provenance`) so the whole-surface §34
+  provenance walk enforces only the real top-level tag, not this descriptive echo. Deterministic
+  (two identical calls byte-identical — guarded); no numeric model, no LLM (§34). Root `/` now
+  advertises `capabilities: /capabilities`; added to the `scripts/audit.py` GET sweep (served-200
+  + provenance-tag).
+- Files: `backend/app/capabilities/{__init__,schema,catalogue,model}.py`,
+  `backend/app/routers/capabilities.py`, `backend/app/main.py` (router + root link),
+  `scripts/audit.py` (get_routes), `backend/tests/test_capabilities.py` (9 tests).
+  **484 green** (was 475), `scripts/audit.py` PASS, app boots with **58 routes** (was 57).
+  No frontend/shared files touched.

@@ -122,6 +122,7 @@ def build_report(text: str) -> dict:
     # integration smoke test so this CLI covers exactly the live surface).
     get_routes = [
         "/health",
+        "/capabilities",
         "/baseline",
         "/world",
         "/registry",

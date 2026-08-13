@@ -21,6 +21,7 @@ from .routers import (
     baseline,
     brief,
     business,
+    capabilities,
     citizen,
     compare,
     datafabric,
@@ -75,6 +76,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(health.router)
+    app.include_router(capabilities.router)
     app.include_router(policy.router)
     app.include_router(baseline.router)
     app.include_router(simulate.router)
@@ -118,6 +120,7 @@ def create_app() -> FastAPI:
             "version": settings.version,
             "docs": "/docs",
             "health": "/health",
+            "capabilities": "/capabilities",
         }
 
     return app
