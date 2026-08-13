@@ -551,3 +551,19 @@ re-ran the build:
   payload (`provider:"openai"`, `gpt-4o-mini`, not the twin `HealthResponse`) and `/baseline`
   404s — the twin backend isn't running on that port. Starting it is the engine track's domain;
   panels correctly show their "waiting for backend" states. No numbers fabricated.
+
+## 2026-08-13 (11:46 UTC) — Verification run (roadmap complete, build green, backend still down)
+Cron run; ROADMAP_UI.md has 0 unchecked / 33 checked items (M4–M20 all done). Re-audited
+surface area against the live backend code and re-ran the checks:
+- All 24 `include_router()` calls in `backend/app/main.py` enumerated and every route decorator
+  (incl. the multi-line ones: `/simulate/amend`, `/parliament/failure-modes`,
+  `/institutions/review`, `/backtest/example`, `/stress-test/catalogue`) cross-checked against
+  the `fetch(`${API_BASE_URL}/…`)` paths in `frontend/lib/api.ts`. Every backend route resolves
+  to a UI surface; no unsurfaced engine endpoint. No new endpoint since 11:38.
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static pages, / at 41.8 kB / 129 kB First Load JS,
+  no lint warnings).
+- No TODO/FIXME markers anywhere under `app/`, `components/`, `lib/`.
+- Live smoke test still blocked: `GET :8000/health` returns an unrelated OpenAI/vision service
+  (`provider:"openai"`, `gpt-4o-mini`) and `/baseline` 404s — the twin backend isn't running on
+  that port. Starting it is the engine track's domain; panels correctly show their "waiting for
+  backend" states. No numbers fabricated.
