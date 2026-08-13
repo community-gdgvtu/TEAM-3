@@ -983,3 +983,11 @@ Frontend-only.
   Citizen, added a small `.biz-*` CSS block (reuses `.cit-*` for shared structure).
   Green: `npx tsc --noEmit` clean, `npx next build` compiled (4/4 static, / = 67.5 kB,
   First Load 155 kB). Frontend-only; 29 analysis tabs now surface all 39 documented endpoints.
+
+- 2026-08-13 — M34: re-sync frontend/README.md with the Citizen + Business drill-downs.
+  README's surface map was last synced at Sensitivity (29 surfaces); Citizen (M32) and
+  Business (M33) shipped after, so the intro count and endpoint table under-claimed and the
+  "every documented backend endpoint has a UI surface" line was stale. Bumped the intro to 31
+  surfaces + listed the two drill-downs, and added `POST /citizen`+`GET /citizen/sample`
+  (§17/§31) and `POST /business`+`GET /business/sample` (§17) rows in tab-bar order. Docs
+  only; verified all 44 backend paths are referenced in lib/api.ts (0 unsurfaced).

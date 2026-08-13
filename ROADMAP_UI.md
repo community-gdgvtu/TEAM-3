@@ -272,3 +272,13 @@ an Estimated proxy (before/after ratio only, never turnover), no LLM on the
 numeric path, bands widen with the horizon, honest scope-limits, never fabricate
 a firm when the backend is down.
 - [x] Business tab: `GET /business/sample` → a policy-independent "click a firm" picker spanning sectors + the central/outer split, plus five archetype selectors (representative / most-exposed / biggest-footfall-loss / pedestrian-winner / largest). `POST /business` → that firm's staged Time-Machine trajectory: a consistency banner (same deterministic mode-choice model as `/simulate`, same `/economy` coefficients, same adaptation curve as the Time Machine, no LLM, revenue = Estimated proxy), the firm profile card (sector / building kind / zone / central-district / floors / floor area / estimated jobs, all Simulated-tagged), a before→after topline (daily footfall, labour-access index, deliveries, added annual cost with band, net revenue-proxy Δ%), the Time-Machine table (World-A reference row + each checkpoint's footfall+cost+revenue with widening bands, labour access, deliveries, added cost, net rev Δ%), the deterministic adaptation-decision cards, the deterministic "Why?" narrative, and the collapsible `not_modelled` scope-limits. Physical drivers Simulated (SPEC §7.3/§7.5), firm translation Estimated (SPEC §7.4/§8); no LLM on the numeric path; `idle` (no policy) / `loading` / `error` states + a graceful picker-unavailable fallback when the backend is down, never mints a fabricated firm (SPEC §17/§34)
+
+## M34 — Re-sync the frontend README with the Citizen + Business drill-downs (SPEC §34)
+The `frontend/README.md` surface map was last re-synced at the Sensitivity tab
+(29 surfaces). Two single-agent drill-downs shipped after it — Citizen
+(`POST /citizen` + `GET /citizen/sample`, M32) and Business (`POST /business` +
+`GET /business/sample`, M33) — so the intro count and the endpoint→SPEC table
+silently under-claimed and the "every documented backend endpoint has a UI
+surface" line was no longer true. Documentation drift is a §34 honesty issue: the
+map a judge reads must match the app they click.
+- [x] Re-sync `frontend/README.md`: bump the intro "29 analysis surfaces" to 31 and add the Citizen/Business drill-downs to the intro list; add the two missing rows to the endpoint→SPEC table in tab-bar order (Citizen after World: `POST /citizen`, `GET /citizen/sample`, §17/§31; Business next: `POST /business`, `GET /business/sample`, §17), restoring the accuracy of the "every documented backend endpoint has a UI surface" claim. Docs only, no code change; `tsc --noEmit` + `next build` already clean (SPEC §34)
