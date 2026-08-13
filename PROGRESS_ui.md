@@ -794,3 +794,22 @@ states. `tsc --noEmit` clean; `next build` clean (/ = 59.7 kB). ROADMAP_UI.md M2
 checked off. Note: the currently-running dev backend predates `/world`, so it 404s
 live until the engine process restarts — the tab shows its honest error+retry
 state until then, exactly as designed.
+
+## 2026-08-13 — Verification checkpoint (UI track, roadmap complete)
+No unchecked items remain in ROADMAP_UI.md (39/39 through M27). Audited every real
+backend route against the frontend and confirmed each has a live surface:
+`/health /baseline /policy/compile /simulate /simulate/amend /compare /compare/grand
+/parliament/debate /parliament/failure-modes /public /media /evidence /registry
+/reproduce /uncertainty /optimise /economy /dynamics /diffusion /microsim /spatial
+/sdg /analogues/cases /backtest /stress-test /catalogue /timeseries /data-fabric
+/run /assumptions /assumptions/rerun /world` — one panel each under
+`frontend/components/twin/*` (plus the map + evidence drawer). The only unmatched
+routes are the FastAPI starter-template leftovers (`/items` `/users` `/login`
+`/uploadfile` `/files` `/send-notification`), which are not part of the SPEC surface.
+Health: `tsc --noEmit` clean, `next build` clean (/ = 59.7 kB, First Load 147 kB).
+Live re-verification against the urban backend was not possible this run — port 8000
+is currently held by an unrelated service (a vision/STT app), not the urban-policy-twin
+API, so the twin's endpoints 404. That's the designed-for case: every tab shows its
+honest `waiting/error` state rather than minting numbers (SPEC §34). Nothing new to
+surface — the engine roadmap is likewise complete (42 routes) and every one is exposed.
+No code change this checkpoint; UI track is caught up and green.
