@@ -789,3 +789,24 @@ record + harmonisation lineage the spec mandates.
   byte-identical across calls (guarded). Added `/world` (full + subset) to the integration-smoke GET
   sweep so the global provenance-tag guardrail covers it. `test_world.py` (10 tests).
   **323 green** (was 313); app boots with **42 routes** (was 41).
+
+---
+
+## 2026-08-13 — ENGINE-track verification checkpoint (roadmap complete)
+
+Ran the ENGINE loop and found **every item in `ROADMAP_ENGINE.md` already checked off** —
+M3/M5/M6/M7, both Stretch items, all 16 Extended (full SPEC §4–§34 coverage), all 4 Hardening
+guards, and both Orchestration composition endpoints. No unchecked `[ ]` work remains, so there
+was nothing new to implement top-to-bottom. Rather than invent speculative numeric layers
+(scope-creep against a SPEC-complete, demo-ready engine, and a §34 risk), I re-verified the
+whole backend end-to-end:
+
+- `python -m pytest -q` → **323 passed** (0 failed) in ~69s.
+- App boots clean: `from app.main import app` imports and exposes **42 routes**.
+- Deps present in `backend/.venv` (fastapi/numpy import OK).
+- `git status` clean; branch `master` up to date with origin.
+
+This confirms the parallel UI track's pushes have **not** drifted any shared backend contract
+(Policy DSL / `Shocks` / metric keys) — the integration-smoke + determinism + widening-band +
+cross-layer consistency guards all still pass against the live app. Engine is green and
+demo-ready. No code change this run (test/app state verified only); no `backend/app/**` edits.
