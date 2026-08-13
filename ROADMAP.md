@@ -23,7 +23,7 @@ Demo policy: *Pedestrianise / price vehicles entering a central district and rei
 - [x] `GET /baseline` returns baseline metric time series
 
 ## M3 — Policy simulation (World B) + time machine
-- [ ] Mode-choice + traffic model applying congestion charge/pedestrianisation — SPEC §7.5/§7.7
+- [x] Mode-choice + traffic model applying congestion charge/pedestrianisation — SPEC §7.5/§7.7
 - [ ] Timeline checkpoints T0,1m,5m,1y,5y,10y with widening uncertainty bands — SPEC §9/§24
 - [ ] `POST /simulate` returns Δ(World B − World A) outcome distributions + event ledger (§10)
 

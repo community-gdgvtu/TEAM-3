@@ -29,6 +29,25 @@ isolated session. Follow this contract exactly so progress compounds instead of 
 - If you finish a whole milestone, keep going into the next one.
 - Keep commits pushed so progress is visible on GitHub.
 
+## Parallel tracks (ACTIVE)
+
+Development now runs as **two parallel loops** with strictly disjoint file ownership so they
+never collide on git. Your cron prompt tells you which track you are.
+
+- **ENGINE track** — roadmap `ROADMAP_ENGINE.md`, progress `PROGRESS_engine.md`, lock `.lock-engine`.
+  Owns `backend/**`, `data/**`, `scripts/**`.
+- **UI track** — roadmap `ROADMAP_UI.md`, progress `PROGRESS_ui.md`, lock `.lock-ui`.
+  Owns `frontend/**`.
+
+Hard rules for parallel safety:
+- Edit ONLY files your track owns, plus your own roadmap/progress file. Never touch the other
+  track's files, and never touch shared files (`README.md`, `ROADMAP.md`, `SPEC.md`, `AGENT_LOOP.md`).
+- Use YOUR lock dir (`.lock-engine` or `.lock-ui`) via `mkdir`; release it before finishing/early-exit.
+- **Push-retry:** if `git push` is rejected (the other track pushed first), run
+  `git pull --rebase --autostash` and push again; repeat until it succeeds. Rebases are clean
+  because tracks own disjoint paths.
+- Do as many roadmap items as you can finish cleanly this run; commit + push after EACH item.
+
 ## LLM / API keys
 
 The AI layer needs an LLM key at runtime. If none is configured, code paths that need it must
