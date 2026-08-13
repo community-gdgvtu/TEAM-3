@@ -1096,3 +1096,17 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
 - Full suite: `.venv/bin/python -m pytest -q` → **399 passed** (was 388). `scripts/audit.py`
   → PASS. App boots with **52 routes** (was 50). Pure additive — no existing `backend/app/**`
   layer changed.
+
+## 2026-08-13 (verification checkpoint + robustness CLI)
+- Reclaimed a stale `.lock-engine` (34 min old, no live engine process; prior run was killed
+  mid-work leaving two uncommitted files) and verified the full engine: **405 tests green**
+  (`backend/.venv/bin/python -m pytest -q`), app boots with **52 routes**, `scripts/audit.py`
+  → PASS (all six §34 guardrail checks green over every route + registry model).
+- All 47 ROADMAP_ENGINE.md items remain checked `[x]` — the engine roadmap is complete.
+- Committed `scripts/robustness.py` + `backend/tests/test_robustness_script.py` (the prior
+  killed run authored but never committed them): a terminal runner for `POST /robustness` in the
+  demo-tooling family (`demo.py` / `north_star.py` / `audit.py`). Prints the candidate × state
+  payoff + regret matrices and the nominal / maximin / minimax-regret / Laplace / robustness-rate
+  picks, then a live §34 audit (Simulated tag, well-formed regret, payoffs byte-equal to the
+  stress-core Δ(B−A), byte-identical on repeat, no long-horizon overclaim), non-zero exit on
+  failure. Pure read of `/robustness`; no `backend/app/**` behaviour changed. 6 tests.
