@@ -668,3 +668,38 @@ declared the UI roadmap complete — a newly unsurfaced endpoint. Added the **Ti
 - `tsc --noEmit` exit 0; `next build` clean (4/4 static, / at 49 kB / 137 kB First Load); `next lint`
   no warnings/errors. Only `frontend/**` + ROADMAP_UI.md + this file touched. Every documented engine
   endpoint is now surfaced in the UI (26 routers incl. `/health`).
+
+## 2026-08-13 (12:57 UTC) — M23: Data-fabric provenance tab (SPEC §4)
+- **Context:** engine mounted a new router, `GET /data-fabric` (`backend/app/routers/datafabric.py`,
+  written 12:48 UTC — after M22 declared the UI roadmap complete). It's the dataset-level provenance
+  layer SPEC §4 asks for: a machine-readable catalogue of every dataset the engine reads, each with
+  the full §4 metadata record built *live from the file bytes* (record counts, missingness, a
+  content-hash `revision`), plus the supported-format contract and the harmonisation-pipeline lineage.
+  Complements — doesn't duplicate — the metric-level `/evidence` trace (§26), the `/registry` model
+  catalogue (§33) and the per-run `/reproduce` envelope (§32). No UI surfaced it → added M23.
+- `lib/api.ts`: typed the payload (`DataFabric`, `DatasetCard`, `VariableCard`, `TransformationStep`,
+  `FormatSupport`, `HarmonisationStep`) + `getDataFabric()` — a `GET` with `cache: "no-store"` that
+  throws on non-2xx so the panel can show an honest error state instead of inventing a catalogue.
+- `components/twin/DataFabricPanel.tsx` (new): policy-independent, loads on mount. Renders the §4
+  `input data → transformation → model → assumptions → result` lineage contract; a summary-counts
+  strip; and a collapsible card per dataset with an auditable file-facts grid (format, records,
+  missingness with a warn tone, the content-hash revision shown mono, scope/resolution/frequency/
+  period/units/license), a confidence line, the variable table (name/type/description/missing-%), the
+  ordered transformation history (each step tagged), and the real-world analogues labelled
+  *schema-compatible with (not a live source)* to keep the synthetic-city honesty. Also the
+  supported-ingestion-format chips (native/adapter-ready/declared) and the harmonisation stages
+  (implemented ✓ / declared ○ + code path). Manifest tag `Observed` about the data; datasets
+  Simulated/assumption-set. `idle`/`loading`/`error` states with a Retry.
+- `PanelTabs.tsx`: registered the `datafabric` tab (label "Data Fabric") after Reproduce; panel stays
+  mounted like the others. `globals.css`: scoped `.fabric-*` styles (own prefix; no clash with
+  `.tab`/`.tag`), mobile-safe (variable grid collapses at 640px).
+- **Contract check:** the twin backend wasn't reachable on the shared host (a *different* service
+  answers on :8000), so I verified the response shape directly against the engine source — ran
+  `backend/.venv/bin/python -c "from app.datafabric.model import build_data_fabric; ..."` (read-only,
+  no backend files touched). Confirmed every key the panel destructures: 6 datasets (5 synthetic + 1
+  assumption-set), `records_total` 12,246, per-dataset `revision` like `sha256:99337d934bd8`,
+  `missingness` 0.0, variable cards with `missing_pct`, transformation steps tagged `Simulated`,
+  and `provenance` `Observed`. Field names/types match the TS interfaces exactly.
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static, / at 50.8 kB / 138 kB First Load). Only
+  `frontend/**` + ROADMAP_UI.md + this file touched. Every documented engine endpoint (27 routers
+  incl. `/health`) is now surfaced in the UI.

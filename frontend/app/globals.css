@@ -7444,3 +7444,502 @@ main.wide {
     width: 100%;
   }
 }
+
+/* --- Data Fabric (DataFabricPanel — SPEC §4) --------------------------- */
+.fabric-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+}
+
+.fabric-ver {
+  font-size: 0.8rem;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.fabric-gen {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.fabric-note {
+  margin-top: 0.5rem;
+}
+
+.fabric-lineage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.7rem 0 0.2rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: rgba(79, 140, 255, 0.05);
+  font-size: 0.82rem;
+}
+
+.fabric-lineage-seg {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.fabric-arrow {
+  color: var(--accent);
+  margin: 0 0.15rem;
+  font-weight: 700;
+}
+
+.fabric-counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.5rem;
+  margin: 0.9rem 0;
+}
+
+.fabric-count {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.fabric-count-val {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.fabric-count-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: capitalize;
+  margin-top: 0.15rem;
+}
+
+.fabric-sub {
+  margin: 1.1rem 0 0.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+/* Dataset cards (collapsible) */
+.fabric-datasets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fabric-ds {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+.fabric-ds.open {
+  border-color: var(--accent);
+}
+
+.fabric-ds-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.fabric-ds-head:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.fabric-ds-caret {
+  color: var(--muted);
+  font-size: 0.8rem;
+  width: 0.9rem;
+  flex: none;
+}
+
+.fabric-ds-title {
+  font-weight: 600;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fabric-ds-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+}
+
+.fabric-ds-count {
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.fabric-kind {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.08rem 0.35rem;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.fabric-kind.synthetic {
+  color: #c9a2ff;
+  border-color: rgba(201, 162, 255, 0.4);
+}
+
+.fabric-kind.assumption-set {
+  color: #ffcf7a;
+  border-color: rgba(255, 207, 122, 0.4);
+}
+
+.fabric-kind.live {
+  color: var(--ok);
+  border-color: rgba(61, 220, 151, 0.4);
+}
+
+.fabric-ds-body {
+  padding: 0.15rem 0.7rem 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.fabric-ds-pub {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0.55rem 0;
+  word-break: break-word;
+}
+
+.fabric-ds-publisher {
+  color: var(--text);
+}
+
+.fabric-ds-src {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.74rem;
+}
+
+.fabric-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0.6rem;
+}
+
+.fabric-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  min-width: 74px;
+}
+
+.fabric-fact-label {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.fabric-fact-val {
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.fabric-fact-val.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 500;
+}
+
+.fabric-fact-val.ok {
+  color: var(--ok);
+}
+
+.fabric-fact-val.warn {
+  color: #ffcf7a;
+}
+
+.fabric-conf {
+  font-size: 0.8rem;
+  color: var(--text);
+  margin: 0.2rem 0 0.6rem;
+}
+
+.fabric-conf-label {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-right: 0.35rem;
+}
+
+/* Variable table */
+.fabric-vars {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0.3rem 0 0.6rem;
+}
+
+.fabric-var {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.3fr) 0.7fr 2fr 0.6fr;
+  gap: 0.5rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+  align-items: baseline;
+}
+
+.fabric-var:first-child {
+  border-top: none;
+}
+
+.fabric-var-head {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.fabric-var-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.fabric-var-unit {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.fabric-var-type {
+  color: var(--muted);
+}
+
+.fabric-var-desc {
+  color: var(--text);
+}
+
+.fabric-var-miss {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.fabric-var-miss.warn {
+  color: #ffcf7a;
+}
+
+/* Transformation history */
+.fabric-trans {
+  margin: 0.5rem 0;
+}
+
+.fabric-trans-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.fabric-trans-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.35rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.fabric-trans-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--border);
+  font-size: 0.79rem;
+}
+
+.fabric-trans-what {
+  flex: 1 1 auto;
+}
+
+.fabric-trans-by {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* Real-world analogues */
+.fabric-analogues {
+  margin-top: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.fabric-analogues-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.fabric-analogues-list {
+  margin: 0.3rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.79rem;
+  color: var(--text);
+}
+
+.fabric-analogues-list li {
+  margin: 0.1rem 0;
+}
+
+/* Format support chips */
+.fabric-formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.fabric-fmt {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  font-size: 0.79rem;
+}
+
+.fabric-fmt-status {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.fabric-fmt-status.native {
+  color: var(--ok);
+  border-color: rgba(61, 220, 151, 0.4);
+}
+
+.fabric-fmt-status.adapter-ready {
+  color: var(--accent);
+  border-color: rgba(79, 140, 255, 0.4);
+}
+
+/* Harmonisation steps */
+.fabric-harm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fabric-hstep {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.fabric-hstep.off {
+  opacity: 0.72;
+}
+
+.fabric-hstep-mark {
+  flex: none;
+  font-weight: 700;
+}
+
+.fabric-hstep.on .fabric-hstep-mark {
+  color: var(--ok);
+}
+
+.fabric-hstep.off .fabric-hstep-mark {
+  color: var(--muted);
+}
+
+.fabric-hstep-text {
+  min-width: 0;
+}
+
+.fabric-hstep-step {
+  margin: 0;
+  font-size: 0.83rem;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.fabric-hstep-flag {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.fabric-hstep-where {
+  margin: 0.15rem 0 0;
+  font-size: 0.77rem;
+  color: var(--muted);
+}
+
+.fabric-hstep-note {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .fabric-var {
+    grid-template-columns: 1fr 1fr;
+  }
+  .fabric-var-desc {
+    grid-column: 1 / -1;
+  }
+  .fabric-ds-meta {
+    flex-wrap: wrap;
+  }
+}

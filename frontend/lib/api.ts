@@ -2418,3 +2418,106 @@ export async function runTimeseries(
   }
   return (await res.json()) as TimeSeriesForecast;
 }
+
+// ---------------------------------------------------------------------------
+// Data Fabric (SPEC §4) — GET /data-fabric
+// ---------------------------------------------------------------------------
+
+/** One measured/derived variable inside a dataset (SPEC §4 `variables`). */
+export interface VariableCard {
+  name: string;
+  dtype: string;
+  unit: string;
+  description: string;
+  /** Share of records where this field is absent/null (0–100). */
+  missing_pct: number;
+}
+
+/** One entry in a dataset's `transformation_history` (SPEC §4). */
+export interface TransformationStep {
+  step: string;
+  by: string;
+  tag: MetricTag;
+}
+
+/** The full SPEC §4 dataset provenance record, built live from the file. */
+export interface DatasetCard {
+  id: string;
+  title: string;
+  publisher: string;
+  source_url: string;
+  /** ISO retrieval time; null for deterministically generated data. */
+  retrieved_at: string | null;
+  geographic_scope: string;
+  spatial_resolution: string;
+  time_start: string | null;
+  time_end: string | null;
+  frequency: string;
+  units: string;
+  variables: VariableCard[];
+  license: string;
+  /** Overall share of missing cells across declared variables (0–100). */
+  missingness: number;
+  /** Content-addressed version: short sha256 of the actual file bytes. */
+  revision: string;
+  confidence: string;
+  transformation_history: TransformationStep[];
+  format: string;
+  record_count: number;
+  /** 'synthetic' | 'legacy' | 'live' | 'assumption-set'. */
+  kind: string;
+  tag: MetricTag;
+  /** Real datasets this synthetic file is schema-compatible with (not sources). */
+  real_world_analogues: string[];
+}
+
+/** One of SPEC §4's supported ingestion formats + its wiring status. */
+export interface FormatSupport {
+  format: string;
+  /** 'native' | 'adapter-ready' | 'declared'. */
+  status: string;
+  note: string;
+}
+
+/** One SPEC §4 harmonisation pipeline stage + whether it actually runs. */
+export interface HarmonisationStep {
+  step: string;
+  implemented: boolean;
+  where: string;
+  note: string;
+}
+
+/** Full `GET /data-fabric` payload — the dataset ingestion & provenance layer (SPEC §4). */
+export interface DataFabric {
+  /** The fabric describes the data on disk, so it is Observed about itself. */
+  provenance: MetricTag;
+  note: string;
+  app_version: string;
+  generated_from: string;
+  lineage_contract: string;
+  datasets: DatasetCard[];
+  format_support: FormatSupport[];
+  harmonisation: HarmonisationStep[];
+  counts: Record<string, number>;
+}
+
+/**
+ * Fetch the Data Fabric manifest via `GET /data-fabric` (SPEC §4): the catalogue
+ * of every dataset the engine reads, each carrying the full §4 provenance record
+ * (record counts, variable lists, missingness and a content-hash revision all
+ * computed live on disk), plus the supported-format contract and the
+ * harmonisation-pipeline lineage. It is the dataset-level answer to "where did
+ * every number ultimately come from?" — Observed about the data itself, no LLM.
+ * Throws on network/HTTP error so the panel can show an honest waiting/error
+ * state rather than inventing a catalogue (SPEC §4/§34).
+ */
+export async function getDataFabric(signal?: AbortSignal): Promise<DataFabric> {
+  const res = await fetch(`${API_BASE_URL}/data-fabric`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as DataFabric;
+}
