@@ -172,3 +172,20 @@ Dated notes, newest at the bottom. One line per shipped item.
   no-policy/loading/error states, no invented forecast when the backend is down.
   Typed `runEnsemble` client + Ensemble/Method types added to lib/api.ts, wired as
   a new "Ensemble" tab in PanelTabs. `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M9.2: Model registry / transparency tab (SPEC §33). New
+  RegistryPanel loads `GET /registry` on mount (policy-independent — it describes
+  the engine, not a run) and renders the transparency manifest that answers "how
+  do we know these numbers aren't AI astrology?". Headline artifact is the SPEC
+  §34 guardrail checklist: each rule shown with a ✓/✗ pass mark (green/red left
+  border), the rule text, and how the codebase concretely enforces it, plus an
+  all-N-enforced summary chip. Below: summary count tiles; model cards for every
+  forecast layer (SPEC sections, determinism badge det/stoch, layer, output tag,
+  method, inputs/outputs, live assumption chips, code path) — each carrying the
+  key honesty badge "numbers: model only" vs a red "⚠ LLM touches numbers" driven
+  by produces_numbers/llm_touches_numbers, plus the LLM's prose-only role; data
+  source cards (kind/tag/used-by); and a collapsible assumption index table of
+  every live-introspected value + source + tag. The manifest is tagged Observed
+  (describes code). Honest backend-down state with a Retry — never pretends the
+  guardrails hold when it can't load them. Typed `getRegistry` client + registry
+  types added to lib/api.ts; wired as a new "Registry" tab (tabbar hint notes it
+  runs without a compiled policy). `tsc --noEmit` + `next build` clean.

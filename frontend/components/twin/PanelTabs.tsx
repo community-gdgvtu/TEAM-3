@@ -20,6 +20,7 @@ import SdgPanel from "./SdgPanel";
 import DiffusionPanel from "./DiffusionPanel";
 import BacktestPanel from "./BacktestPanel";
 import EnsemblePanel from "./EnsemblePanel";
+import RegistryPanel from "./RegistryPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -30,7 +31,8 @@ type TabKey =
   | "sdg"
   | "diffusion"
   | "ensemble"
-  | "backtest";
+  | "backtest"
+  | "registry";
 
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "parliament", label: "Parliament" },
@@ -41,6 +43,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "diffusion", label: "Diffusion" },
   { key: "ensemble", label: "Ensemble" },
   { key: "backtest", label: "Backtest" },
+  { key: "registry", label: "Registry" },
 ];
 
 export default function PanelTabs() {
@@ -64,7 +67,7 @@ export default function PanelTabs() {
         ))}
         {!policy && (
           <span className="tabbar-hint">
-            Compile a policy to activate (Backtest runs without one)
+            Compile a policy to activate (Backtest &amp; Registry run without one)
           </span>
         )}
       </div>
@@ -93,6 +96,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "backtest"}>
           <BacktestPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "registry"}>
+          <RegistryPanel />
         </div>
       </div>
     </div>

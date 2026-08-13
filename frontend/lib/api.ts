@@ -954,6 +954,87 @@ export async function runEnsemble(
 }
 
 // ---------------------------------------------------------------------------
+// Model registry / transparency manifest (SPEC §33) — GET /registry
+// ---------------------------------------------------------------------------
+
+/** One documented, auditable input assumption feeding a model. */
+export interface AssumptionRecord {
+  name: string;
+  label: string;
+  value: unknown;
+  unit: string;
+  source: string;
+  tag: MetricTag;
+}
+
+/** A self-describing entry for one model / forecast layer (SPEC §7/§33). */
+export interface ModelCard {
+  id: string;
+  name: string;
+  spec_sections: string[];
+  layer: string;
+  method: string;
+  /** 'deterministic' | 'stochastic (seeded)'. */
+  determinism: string;
+  produces_numbers: boolean;
+  /** MUST be false for any numeric model (SPEC §34 guardrail). */
+  llm_touches_numbers: boolean;
+  llm_role: string;
+  inputs: string[];
+  outputs: string[];
+  output_tag: MetricTag;
+  code: string;
+  assumptions: AssumptionRecord[];
+}
+
+/** One data source the models read (SPEC §4/§33). */
+export interface DataSourceCard {
+  id: string;
+  name: string;
+  /** 'synthetic' | 'legacy' | 'live' | 'assumption-set'. */
+  kind: string;
+  description: string;
+  tag: MetricTag;
+  used_by: string[];
+}
+
+/** One SPEC §34 anti-'AI-astrology' guardrail and how URBAN enforces it. */
+export interface GuardrailCheck {
+  id: string;
+  rule: string;
+  enforced_by: string;
+  holds: boolean;
+}
+
+export interface ModelRegistry {
+  provenance: MetricTag;
+  note: string;
+  app_version: string;
+  generated_from: string;
+  models: ModelCard[];
+  data_sources: DataSourceCard[];
+  guardrails: GuardrailCheck[];
+  assumption_index: AssumptionRecord[];
+  counts: Record<string, number>;
+}
+
+/**
+ * Fetch the transparency manifest (SPEC §33): every forecast layer, its live
+ * assumptions, data sources, and the SPEC §34 guardrail checklist. Deterministic,
+ * no LLM. Throws on network/HTTP error.
+ */
+export async function getRegistry(signal?: AbortSignal): Promise<ModelRegistry> {
+  const res = await fetch(`${API_BASE_URL}/registry`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as ModelRegistry;
+}
+
+// ---------------------------------------------------------------------------
 // Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
 // ---------------------------------------------------------------------------
 
