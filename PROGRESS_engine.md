@@ -84,3 +84,17 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   worlds reuse `apply_amendment` (structured DSL edits only); every number from the same deterministic
   model, no LLM (SPEC §21/§34). Horizon snaps to nearest checkpoint (default 5y). 5 tests; 125 green.
   **M7 complete — Evidence, uncertainty, credibility milestone done.**
+- 2026-08-13 — Stretch policy optimiser stub: new `backend/app/optimiser/` package + `POST /optimise`.
+  Works the problem backwards (SPEC §22): grid-searches 25 candidate interventions (congestion charge
+  across amount × revenue split × low-income exemption, parking levy, pedestrianisation), simulates each
+  with the deterministic World-B model and the cohort opinion model, and scores four competing objectives —
+  emissions reduction %, size-weighted average commute-cost increase %, size-weighted low-income burden %
+  (both real generalized-cost impacts pulled from the opinion cohorts, normalised by a one-pass baseline
+  reference gc), and an Estimated scheme-cost proxy — plus net public support for context. Applies the
+  supplied objective/constraints (reduce_transport_emissions_pct target, max_average_commute_increase_pct,
+  max_low_income_burden_increase_pct, max_budget), builds the feasible 4-objective Pareto frontier, and
+  labels representative policies (cheapest / most-equitable / largest-emissions-reduction / best-balanced
+  via min-max-normalised distance to the ideal point). Outcome metrics Simulated; only est_cost is a
+  documented Estimated constant (used solely for the budget constraint), clearly flagged; unsatisfiable
+  constraints are flagged but a frontier over all candidates is still returned so the UI is never empty.
+  ~1.2s for the full grid, deterministic, no LLM (SPEC §22/§34). 8 tests; 133 green.
