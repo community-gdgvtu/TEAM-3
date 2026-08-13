@@ -1234,4 +1234,9 @@ style — no new numeric model, types, styles or endpoints. With this, every
 zero-body backend example helper (/brief, /run, /north-star, /backtest) has a
 one-click UI surface again. `tsc --noEmit` + `next build` + `next lint` +
 `npm test` (41) all clean.
-Follow-up: none — endpoint→surface map is closed again.
+Follow-up: re-synced `frontend/README.md`'s endpoint→SPEC table — the North-Star
+row now lists `GET /north-star/example` and the Run row `GET /run/example`
+(mirroring how the Brief/Backtest rows already list their example helpers), so
+the "every documented backend endpoint has a UI surface" claim is literally true
+again. Audited backend routes vs `lib/api.ts` fetches: no other unsurfaced
+endpoint remains.
