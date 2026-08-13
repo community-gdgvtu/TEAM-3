@@ -304,3 +304,9 @@ Dated notes, newest at the bottom. One line per shipped item.
   small utility classes (.error-boundary, .error-actions) to globals.css. Verified full
   suite: `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4
   static pages). **M12 complete.**
+- 2026-08-13 — M12.2: Themed 404 (`app/not-found.tsx`). Completes the error-surface
+  coverage started by the boundaries: a bad URL now lands on an on-brand page (reuses
+  globals.css theme + .btn primary) with a Link back to the twin, instead of Next's
+  bare default 404 — off-brand mid-demo. Static, self-contained, no data or metrics.
+  Build now emits a custom `/_not-found` route. `tsc --noEmit`, `next lint`, `next
+  build` all clean. **M12 complete — the UI is crash-safe end to end.**

@@ -64,3 +64,4 @@ Every endpoint is now surfaced and every panel handles its own fetch idle/loadin
 states. This milestone hardens against the failure the per-panel states can't catch — a
 render throw that would blank the whole app mid-demo — keeping the honesty contract intact.
 - [x] App Router error boundaries: `app/error.tsx` (segment) + `app/global-error.tsx` (root layout). A render throw — unexpected backend payload shape, deck.gl/MapLibre runtime error, deep null deref — is contained to a themed, honest recovery card (clear message + error digest + Try again / Reload) instead of Next's default crash page. Never fabricates or estimates a metric; global-error is self-contained (own html/body, inline styles) since it replaces the root layout (SPEC §34)
+- [x] Themed 404: `app/not-found.tsx` — a bad URL lands on an on-brand page with a route back to the twin instead of Next's bare default 404, completing error-surface coverage alongside the boundaries. Static, no data, no metrics
