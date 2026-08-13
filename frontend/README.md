@@ -82,7 +82,7 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Outcomes dashboard tiles | (from `/simulate` + `/baseline`) | §27 |
 | Evidence drawer | `POST /evidence` | §26 |
 | North-Star answer (the minister's question) | `POST /north-star` | §37 |
-| Minister's Brief (North-Star as a printable Markdown memo) | `POST /brief` | §27/§37 |
+| Minister's Brief (North-Star as a printable Markdown memo) | `POST /brief`, `GET /brief/example` | §27/§37 |
 | Run — whole pipeline in one call | `POST /run` | §28/§29 |
 | Baseline World Model | `GET /world` | §5/§28.2 |
 | Citizen View (click a household) | `POST /citizen`, `GET /citizen/sample` | §17/§31 |

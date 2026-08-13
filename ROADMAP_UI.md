@@ -449,3 +449,17 @@ verified mechanism/coverage/revenue-split but never the charge amount, so this
 slipped through. Pure prompt wording (frontend-only): no numbers invented, every
 DSL field re-verified against the rule-based compiler + microsim.
 - [x] Reword the six charge-bearing `EXAMPLE_POLICIES.text` prompts so the rule-based `_find_amount` extracts the 12-credit charge: the four cordon variants (default, late-start, bus-funded, cycle-funded) and the LEZ now say "Introduce a charge of 12 credits on private vehicles entering…" / "…with a daily levy of 12 credits on … non-compliant vehicles, in force between…" (the LEZ avoids the `charge.*enter` trigger so it classifies as `low_emission_zone`, not road pricing). Workplace-parking-levy ("levy of 12"), pedestrianisation and standalone-transit already parsed correctly and are unchanged. Verified end-to-end against the backend rule-based compiler + `build_microsim_report`: all six now yield `amount = 12` with their intended distinct mechanism (road_pricing ×4 / low_emission_zone / parking_levy), nonzero payers (92–1032) and live regressivity, while the two no-charge chips keep `amount = None` — so under the keyless fallback the gallery, microsim, regressivity and M44 constraint card all show real, distinct numbers instead of zeros (SPEC §34). No new types/styles/endpoints; hours, exemptions, revenue splits and the 5% low-income cap all preserved. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §7.5/§29/§34)
+
+## M46 — Close the backend surface: the Minister's Brief example (SPEC §27/§37/§34)
+Auditing the panel↔endpoint map after M45 showed the UI already calls every
+documented backend endpoint **except one**: `GET /brief/example`. The Brief tab
+was the lone sample-bearing surface that never exposed its zero-body example
+helper, even though every sibling does — Backtest surfaces `GET /backtest/example`,
+Citizen `GET /citizen/sample`, Business `GET /business/sample`, Analogue
+`GET /analogues/cases`. A judge landing on the Brief tab with no compiled policy
+therefore couldn't see the finished artifact at all; every other tab gives them a
+one-click sample. Pure surfacing of real backend data — the button mints no
+numbers (the canonical §28 demo memo is the same deterministic North-Star answer,
+rendered for the demo policy), and it's explicitly stamped **not** the compiled
+policy so a demo memo can never masquerade as the user's own.
+- [x] Add `getBriefExample()` (`GET /brief/example`) to `lib/api.ts` mirroring `runBrief`'s honest error handling (throws so the panel shows a waiting/error state, never a minted memo), and wire a "Load example brief" button into `BriefPanel` alongside "Render the brief": it renders the body-less canonical demo congestion-charge memo so the tab is usable with no compiled policy in the store. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading label distinguishes example-vs-policy, and (c) the error-state Retry re-runs the correct path. Added `.brief-example-note` to `globals.css`; re-synced `frontend/README.md`'s endpoint→SPEC row (`POST /brief`, `GET /brief/example`) so the "every documented backend endpoint has a UI surface" claim is now literally true. No new numeric model. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §27/§37/§34)

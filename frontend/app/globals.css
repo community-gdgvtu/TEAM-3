@@ -11023,6 +11023,14 @@ td.neutral {
   margin-top: 0.2rem;
 }
 
+.brief-example-note {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.2rem 0 0.4rem;
+}
+
 .brief-toggle {
   display: inline-flex;
   align-items: center;

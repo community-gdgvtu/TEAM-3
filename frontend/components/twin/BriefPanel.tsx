@@ -26,7 +26,7 @@
 
 import { useState } from "react";
 
-import { runBrief } from "../../lib/api";
+import { runBrief, getBriefExample } from "../../lib/api";
 import type { BriefResponse } from "../../lib/api";
 import { useTwin } from "./TwinStore";
 
@@ -59,6 +59,10 @@ export default function BriefPanel() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // True when the current memo is the canonical §28 demo (GET /brief/example),
+  // not the user's compiled/typed policy — kept explicit so the UI never lets a
+  // demo memo masquerade as the policy above it.
+  const [isExample, setIsExample] = useState(false);
 
   // Prefer the compiled policy from the store; fall back to a natural-language
   // box so the tab can drive the whole compile→brief pipeline standalone (§3).
@@ -69,6 +73,7 @@ export default function BriefPanel() {
     setStatus("loading");
     setError(null);
     setCopied(false);
+    setIsExample(false);
     const req = usingText
       ? { text: text.trim(), horizon_months: horizon, include_media: includeMedia }
       : {
@@ -83,6 +88,28 @@ export default function BriefPanel() {
       })
       .catch((e: unknown) => {
         setError(e instanceof Error ? e.message : "Minister's Brief export failed");
+        setStatus("error");
+      });
+  }
+
+  // Render the canonical §28 demo memo (GET /brief/example) — a body-less call so
+  // a judge can see the finished artifact without compiling anything. The
+  // horizon/media toggles are the backend's demo defaults here, so we flag the
+  // result as the example rather than the policy above (honest, SPEC §34).
+  function executeExample() {
+    setStatus("loading");
+    setError(null);
+    setCopied(false);
+    setIsExample(true);
+    getBriefExample()
+      .then((b) => {
+        setBrief(b);
+        setStatus("ready");
+      })
+      .catch((e: unknown) => {
+        setError(
+          e instanceof Error ? e.message : "Example Minister's Brief failed",
+        );
         setStatus("error");
       });
   }
@@ -182,11 +209,22 @@ export default function BriefPanel() {
             onClick={execute}
             disabled={status === "loading" || (usingText && !text.trim())}
           >
-            {status === "loading"
+            {status === "loading" && !isExample
               ? "Rendering memo…"
               : usingText
                 ? "Compile & brief"
                 : "Render the brief"}
+          </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={executeExample}
+            disabled={status === "loading"}
+            title="Render the canonical demo congestion-charge memo — no policy needed"
+          >
+            {status === "loading" && isExample
+              ? "Loading example…"
+              : "Load example brief"}
           </button>
         </div>
       </div>
@@ -202,7 +240,11 @@ export default function BriefPanel() {
             Couldn&rsquo;t render the brief: {error}. Nothing here is invented —
             reconnect the backend to read the memo from one deterministic run.
           </p>
-          <button type="button" className="btn" onClick={execute}>
+          <button
+            type="button"
+            className="btn"
+            onClick={isExample ? executeExample : execute}
+          >
             Retry
           </button>
         </div>
@@ -220,6 +262,7 @@ export default function BriefPanel() {
         <BriefResult
           brief={brief}
           stale={status === "loading"}
+          isExample={isExample}
           copied={copied}
           onCopy={copyMemo}
           onDownload={downloadMemo}
@@ -233,6 +276,7 @@ export default function BriefPanel() {
 function BriefResult({
   brief,
   stale,
+  isExample,
   copied,
   onCopy,
   onDownload,
@@ -240,6 +284,7 @@ function BriefResult({
 }: {
   brief: BriefResponse;
   stale: boolean;
+  isExample: boolean;
   copied: boolean;
   onCopy: () => void;
   onDownload: () => void;
@@ -251,6 +296,16 @@ function BriefResult({
     <div className={`run-result${stale ? " stale" : ""}`}>
       {stale && (
         <p className="hint run-stale">Re-rendering… showing the previous memo.</p>
+      )}
+
+      {isExample && (
+        <p className="hint brief-example-note">
+          <span className="tag generated">example</span>
+          The canonical §28 demo congestion charge (from{" "}
+          <code>/brief/example</code>) — <strong>not</strong> the policy compiled
+          above. Compile a policy and use <em>Render the brief</em> for your own
+          memo.
+        </p>
       )}
 
       {/* Provenance banner — the reason this memo is trustworthy. */}

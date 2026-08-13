@@ -3878,3 +3878,31 @@ export async function runBrief(
   }
   return (await res.json()) as BriefResponse;
 }
+
+/**
+ * Render the canonical §28 demo congestion-charge brief (`GET /brief/example`).
+ * A body-less GET so a judge can see the finished artifact with no compiled
+ * policy in the store — the same deterministic North-Star answer, rendered for
+ * the demo policy. Introduces no new number and throws on network/HTTP error so
+ * the panel can show an honest waiting/error state instead of a minted memo
+ * (SPEC §37/§34).
+ */
+export async function getBriefExample(
+  signal?: AbortSignal,
+): Promise<BriefResponse> {
+  const res = await fetch(`${API_BASE_URL}/brief/example`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as BriefResponse;
+}

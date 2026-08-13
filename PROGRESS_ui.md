@@ -1186,3 +1186,19 @@ splits and the 5% cap all preserved; nothing invented. `tsc --noEmit` +
 Follow-up: engine track may want `_find_amount` to recognise "N credits" so the
 rule-based fallback is robust to natural phrasings (backend-owned; not editable
 from this track).
+
+## 2026-08-13 — M46: close the backend surface (GET /brief/example)
+Audited the panel↔endpoint map: the UI already called every documented backend
+endpoint except one — `GET /brief/example`. The Brief tab was the only
+sample-bearing surface not exposing its zero-body example helper (Backtest,
+Citizen, Business, Analogue all surface theirs), so a judge landing on it with no
+compiled policy couldn't see the finished artifact. Added `getBriefExample()` to
+`lib/api.ts` (same honest throw-on-error contract as `runBrief`) and a "Load
+example brief" button to `BriefPanel` that renders the canonical §28 demo memo
+body-lessly. An `isExample` flag stamps the result with an honest `example` chip
+("the canonical §28 demo congestion charge — NOT the policy compiled above"),
+distinguishes the loading label, and points the error-state Retry at the correct
+path. Added `.brief-example-note` to `globals.css`; re-synced the README
+endpoint→SPEC row (`POST /brief`, `GET /brief/example`) so "every documented
+backend endpoint has a UI surface" is now literally true. No new numeric model.
+`tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean.
