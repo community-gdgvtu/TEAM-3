@@ -536,3 +536,18 @@ all done). Re-audited surface area against the live backend:
 - Live smoke test still not possible: port 8000 is held by an unrelated OpenAI/vision service
   (not the twin `HealthResponse`), so the twin backend isn't up. Starting it is the engine
   track's domain; panels correctly show their "waiting for backend" states. No numbers fabricated.
+
+## 2026-08-13 (11:38 UTC) — Verification run (roadmap complete, build green, backend still down)
+Cron run; no unchecked items in ROADMAP_UI.md (M4–M20 all done). Re-audited surface area and
+re-ran the build:
+- Enumerated all 23 router prefixes in `backend/app/main.py` `include_router` calls and
+  cross-checked each against the `fetch(`${API_BASE_URL}/…`)` paths in `frontend/lib/api.ts`.
+  Every backend prefix is surfaced (health, policy, baseline, simulate[+/amend], parliament
+  [debate+failure-modes], public, media, evidence, uncertainty, compare, optimise, backtest
+  [+/example], sdg, diffusion, registry, reproduce, press-conference, ensemble, institutions
+  /review, economy, dynamics, spatial, microsim, stress-test[+/catalogue]). No new endpoint.
+- `tsc --noEmit` exit 0; `next build` clean (4/4 static pages, / at 129 kB First Load JS).
+- Live smoke test still blocked: `GET :8000/health` returns an unrelated OpenAI/vision service
+  payload (`provider:"openai"`, `gpt-4o-mini`, not the twin `HealthResponse`) and `/baseline`
+  404s — the twin backend isn't running on that port. Starting it is the engine track's domain;
+  panels correctly show their "waiting for backend" states. No numbers fabricated.
