@@ -76,3 +76,11 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   high behavioural-regime ensemble → spread. Seeded (reproducible), samples clamped 20–500 (~3s at the
   100-sample default). Only documented input assumptions are perturbed and the same structural code is
   re-run; no LLM on the numeric path (SPEC §34). Unknown key → 404. 8 tests; 120 green. **Second M7 item complete.**
+- 2026-08-13 — M7 counterfactual comparison: new `backend/app/simulation/counterfactual.py` +
+  `POST /compare`. Returns World A (baseline) vs World B (intervention) vs one world per supplied
+  amendment (C, D…) in a single payload. Each intervention world carries its snapshot, trajectory,
+  Δ-vs-baseline and Δ-vs-intervention (None for B). Plus a headline table: one row per metric with the
+  baseline value (never omitted, SPEC §21) and each world's value + Δ + Δ% at a chosen horizon. Amendment
+  worlds reuse `apply_amendment` (structured DSL edits only); every number from the same deterministic
+  model, no LLM (SPEC §21/§34). Horizon snaps to nearest checkpoint (default 5y). 5 tests; 125 green.
+  **M7 complete — Evidence, uncertainty, credibility milestone done.**
