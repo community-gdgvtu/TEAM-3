@@ -1228,3 +1228,22 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
   `backend/app/policy/rules.py`, `backend/app/registry/model.py`,
   `backend/tests/test_active_travel_reinvestment.py` (11 tests). **459 green** (was 448),
   `scripts/audit.py` PASS, app boots with **53 routes**. No frontend/shared files touched.
+
+## 2026-08-13 (engine, recovered WIP)
+- **Stated equity-constraint compliance in the microsim** (SPEC §7.3/§34). A policy's
+  declared `constraints.max_low_income_burden_increase_pct` cap was extracted by both the
+  rule compiler and the LLM, echoed as a reviewable assumption, and even argued over by the
+  Equity Advocate persona — but never checked against the modelled numbers. §34: a constraint
+  you never test is theatre. The microsim now computes the modelled World-B out-of-pocket
+  charge burden on the lowest-income decile (baseline has no charge, so this IS the increase
+  the cap governs) and attaches a `ConstraintCheck` (cap, modelled burden, satisfied?, signed
+  margin, plain-language reading that honestly flags violations). `None` when no cap declared
+  → every existing policy byte-identical. A low-income exemption → burden 0.0 → any cap holds.
+  Reachable without an LLM (compiler extracts the cap). Provenance Simulated; deterministic.
+- Recovered a clean, tested WIP left uncommitted by a prior engine run that exited on a stale
+  lock (verified the working tree, ran the tests, then committed). Took over the 30-min-stale
+  `.lock-engine` (no live process held it).
+- Files: `backend/app/microsim/schema.py` (ConstraintCheck + report field),
+  `backend/app/microsim/model.py` (compute + attach),
+  `backend/tests/test_constraint_compliance.py` (6 tests). **465 green** (was 459),
+  `scripts/audit.py` PASS, app boots with **53 routes**. No frontend/shared files touched.
