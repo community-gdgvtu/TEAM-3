@@ -33,6 +33,7 @@ from .routers import (
     press,
     public,
     registry,
+    reproduce,
     sdg,
     simulate,
     spatial,
@@ -75,6 +76,7 @@ def create_app() -> FastAPI:
     app.include_router(sdg.router)
     app.include_router(diffusion.router)
     app.include_router(registry.router)
+    app.include_router(reproduce.router)
     app.include_router(press.router)
     app.include_router(ensemble.router)
     app.include_router(institutions.router)

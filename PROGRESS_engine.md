@@ -409,3 +409,25 @@ Dated log of backend/simulation/data work. Newest at the bottom.
 - Health check this run: `pytest` **210 passed**; `app.main:app` boots with **30 routes**.
 - No actionable engine items remain; owned scope (`backend/**`, `data/**`, `scripts/**`)
   is stable. Did not scope-creep into UI/shared files per parallel-track contract.
+
+## 2026-08-13 (run 10:49 UTC) — SPEC §32 reproducibility manifest (REPRODUCE RUN)
+- Roadmap was fully checked (24/24) and the last two runs were no-op verification
+  commits. Rather than repeat that, closed a genuine **SPEC §32** gap: determinism
+  was asserted everywhere but no endpoint produced the per-run provenance envelope
+  behind the "REPRODUCE RUN" affordance (dataset/model versions, params, seed,
+  prompts, DSL, assumptions, code version, timestamp).
+- Added `backend/app/reproduce/` (`schema.py`, `manifest.py`) + `POST /reproduce`
+  (`backend/app/routers/reproduce.py`), wired in `main.py`.
+  - `run_id` = SHA-256 content address over the reproducing inputs (policy DSL,
+    shocks, seed, **byte-hash of each dataset file**, live assumption index from the
+    §33 registry, app + git `code_version`); **timestamp excluded** so identical
+    inputs → identical `run_id`.
+  - Reproducibility is *proven*: the deterministic A/B/Δ core runs twice and
+    `reproducible` is only true when the two `output_digest`s match.
+  - `prompts: []` + every model card `llm_touches_numbers: false` (SPEC §34).
+  - §33 registry left untouched (per-run record ≠ static catalogue).
+- Tests: `backend/tests/test_reproduce.py` (8) — stable/changing run_id, seed in
+  identity but not in numbers, content-addressed datasets, shocks in identity,
+  no-LLM assertion.
+- Health check this run: `pytest` **218 passed** (+8); `app.main:app` boots with
+  **31 routes**; new `/reproduce` verified end-to-end (run_id stable, reproducible=true).
