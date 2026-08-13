@@ -98,3 +98,17 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   documented Estimated constant (used solely for the budget constraint), clearly flagged; unsatisfiable
   constraints are flagged but a frontier over all candidates is still returned so the UI is never empty.
   ~1.2s for the full grid, deterministic, no LLM (SPEC §22/§34). 8 tests; 133 green.
+- 2026-08-13 — Stretch backtesting harness scaffold: new `backend/app/backtest/` package +
+  `GET /backtest/example` + `POST /backtest`. Historical replay (SPEC §25): takes a HistoricalCase
+  (a policy plus its known outcomes + observed event months), replays it through the deterministic
+  World-A/B/Δ model + event ledger using only pre-implementation state, and scores the forecast against
+  the actuals — forecast error (MAE/RMSE/MAPE via linear interpolation of the World-B trajectory to each
+  observation month), direction accuracy (sign of forecast−baseline vs actual−baseline), interval
+  calibration (fraction of actuals inside the forecast's uncertainty band), and event-timing error
+  (|predicted − actual| month, matched to the ledger by event type). Ships a built-in synthetic
+  Meridia-2018 cordon benchmark case whose actuals are clearly labelled Simulated (not real records) so
+  the scaffold produces a meaningful non-trivial scorecard end-to-end; geographic + full distributional
+  accuracy are explicitly flagged as unscored in the scaffold (no per-zone actuals) rather than silently
+  skipped. Forecast Simulated, scores exact arithmetic, deterministic, no LLM (SPEC §25/§34). Perfect-
+  actuals ⇒ ~0 error/100% coverage; wrong-sign & out-of-band cases are caught. 7 tests; 140 green.
+  **All ENGINE roadmap items (M3–M7 + both stretch) complete.**

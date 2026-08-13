@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .routers import (
+    backtest,
     baseline,
     compare,
     evidence,
@@ -60,6 +61,7 @@ def create_app() -> FastAPI:
     app.include_router(uncertainty.router)
     app.include_router(compare.router)
     app.include_router(optimise.router)
+    app.include_router(backtest.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
