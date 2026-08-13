@@ -1007,3 +1007,18 @@ Frontend-only.
   `.tab:focus-visible`. Frontend-only, no endpoint/number touched. Green: `npx tsc --noEmit`
   clean, `npx next build` compiled (4/4 static, / = 67.3 kB, First Load 155 kB),
   `npx next lint` no warnings.
+
+- 2026-08-13 — M36: first frontend test suite (SPEC §34 honesty guard).
+  The frontend had zero automated tests — nothing pinned the behaviour of the pure helpers
+  that render every headline number and back the editable-assumptions panel. Added a
+  `frontend/tests/` suite with ZERO new dependencies, using Node 22's built-in `node:test`
+  + `--experimental-strip-types` to run TypeScript directly (`npm test` →
+  `node --test --experimental-strip-types tests/*.test.mts`). `format.test.mts` (8 tests)
+  locks every `formatNumber` magnitude bucket incl. sign-preservation on negatives, and
+  `formatSignedPct`'s sign rules — explicitly asserting the negative case renders a real
+  U+2212 minus (not an ASCII hyphen) and that zero is unsigned. `dsl.test.mts` (6 tests)
+  covers `getByPath` (nested / missing / non-object mid-path), `setByPath` and its
+  immutability guarantee (original untouched, branch cloned, untouched branches independent),
+  intermediate-object creation, non-object-intermediate replacement, and `fieldKind`'s
+  type→control mapping. 14 tests, all green; no runtime code changed. `npx tsc --noEmit`,
+  `npx next build` (/ = 67.3 kB, First Load 155 kB), and `npx next lint` all still clean.

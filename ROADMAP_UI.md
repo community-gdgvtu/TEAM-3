@@ -293,3 +293,15 @@ usability wall for the demo and a real accessibility gap. Frontend-only, no new
 endpoint, no numbers touched — a pure interaction/a11y upgrade to an existing
 surface.
 - [x] Upgrade `PanelTabs` to the ARIA APG Tabs pattern: a single tab stop with a **roving `tabIndex`** (only the selected tab is focusable), **ArrowLeft/ArrowRight/ArrowUp/ArrowDown/Home/End** navigation with automatic activation (wrapping, over only the currently-visible tabs), each tab wired to its panel via `id` + `aria-controls` + `aria-labelledby`, and the active `tabpanel` made focusable (`tabIndex=0`) so keyboard users can reach panel content; add a visible `:focus-visible` ring. Add a **filter box** (`type=search`, screen-reader-labelled, live `matched/total` count) that narrows the 31 tabs by label substring while always keeping the active tab visible (a narrow filter can never orphan the on-screen panel), with a "No panel matches …" status when empty; the guided demo clears the filter when it drives a tab so the requested panel stays in view. Refactored the 31 hand-written panel wrappers into a single `TABS` map (tab↔panel ids can't drift). Frontend-only; `tsc --noEmit` + `next build` + `next lint` clean (SPEC §27/§34)
+
+## M36 — First frontend test suite: guard the honesty-critical pure helpers (SPEC §34)
+The frontend had **zero automated tests** — `tsc`/`next build`/`next lint` catch
+type and syntax errors but nothing pinned the *behaviour* of the pure helpers
+that render every headline number and drive the editable-assumptions panel. A
+silent regression in `formatNumber`/`formatSignedPct` corrupts the numbers a
+judge reads (a §34 honesty surface), and a mutation bug in the DSL `setByPath`
+helper would edit the wrong world or leak state between renders. These are the
+highest-value, easiest-to-pin units in the codebase and had no guard at all.
+Added with **zero new dependencies**: Node 22's built-in `node:test` +
+`--experimental-strip-types` runs the TypeScript tests directly.
+- [x] Add a `frontend/tests/` suite (`.test.mts`, run via `npm test` → `node --test --experimental-strip-types tests/*.test.mts`) covering `lib/format.ts` (every `formatNumber` magnitude bucket incl. sign-preservation on negatives; `formatSignedPct` sign rules — asserting the negative case uses a real U+2212 minus, not an ASCII hyphen — and the unsigned zero) and `lib/dsl.ts` (`getByPath` nested/missing/non-object-mid-path; `setByPath` leaf update **and its immutability guarantee** — original untouched, branch cloned, untouched branches independent — plus intermediate-object creation and non-object-intermediate replacement; `fieldKind` type→control mapping). 14 tests, all green; no dependency added, no runtime code changed; `tsc --noEmit` + `next build` + `next lint` still clean (SPEC §34)
