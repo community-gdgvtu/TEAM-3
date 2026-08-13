@@ -11,6 +11,7 @@ from __future__ import annotations
 from ..baseline.params import DEFAULT_PARAMS
 from ..baseline.schema import MetricTag
 from ..config import settings
+from ..dynamics.params import DEFAULT_SD_PARAMS
 from ..economy.params import DEFAULT_ECON_PARAMS
 from ..opinion.params import OpinionParams
 from ..simulation.levers import DEFAULT_SIM_PARAMS
@@ -131,6 +132,33 @@ def _economy_assumptions() -> list[AssumptionRecord]:
              "share", "Documented ratio — freight is not in the synthetic population", est),
         _rec("freight_cost_pass_through", "Freight cost pass-through", e.freight_cost_pass_through,
              "share", "Share of the freight charge passed to CBD business/customers", est),
+    ]
+
+
+def _dynamics_assumptions() -> list[AssumptionRecord]:
+    d = DEFAULT_SD_PARAMS
+    est = MetricTag.estimated
+    return [
+        _rec("behaviour_tau_months", "Demand-response time constant", d.behaviour_tau_months,
+             "months", "Speed the transit-demand stock relaxes toward the charge's pull", est),
+        _rec("capacity_programme_years", "Capacity programme scope",
+             d.capacity_programme_years, "years",
+             "Years of nominal-charge reinvestment the capacity plan is sized to cost", est),
+        _rec("max_capacity_uplift", "Max funded capacity uplift", d.max_capacity_uplift,
+             "fraction", "Peak-capacity uplift a fully-funded programme delivers", est),
+        _rec("capacity_build_tau_months", "Capacity build time constant",
+             d.capacity_build_tau_months, "months",
+             "Delivery lag of capacity toward its funded target", est),
+        _rec("support_tau_months", "Opinion stickiness", d.support_tau_months, "months",
+             "Speed the support stock relaxes toward its target", est),
+        _rec("crowding_penalty", "Crowding support penalty", d.crowding_penalty, "support/×",
+             "Support lost per unit of sustained over-capacity crowding", est),
+        _rec("political_threshold", "Political-response trigger", d.political_threshold,
+             "net support", "Support level below which an amendment builds", est),
+        _rec("patience_months", "Amendment patience", d.patience_months, "months",
+             "Consecutive months below threshold before a charge cut is forced", est),
+        _rec("charge_cut_factor", "Amendment charge cut", d.charge_cut_factor, "×",
+             "Fraction the charge is cut to when an amendment fires", est),
     ]
 
 
@@ -282,6 +310,34 @@ def _models() -> list[ModelCard]:
             assumptions=_economy_assumptions(),
         ),
         ModelCard(
+            id="system_dynamics",
+            name="System dynamics / recursive feedback loop",
+            spec_sections=["§7.6", "§19"],
+            layer="System Dynamics Layer (SPEC §7.6)",
+            method=(
+                "Integrates four coupled stocks (charge, transit demand, transit "
+                "capacity, public support) month-by-month, closing the SPEC §19 "
+                "loop: charge → mode shift → revenue → funded capacity, and "
+                "sustained negative support → an endogenous amendment that cuts the "
+                "charge → weaker effect → less revenue → renewed crowding. The "
+                "magnitudes each stock chases are read from the deterministic ABM "
+                "at the in-force charge (Simulated); the temporal coefficients "
+                "coupling them are documented Estimated inputs."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["compiled Policy DSL", "ABM anchors per charge", "dynamics coefficients"],
+            outputs=[
+                "coupled stock trajectories",
+                "structured feedback events",
+                "closed- vs open-loop contrast",
+            ],
+            output_tag=sim,
+            code="app.dynamics.model",
+            assumptions=_dynamics_assumptions(),
+        ),
+        ModelCard(
             id="policy_optimiser",
             name="Policy optimiser (grid search → Pareto set)",
             spec_sections=["§22"],
@@ -390,8 +446,8 @@ def _guardrails() -> list[GuardrailCheck]:
             rule="LLMs never generate core numeric simulation effects.",
             enforced_by=(
                 "All numeric models (baseline, world_b, timeline, uncertainty, "
-                "opinion, diffusion, economic spillover, optimiser) are pure "
-                "deterministic/seeded code; LLM use is confined to prose "
+                "opinion, diffusion, economic spillover, system dynamics, "
+                "optimiser) are pure deterministic/seeded code; LLM use is confined to prose "
                 "(parliament, media) and language structuring (policy compiler)."
             ),
             holds=True,

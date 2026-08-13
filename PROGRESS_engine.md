@@ -263,3 +263,39 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   and drift-free — the registry now catalogues all 10 forecast layers (8 numeric, 0 touching
   numbers with an LLM). 185 green (5 registry tests unchanged — counts derive from the live
   model list, not hardcoded).
+- 2026-08-13 09:58 UTC — Built the **System Dynamics / recursive-feedback layer**
+  (SPEC §7.6 + §19): new `backend/app/dynamics/` package (`params.py`, `schema.py`,
+  `model.py`), `POST /dynamics`, registered in the §33 model registry. This fills the
+  one genuinely missing engine capability — the whole roadmap (M3–M7 + Stretch +
+  Extended, incl. last run's §7.4 economy layer) was complete, but nothing *closed the
+  loop* SPEC §19 calls "central to the concept": World-B is a single adapted end-state
+  and the Time Machine is a staged interpolation toward it — neither lets public opinion
+  feed back into the **policy itself**. The new layer integrates four coupled stocks
+  month-by-month over the 10-yr horizon — charge, transit demand, transit capacity,
+  public support — instantiating the exact §19 cascade: charge → mode shift → revenue →
+  funded capacity, and sustained negative support → an **endogenous amendment** that cuts
+  the charge → weaker price signal → less revenue → slower capacity expansion → renewed
+  crowding. Every magnitude each stock chases is read from the deterministic ABM at the
+  in-force charge (behavioural-only World-B peak transit demand; priced-commuter annual
+  revenue; cohort-opinion net support), memoised per distinct charge so a run costs only a
+  handful of ABM evaluations; the temporal coefficients coupling them (relaxation taus,
+  capacity build lag, crowding penalty, political threshold/patience/cut-factor) live in
+  `SystemDynamicsParams` as documented **Estimated** inputs. Capacity is a genuine
+  revenue-funded supply stock — the programme is scoped at announcement to N years of
+  *nominal* reinvestment, so if the charge is later cut the plan's cost stays fixed and
+  completion stalls (the mechanical heart of the §19 loop). Output: coupled stock
+  trajectories at the Time-Machine checkpoints, structured feedback events
+  (capacity_exceeded / amendment / crowding_relieved, each carrying its causal chain), and
+  — always — a **closed-loop vs open-loop contrast** (political response ON vs OFF, same
+  deterministic model) that concretely shows the feedback changes the outcome: the demo £12
+  full-reinvest charge is popular at nominal (+0.13 net support) but crowding drives support
+  negative, triggering 2 amendments (£12→£7.2→£4.32) and ending at +0.23 support / −0.37
+  crowding vs the open-loop run. Edge cases verified: full reinvestment expands peak capacity
+  while a general-fund split never does; pedestrianisation (no charge) has an inert political
+  arm but still tracks crowding; fully deterministic (identical dumps). Structural anchors
+  Simulated, dynamics coefficients Estimated; confidence widens with horizon; no LLM in the
+  numeric path (SPEC §7.6/§19/§34). Registry now catalogues 11 forecast layers and the
+  no-LLM-numbers guardrail names the new layer. 8 tests; **193 green**, app boots with **28
+  routes**. Honest `not_modelled`: continuous charge optimisation (amendments are discrete
+  cuts), ridership suppression from crowding (demand stays latent, crowding hits support
+  only), capacity depreciation, horizon shocks, spatial/per-corridor detail (needs §7.7).
