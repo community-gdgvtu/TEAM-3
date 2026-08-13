@@ -26,7 +26,7 @@
 
 import { useState } from "react";
 
-import { runNorthStar } from "../../lib/api";
+import { runNorthStar, getNorthStarExample } from "../../lib/api";
 import type {
   AmendmentComparison,
   GuardrailCheck,
@@ -83,6 +83,10 @@ export default function NorthStarPanel() {
   const [answer, setAnswer] = useState<NorthStarAnswer | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  // True when the shown answer is the canonical §28 demo (GET /north-star/example),
+  // not the user's compiled/typed policy — kept explicit so the UI never lets a
+  // demo narrative masquerade as the policy above it (honest, SPEC §34).
+  const [isExample, setIsExample] = useState(false);
 
   // Prefer the compiled policy from the store; fall back to a natural-language
   // box so the tab can drive the whole compile→answer pipeline standalone (§3).
@@ -92,6 +96,7 @@ export default function NorthStarPanel() {
     if (usingText && !text.trim()) return;
     setStatus("loading");
     setError(null);
+    setIsExample(false);
     const req = usingText
       ? { text: text.trim(), horizon_months: horizon }
       : { policy: policy ?? undefined, horizon_months: horizon };
@@ -102,6 +107,26 @@ export default function NorthStarPanel() {
       })
       .catch((e: unknown) => {
         setError(e instanceof Error ? e.message : "North-Star answer failed");
+        setStatus("error");
+      });
+  }
+
+  // Compose the canonical §28 demo answer (GET /north-star/example) — a body-less
+  // call so a judge can read the whole §37 narrative without compiling anything.
+  // Flagged as the example rather than the policy above (honest, SPEC §34).
+  function executeExample() {
+    setStatus("loading");
+    setError(null);
+    setIsExample(true);
+    getNorthStarExample()
+      .then((a) => {
+        setAnswer(a);
+        setStatus("ready");
+      })
+      .catch((e: unknown) => {
+        setError(
+          e instanceof Error ? e.message : "Example North-Star answer failed",
+        );
         setStatus("error");
       });
   }
@@ -165,11 +190,22 @@ export default function NorthStarPanel() {
             onClick={execute}
             disabled={status === "loading" || (usingText && !text.trim())}
           >
-            {status === "loading"
+            {status === "loading" && !isExample
               ? "Composing answer…"
               : usingText
                 ? "Compile & answer"
                 : "Answer the question"}
+          </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={executeExample}
+            disabled={status === "loading"}
+            title="Compose the §37 answer for the canonical demo congestion charge — no policy needed"
+          >
+            {status === "loading" && isExample
+              ? "Loading example…"
+              : "Load example answer"}
           </button>
         </div>
       </div>
@@ -186,7 +222,11 @@ export default function NorthStarPanel() {
             reconnect the backend to read the §37 narrative from one deterministic
             run.
           </p>
-          <button type="button" className="btn" onClick={execute}>
+          <button
+            type="button"
+            className="btn"
+            onClick={isExample ? executeExample : execute}
+          >
             Retry
           </button>
         </div>
@@ -200,7 +240,13 @@ export default function NorthStarPanel() {
         </p>
       )}
 
-      {answer && <NorthStarResult answer={answer} stale={status === "loading"} />}
+      {answer && (
+        <NorthStarResult
+          answer={answer}
+          stale={status === "loading"}
+          isExample={isExample}
+        />
+      )}
     </section>
   );
 }
@@ -208,14 +254,26 @@ export default function NorthStarPanel() {
 function NorthStarResult({
   answer,
   stale,
+  isExample,
 }: {
   answer: NorthStarAnswer;
   stale: boolean;
+  isExample: boolean;
 }) {
   return (
     <div className={`run-result${stale ? " stale" : ""}`}>
       {stale && (
         <p className="hint run-stale">Re-composing… showing the previous answer.</p>
+      )}
+
+      {isExample && (
+        <p className="hint brief-example-note">
+          <span className="tag generated">example</span>
+          The canonical §28 demo congestion charge (from{" "}
+          <code>/north-star/example</code>) — <strong>not</strong> the policy
+          compiled above. Compile a policy and use <em>Answer the question</em> for
+          your own §37 answer.
+        </p>
       )}
 
       {/* Provenance banner — the reason this single answer is trustworthy. */}

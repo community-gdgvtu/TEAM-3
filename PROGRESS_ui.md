@@ -1220,3 +1220,18 @@ test; verified against the documented contract with the honest error path
 covering the not-live case. `tsc --noEmit` + `next build` + `next lint` +
 `npm test` (41) all clean.
 Follow-up: M48 will do the same for `GET /north-star/example` on `NorthStarPanel`.
+
+## 2026-08-13 — M48: surface the §37 answer example (GET /north-star/example)
+Second half of the M47 fix. Added `getNorthStarExample()` to `lib/api.ts` (same
+honest throw-on-error contract as `runNorthStar`) and a "Load example answer"
+button to `NorthStarPanel` that composes the canonical §28 demo §37 answer
+body-lessly, so the North-Star tab — the flagship URBAN experience — is usable
+with no compiled policy in the store. An `isExample` flag stamps the result with
+an honest `example` chip ("the canonical §28 demo congestion charge — NOT the
+policy compiled above"), distinguishes the loading label, and points the
+error-state Retry at the correct path. Reused the existing `.brief-example-note`
+style — no new numeric model, types, styles or endpoints. With this, every
+zero-body backend example helper (/brief, /run, /north-star, /backtest) has a
+one-click UI surface again. `tsc --noEmit` + `next build` + `next lint` +
+`npm test` (41) all clean.
+Follow-up: none — endpoint→surface map is closed again.

@@ -476,3 +476,17 @@ prompt. Pure surfacing of real backend data: the button mints no numbers (the
 pipeline is identical to the deterministic run) and is explicitly stamped **not**
 the compiled policy so a demo can never masquerade as the user's own.
 - [x] Add `getRunExample()` (`GET /run/example`) to `lib/api.ts` mirroring `runScenario`'s honest throw-on-error contract (so the panel shows a waiting/error state, never an invented narrative), and wire a "Load example run" button into `RunPanel` alongside "Run full pipeline": it orchestrates the body-less canonical §28 demo pipeline so the tab is usable with no compiled policy in the store. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading label distinguishes example-vs-policy, and (c) the error-state Retry re-runs the correct path. Reuses the existing `.brief-example-note` style — no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §28/§29/§34)
+
+## M48 — Surface the §37 answer example: GET /north-star/example (SPEC §37/§34)
+The second of the two zero-body example helpers M47 flagged. `POST /north-star`
+composes the fixed §37 minister's answer; its sibling `GET /north-star/example`
+returns the *same* deterministic answer for the canonical §28 demo congestion
+charge with no request body (identical inputs to `GET /brief/example`, which
+delegates to this layer). Until now the North-Star tab — arguably *the* URBAN
+experience — couldn't show that answer without a compiled policy, so a judge
+landing on it cold saw only an empty prompt. This closes the endpoint→surface
+map again: every zero-body backend example helper (`/brief`, `/run`,
+`/north-star`, `/backtest`) now has a one-click UI surface. Pure surfacing of
+real backend data — the button mints no numbers and is explicitly stamped
+**not** the compiled policy.
+- [x] Add `getNorthStarExample()` (`GET /north-star/example`) to `lib/api.ts` mirroring `runNorthStar`'s honest throw-on-error contract (so the panel shows a waiting/error state, never an invented narrative), and wire a "Load example answer" button into `NorthStarPanel` alongside "Answer the question": it composes the body-less canonical §28 demo answer so the tab is usable with no compiled policy in the store. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading label distinguishes example-vs-policy, and (c) the error-state Retry re-runs the correct path. Reuses the existing `.brief-example-note` style — no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §37/§34)
