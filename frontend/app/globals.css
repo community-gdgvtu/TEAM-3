@@ -4319,6 +4319,232 @@ ul.assumptions {
   }
 }
 
+/* --- Scenario presets panel (M53, SPEC §3/§27/§28) -------------------- */
+/* Reuses .reg-body / .reg-topline / .reg-gen / .reg-note / .reg-spec /
+   .tag.* / .btn from earlier panels; adds the card + family-filter chrome. */
+
+.scn-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 1rem 0 0.4rem;
+}
+.scn-fam {
+  font-size: 0.78rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.scn-fam:hover {
+  color: var(--fg);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+.scn-fam.active {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.scn-shown {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.scn-cards {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.8rem;
+}
+.scn-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 0.95rem;
+  background: rgba(255, 255, 255, 0.012);
+}
+.scn-card.active {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+.scn-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.scn-card-title {
+  margin: 0;
+  font-size: 1rem;
+}
+.scn-card-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.scn-fam-chip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 999px;
+  padding: 0.08rem 0.5rem;
+}
+.scn-card-summary {
+  margin: 0.45rem 0 0.6rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.scn-goals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+.scn-goal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-left-color: color-mix(in srgb, var(--ok) 60%, var(--border));
+  border-radius: 6px;
+  padding: 0.12rem 0.45rem;
+}
+.scn-goal.constraint {
+  border-left-color: color-mix(in srgb, #f6be60 70%, var(--border));
+}
+.scn-goal-k {
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.scn-goal-v {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.scn-card-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.scn-details-btn {
+  font-size: 0.8rem;
+}
+.scn-active-note {
+  margin: 0.7rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.scn-detail {
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.7rem;
+  display: grid;
+  gap: 0.8rem;
+}
+.scn-detail-block {
+  display: grid;
+  gap: 0.35rem;
+}
+.scn-detail-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.scn-method {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+.scn-prompt {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.scn-assumptions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+.scn-assumption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+}
+.scn-assumption-field {
+  font-size: 0.76rem;
+  color: var(--fg);
+}
+.scn-assumption-val {
+  color: var(--muted);
+}
+.scn-src {
+  font-size: 0.66rem;
+  border-radius: 999px;
+  padding: 0.04rem 0.4rem;
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-left: auto;
+}
+.scn-src-stated {
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+}
+.scn-src-inferred {
+  color: #f6be60;
+  border-color: color-mix(in srgb, #f6be60 55%, var(--border));
+}
+.scn-src-default {
+  color: var(--muted);
+}
+.scn-conf {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.scn-warnings {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: #f0834a;
+}
+.scn-dsl {
+  margin: 0;
+  max-height: 320px;
+  overflow: auto;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+}
+
+@media (max-width: 640px) {
+  .scn-shown {
+    margin-left: 0;
+  }
+  .scn-src {
+    margin-left: 0;
+  }
+}
+
 /* --- Institutional review panel (M9) ---------------------------------- */
 .inst-body {
   margin-top: 1rem;

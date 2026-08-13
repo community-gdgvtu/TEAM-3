@@ -4095,3 +4095,73 @@ export async function getCapabilities(
   }
   return (await res.json()) as CapabilityManifest;
 }
+
+// ---------------------------------------------------------------------------
+// Scenario presets — the discoverable menu of canonical demo policies
+// (SPEC §3/§27/§28). GET /scenarios returns a curated library of ready-to-run
+// policies; each card carries its natural-language prompt, the *real* compiler
+// output (DSL + reviewable assumptions), and two ready-to-POST bodies. No
+// numeric model runs here — the catalogue is Observed about itself and each
+// card's `compiled.provenance` is Generated (structuring, not simulation).
+// ---------------------------------------------------------------------------
+
+/** One ready-to-run canonical policy scenario. */
+export interface ScenarioCard {
+  /** Stable key, e.g. `congestion_charge_cbd`. */
+  id: string;
+  title: string;
+  summary: string;
+  /**
+   * Intervention family, derived live from the compiled DSL
+   * (`road_pricing` / `pedestrianisation` / `low_emission_zone` /
+   * `parking_levy` / `transit_investment` / `other`) so it can never drift
+   * from the compiler.
+   */
+  family: string;
+  spec_sections: string[];
+  /** The natural-language policy prompt a user would type. */
+  text: string;
+  /** Optimiser objective for the composed-answer endpoints (may be empty). */
+  objective: Record<string, unknown>;
+  /** Optimiser constraints for the composed-answer endpoints (may be empty). */
+  constraints: Record<string, unknown>;
+  /** The real compiler output for `text` — provenance Generated (SPEC §34). */
+  compiled: CompileResponse;
+  /** Ready-to-POST body for `/simulate`: `{ policy: <compiled DSL> }`. */
+  simulate_body: { policy: PolicyDSL };
+  /** Ready-to-POST body for `/run`, `/north-star`, `/brief`. */
+  answer_body: {
+    text: string;
+    objective: Record<string, unknown>;
+    constraints: Record<string, unknown>;
+  };
+}
+
+/** The full curated menu of canonical demo policies. */
+export interface ScenarioLibrary {
+  /** Observed — the catalogue lists curated inputs (SPEC §34). */
+  provenance: MetricTag;
+  note: string;
+  count: number;
+  /** Distinct intervention families represented, sorted. */
+  families: string[];
+  scenarios: ScenarioCard[];
+}
+
+/**
+ * Fetch the scenario-presets catalogue (SPEC §3/§27/§28): the discoverable menu
+ * of ready-to-run canonical policies. Throws on network/HTTP error so the panel
+ * shows an honest waiting/error state rather than inventing a menu (SPEC §34).
+ */
+export async function getScenarios(
+  signal?: AbortSignal,
+): Promise<ScenarioLibrary> {
+  const res = await fetch(`${API_BASE_URL}/scenarios`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as ScenarioLibrary;
+}

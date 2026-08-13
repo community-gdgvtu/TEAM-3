@@ -45,6 +45,7 @@ import BacktestPanel from "./BacktestPanel";
 import EnsemblePanel from "./EnsemblePanel";
 import RegistryPanel from "./RegistryPanel";
 import CapabilitiesPanel from "./CapabilitiesPanel";
+import ScenariosPanel from "./ScenariosPanel";
 import InstitutionsPanel from "./InstitutionsPanel";
 import PressConferencePanel from "./PressConferencePanel";
 import ComparePanel from "./ComparePanel";
@@ -97,6 +98,7 @@ type TabKey =
   | "backtest"
   | "registry"
   | "capabilities"
+  | "scenarios"
   | "reproduce"
   | "datafabric"
   | "assumptions";
@@ -133,6 +135,7 @@ const TABS: Array<{ key: TabKey; label: string; Panel: ComponentType }> = [
   { key: "backtest", label: "Backtest", Panel: BacktestPanel },
   { key: "registry", label: "Registry", Panel: RegistryPanel },
   { key: "capabilities", label: "Capabilities", Panel: CapabilitiesPanel },
+  { key: "scenarios", label: "Scenarios", Panel: ScenariosPanel },
   { key: "reproduce", label: "Reproduce", Panel: ReproducePanel },
   { key: "datafabric", label: "Data Fabric", Panel: DataFabricPanel },
   { key: "assumptions", label: "Assumptions", Panel: AssumptionsPanel },

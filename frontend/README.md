@@ -110,7 +110,9 @@ judge sees left-to-right (North-Star and Run lead as the §37/§29 flagships).
 | Time-series forecast | `POST /timeseries` | §7.2/§8 |
 | Institutional review | `POST /institutions/review` | §18 |
 | Backtest scorecard | `GET /backtest/example`, `POST /backtest` | §25 |
+| Scenario presets (canonical demo policies) | `GET /scenarios`, `GET /scenarios/{id}` | §3/§27/§28 |
 | Model registry / transparency | `GET /registry` | §33 |
+| Engine capabilities (machine-readable surface) | `GET /capabilities` | §27/§33 |
 | Reproducibility manifest (REPRODUCE RUN) | `POST /reproduce` | §32 |
 | Data Fabric catalogue | `GET /data-fabric` | §4 |
 | Change-assumptions-and-rerun | `GET /assumptions`, `POST /assumptions/rerun` | §34.10 |

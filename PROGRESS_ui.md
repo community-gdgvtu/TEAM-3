@@ -1312,3 +1312,36 @@ M52 to close the new surface.
   + `next lint` + `npm test` (41) all clean. Built ahead of the local backend (twin backend
   not live here — port 8000 is a different service), so the tab shows the honest waiting state
   until `/capabilities` responds.
+
+## 2026-08-13 — M53: surface GET /scenarios, the discoverable menu of canonical demo policies (SPEC §3/§27/§28)
+The engine track (commit 29e51af) shipped `GET /scenarios` (+ `GET /scenarios/{id}`): a
+curated library of ready-to-run canonical demo policies. Every *other* endpoint first
+requires the caller to author or compile a Policy DSL, so nothing advertised the demo's
+own canonical scenarios for a judge (or the UI) to one-click load. The UI roadmap was
+exhausted through M52, so — following the engine-adds-endpoint → UI-surfaces-it cadence —
+I added M53 to close it. This is the twin's on-ramp: browse the menu, load a lever, and
+every downstream panel lights up against it.
+- `lib/api.ts`: added `getScenarios()` (`GET /scenarios`) + `ScenarioCard` / `ScenarioLibrary`
+  types, mirroring the honest throw-on-error contract (panel shows waiting/error + Retry,
+  never an invented menu). Each card reuses the existing `CompileResponse`/`PolicyDSL` types.
+- New `ScenariosPanel.tsx` + "Scenarios" tab registered in `PanelTabs` right after Capabilities.
+  Policy-independent, loads on mount, itself Observed. Shows: provenance topline + note, a
+  presentation-only family filter (chips) with a `showing N/total` readout, and one card per
+  scenario — title, compiler-derived family chip, SPEC chips, summary, objective/constraint
+  goal chips, and a **"Load into workspace"** button that publishes the card's *pre-compiled*
+  DSL to the shared `TwinStore` (exactly as the drafting box does after `/policy/compile`), so
+  Parliament/Simulate/Compare/etc. run against it. An expandable details block shows the
+  natural-language prompt, the reviewable assumptions (field/value/source/confidence + method),
+  any warnings, and the full compiled DSL. The active card is matched by comparing the store's
+  compiled policy to each card's DSL, so the "✓ Loaded — active policy" badge stays honest no
+  matter how the policy got there.
+- Honesty (SPEC §34): the catalogue is Observed about itself; each card's compiled DSL is
+  stamped **Generated** (structuring, not simulation); an active-card note makes clear no
+  numbers are minted here — the figures come downstream from the deterministic sim layers.
+- `globals.css`: new `.scn-*` styles; reuses `.reg-*` / `.tag.*` / `.btn`. README endpoint
+  table gains the Scenarios row (and the previously-missing Capabilities row, keeping the
+  "every documented endpoint has a UI surface" claim literally true).
+- No LLM on any path, no minted numbers, no new endpoints. `tsc --noEmit` + `next build`
+  + `next lint` + `npm test` (41) all clean. Built ahead of the local backend (twin backend
+  not live here — port 8000 is a different service), so the tab shows the honest waiting state
+  until `/scenarios` responds.
