@@ -33,3 +33,9 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   re-simulates original + amended over one baseline and returns each policy's Δ-vs-baseline plus
   Δ(amended−original) isolating the amendment. Generalised `build_delta` to compare two World-B runs.
   E.g. a low-income exemption drops priced commuters 123→100 and nudges car share +1.7pp. 7 tests; 85 green.
+- 2026-08-13 — M5 Failure Mode Register: `backend/app/parliament/failure_modes.py` + `POST
+  /parliament/failure-modes`. Devil's Advocate critique → structured ranked register: adaptation-gap
+  overcrowding, regressive-burden backlash (only when no low-income exemption), charge-revenue erosion,
+  and always-present assumption fragility. Each carries risk/mechanism/severity/probability/evidence/
+  mitigation; ranked by severity-weight × probability. Provenance split: risk scores Estimated, cited
+  evidence Simulated (SPEC §12/§34). Extracted shared `simulate_brief()`. 6 tests; 91 green. **M5 complete.**

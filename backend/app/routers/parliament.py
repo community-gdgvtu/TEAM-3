@@ -12,7 +12,14 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from ..parliament import DebateRequest, DebateResponse, run_debate
+from ..parliament import (
+    DebateRequest,
+    DebateResponse,
+    FailureModeRegister,
+    build_failure_register,
+    run_debate,
+    simulate_brief,
+)
 
 router = APIRouter(prefix="/parliament", tags=["parliament"])
 
@@ -21,3 +28,19 @@ router = APIRouter(prefix="/parliament", tags=["parliament"])
 def debate(req: DebateRequest) -> DebateResponse:
     """Stress-test ``req.policy`` in the Model Parliament and return the debate."""
     return run_debate(req.policy, shocks=req.shocks, seed=req.seed)
+
+
+@router.post(
+    "/failure-modes",
+    response_model=FailureModeRegister,
+    summary="Devil's Advocate → ranked Failure Mode Register",
+)
+def failure_modes(req: DebateRequest) -> FailureModeRegister:
+    """Return the ranked Failure Mode Register for ``req.policy`` (SPEC §12).
+
+    Each mode carries risk/mechanism/severity/probability/evidence/mitigation and
+    is ranked by expected risk. Risk scores are Estimated; cited evidence is
+    Simulated (SPEC §34).
+    """
+    brief = simulate_brief(req.policy, shocks=req.shocks)
+    return build_failure_register(brief)

@@ -18,7 +18,7 @@ label generated media SIMULATED; uncertainty widens with horizon).
 ## M5 — Parliament + amendment loop (backend)
 - [x] `backend/app/parliament/` agents: Government, Opposition, Equity, Economist, Devil's Advocate. Each produces evidence-grounded arguments that cite `/simulate` metrics + event-ledger entries (LLM for prose only, with a deterministic template fallback when no key). `POST /parliament/debate` [DONE — `backend/app/parliament/` (personas deterministically select evidence + stance; `llm.py` polishes prose with template fallback); `POST /parliament/debate` returns 5 grounded arguments + tally + summary]
 - [x] Amendment model + `POST /simulate` support for amended DSL (e.g. exempt bottom-30% income): recompute and return Δ vs original policy [DONE — `backend/app/simulation/amendment.py` (`Amendment` = structured DSL mutation) + `POST /simulate/amend` returns each policy's Δ-vs-baseline plus Δ(amended−original); `build_delta` generalised to compare two World-B runs]
-- [ ] Devil's Advocate → ranked Failure Mode Register (risk/mechanism/severity/probability/evidence/mitigation), SPEC §12
+- [x] Devil's Advocate → ranked Failure Mode Register (risk/mechanism/severity/probability/evidence/mitigation), SPEC §12 [DONE — `backend/app/parliament/failure_modes.py` + `POST /parliament/failure-modes`: adaptation-gap / regressive-backlash / revenue-erosion / assumption-fragility modes ranked by severity×probability; Estimated scores over Simulated evidence]
 
 ## M6 — Public reaction + simulated media (backend)
 - [ ] Cohort opinion model (income decile × geography × transport mode): material impact + fairness + prior → support distribution (Strong support…Strong oppose), deterministic core (SPEC §13). Expose via `/simulate` or `POST /public`
