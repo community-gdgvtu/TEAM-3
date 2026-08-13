@@ -1154,3 +1154,47 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
 - Files: `backend/app/simulation/levers.py`, `backend/app/registry/model.py`,
   `backend/tests/test_parking_levy.py` (10 tests). **425 green** (was 415), `scripts/audit.py`
   PASS, app boots with **52 routes**. No frontend/shared files touched.
+
+## 2026-08-13 (standalone transit investment — recovered from a prior run)
+- Found the working tree carried a **complete, green-but-uncommitted** engine unit left by a prior
+  run that exited before committing (its stale `.lock-engine` was reclaimed this run): the
+  standalone `transit_investment` mechanism. HEAD had zero `transit_investment` refs; the tree had
+  the full levers branch + `transit_investment_intensity` SimParam + §33 registry entry +
+  `model.py` short-run rule-drop filter + `tests/test_transit_investment.py` (10 tests) +
+  a `tests/test_microsim.py` no-op tweak, all passing. Verified green (435 tests) and audit PASS
+  before committing it rather than letting the next `pull --rebase --autostash` collide with it.
+- The mechanism: `transit_investment` had no charge/ban so it hit no lever branch → World B was
+  byte-identical to World A (a silent no-op). Now a supply-side branch: fare-cut + speed-uplift
+  scaled by an explicit `transit_investment_intensity` (0.5, Estimated) — **not** derived from the
+  £ amount (no cost→service function; §34). Neutral in the short-run anchor, applied in the
+  long-run one, so it ramps in (§9). Honest guardrail: with no stick the pull is mostly
+  walk→transit, so car drop ≤ transit gain (a test pins it). Leaves `co2_factor_multiplier == 1.0`.
+- Committed together with the active-hours item below (both touch `levers.py` + `registry/model.py`
+  in disjoint hunks; interactive hunk-staging unavailable, so one commit, both documented).
+
+## 2026-08-13 (active_hours actually scales the charge)
+- Roadmap was fully checked (50/50) and green (435 tests, 52 routes, audit PASS). Continuing the
+  LEZ / parking-levy precedent, fixed the next §34 honesty gap the model still carried: the
+  intervention's **operating window** (`intervention.active_hours`) was parsed by both the LLM and
+  the rule compiler, stored in the DSL and surfaced as provenance — but **never touched a number**.
+  A congestion charge set to 07:00–10:00 (AM peak only) produced **byte-identical** traffic /
+  emissions / revenue to one running 07:00–19:00 all day. Dishonest: it would tell a minister a
+  3-hour peak-only scheme works exactly as hard as a 12-hour all-day one.
+- Fix: the charged event here is the **inbound CBD-bound car leg** (clusters in the AM peak), so
+  the honest correction scales the charge by how much of the inbound peak the operating window
+  covers — `_active_hours_coverage` = overlap(active_hours, inbound-peak) ÷ peak-length ∈ [0,1].
+  Every pricing branch multiplies its per-trip signal by it. Because `charge_per_one_way` is the
+  **single lever every downstream layer reads** (mode choice, microsim, economy, opinion, business,
+  revenue→transit reinvestment), scaling it at the source weakens the whole engine consistently —
+  a narrow-window charge shifts fewer drivers AND funds less bus service.
+- Applies to all three money-charge mechanisms (cordon / LEZ / parking levy); LEZ<levy<cordon
+  ordering preserved under partial coverage (pinned). Surfaced as its own §7.5 `BehaviouralRule`
+  (`active_hours_coverage`) **only when it bites** (coverage < 1.0), so the default all-day window
+  adds no rule and changes no number. Degenerate/unparseable windows fall back to coverage 1.0.
+- **World A untouched; every existing charge byte-identical** — the default 07:00–19:00 window
+  fully contains the 07:00–10:00 peak → coverage 1.0 (regression pinned). New SimParams
+  `commute_inbound_peak_start` / `commute_inbound_peak_end` (07:00–10:00, Estimated) surfaced live
+  in the §33 registry so the manifest can't drift.
+- Files: `backend/app/simulation/levers.py`, `backend/app/registry/model.py`,
+  `backend/tests/test_active_hours.py` (9 tests). **444 green** (was 435), `scripts/audit.py` PASS,
+  app boots with **52 routes**. No frontend/shared files touched.

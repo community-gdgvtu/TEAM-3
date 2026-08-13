@@ -130,7 +130,11 @@ def compute_world_b(
         # service-quality levers are neutral and their audit rule is dropped.
         levers.transit_fare_multiplier = 1.0
         levers.transit_speed_multiplier = 1.0
-        levers.rules = [r for r in levers.rules if r.name != "transit_reinvestment"]
+        levers.rules = [
+            r
+            for r in levers.rules
+            if r.name not in ("transit_reinvestment", "transit_investment")
+        ]
     trips = params.trips_per_commuter_per_day
 
     counts = {CAR: 0, TRANSIT: 0, WALK: 0}

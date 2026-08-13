@@ -32,6 +32,13 @@ and reinvest revenue into public transport*):
    to the commuter, so its behavioural signal (and mode shift) is proportionately
    smaller than an equivalent road-pricing charge. Unlike an LEZ it does not clean
    the fleet — it cuts emissions purely by cutting car-km.
+6. **Standalone transit investment** — a supply-side policy with no charge or ban.
+   Its only lever is better transit service (a fare cut + speed uplift), so it
+   pulls commuters over voluntarily and more weakly than a charge-plus-reinvestment
+   package. The service intensity is an explicit Estimated assumption, not derived
+   from the currency amount (the model has no cost→service function, so a £→service
+   elasticity would be false precision, SPEC §34), and it ramps in over the horizon
+   rather than switching on at T0.
 """
 
 from __future__ import annotations
@@ -89,6 +96,25 @@ class SimParams:
     #: pressure is proportionately smaller than an equivalent flat cordon charge
     #: that every entering vehicle pays in full (Estimated).
     parking_levy_passthrough_share: float = 0.55
+    #: Standalone transit-investment package: service-improvement intensity as a
+    #: fraction of the maximum modelled fare cut / effective-speed uplift (the same
+    #: ``reinvest_max_*`` caps a fully-revenue-funded package would reach). This is
+    #: deliberately NOT derived from the currency amount — the model has no
+    #: cost-to-service function, so inventing a £→service elasticity would be false
+    #: precision (SPEC §34). It is an explicit, tunable Estimated assumption a user
+    #: can change and rerun (SPEC §34.10). The uplift lands over the horizon like
+    #: any capacity ramp: neutral in the short-run anchor, present in the long-run
+    #: one, so a pure transit investment ramps in rather than switching on at T0.
+    transit_investment_intensity: float = 0.5
+    #: Inbound morning-commute peak window (``HH:MM``). The charged event in this
+    #: model is the *inbound* CBD-bound car leg, which clusters in the AM peak, so a
+    #: charge only bites commuters to the extent its operating window overlaps this
+    #: peak. Used to convert ``intervention.active_hours`` into an honest coverage
+    #: fraction on the charge (a peak-only scheme must NOT read as an all-day one —
+    #: SPEC §34). Default 07:00–10:00 is fully inside the default 07:00–19:00 active
+    #: window, so an unspecified/all-day charge keeps coverage 1.0 and is unchanged.
+    commute_inbound_peak_start: str = "07:00"
+    commute_inbound_peak_end: str = "10:00"
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -146,6 +172,45 @@ def _match_exemptions(exemptions: list[str]) -> tuple[bool, bool, bool]:
     return residents, low_income, disabled
 
 
+def _hhmm_to_minutes(s: str) -> int | None:
+    """Parse a ``HH:MM`` clock string to minutes-past-midnight, or ``None``."""
+    try:
+        hh, mm = s.strip().split(":")
+        total = int(hh) * 60 + int(mm)
+    except (ValueError, AttributeError):
+        return None
+    if 0 <= total <= 24 * 60:
+        return total
+    return None
+
+
+def _active_hours_coverage(active, sim: SimParams) -> float:
+    """Fraction of the inbound AM commute peak the charging window covers ∈ [0, 1].
+
+    The charged event in this model is the inbound CBD-bound car leg, which sits in
+    the morning peak, so a time-limited charge only prices commuters to the extent
+    its operating window overlaps that peak. Coverage 1.0 means the whole peak is
+    inside the window (the all-day default), 0.0 means the window misses the peak
+    entirely (e.g. an evening-only charge does nothing to morning commuters). This
+    keeps a peak-only scheme from reading as an all-day one (SPEC §34).
+
+    Degenerate/unparseable windows fall back to 1.0 rather than silently zeroing the
+    charge — an operating window we cannot interpret must not invent a mode shift or
+    erase one. Windows that wrap past midnight are not modelled (single AM peak).
+    """
+    ch_start = _hhmm_to_minutes(getattr(active, "start", None))
+    ch_end = _hhmm_to_minutes(getattr(active, "end", None))
+    pk_start = _hhmm_to_minutes(sim.commute_inbound_peak_start)
+    pk_end = _hhmm_to_minutes(sim.commute_inbound_peak_end)
+    if None in (ch_start, ch_end, pk_start, pk_end):
+        return 1.0
+    if ch_end <= ch_start or pk_end <= pk_start:
+        return 1.0
+    overlap = max(0, min(ch_end, pk_end) - max(ch_start, pk_start))
+    peak = pk_end - pk_start
+    return max(0.0, min(1.0, overlap / peak))
+
+
 def derive_levers(
     policy: PolicyDSL,
     params: BaselineParams = DEFAULT_PARAMS,
@@ -164,10 +229,26 @@ def derive_levers(
     levers.exempt_low_income = low_income
     levers.exempt_disabled = disabled
 
+    # Operating-hours coverage: a charge only prices the inbound commute peak it
+    # actually operates over, so a peak-only scheme is weaker than an all-day one
+    # (SPEC §34). Coverage 1.0 for the default all-day window keeps every existing
+    # charge byte-identical; a narrower window scales the per-trip signal (and thus
+    # revenue, reinvestment, opinion and economy, which all read this one lever).
+    coverage = _active_hours_coverage(policy.intervention.active_hours, sim)
+    _cov_src = (
+        ""
+        if coverage >= 1.0
+        else (
+            f" × {coverage:.2f} active-hours coverage (charge operates "
+            f"{policy.intervention.active_hours.start}–{policy.intervention.active_hours.end}; "
+            f"inbound peak {sim.commute_inbound_peak_start}–{sim.commute_inbound_peak_end})"
+        )
+    )
+
     # --- 1. Cordon charge (pricing interventions) --------------------------
     amount = policy.intervention.amount
     if itype in _PRICING_TYPES and amount and amount > 0:
-        per_one_way = amount / max(1, sim.charge_trips_per_day)
+        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * coverage
         levers.charge_per_one_way = per_one_way
         levers.rules.append(
             BehaviouralRule(
@@ -184,7 +265,7 @@ def derive_levers(
                 ),
                 source=(
                     f"intervention.amount ({amount} {policy.intervention.currency}) "
-                    f"amortised over {sim.charge_trips_per_day} daily trips"
+                    f"amortised over {sim.charge_trips_per_day} daily trips{_cov_src}"
                 ),
             )
         )
@@ -219,7 +300,7 @@ def derive_levers(
         # by the non-compliant share (compliant vehicles pay nothing). This
         # conserves total charge revenue (share of the fleet × full charge) while
         # applying a proportionately smaller behavioural signal to each commuter.
-        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * share
+        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * share * coverage
         levers.charge_per_one_way = per_one_way
         levers.rules.append(
             BehaviouralRule(
@@ -237,7 +318,7 @@ def derive_levers(
                 source=(
                     f"intervention.amount ({amount} {policy.intervention.currency}) "
                     f"amortised over {sim.charge_trips_per_day} daily trips × "
-                    f"{share:.2f} non-compliant share"
+                    f"{share:.2f} non-compliant share{_cov_src}"
                 ),
             )
         )
@@ -277,7 +358,7 @@ def derive_levers(
     # which is what distinguishes it from a low-emission zone.
     if itype == InterventionType.parking_levy and amount and amount > 0:
         passthrough = max(0.0, min(1.0, sim.parking_levy_passthrough_share))
-        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * passthrough
+        per_one_way = (amount / max(1, sim.charge_trips_per_day)) * passthrough * coverage
         levers.charge_per_one_way = per_one_way
         levers.rules.append(
             BehaviouralRule(
@@ -295,7 +376,81 @@ def derive_levers(
                 source=(
                     f"intervention.amount ({amount} {policy.intervention.currency}) "
                     f"amortised over {sim.charge_trips_per_day} daily trips × "
-                    f"{passthrough:.2f} employer pass-through share"
+                    f"{passthrough:.2f} employer pass-through share{_cov_src}"
+                ),
+            )
+        )
+
+    # --- 2d. Standalone transit investment (supply-side, no charge) ---------
+    # A "invest in buses/transit" policy has no stick — no charge, no ban — so its
+    # only lever is better transit service pulling commuters over voluntarily. We
+    # model that as the same fare-cut / speed-uplift the revenue-reinvestment lever
+    # uses, scaled by an explicit ``transit_investment_intensity`` rather than by a
+    # currency amount (the model has no cost→service function, so a £→service
+    # elasticity would be false precision — SPEC §34). Because the uplift lands via
+    # the transit multipliers, the short-run anchor (reinvestment off) leaves it at
+    # neutral and the long-run anchor applies it, so the investment ramps in over
+    # the horizon like any capacity build instead of switching on at T0.
+    if itype == InterventionType.transit_investment:
+        intensity = max(0.0, min(1.0, sim.transit_investment_intensity))
+        if intensity > 0.0:
+            fare_mult = 1.0 - intensity * sim.reinvest_max_fare_cut
+            speed_mult = 1.0 + intensity * sim.reinvest_max_speed_gain
+            levers.transit_fare_multiplier = fare_mult
+            levers.transit_speed_multiplier = speed_mult
+            levers.rules.append(
+                BehaviouralRule(
+                    name="transit_investment",
+                    label="Standalone transit-service investment",
+                    parameter="Transit fare ×mult and effective-speed ×mult from a service-improvement package",
+                    value=round(intensity, 3),
+                    unit="intensity",
+                    plausible_range=[0.0, 1.0],
+                    sensitivity=(
+                        f"At this {intensity:.0%} intensity: fare ×{fare_mult:.2f}, "
+                        f"speed ×{speed_mult:.2f}. With no charge/ban the only pull is "
+                        "cheaper/faster transit, so the mode shift is smaller than a "
+                        "charge-plus-reinvestment package. Intensity is an explicit "
+                        "assumption (not derived from the £ amount) — tune and rerun."
+                    ),
+                    source=(
+                        "intervention.type == transit_investment × "
+                        "sim.transit_investment_intensity (Estimated; not the £ amount)"
+                    ),
+                )
+            )
+
+    # --- 2e. Operating-hours coverage (only when it actually bites) --------
+    # Surfaced as its own §7.5 rule *only* when the charge is time-limited enough
+    # to miss part of the inbound peak (coverage < 1.0). The all-day default keeps
+    # coverage 1.0, adds no rule and changes no number — so this is purely an
+    # honesty correction for genuinely peak-restricted schemes.
+    _charge_types = (
+        InterventionType.road_pricing,
+        InterventionType.low_emission_zone,
+        InterventionType.parking_levy,
+    )
+    if coverage < 1.0 and itype in _charge_types and amount and amount > 0:
+        levers.rules.append(
+            BehaviouralRule(
+                name="active_hours_coverage",
+                label="Charge only operates part of the commute peak",
+                parameter="Fraction of the inbound AM commute peak the charging window covers",
+                value=round(coverage, 4),
+                unit="coverage",
+                plausible_range=[0.0, 1.0],
+                sensitivity=(
+                    f"The charge runs {policy.intervention.active_hours.start}–"
+                    f"{policy.intervention.active_hours.end}, covering {coverage:.0%} of the "
+                    f"{sim.commute_inbound_peak_start}–{sim.commute_inbound_peak_end} inbound "
+                    "peak, so it prices only that share of commute trips — a peak-only "
+                    "scheme shifts fewer drivers (and raises less revenue) than an all-day "
+                    "one, instead of reading as identical to it."
+                ),
+                source=(
+                    f"overlap(active_hours {policy.intervention.active_hours.start}–"
+                    f"{policy.intervention.active_hours.end}, inbound peak "
+                    f"{sim.commute_inbound_peak_start}–{sim.commute_inbound_peak_end}) ÷ peak length"
                 ),
             )
         )

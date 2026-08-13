@@ -30,9 +30,12 @@ def _charge(amount: float = 12.0, pt_share: float = 1.0, exemptions=None) -> Pol
 
 
 def _noop() -> PolicyDSL:
+    # A genuinely inert intervention: ``other`` maps to no lever, so no one is
+    # charged, banned, or served better. (``transit_investment`` is no longer a
+    # no-op — it now improves transit service, so it would create winners.)
     return PolicyDSL(
         id="ms_noop",
-        intervention=Intervention(type=InterventionType.transit_investment),
+        intervention=Intervention(type=InterventionType.other),
     )
 
 

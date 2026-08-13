@@ -104,6 +104,12 @@ def _sim_assumptions() -> list[AssumptionRecord]:
              "× baseline factor", "CO₂/km of a compliant replacement vehicle vs the baseline fleet factor", est),
         _rec("parking_levy_passthrough_share", "Parking-levy employer pass-through", s.parking_levy_passthrough_share,
              "share", "Fraction of a workplace parking levy passed from employer to commuter as a behavioural signal", est),
+        _rec("transit_investment_intensity", "Transit-investment service intensity", s.transit_investment_intensity,
+             "intensity", "Service uplift of a standalone transit investment as a fraction of the max fare-cut/speed-gain (not derived from the £ amount)", est),
+        _rec("commute_inbound_peak_start", "Inbound commute peak start", s.commute_inbound_peak_start,
+             "HH:MM", "Start of the AM inbound-commute peak used to score a charge's operating-hours coverage (peak-only vs all-day)", est),
+        _rec("commute_inbound_peak_end", "Inbound commute peak end", s.commute_inbound_peak_end,
+             "HH:MM", "End of the AM inbound-commute peak used to score a charge's operating-hours coverage (peak-only vs all-day)", est),
     ]
 
 
