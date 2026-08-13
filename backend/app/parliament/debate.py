@@ -22,9 +22,15 @@ from ..simulation.model import compute_world_b
 from ..simulation.shocks import Shocks, apply_shocks
 from ..simulation.timeline import build_world_b_timeline
 from ..policy.dsl import PolicyDSL
-from .llm import ParliamentLLMUnavailable, generate_speech, template_speech
-from .personas import DebateBrief, build_arguments
-from .schema import Argument, DebateResponse, Stance
+from .llm import (
+    ParliamentLLMUnavailable,
+    generate_answer,
+    generate_speech,
+    template_answer,
+    template_speech,
+)
+from .personas import DebateBrief, PANEL_BY_NAME, build_arguments
+from .schema import Argument, AskResponse, DebateResponse, Stance
 
 
 def simulate_brief(policy: PolicyDSL, shocks: Shocks | None = None) -> DebateBrief:
@@ -127,4 +133,46 @@ def run_debate(
         arguments=arguments,
         tally=tally,
         summary=_summarise(policy, arguments, tally),
+    )
+
+
+def ask_persona(
+    policy: PolicyDSL,
+    persona: str,
+    question: str,
+    shocks: Shocks | None = None,
+) -> AskResponse:
+    """Answer ``question`` in ``persona``'s voice, grounded in their own argument.
+
+    Reruns the same deterministic simulation and persona logic as
+    :func:`run_debate` — the answer prose is the only thing that differs (a
+    direct response to ``question`` rather than the set-piece speech) — so the
+    guardrail is identical: numbers come from the model, the LLM only phrases
+    them, and the endpoint always answers even with no key configured.
+    """
+    build_fn = PANEL_BY_NAME.get(persona)
+    if build_fn is None:
+        raise ValueError(
+            f"Unknown persona {persona!r}. Choose one of: {', '.join(PANEL_BY_NAME)}."
+        )
+    brief = simulate_brief(policy, shocks)
+    arg = build_fn(brief)
+
+    method = "template"
+    answer = template_answer(arg.headline, arg.points, question)
+    if settings.llm_enabled:
+        try:
+            answer = generate_answer(arg.persona, arg.role, arg.stance.value, arg.points, question)
+            method = "llm"
+        except ParliamentLLMUnavailable:
+            pass
+
+    return AskResponse(
+        persona=arg.persona,
+        role=arg.role,
+        stance=arg.stance,
+        question=question,
+        answer=answer,
+        method=method,
+        citations=arg.citations,
     )

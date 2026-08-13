@@ -24,6 +24,7 @@ import {
   predict,
 } from "../../lib/cityModel";
 import type { Scenario } from "../../lib/cityModel";
+import PoliticianCard from "./PoliticianCard";
 import SourcesNote from "./SourcesNote";
 
 const CityCanvas = dynamic(() => import("./CityCanvas"), {
@@ -126,7 +127,7 @@ export default function CityStudio() {
   );
 
   return (
-    <section className="studio card" data-tour="map">
+    <section id="meridia" className="studio card" data-tour="map">
       <header className="studio-head">
         <div>
           <h2>Meridia — 3D digital twin</h2>
@@ -241,6 +242,13 @@ export default function CityStudio() {
 
       {state && reference && (
         <>
+          <PoliticianCard
+            year={year}
+            scenario={scenario}
+            state={state}
+            reference={reference}
+          />
+
           <div className="outcome-strip">
             <div className="outcome">
               <span className="o-label">Cars into the centre</span>

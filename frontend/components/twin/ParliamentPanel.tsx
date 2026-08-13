@@ -9,14 +9,25 @@
  */
 
 import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
 
-import { amendPolicy, applyAmendment, runDebate, simulate } from "../../lib/api";
+import {
+  PERSONAS,
+  amendPolicy,
+  applyAmendment,
+  askPersona,
+  runDebate,
+  simulate,
+} from "../../lib/api";
 import type {
   Amendment,
   AmendmentComparison,
   Argument,
+  AskResponse,
   DebateResponse,
   DeltaSeries,
+  PersonaName,
+  PolicyDSL,
   Stance,
 } from "../../lib/api";
 import { formatNumber } from "../../lib/format";
@@ -134,6 +145,8 @@ export default function ParliamentPanel() {
           {status === "error" && (
             <p className="hint error-text">Couldn’t debate: {error}</p>
           )}
+
+          <AskPersona policy={policy} />
 
           {debate && status === "ready" && (
             <div className="debate">
@@ -270,6 +283,106 @@ function AmendmentEffect({ effect }: { effect: AmendmentComparison }) {
         })}
       </div>
       <p className="hint amd-note">{effect.amendment_delta.note}</p>
+    </div>
+  );
+}
+
+/**
+ * Direct follow-up questions to one persona (SPEC §11/§34): calls
+ * `POST /parliament/ask`, which reruns the same deterministic simulation as
+ * the debate above and answers only from that persona's own evidence points —
+ * LLM-phrased when the backend has a key configured, keyword-matched
+ * templated prose otherwise. Independent of whether the debate has been
+ * convened, since each question computes its own brief.
+ */
+function AskPersona({ policy }: { policy: PolicyDSL }) {
+  const [persona, setPersona] = useState<PersonaName>("Government");
+  const [question, setQuestion] = useState("");
+  const [thread, setThread] = useState<AskResponse[]>([]);
+  const [asking, setAsking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    const q = question.trim();
+    if (!q) return;
+    setAsking(true);
+    setError(null);
+    try {
+      const res = await askPersona(policy, persona, q);
+      setThread((t) => [...t, res]);
+      setQuestion("");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Couldn't get an answer");
+    } finally {
+      setAsking(false);
+    }
+  }
+
+  return (
+    <div className="ask-persona">
+      <h3 className="assumptions-title">Ask a persona</h3>
+      <p className="hint" style={{ marginTop: 0 }}>
+        Put a direct question to one member of the chamber — answered from
+        their own evidence, never a new number (SPEC §34).
+      </p>
+      <form className="ask-form" onSubmit={submit}>
+        <select
+          className="ask-select"
+          value={persona}
+          onChange={(e) => setPersona(e.target.value as PersonaName)}
+          aria-label="Persona to ask"
+        >
+          {PERSONAS.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          className="ask-input"
+          placeholder="e.g. Who actually pays this charge?"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          maxLength={500}
+          aria-label="Question"
+        />
+        <button
+          type="submit"
+          className="btn primary"
+          disabled={asking || !question.trim()}
+        >
+          {asking ? "Asking…" : "Ask"}
+        </button>
+      </form>
+
+      {error && <p className="hint error-text">{error}</p>}
+
+      {thread.length > 0 && (
+        <div className="ask-thread">
+          {thread.map((a, i) => (
+            <div className="ask-exchange" key={i}>
+              <p className="ask-question">
+                <span className="ask-question-label">Q</span> {a.question}
+              </p>
+              <div className="ask-answer">
+                <div className="ask-answer-head">
+                  <span className="argument-persona">{a.persona}</span>
+                  <span className="argument-role"> · {a.role}</span>
+                  <span className={`stance-chip ${a.stance}`}>
+                    {STANCE_LABEL[a.stance]}
+                  </span>
+                </div>
+                <p>{a.answer}</p>
+                <span className="tag muted">
+                  {a.method === "llm" ? "LLM prose" : "Template prose"}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

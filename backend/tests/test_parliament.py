@@ -7,6 +7,7 @@ Simulated evidence, and take role-appropriate stances.
 
 from __future__ import annotations
 
+import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -119,3 +120,51 @@ def test_endpoint_contract() -> None:
     assert len(data["arguments"]) == 5
     assert data["motion"]
     assert data["method"] in {"llm", "template"}
+
+
+def test_ask_persona_returns_grounded_answer() -> None:
+    from app.parliament import ask_persona
+
+    a = ask_persona(_policy(), "Government", "How much does the charge raise per day?")
+    assert a.persona == "Government"
+    assert a.method == "template"  # no key in tests
+    assert a.answer
+    assert a.provenance == "Generated"
+
+
+def test_ask_persona_unknown_name_raises() -> None:
+    from app.parliament import ask_persona
+
+    with pytest.raises(ValueError):
+        ask_persona(_policy(), "Not A Persona", "Why?")
+
+
+def test_ask_endpoint_contract() -> None:
+    body = {
+        "policy": {
+            "id": "policy_ask",
+            "intervention": {"type": "road_pricing", "amount": 12.0},
+            "revenue_allocation": {"public_transport": 1.0, "general_fund": 0.0},
+        },
+        "persona": "Opposition",
+        "question": "Who actually pays this charge?",
+    }
+    r = client.post("/parliament/ask", json=body)
+    assert r.status_code == 200, r.text
+    data = r.json()
+    assert data["persona"] == "Opposition"
+    assert data["answer"]
+    assert data["method"] in {"llm", "template"}
+
+
+def test_ask_endpoint_rejects_unknown_persona() -> None:
+    body = {
+        "policy": {
+            "id": "policy_ask2",
+            "intervention": {"type": "road_pricing", "amount": 12.0},
+        },
+        "persona": "Mystery Guest",
+        "question": "Who are you?",
+    }
+    r = client.post("/parliament/ask", json=body)
+    assert r.status_code == 400

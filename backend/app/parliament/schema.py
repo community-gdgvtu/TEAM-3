@@ -66,6 +66,42 @@ class DebateRequest(BaseModel):
     seed: int | None = Field(default=None, description="Echoed; model is deterministic.")
 
 
+class AskRequest(BaseModel):
+    """Input to ``POST /parliament/ask`` — a follow-up question to one persona."""
+
+    policy: PolicyDSL = Field(description="Compiled Policy DSL the persona argues over.")
+    persona: str = Field(
+        "Government",
+        description=(
+            "Which persona to address: 'Government', 'Opposition', "
+            "'Equity Advocate', 'Economist', or \"Devil's Advocate\"."
+        ),
+    )
+    question: str = Field(min_length=1, max_length=500, description="The question to ask.")
+    shocks: Shocks | None = Field(
+        default=None, description="Optional exogenous stressors for the simulation."
+    )
+
+
+class AskResponse(BaseModel):
+    """Output of ``POST /parliament/ask``."""
+
+    provenance: MetricTag = Field(
+        MetricTag.generated,
+        description="The answer prose is Generated; every cited number is Simulated.",
+    )
+    persona: str
+    role: str
+    stance: Stance
+    question: str
+    answer: str = Field(description="The persona's in-character answer.")
+    method: str = Field(description="'llm' or 'template' — how the prose was produced.")
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description="The persona's underlying evidence citations (context, not necessarily all quoted).",
+    )
+
+
 class DebateResponse(BaseModel):
     """Output of the parliament debate."""
 

@@ -14,6 +14,8 @@ Advocate. Together they form the adversarial stress test SPEC §11 asks for.
 
 from __future__ import annotations
 
+from typing import Callable
+
 from ..baseline.schema import BaselineMetrics
 from ..policy.dsl import PolicyDSL
 from ..simulation.schema import DeltaTimeSeries, EventLedger, LedgerEvent, WorldBMetrics
@@ -370,6 +372,17 @@ def devils_advocate(brief: DebateBrief) -> Argument:
 
 #: The full panel, in speaking order.
 PANEL = (government, opposition, equity, economist, devils_advocate)
+
+#: Lookup by the persona name each function's Argument carries — lets a caller
+#: (e.g. the "ask a follow-up question" endpoint) address one persona directly
+#: without re-running the whole panel.
+PANEL_BY_NAME: dict[str, Callable[[DebateBrief], Argument]] = {
+    "Government": government,
+    "Opposition": opposition,
+    "Equity Advocate": equity,
+    "Economist": economist,
+    "Devil's Advocate": devils_advocate,
+}
 
 
 def build_arguments(brief: DebateBrief) -> list[Argument]:

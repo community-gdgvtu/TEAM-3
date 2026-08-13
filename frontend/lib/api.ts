@@ -343,6 +343,54 @@ export async function runDebate(
   return (await res.json()) as DebateResponse;
 }
 
+/** The five Parliament personas `POST /parliament/ask` will address. */
+export const PERSONAS = [
+  "Government",
+  "Opposition",
+  "Equity Advocate",
+  "Economist",
+  "Devil's Advocate",
+] as const;
+export type PersonaName = (typeof PERSONAS)[number];
+
+export interface AskResponse {
+  provenance: MetricTag;
+  persona: string;
+  role: string;
+  stance: Stance;
+  question: string;
+  answer: string;
+  method: string;
+  citations: EvidenceCitation[];
+}
+
+/** Ask one persona a direct follow-up question, grounded in their own evidence. */
+export async function askPersona(
+  policy: PolicyDSL,
+  persona: PersonaName,
+  question: string,
+  signal?: AbortSignal,
+): Promise<AskResponse> {
+  const res = await fetch(`${API_BASE_URL}/parliament/ask`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, persona, question }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as AskResponse;
+}
+
 export type Severity = "low" | "medium" | "high" | "critical";
 
 export interface FailureMode {

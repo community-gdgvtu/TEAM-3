@@ -101,6 +101,15 @@ export const SCENARIOS: Scenario[] = [
     reinvest: 1,
     pedestrianise: 0.7,
   },
+  {
+    id: "transit-only",
+    label: "Fund transit, no charge",
+    blurb:
+      "A genuinely different lever: buy bus/rail capacity from general revenue instead of pricing the road — no cordon charge, no disruption, slower mode shift.",
+    charge: 0,
+    reinvest: 1,
+    pedestrianise: 0,
+  },
 ];
 
 export const BASELINE_SCENARIO = SCENARIOS[0];
@@ -222,7 +231,19 @@ export function predict(
   // effect of handing street space to people, which is independent of price.
   const priceEffect = Math.pow(1 + dCost, a.costElasticity) - 1;
   const spaceEffect = -0.22 * scenario.pedestrianise;
-  const carChange = clamp((priceEffect + spaceEffect) * ramp, -0.85, 0.2);
+  // A zero-charge, transit-funded scenario has no price shock to drive mode
+  // shift, so without this the reinvestment would only grow towers (`tod`
+  // below) while ridership stayed flat — unrealistic and a dull demo. This is
+  // the *service-quality* pull of better frequency/speed on its own, isolated
+  // to the no-charge case so the calibrated charge/pedestrianise scenarios are
+  // untouched.
+  const serviceEffect =
+    scenario.charge === 0 ? -0.08 * scenario.reinvest : 0;
+  const carChange = clamp(
+    (priceEffect + spaceEffect + serviceEffect) * ramp,
+    -0.85,
+    0.2,
+  );
 
   const carTripsIntoCbd = car0 * (1 + carChange);
   const suppressed = car0 - carTripsIntoCbd;
@@ -304,4 +325,114 @@ export function predict(
 export function deltaPct(value: number, reference: number): number | null {
   if (!Number.isFinite(reference) || reference === 0) return null;
   return ((value - reference) / reference) * 100;
+}
+
+// ---------------------------------------------------------------------------
+// Politician persona — a deterministic narrative reading of the same numbers
+// ---------------------------------------------------------------------------
+
+/**
+ * The sponsor's fictional identity. One fixed persona keeps the "who's talking"
+ * question answered consistently across the whole demo rather than a different
+ * invented name per scenario.
+ */
+export const SPONSOR = {
+  name: "Amara Voss",
+  title: "Deputy Mayor for Transport, Meridia",
+} as const;
+
+export interface PoliticianStatement {
+  intention: string;
+  effects: string[];
+  rebuttal: string;
+  tone: "defensive" | "building" | "confident" | "static";
+}
+
+function pct(n: number | null, digits = 1): string {
+  return n === null ? "—" : `${Math.abs(n).toFixed(digits)}%`;
+}
+
+/**
+ * Deterministic, template-built statement in the sponsor's voice — the
+ * intention behind the chosen scenario and the effects she'd point to at this
+ * point on the timeline, read straight off `state`/`reference`. No LLM: this
+ * runs on the same client-side model as the rest of the simple view, so it
+ * updates instantly as the scrubber moves and works with the backend down.
+ * The backend-backed "ask a follow-up" (Advanced → Parliament) is the LLM path
+ * for open-ended questions; this ambient card is the always-on summary.
+ */
+export function politicianStatement(
+  year: number,
+  scenario: Scenario,
+  state: CityState,
+  reference: CityState,
+): PoliticianStatement {
+  const carPct = deltaPct(state.carTripsIntoCbd, reference.carTripsIntoCbd);
+  const transitPct = deltaPct(state.transitTrips, reference.transitTrips);
+  const co2Pct = deltaPct(state.co2TonnesPerDay, reference.co2TonnesPerDay);
+  const supportPct = Math.round(state.support * 100);
+
+  if (scenario.id === "baseline") {
+    return {
+      intention:
+        "My position today is to hold — no charge, no reallocation of street space, until there's a mandate for more.",
+      effects: [
+        `Traffic keeps pace with the city itself: ${Math.round(state.carTripsIntoCbd).toLocaleString()} cars/day into the centre by ${yearLabelFor(year)}, rising every year we wait.`,
+        "There is no mechanism in this plan to bend that curve — the numbers below are simply the city growing into its current streets.",
+      ],
+      rebuttal:
+        "Opponents say inaction is itself a choice — one that costs the most to people already stuck in the worst traffic.",
+      tone: "static",
+    };
+  }
+
+  const intentionParts = [
+    "We're pricing every vehicle entering the centre, and by law the revenue only funds public transport — not the general budget.",
+  ];
+  if (scenario.charge === 0 && scenario.reinvest > 0) {
+    intentionParts[0] =
+      "I won't charge anyone to drive. We fund better transit from the existing budget and let people choose it because the service earns it.";
+  }
+  if (scenario.pedestrianise > 0) {
+    intentionParts.push(
+      "And the street space we reclaim from through-traffic goes straight back to residents — plazas, wider footways, pocket parks.",
+    );
+  }
+
+  const effects: string[] = [];
+  if (carPct !== null && Math.abs(carPct) > 0.5) {
+    effects.push(
+      `Cars into the centre are running ${pct(carPct)} ${carPct < 0 ? "below" : "above"} the do-nothing path.`,
+    );
+  }
+  if (transitPct !== null && Math.abs(transitPct) > 0.5) {
+    effects.push(`Transit ridership is up ${pct(transitPct)} on the same comparison.`);
+  }
+  if (co2Pct !== null && Math.abs(co2Pct) > 0.5) {
+    effects.push(`Traffic CO₂ is down ${pct(co2Pct)}.`);
+  }
+  if (effects.length === 0) {
+    effects.push(
+      "It's early — the response takes a couple of years to show up in the numbers below; that's the honest, Simulated picture, not spin.",
+    );
+  }
+
+  let tone: PoliticianStatement["tone"] = "building";
+  let rebuttal =
+    "Opponents call the charge a tax on people with no other way to get to work — watch the equity numbers in Parliament below for the actual distributional read.";
+  if (year < 1 && scenario.charge > 0) {
+    tone = "defensive";
+    rebuttal = `Support sits at ${supportPct}% right now — the disruption lands before the benefit does, and I own that.`;
+  } else if (supportPct >= 55) {
+    tone = "confident";
+    rebuttal = `Support has recovered to ${supportPct}% as the service actually got better — that's the bet this policy made.`;
+  }
+
+  return { intention: intentionParts.join(" "), effects, rebuttal, tone };
+}
+
+function yearLabelFor(y: number): string {
+  if (y < 0.05) return "today";
+  if (y < 1) return `month ${Math.round(y * 12)}`;
+  return `year ${y.toFixed(1).replace(/\.0$/, "")}`;
 }
