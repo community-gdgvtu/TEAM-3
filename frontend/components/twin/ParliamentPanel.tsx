@@ -10,9 +10,22 @@
 
 import { useEffect, useState } from "react";
 
-import { runDebate } from "../../lib/api";
-import type { Argument, DebateResponse, Stance } from "../../lib/api";
+import { applyAmendment, runDebate, simulate } from "../../lib/api";
+import type {
+  Amendment,
+  Argument,
+  DebateResponse,
+  Stance,
+} from "../../lib/api";
 import { useTwin } from "./TwinStore";
+
+/** Preset opposition/committee amendments (mirror backend Amendment fields). */
+const PRESET_AMENDMENTS: Amendment[] = [
+  { label: "Exempt low-income commuters", exempt_low_income: true },
+  { label: "Exempt in-cordon residents", exempt_residents: true },
+  { label: "Raise the charge ×1.5", charge_multiplier: 1.5 },
+  { label: "Reinvest 90% of revenue in transit", set_public_transport_share: 0.9 },
+];
 
 const STANCE_LABEL: Record<Stance, string> = {
   support: "Support",
@@ -24,10 +37,29 @@ const STANCE_LABEL: Record<Stance, string> = {
 type Status = "idle" | "loading" | "ready" | "error";
 
 export default function ParliamentPanel() {
-  const { policy } = useTwin();
+  const { policy, setSim } = useTwin();
   const [status, setStatus] = useState<Status>("idle");
   const [debate, setDebate] = useState<DebateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [applying, setApplying] = useState<string | null>(null);
+  const [amendError, setAmendError] = useState<string | null>(null);
+
+  async function applyAndResimulate(amendment: Amendment) {
+    if (!policy) return;
+    setApplying(amendment.label);
+    setAmendError(null);
+    try {
+      // Structured DSL edit (mirrors backend), then re-run through /simulate —
+      // the killer interaction: the map + dashboard update from shared state.
+      const amended = applyAmendment(policy, amendment);
+      const result = await simulate(amended);
+      setSim(result, { label: amendment.label, amended: true });
+    } catch (e: unknown) {
+      setAmendError(e instanceof Error ? e.message : "Re-simulation failed");
+    } finally {
+      setApplying(null);
+    }
+  }
 
   // A new/edited policy invalidates a stale debate.
   useEffect(() => {
@@ -110,6 +142,32 @@ export default function ParliamentPanel() {
               </div>
             </div>
           )}
+
+          <div className="amendments">
+            <h3 className="assumptions-title">Amendment queue</h3>
+            <p className="hint" style={{ marginTop: 0 }}>
+              Apply an amendment and re-simulate — the outcomes dashboard above
+              updates with the amended World B vs baseline (SPEC §29).
+            </p>
+            <div className="amendment-list">
+              {PRESET_AMENDMENTS.map((a) => (
+                <button
+                  key={a.label}
+                  type="button"
+                  className="btn amendment-btn"
+                  onClick={() => applyAndResimulate(a)}
+                  disabled={applying !== null}
+                >
+                  {applying === a.label
+                    ? "Re-simulating…"
+                    : `Apply + re-simulate: ${a.label}`}
+                </button>
+              ))}
+            </div>
+            {amendError && (
+              <p className="hint error-text">Couldn’t re-simulate: {amendError}</p>
+            )}
+          </div>
         </>
       )}
     </section>

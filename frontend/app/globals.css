@@ -967,6 +967,33 @@ ul.assumptions {
   font-size: 0.9rem;
 }
 
+.sim-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+.amendments {
+  margin-top: 1.1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.9rem;
+}
+
+.amendment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.amendment-btn {
+  font-size: 0.82rem;
+}
+
 .maplibregl-ctrl-group {
   background: var(--panel) !important;
 }

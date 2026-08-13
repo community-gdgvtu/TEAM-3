@@ -39,3 +39,14 @@ Dated notes, newest at the bottom. One line per shipped item.
   /parliament/debate, /parliament/failure-modes + a client-side applyAmendment mirror
   of the backend added to lib/api.ts. Backend contracts matched against source; graceful
   states when it's down. `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M5.2: Apply-amendment + re-simulate loop (the killer interaction,
+  SPEC §29). Added a "Simulate policy" button to the Time Machine bar and an
+  Amendment queue in the Parliament panel (exempt low-income / exempt residents /
+  raise charge ×1.5 / reinvest 90% in transit). Each applies a structured DSL edit
+  (client mirror of the backend `apply_amendment`) then re-runs `POST /simulate`,
+  writing World A/B/Δ into the shared TwinStore. The outcomes dashboard flips from
+  World-A baseline to World B + the real Δ(B−A) per tile (value, %, effect
+  sparkline with widening band), tags everything Simulated, and shows an "Amended"
+  banner naming the active amendment; the map time badge switches to "World B".
+  "Show baseline" reverts. Every number comes from the model — no fabricated
+  effects (SPEC §34). `tsc --noEmit` + `next build` clean.
