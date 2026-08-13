@@ -1029,6 +1029,137 @@ export async function runPressConference(
 }
 
 // ---------------------------------------------------------------------------
+// Uncertainty fan (SPEC §24) — POST /uncertainty
+// ---------------------------------------------------------------------------
+
+/** A central estimate's [low, high] band at one confidence level. */
+export interface Interval {
+  level: number;
+  low: number;
+  high: number;
+}
+
+/** The fan at one Time-Machine checkpoint: median + nested intervals. */
+export interface HorizonBand {
+  t_months: number;
+  t_years: number;
+  median: number;
+  intervals: Interval[];
+}
+
+/** One assumption's influence on the metric (one-at-a-time swing). */
+export interface SensitivityEntry {
+  rank: number;
+  name: string;
+  label: string;
+  unit: string;
+  low_value: number;
+  high_value: number;
+  delta_at_low: number;
+  delta_at_high: number;
+  swing: number;
+  swing_pct_of_median: number | null;
+  /** 'up' | 'down' | 'flat'. */
+  direction: string;
+}
+
+/** One behavioural-regime run in the model-disagreement ensemble. */
+export interface EnsembleVariant {
+  name: string;
+  label: string;
+  delta: number;
+  description: string;
+}
+
+export interface ModelDisagreement {
+  variants: EnsembleVariant[];
+  spread: number;
+  note: string;
+}
+
+export interface UncertaintyResult {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  metric_key: string;
+  metric_label: string;
+  unit: string;
+  horizon: Checkpoint;
+  point_estimate: number;
+  median: number;
+  mean: number;
+  intervals: Interval[];
+  samples: number;
+  seed: number;
+  fan: HorizonBand[];
+  influential_assumptions: SensitivityEntry[];
+  model_disagreement: ModelDisagreement;
+  swept_assumptions: string[];
+}
+
+/**
+ * Thrown when the requested metric key isn't in the simulation's delta series.
+ * Carries the backend's list of valid keys so the UI can offer them (SPEC §24).
+ */
+export class MetricNotFoundError extends Error {
+  available: string[];
+  constructor(message: string, available: string[]) {
+    super(message);
+    this.name = "MetricNotFoundError";
+    this.available = available;
+  }
+}
+
+/**
+ * Monte-Carlo uncertainty fan for one metric of a compiled policy (SPEC §24):
+ * median + 50/80/95% intervals per horizon, a ranked sensitivity list, and a
+ * behavioural-regime disagreement ensemble. Every number is a re-run of the
+ * deterministic model with perturbed assumptions — no LLM on the numeric path.
+ * Throws `MetricNotFoundError` (with valid keys) on an unknown metric.
+ */
+export async function runUncertainty(
+  policy: PolicyDSL,
+  metricKey: string,
+  signal?: AbortSignal,
+): Promise<UncertaintyResult> {
+  const res = await fetch(`${API_BASE_URL}/uncertainty`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, metric_key: metricKey }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    if (res.status === 404) {
+      try {
+        const body = (await res.json()) as {
+          detail?: { error?: string; available_metric_keys?: string[] };
+        };
+        const d = body.detail;
+        if (d && Array.isArray(d.available_metric_keys)) {
+          throw new MetricNotFoundError(
+            d.error ?? `Unknown metric key ${metricKey}`,
+            d.available_metric_keys,
+          );
+        }
+      } catch (e) {
+        if (e instanceof MetricNotFoundError) throw e;
+        // fall through to generic error below
+      }
+    }
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as UncertaintyResult;
+}
+
+// ---------------------------------------------------------------------------
 // Counterfactual comparison (SPEC §21) — POST /compare
 // ---------------------------------------------------------------------------
 

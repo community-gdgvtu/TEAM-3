@@ -3782,3 +3782,284 @@ ul.assumptions {
 .cmp-note {
   margin-top: 1rem;
 }
+
+/* --- Uncertainty fan panel (M10) -------------------------------------- */
+.unc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.unc-metric-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.unc-metric-input {
+  flex: 1 1 220px;
+  min-width: 180px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  color: var(--text);
+}
+.unc-metric-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.unc-available {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.unc-key-chip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.74rem;
+  color: var(--accent);
+  background: rgba(79, 140, 255, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.15rem 0.45rem;
+  cursor: pointer;
+}
+.unc-key-chip:hover {
+  border-color: var(--accent);
+}
+
+.unc-body {
+  margin-top: 1rem;
+}
+
+.unc-headline {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.unc-median {
+  font-size: 1.9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.unc-metric-name {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.unc-intervals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.unc-iv {
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+}
+
+.unc-point {
+  margin: 0.6rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.unc-point strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.unc-chart {
+  margin: 1rem 0 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+.unc-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.unc-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.unc-zero {
+  stroke: rgba(231, 236, 245, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.unc-axis {
+  fill: var(--muted);
+  font-size: 10px;
+}
+.unc-median-line {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.unc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.unc-leg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.unc-leg::before {
+  content: "";
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.unc-leg.median::before {
+  height: 2px;
+  background: var(--accent);
+}
+.unc-leg.b50::before {
+  background: rgba(79, 140, 255, 0.34);
+}
+.unc-leg.b80::before {
+  background: rgba(79, 140, 255, 0.22);
+}
+.unc-leg.b95::before {
+  background: rgba(79, 140, 255, 0.14);
+}
+.unc-leg-unit {
+  margin-left: auto;
+  font-style: italic;
+}
+
+.unc-sub {
+  margin: 1.3rem 0 0.3rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.unc-sub-note {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.unc-spread {
+  font-size: 0.74rem;
+  color: #f6be60;
+  border: 1px solid rgba(246, 190, 96, 0.5);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+/* Tornado */
+.unc-tornado {
+  display: grid;
+  gap: 0.4rem;
+}
+.unc-tor-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.2fr) 3fr minmax(80px, 0.9fr);
+  align-items: center;
+  gap: 0.6rem;
+}
+.unc-tor-label {
+  font-size: 0.82rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.unc-tor-track {
+  position: relative;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.unc-tor-mid {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(231, 236, 245, 0.3);
+}
+.unc-tor-bar {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.75;
+}
+.unc-tor-swing {
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Regimes */
+.unc-regimes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+.unc-regime {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.unc-regime-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.unc-regime-delta {
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.unc-swept {
+  margin-top: 0.8rem;
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.unc-note {
+  margin-top: 1rem;
+}
+
+@media (max-width: 560px) {
+  .unc-median {
+    font-size: 1.5rem;
+  }
+  .unc-tor-row {
+    grid-template-columns: minmax(90px, 1.1fr) 2.4fr minmax(64px, 0.9fr);
+  }
+}

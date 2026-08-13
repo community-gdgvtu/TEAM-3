@@ -24,6 +24,7 @@ import RegistryPanel from "./RegistryPanel";
 import InstitutionsPanel from "./InstitutionsPanel";
 import PressConferencePanel from "./PressConferencePanel";
 import ComparePanel from "./ComparePanel";
+import UncertaintyPanel from "./UncertaintyPanel";
 import { useTwin } from "./TwinStore";
 
 type TabKey =
@@ -36,6 +37,7 @@ type TabKey =
   | "sdg"
   | "diffusion"
   | "ensemble"
+  | "uncertainty"
   | "institutions"
   | "backtest"
   | "registry";
@@ -50,6 +52,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "sdg", label: "SDG" },
   { key: "diffusion", label: "Diffusion" },
   { key: "ensemble", label: "Ensemble" },
+  { key: "uncertainty", label: "Uncertainty" },
   { key: "institutions", label: "Institutions" },
   { key: "backtest", label: "Backtest" },
   { key: "registry", label: "Registry" },
@@ -108,6 +111,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "ensemble"}>
           <EnsemblePanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "uncertainty"}>
+          <UncertaintyPanel />
         </div>
         <div role="tabpanel" hidden={active !== "institutions"}>
           <InstitutionsPanel />

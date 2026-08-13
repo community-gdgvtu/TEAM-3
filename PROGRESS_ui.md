@@ -236,3 +236,20 @@ Dated notes, newest at the bottom. One line per shipped item.
   world − baseline. Graceful no-policy/loading/error states. Typed `runCompare`
   client + comparison types added to lib/api.ts (reusing the Amendment type);
   wired as a new "Compare" tab. `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M10.3: Uncertainty fan tab (SPEC §24). New UncertaintyPanel
+  convenes `POST /uncertainty` for a chosen metric of the compiled policy and
+  renders the Monte-Carlo fan of futures. Centerpiece is an SVG fan chart: nested
+  50/80/95% interval bands (light→dark) with a median trajectory line across every
+  Time-Machine checkpoint, a dashed zero line and y/x axis labels — uncertainty
+  made visible, not a false-precision point. Alongside: the headline median Δ with
+  its three intervals and the deterministic point estimate + sample count/seed
+  (reproducible); a sensitivity tornado ranking the most-influential assumptions
+  by their one-at-a-time swing (bars centred on zero, low→high span); and the
+  behavioural-regime disagreement ensemble (per-regime Δ + spread). Metric key is
+  a text input defaulting to traffic.daily_vehicle_km; on an unknown key the
+  backend's 404 returns the valid keys, surfaced as one-click chips (typed
+  MetricNotFoundError) rather than guessing. Honesty (SPEC §24/§34): every number
+  is a re-run of the deterministic model with perturbed assumptions, tagged
+  Simulated, no LLM on the numeric path. Typed `runUncertainty` client +
+  uncertainty types added to lib/api.ts; wired as a new "Uncertainty" tab.
+  `tsc --noEmit` + `next build` clean.
