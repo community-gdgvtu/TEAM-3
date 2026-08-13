@@ -1202,3 +1202,21 @@ path. Added `.brief-example-note` to `globals.css`; re-synced the README
 endpoint→SPEC row (`POST /brief`, `GET /brief/example`) so "every documented
 backend endpoint has a UI surface" is now literally true. No new numeric model.
 `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean.
+
+## 2026-08-13 — M47: surface the killer-demo example (GET /run/example)
+After M46 closed the endpoint→surface map for `/brief/example`, the engine track
+shipped two more zero-body example helpers (`GET /run/example`,
+`GET /north-star/example`) that the UI didn't surface — reopening the gap M46
+closed. Added `getRunExample()` to `lib/api.ts` (same honest throw-on-error
+contract as `runScenario`) and a "Load example run" button to `RunPanel` that
+orchestrates the canonical §28 demo pipeline body-lessly, so the §29
+killer-demo narrative is visible with no compiled policy in the store. An
+`isExample` flag stamps the result with an honest `example` chip ("the canonical
+§28 demo congestion charge — NOT the policy compiled above"), distinguishes the
+loading label, and points the error-state Retry at the correct path. Reused the
+existing `.brief-example-note` style — no new numeric model, types, styles or
+endpoints. Backend on this host's :8000 is a different service, so no live smoke
+test; verified against the documented contract with the honest error path
+covering the not-live case. `tsc --noEmit` + `next build` + `next lint` +
+`npm test` (41) all clean.
+Follow-up: M48 will do the same for `GET /north-star/example` on `NorthStarPanel`.

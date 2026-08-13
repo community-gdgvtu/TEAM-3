@@ -3096,6 +3096,35 @@ export async function runScenario(
   return (await res.json()) as RunResponse;
 }
 
+/**
+ * Orchestrate the canonical §28 demo congestion charge end-to-end
+ * (`GET /run/example`). A body-less GET so a judge can pull the whole §29
+ * killer-demo narrative with no compiled policy in the store — the same
+ * deterministic pipeline `POST /run` composes, run on the demo policy.
+ * Introduces no new number and throws on network/HTTP error so the panel shows
+ * an honest waiting/error state instead of inventing a narrative
+ * (SPEC §28/§29/§34).
+ */
+export async function getRunExample(
+  signal?: AbortSignal,
+): Promise<RunResponse> {
+  const res = await fetch(`${API_BASE_URL}/run/example`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as RunResponse;
+}
+
 // ---------------------------------------------------------------------------
 // Change-assumptions-and-rerun (SPEC §34.10) — GET /assumptions,
 // POST /assumptions/rerun
@@ -3511,6 +3540,34 @@ export async function runNorthStar(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as NorthStarAnswer;
+}
+
+/**
+ * Compose the SPEC §37 North-Star answer for the canonical §28 demo congestion
+ * charge (`GET /north-star/example`). A body-less GET so a judge can read the
+ * whole fixed narrative with no compiled policy in the store — identical inputs
+ * to `GET /brief/example`, which delegates to this layer. Introduces no new
+ * number and throws on network/HTTP error so the panel shows an honest
+ * waiting/error state instead of inventing a narrative (SPEC §37/§34).
+ */
+export async function getNorthStarExample(
+  signal?: AbortSignal,
+): Promise<NorthStarAnswer> {
+  const res = await fetch(`${API_BASE_URL}/north-star/example`, {
     signal,
     cache: "no-store",
   });

@@ -18,7 +18,7 @@
 
 import { useState } from "react";
 
-import { runScenario } from "../../lib/api";
+import { runScenario, getRunExample } from "../../lib/api";
 import type {
   DeltaSeries,
   RunHeadlineMetric,
@@ -49,6 +49,10 @@ export default function RunPanel() {
   const [run, setRun] = useState<RunResponse | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  // True when the shown run is the canonical §28 demo (GET /run/example), not the
+  // user's compiled/typed policy — kept explicit so the UI never lets a demo
+  // narrative masquerade as the policy above it (honest, SPEC §34).
+  const [isExample, setIsExample] = useState(false);
 
   // Prefer the compiled policy from the store; fall back to a natural-language
   // box so the tab can drive the whole compile→run pipeline standalone (SPEC §3).
@@ -58,6 +62,7 @@ export default function RunPanel() {
     if (usingText && !text.trim()) return;
     setStatus("loading");
     setError(null);
+    setIsExample(false);
     const req = usingText
       ? { text: text.trim(), horizon_months: horizon }
       : { policy: policy ?? undefined, horizon_months: horizon };
@@ -68,6 +73,24 @@ export default function RunPanel() {
       })
       .catch((e: unknown) => {
         setError(e instanceof Error ? e.message : "Scenario run failed");
+        setStatus("error");
+      });
+  }
+
+  // Orchestrate the canonical §28 demo pipeline (GET /run/example) — a body-less
+  // call so a judge can see the whole §29 narrative without compiling anything.
+  // Flagged as the example rather than the policy above (honest, SPEC §34).
+  function executeExample() {
+    setStatus("loading");
+    setError(null);
+    setIsExample(true);
+    getRunExample()
+      .then((r) => {
+        setRun(r);
+        setStatus("ready");
+      })
+      .catch((e: unknown) => {
+        setError(e instanceof Error ? e.message : "Example scenario run failed");
         setStatus("error");
       });
   }
@@ -131,11 +154,22 @@ export default function RunPanel() {
             onClick={execute}
             disabled={status === "loading" || (usingText && !text.trim())}
           >
-            {status === "loading"
+            {status === "loading" && !isExample
               ? "Running pipeline…"
               : usingText
                 ? "Compile & run"
                 : "Run full pipeline"}
+          </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={executeExample}
+            disabled={status === "loading"}
+            title="Run the canonical demo congestion charge end-to-end — no policy needed"
+          >
+            {status === "loading" && isExample
+              ? "Loading example…"
+              : "Load example run"}
           </button>
         </div>
       </div>
@@ -154,22 +188,45 @@ export default function RunPanel() {
             reconnect the backend to compose the pipeline (compile → simulate →
             parliament → amendment → media) from one deterministic run.
           </p>
-          <button type="button" className="btn" onClick={execute}>
+          <button
+            type="button"
+            className="btn"
+            onClick={isExample ? executeExample : execute}
+          >
             Retry
           </button>
         </div>
       )}
 
-      {run && <RunResult run={run} stale={status === "loading"} />}
+      {run && (
+        <RunResult run={run} stale={status === "loading"} isExample={isExample} />
+      )}
     </section>
   );
 }
 
-function RunResult({ run, stale }: { run: RunResponse; stale: boolean }) {
+function RunResult({
+  run,
+  stale,
+  isExample,
+}: {
+  run: RunResponse;
+  stale: boolean;
+  isExample: boolean;
+}) {
   return (
     <div className={`run-result${stale ? " stale" : ""}`}>
       {stale && (
         <p className="hint run-stale">Re-running… showing the previous result.</p>
+      )}
+
+      {isExample && (
+        <p className="hint brief-example-note">
+          <span className="tag generated">example</span>
+          The canonical §28 demo congestion charge (from <code>/run/example</code>)
+          — <strong>not</strong> the policy compiled above. Compile a policy and
+          use <em>Run full pipeline</em> for your own scenario.
+        </p>
       )}
 
       {/* Consistency banner — the reason this tab exists. */}

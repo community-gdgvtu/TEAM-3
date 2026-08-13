@@ -463,3 +463,16 @@ numbers (the canonical §28 demo memo is the same deterministic North-Star answe
 rendered for the demo policy), and it's explicitly stamped **not** the compiled
 policy so a demo memo can never masquerade as the user's own.
 - [x] Add `getBriefExample()` (`GET /brief/example`) to `lib/api.ts` mirroring `runBrief`'s honest error handling (throws so the panel shows a waiting/error state, never a minted memo), and wire a "Load example brief" button into `BriefPanel` alongside "Render the brief": it renders the body-less canonical demo congestion-charge memo so the tab is usable with no compiled policy in the store. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading label distinguishes example-vs-policy, and (c) the error-state Retry re-runs the correct path. Added `.brief-example-note` to `globals.css`; re-synced `frontend/README.md`'s endpoint→SPEC row (`POST /brief`, `GET /brief/example`) so the "every documented backend endpoint has a UI surface" claim is now literally true. No new numeric model. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §27/§37/§34)
+
+## M47 — Surface the killer-demo example: GET /run/example (SPEC §28/§29/§34)
+M46 closed the endpoint→surface map for `/brief/example`, but two sibling
+zero-body example helpers landed on the engine track immediately after (commits
+e82bc79/75baa98): `GET /run/example` and `GET /north-star/example`. Both return
+the *same* deterministic payload their `POST` sibling composes, run on the
+canonical §28 demo congestion charge — a keyless one-call demo. The Run tab
+(`POST /run`, the §29 killer-demo pipeline) had no way to show that narrative
+without a compiled policy, so a judge landing on it cold saw only an empty
+prompt. Pure surfacing of real backend data: the button mints no numbers (the
+pipeline is identical to the deterministic run) and is explicitly stamped **not**
+the compiled policy so a demo can never masquerade as the user's own.
+- [x] Add `getRunExample()` (`GET /run/example`) to `lib/api.ts` mirroring `runScenario`'s honest throw-on-error contract (so the panel shows a waiting/error state, never an invented narrative), and wire a "Load example run" button into `RunPanel` alongside "Run full pipeline": it orchestrates the body-less canonical §28 demo pipeline so the tab is usable with no compiled policy in the store. Tracks an `isExample` flag so (a) the result carries an honest `example` chip reading "the canonical §28 demo congestion charge — **not** the policy compiled above", (b) the loading label distinguishes example-vs-policy, and (c) the error-state Retry re-runs the correct path. Reuses the existing `.brief-example-note` style — no new numeric model, types or endpoints. `tsc --noEmit` + `next build` + `next lint` + `npm test` (41) all clean (SPEC §28/§29/§34)
