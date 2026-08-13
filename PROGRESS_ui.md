@@ -117,3 +117,14 @@ Dated notes, newest at the bottom. One line per shipped item.
   (SPEC §34 honesty). Added a ≤460px fallback so the evidence drawer's World A/B/Δ
   result grid stacks to one column on narrow screens. **M7 complete — ROADMAP_UI
   fully checked off.** `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M8.1: SDG alignment tab (SPEC §23). New SdgPanel convenes `POST /sdg`
+  on the compiled policy and renders the alignment report grouped by goal (SDG 11/16
+  core, 10/13 secondary). Each goal lists its measurable indicators / transparent
+  proxies with baseline vs scenario, a direction-aware change (toward/away from the
+  target, coloured by whether it improves — not merely by sign), a confidence chip
+  (high/med/low + %), the data source, and the provenance tag. The headline is a
+  count of improved/worsened/unchanged indicators at the horizon — **no composite
+  "SDG score"** (SPEC §23 forbids one). Everything tagged Simulated; graceful
+  no-policy/loading/error states, no invented alignment when the backend is down
+  (SPEC §34). Typed `runSdg` client + SDG types added to lib/api.ts. `tsc --noEmit`
+  + `next build` clean.

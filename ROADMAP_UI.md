@@ -31,3 +31,10 @@ Mark any generated media in the UI as SIMULATED. Uncertainty bands must be visib
 - [x] Click any dashboard metric → evidence drawer showing the provenance trace, assumptions, confidence (from the backend evidence endpoint)
 - [x] Assemble the main screen layout per SPEC §27 (3D world + outcomes panel + timeline + [Parliament][Public][Press][Red Team] tabs) and wire the 60-second demo flow (SPEC §29)
 - [x] Visual polish: consistent theme, loading/empty/error states, mobile-safe
+
+## M8 — Surface the newer engine layers (SPEC §23/§14/§25)
+The engine track has shipped analysis endpoints the UI hasn't exposed yet. Add a
+tab per layer; keep every number tagged and never invent one when the backend is down.
+- [x] SDG alignment tab: `POST /sdg` → per-goal indicator table (baseline/scenario/change/confidence, direction-aware improved/worsened), count-based headline (SPEC §23 forbids a composite score)
+- [ ] Opinion-diffusion tab: `POST /diffusion` → opinion trajectories over rounds, salience + polarisation, coalitions, dominant narrative; rounds labelled as information steps (NOT the Time-Machine horizon)
+- [ ] Backtest scorecard tab: `GET /backtest/example` + `POST /backtest` → forecast-vs-actual scorecard with error metrics; actuals stamped synthetic-benchmark

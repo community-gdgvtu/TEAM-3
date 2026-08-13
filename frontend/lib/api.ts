@@ -624,6 +624,158 @@ export async function runMedia(
 }
 
 // ---------------------------------------------------------------------------
+// SDG alignment — POST /sdg (SPEC §23)
+// ---------------------------------------------------------------------------
+
+/** One measurable indicator / transparent proxy mapped to an SDG target. */
+export interface SdgIndicator {
+  id: string;
+  sdg_target: string;
+  indicator: string;
+  proxy_for: string;
+  unit: string;
+  baseline: number;
+  scenario: number;
+  change: number;
+  change_pct: number | null;
+  /** `"higher"` or `"lower"` — direction of improvement. */
+  better_when: string;
+  improved: boolean;
+  data_source: string;
+  confidence: number;
+  /** `"high" | "medium" | "low"`. */
+  confidence_label: string;
+  tag: MetricTag;
+  note: string;
+}
+
+export interface SdgGoal {
+  goal: number;
+  title: string;
+  /** `"core"` or `"secondary"` URBAN alignment (SPEC §23). */
+  tier: string;
+  indicators: SdgIndicator[];
+  improved_count: number;
+  worsened_count: number;
+  unchanged_count: number;
+  summary: string;
+}
+
+export interface SdgReport {
+  /** Always `"Simulated"` — deterministic sim mapped onto SDG targets (SPEC §34). */
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  horizon: Checkpoint;
+  goals: SdgGoal[];
+  total_improved: number;
+  total_worsened: number;
+  total_unchanged: number;
+  /** Count-based summary — never an arbitrary SDG score (SPEC §23). */
+  headline: string;
+}
+
+/** Map a compiled policy onto UN SDG targets. Throws on error. */
+export async function runSdg(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<SdgReport> {
+  const res = await fetch(`${API_BASE_URL}/sdg`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as SdgReport;
+}
+
+// ---------------------------------------------------------------------------
+// Opinion diffusion — POST /diffusion (SPEC §14)
+// ---------------------------------------------------------------------------
+
+export interface DiffusionNode {
+  id: string;
+  type: string;
+  label: string;
+  size: number;
+  susceptibility: number;
+  initial_opinion: number;
+  final_opinion: number;
+  opinion_prior_source: string;
+}
+
+export interface DiffusionEdge {
+  source: string;
+  target: string;
+  weight: number;
+  kind: string;
+}
+
+export interface OpinionTrajectory {
+  node_id: string;
+  opinions: number[];
+}
+
+export interface Coalition {
+  /** `"support" | "oppose" | "contested"`. */
+  stance: string;
+  members: string[];
+  citizen_share: number;
+  mean_opinion: number;
+}
+
+export interface InfoShock {
+  round: number;
+  node: string;
+  delta: number;
+  label: string;
+}
+
+export interface DiffusionResult {
+  /** Always `"Simulated"` — deterministic Friedkin–Johnsen diffusion (SPEC §34). */
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  rounds: number;
+  nodes: DiffusionNode[];
+  edges: DiffusionEdge[];
+  trajectories: OpinionTrajectory[];
+  /** Issue salience per round (0–1). */
+  salience: number[];
+  /** Opinion polarisation per round (0–1). */
+  polarisation: number[];
+  coalitions: Coalition[];
+  initial_net_support: number;
+  final_net_support: number;
+  dominant_narrative: string;
+  shocks_applied: InfoShock[];
+  assumptions: Record<string, unknown>;
+}
+
+/** Run the opinion-diffusion process for a policy. Throws on error. */
+export async function runDiffusion(
+  policy: PolicyDSL,
+  rounds?: number,
+  signal?: AbortSignal,
+): Promise<DiffusionResult> {
+  const res = await fetch(`${API_BASE_URL}/diffusion`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(rounds != null ? { policy, rounds } : { policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as DiffusionResult;
+}
+
+// ---------------------------------------------------------------------------
 // Amendment loop — a structured DSL mutation re-run through /simulate (SPEC §12)
 // ---------------------------------------------------------------------------
 
