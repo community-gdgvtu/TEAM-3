@@ -1036,3 +1036,31 @@ no LLM (SPEC §34); pure read of existing endpoints — `demo.py` / `north_star.
 - No new engine work remains on the roadmap; standing guards (integration-smoke,
   determinism-regression, uncertainty-widening, cross-layer mode-choice) all pass, so the
   §34 guardrails hold across the whole HTTP surface.
+
+## 2026-08-13 (16:55 UTC) — Minister's Brief export (`POST /brief`)
+
+Roadmap was 100% complete on entry (45/45, 381 green). Added one new judge-facing
+item under a new **Presentation / export** section and shipped it end-to-end.
+
+- **New:** `backend/app/brief/` (`schema.py`, `render.py`, `service.py`, `__init__.py`)
+  + `backend/app/routers/brief.py` → `POST /brief` and `GET /brief/example`; registered in
+  `app/main.py`.
+- **What it is (SPEC §27/§28.11/§37):** the one-page ministerial memo behind the dashboard.
+  A **pure rendering layer** — `build_brief` delegates the whole answer to `run_north_star`
+  and `render.py` lays it out as a single self-contained **Markdown memo**: title/question/
+  horizon, a printed provenance key (all four tags), an executive-summary headline table
+  (A→B→Δ→Δ%→band→tag per metric), the fixed §37 15-line narrative (order preserved),
+  winners/losers + regressivity, a ranked failure-mode table, risk-reducing amendments +
+  their re-simulated effect, a SIMULATED media section, and a reproducibility footer.
+- **§34 guardrails:** no new numeric model, no LLM in any figure — every number is the same
+  object `/north-star` returns, so the memo can never disagree with the endpoints. A test
+  pins `brief.answer.median_outcome == /north-star median_outcome` byte-for-byte; media stays
+  labelled SIMULATED; the footer states the no-LLM-in-numbers claim + seed (SPEC §32).
+- Presentation switches `include_answer` / `include_media` (both guarded); response also
+  returns `tag_legend`, `word_count`, and (optionally) the full structured `answer`.
+- **Tests:** `backend/tests/test_brief.py` (7): example renders, §37 order preserved,
+  consistency with `/north-star`, determinism (byte-identical Markdown), presentation
+  switches, §34 guardrails present, pre-compiled `policy` path.
+- Full suite: `.venv/bin/python -m pytest -q` → **388 passed** (251s, was 381). App boots
+  with **50 routes** (was 48). Pure additive composition — no existing `backend/app/**`
+  layer changed.

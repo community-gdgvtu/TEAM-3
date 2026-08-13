@@ -19,6 +19,7 @@ from .routers import (
     assumptions,
     backtest,
     baseline,
+    brief,
     business,
     citizen,
     compare,
@@ -106,6 +107,7 @@ def create_app() -> FastAPI:
     app.include_router(business.router)
     app.include_router(run.router)
     app.include_router(northstar.router)
+    app.include_router(brief.router)
 
     @app.get("/", tags=["system"], summary="Service root")
     def root() -> dict[str, str]:
