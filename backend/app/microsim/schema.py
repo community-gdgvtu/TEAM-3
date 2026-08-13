@@ -7,6 +7,32 @@ from pydantic import BaseModel, Field
 from ..baseline.schema import MetricTag
 
 
+class ConstraintCheck(BaseModel):
+    """Whether the policy's own stated equity constraint holds against the numbers.
+
+    A policy may declare ``constraints.max_low_income_burden_increase_pct`` — a cap
+    the minister sets on how much the charge is allowed to raise low-income
+    households' cost burden. Until now that cap was recorded and asserted in debate
+    but never checked against the modelled distributional outcome (SPEC §34: a
+    constraint you never test is theatre). This is that test, computed from the same
+    deterministic microsim burden numbers.
+    """
+
+    name: str = Field(description="The DSL constraint being checked.")
+    cap_pct: float = Field(description="The stated maximum low-income burden increase (% of income).")
+    modelled_low_income_burden_pct: float = Field(
+        description="Modelled World-B out-of-pocket charge burden on the lowest-income "
+        "decile as % of income. Baseline burden is zero (no charge), so this IS the "
+        "increase the cap governs."
+    )
+    satisfied: bool = Field(description="Whether the modelled increase is within the stated cap.")
+    margin_pct: float = Field(
+        description="Cap minus modelled burden: positive = headroom, negative = overshoot."
+    )
+    note: str = Field(default="", description="Plain-language reading of the check.")
+    provenance: MetricTag = Field(MetricTag.simulated)
+
+
 class GroupImpact(BaseModel):
     """Distributional impact for one population subgroup (SPEC §7.3)."""
 
@@ -64,6 +90,11 @@ class MicrosimReport(BaseModel):
         "the charge falls harder on lower incomes (regressive); 0 if top decile pays nothing."
     )
     regressivity_note: str = ""
+    constraint_check: ConstraintCheck | None = Field(
+        default=None,
+        description="Compliance of the policy's stated equity constraint against the "
+        "modelled low-income burden, when the DSL declares one (else null).",
+    )
     by_income_decile: list[GroupImpact] = Field(default_factory=list)
     by_household_type: list[GroupImpact] = Field(default_factory=list)
     by_geography: list[GroupImpact] = Field(default_factory=list)

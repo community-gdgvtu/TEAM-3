@@ -29,9 +29,10 @@ from ..simulation.levers import (
     derive_levers,
 )
 from ..simulation.model import policy_mode_options
-from .schema import GroupImpact, MicrosimReport
+from .schema import ConstraintCheck, GroupImpact, MicrosimReport
 
 _EPS = 0.01  # minutes-equiv threshold for "meaningfully changed"
+_BURDEN_EPS = 1e-9  # tolerance (percentage points) for the constraint-compliance test
 
 
 def _round(x: float, d: int = 2) -> float:
@@ -191,6 +192,44 @@ def build_microsim_report(
     else:
         regressivity_note = "The charge burden is roughly proportional across income deciles."
 
+    # --- Stated-constraint compliance --------------------------------------
+    # If the policy declares a cap on the low-income burden increase, actually
+    # test it against the modelled outcome instead of merely asserting it (SPEC
+    # §34). The baseline has no cordon charge, so the World-B out-of-pocket burden
+    # on the lowest-income decile IS the increase the cap governs.
+    constraint_check = None
+    cap = policy.constraints.max_low_income_burden_increase_pct
+    if cap is not None:
+        modelled = bottom_burden  # decile-1 mean charge burden as % of income
+        satisfied = modelled <= cap + _BURDEN_EPS
+        margin = _round(cap - modelled, 3)
+        if modelled <= _BURDEN_EPS:
+            note = (
+                f"The lowest-income decile bears no modelled cordon burden "
+                f"(exempt or not driving into the charge), so the {cap:g}% cap holds "
+                f"with the full cap as headroom."
+            )
+        elif satisfied:
+            note = (
+                f"Modelled low-income burden is {modelled:g}% of income, within the "
+                f"stated {cap:g}% cap ({margin:g}pp headroom)."
+            )
+        else:
+            note = (
+                f"Modelled low-income burden is {modelled:g}% of income, EXCEEDING the "
+                f"stated {cap:g}% cap by {_round(modelled - cap, 3):g}pp — the policy "
+                f"violates its own equity constraint (add a low-income exemption or cut "
+                f"the charge to comply)."
+            )
+        constraint_check = ConstraintCheck(
+            name="max_low_income_burden_increase_pct",
+            cap_pct=cap,
+            modelled_low_income_burden_pct=modelled,
+            satisfied=satisfied,
+            margin_pct=margin,
+            note=note,
+        )
+
     # --- Household type ----------------------------------------------------
     hh: dict[str, list[_AgentImpact]] = {}
     for k in range(n):
@@ -241,6 +280,7 @@ def build_microsim_report(
         mean_payer_burden_pct=mean_payer_burden,
         regressivity_ratio=regressivity,
         regressivity_note=regressivity_note,
+        constraint_check=constraint_check,
         by_income_decile=by_decile,
         by_household_type=by_household,
         by_geography=by_geography,
