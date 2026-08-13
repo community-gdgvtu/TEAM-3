@@ -3164,3 +3164,279 @@ ul.assumptions {
     display: none; /* hide Source column on very narrow screens */
   }
 }
+
+/* --- Institutional review panel (M9) ---------------------------------- */
+.inst-body {
+  margin-top: 1rem;
+}
+
+/* Verdict colour system, shared by the overall banner, review cards, chips. */
+.inst-overall {
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  background: rgba(255, 255, 255, 0.015);
+  margin-bottom: 0.9rem;
+}
+.inst-overall.clear {
+  border-left-color: var(--ok);
+}
+.inst-overall.conditional {
+  border-left-color: #f6be60;
+}
+.inst-overall.concern {
+  border-left-color: #f0834a;
+}
+.inst-overall.block {
+  border-left-color: var(--bad);
+}
+
+.inst-overall-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.7rem;
+}
+
+.inst-overall-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.inst-overall-note {
+  font-size: 0.74rem;
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.inst-verdict {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+  border: 1px solid var(--border);
+}
+.inst-verdict.clear {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.inst-verdict.conditional {
+  color: #f6be60;
+  border-color: #f6be60;
+}
+.inst-verdict.concern {
+  color: #ff9d5c;
+  border-color: #f0834a;
+}
+.inst-verdict.block {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.inst-tally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.inst-tally-chip {
+  font-size: 0.72rem;
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.inst-tally-chip.clear {
+  color: var(--ok);
+  border-color: rgba(61, 220, 151, 0.5);
+}
+.inst-tally-chip.conditional {
+  color: #f6be60;
+  border-color: rgba(246, 190, 96, 0.5);
+}
+.inst-tally-chip.concern {
+  color: #ff9d5c;
+  border-color: rgba(240, 131, 74, 0.5);
+}
+.inst-tally-chip.block {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.inst-overall-summary {
+  margin: 0.6rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.inst-reviews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.7rem;
+}
+
+.inst-review {
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 10px;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+.inst-review.clear {
+  border-left-color: var(--ok);
+}
+.inst-review.conditional {
+  border-left-color: #f6be60;
+}
+.inst-review.concern {
+  border-left-color: #f0834a;
+}
+.inst-review.block {
+  border-left-color: var(--bad);
+}
+
+.inst-review-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.inst-agent-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.inst-agent {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.inst-mandate {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.inst-review-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.inst-confidence {
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.inst-summary {
+  margin: 0.55rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text);
+  opacity: 0.92;
+  line-height: 1.4;
+}
+
+.inst-findings {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.inst-finding {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.4;
+  padding-left: 0.1rem;
+}
+
+.inst-sev {
+  display: inline-block;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 0.02rem 0.35rem;
+  margin-right: 0.4rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  vertical-align: middle;
+}
+.inst-sev.watch {
+  color: #f6be60;
+  border-color: rgba(246, 190, 96, 0.5);
+}
+.inst-sev.risk {
+  color: #ff9d5c;
+  border-color: rgba(240, 131, 74, 0.5);
+}
+.inst-sev.blocker {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.inst-finding-dim {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.inst-finding-detail {
+  color: var(--muted);
+}
+
+.inst-reco {
+  margin: 0.6rem 0 0;
+  font-size: 0.84rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.inst-reco-label {
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  margin-right: 0.3rem;
+}
+
+.inst-citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.inst-cite {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.73rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.12rem 0.4rem;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.inst-cite-ref {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--accent);
+}
+
+.inst-cite-detail {
+  color: var(--muted);
+}
+
+.inst-note {
+  margin-top: 1rem;
+}

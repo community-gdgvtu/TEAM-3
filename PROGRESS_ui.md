@@ -189,3 +189,20 @@ Dated notes, newest at the bottom. One line per shipped item.
   guardrails hold when it can't load them. Typed `getRegistry` client + registry
   types added to lib/api.ts; wired as a new "Registry" tab (tabbar hint notes it
   runs without a compiled policy). `tsc --noEmit` + `next build` clean.
+- 2026-08-13 — M9.3: Institutional review tab (SPEC §18). New InstitutionsPanel
+  convenes `POST /institutions/review` on the compiled policy and renders the
+  four institutional agents (Climate, Implementation, Legal/Constitutional,
+  Auditor). An overall banner shows the single most-severe verdict (deterministic,
+  not averaged) with a per-verdict tally and the cross-agent synthesis. Each agent
+  card carries its mandate, a colour-coded verdict badge (clear/conditional/
+  concern/block → green/amber/orange/red left border), confidence, a one-line
+  summary, a severity-tagged findings list (info/watch/risk/blocker), a concrete
+  recommendation, and evidence citations that point at the model's metric/event
+  refs — each stamped with its provenance tag. Honesty (SPEC §18/§34): the header
+  and the response tag make clear the review prose is Generated while every cited
+  number is Simulated from the model; no LLM produces a figure. Graceful
+  no-policy/loading/error states; no invented verdicts when the backend is down.
+  Note the endpoint is `/institutions/review` (not `/institutions`). Typed
+  `runInstitutions` client + institution types added to lib/api.ts (reusing the
+  existing EvidenceCitation type); wired as a new "Institutions" tab. **M9 complete.**
+  `tsc --noEmit` + `next build` clean.

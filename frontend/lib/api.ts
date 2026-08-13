@@ -954,6 +954,74 @@ export async function runEnsemble(
 }
 
 // ---------------------------------------------------------------------------
+// Institutional review panel (SPEC §18) — POST /institutions/review
+// ---------------------------------------------------------------------------
+
+/** An institutional agent's professional verdict on one dimension. */
+export type Verdict = "clear" | "conditional" | "concern" | "block";
+
+/** One specific, evidence-anchored observation within a review. */
+export interface InstitutionalFinding {
+  dimension: string;
+  detail: string;
+  /** 'info' | 'watch' | 'risk' | 'blocker'. */
+  severity: string;
+}
+
+/** One institutional agent's structured assessment (SPEC §18). */
+export interface InstitutionalReview {
+  agent: string;
+  mandate: string;
+  spec_ref: string;
+  verdict: Verdict;
+  summary: string;
+  findings: InstitutionalFinding[];
+  recommendation: string;
+  citations: EvidenceCitation[];
+  confidence: number;
+}
+
+export interface InstitutionsResponse {
+  provenance: MetricTag;
+  note: string;
+  policy_id: string;
+  reviews: InstitutionalReview[];
+  overall_verdict: Verdict;
+  verdict_tally: Record<string, number>;
+  summary: string;
+}
+
+/**
+ * Run the institutional review panel for a compiled policy (SPEC §18): Climate,
+ * Implementation, Legal/Constitutional and Auditor agents each assess the policy
+ * against a professional mandate, grounded in the deterministic simulation. The
+ * prose is Generated; every cited number is Simulated. Throws on error.
+ */
+export async function runInstitutions(
+  policy: PolicyDSL,
+  signal?: AbortSignal,
+): Promise<InstitutionsResponse> {
+  const res = await fetch(`${API_BASE_URL}/institutions/review`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as InstitutionsResponse;
+}
+
+// ---------------------------------------------------------------------------
 // Model registry / transparency manifest (SPEC §33) — GET /registry
 // ---------------------------------------------------------------------------
 
