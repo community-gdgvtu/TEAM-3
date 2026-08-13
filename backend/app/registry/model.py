@@ -444,6 +444,35 @@ def _models() -> list[ModelCard]:
             assumptions=[],
         ),
         ModelCard(
+            id="citizen_view",
+            name="Citizen View (single-household drill-down)",
+            spec_sections=["§17", "§31"],
+            layer="Microsimulation Layer (SPEC §7.3) — per-agent projection",
+            method=(
+                "Projects one synthetic household's commute time, monthly transport "
+                "cost and policy support across the Time Machine. World-A and "
+                "World-B states use the same deterministic mode-choice model as "
+                "/simulate; support uses the same per-agent function as /public. The "
+                "household is interpolated between three structural anchors (World A, "
+                "behaviour-only World B, fully-adapted World B) on the same "
+                "behaviour/transit-ramp curves as the aggregate timeline, so its "
+                "worse-before-better arc and far-horizon values match the "
+                "dashboard. Bands widen monotonically with the horizon (SPEC §9)."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["synthetic household record", "policy levers", "staged-adaptation curve"],
+            outputs=[
+                "per-household commute / transport-cost trajectory",
+                "per-household policy support (SPEC §31 Agent State)",
+                "deterministic 'why?' narrative",
+            ],
+            output_tag=sim,
+            code="app.citizen.service",
+            assumptions=[],
+        ),
+        ModelCard(
             id="policy_optimiser",
             name="Policy optimiser (grid search → Pareto set)",
             spec_sections=["§22"],

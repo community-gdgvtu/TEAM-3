@@ -130,6 +130,7 @@ def build_report(text: str) -> dict:
         "/backtest/example",
         "/stress-test/catalogue",
         "/analogues/cases",
+        "/citizen/sample",
     ]
     post_routes: list[tuple[str, dict]] = [
         ("/run", P),
@@ -146,6 +147,7 @@ def build_report(text: str) -> dict:
         ("/institutions/review", P),
         ("/media", P),
         ("/microsim", P),
+        ("/citizen", P),
         ("/parliament/debate", P),
         ("/parliament/failure-modes", P),
         ("/press-conference", P),
@@ -173,6 +175,7 @@ def build_report(text: str) -> dict:
         ("/simulate", P),
         ("/spatial", P),
         ("/microsim", P),
+        ("/citizen", P),
         ("/economy", P),
         ("/dynamics", P),
         ("/sdg", P),

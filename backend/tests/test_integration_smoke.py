@@ -95,6 +95,7 @@ GET_ROUTES = [
     "/assumptions",
     "/backtest/example",
     "/stress-test/catalogue",
+    "/citizen/sample",
 ]
 
 # Endpoints that take the compiled Policy DSL as ``policy`` (plus optional extras).
@@ -114,6 +115,7 @@ POST_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/institutions/review", _P),
     ("/media", _P),
     ("/microsim", _P),
+    ("/citizen", _P),  # §17 Citizen View: follow a single household through the Time Machine
     ("/parliament/debate", _P),
     ("/parliament/failure-modes", _P),
     ("/press-conference", _P),

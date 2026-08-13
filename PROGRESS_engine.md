@@ -952,3 +952,35 @@ no LLM (SPEC §34); pure read of existing endpoints — `demo.py` / `north_star.
   filter + fallback, registry registration.
 - `python -m pytest -q` → **359 passed** (was 350); app boots with **44 routes** (was 43);
   `scripts/audit.py` full-surface §34 audit PASS over all 44 routes.
+
+## 2026-08-13 (engine) — Citizen View: single-household drill-down (SPEC §17 / §31)
+- Roadmap was fully checked (43 milestones + stretch + extended). Found the one
+  genuine remaining SPEC gap: §17 **Citizen View** ("click a household" — the spec
+  gives an exact worked example) and the §31 **Agent State** core data structure had
+  no endpoint. Every layer *aggregates* the population; nothing showed one citizen's
+  before/after life.
+- New `backend/app/citizen/` (`schema.py`, `service.py`, `__init__.py`) + `POST /citizen`
+  (+ `GET /citizen/sample`). **No new numeric model, no LLM** (SPEC §34) — pure reuse:
+  World-A mode/time/cost from `mode_options`, World-B from `policy_mode_options` (the
+  same primitives `/simulate` + `/microsim` use); support from the opinion model's
+  per-agent `_agent_support` (the same function `/public` aggregates).
+- **Staged over the Time Machine** (SPEC §9): the household is interpolated between
+  three structural anchors (World A / behaviour-only World B / fully-adapted World B)
+  on the *same* behaviour + transit-ramp curves as the aggregate timeline — reproduces
+  §17's worse-before-better arc (transit winner: commute 33.6→30.3 min, cost $75→$52.54;
+  low-income CBD driver: cost $22→$272/mo, support −0.67).
+- Output: profile, BEFORE-POLICY World-A snapshot, 8-checkpoint trajectory (T0→10y) with
+  monotone-widening commute/cost bands (guarded), the §31 Agent-State record per
+  checkpoint, and a deterministic "Why?" narrative. Selectors: `agent_id` (404 on miss)
+  or `select` archetype (representative / most_burdened / biggest_loser / biggest_winner /
+  median; 422 on unknown). `GET /citizen/sample` = a policy-independent household picker
+  spanning all five income bands.
+- Consistency guarantees pinned by tests: far-horizon mode == World-B `choose_mode_policy`;
+  far-horizon support == this agent's own `/public` contribution; BEFORE-POLICY == T0 ==
+  World A; a no-op policy leaves the household unchanged.
+- Deterministic (byte-identical), Simulated; registered in the §33 registry (17 layers,
+  `llm_touches_numbers=False`); added to integration-smoke + determinism-regression +
+  `scripts/audit.py` standing guards.
+- New `backend/tests/test_citizen.py` (11 tests). `python -m pytest -q` → **370 passed**
+  (was 359); app boots with **46 routes** (was 44); `scripts/audit.py` full-surface §34
+  audit PASS over all routes.

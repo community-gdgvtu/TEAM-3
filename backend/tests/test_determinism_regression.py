@@ -47,6 +47,7 @@ DETERMINISTIC_ROUTES: list[tuple[str, dict[str, Any]]] = [
     ("/spatial", _P),
     ("/timeseries", _P),
     ("/microsim", _P),
+    ("/citizen", _P),
     ("/economy", _P),
     ("/dynamics", _P),
     ("/sdg", _P),
