@@ -862,3 +862,29 @@ assumption/guardrail ledger.
 - Mirrors `/run`'s NL-compile-or-precompiled input + 422 validator. Pure additive composition — no
   existing `backend/app/**` layer changed.
 - `python -m pytest -q` → **340 passed** (was 328); app boots with **43 routes** (was 42).
+
+---
+
+## 2026-08-13 — ENGINE-track: North-Star runner CLI (`scripts/north_star.py`)
+
+Follow-on to the §37 endpoint: a one-command terminal renderer for the **North-Star answer** —
+the SPEC's literal closing experience ("That is URBAN."). Complements `scripts/demo.py` (which
+renders the §29 pipeline) by showing the ministerial *answer* a judge reads top-to-bottom.
+
+- New `scripts/north_star.py` (own track, `scripts/**`): drives `POST /north-star` **in-process**
+  via `TestClient` (no server/ports) and prints the question, policy id + horizon, the **fixed
+  15-line §37 narrative** (each line = the §37 question + its deterministic one-sentence `lead` +
+  provenance tag), a compact **backing-figures** block (median-outcome dashboard A→B/%, the
+  risk-reducing amendments + the risk each targets, the optimiser best-balanced pick), and a live
+  **§34 guardrail audit**: all 15 sections present + ordered; every section provenance-tagged;
+  every media headline labelled SIMULATED; `llm_touches_numbers=False`; the 95% uncertainty fan
+  non-decreasing **and** strictly wider at the far horizon than at T0. Returns a **non-zero exit
+  code** on any guardrail failure, so it's a real smoke gate. Flags: `--json`, `--text`,
+  `--horizon`. ANSI colour auto-disables when stdout isn't a TTY; progress goes to stderr so
+  `--json` stays pipeable.
+- **Separate file — `demo.py` untouched** (its existing guards stay intact). No new numeric model,
+  no LLM — pure read of the `/north-star` endpoint (SPEC §34).
+- Guarded by `backend/tests/test_north_star_script.py` (5 tests: script present, runs + audit
+  passes with all 15 lines rendered, `--json` is a valid `/north-star` payload with 15 sections,
+  guardrails hold at horizons 12 & 60).
+- `python -m pytest -q` → **345 passed** (was 340); app still boots with **43 routes**.
