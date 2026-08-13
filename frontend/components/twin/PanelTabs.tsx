@@ -17,9 +17,16 @@ import PublicReactionPanel from "./PublicReactionPanel";
 import PressFeedPanel from "./PressFeedPanel";
 import FailureModesPanel from "./FailureModesPanel";
 import SdgPanel from "./SdgPanel";
+import DiffusionPanel from "./DiffusionPanel";
 import { useTwin } from "./TwinStore";
 
-type TabKey = "parliament" | "public" | "press" | "redteam" | "sdg";
+type TabKey =
+  | "parliament"
+  | "public"
+  | "press"
+  | "redteam"
+  | "sdg"
+  | "diffusion";
 
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "parliament", label: "Parliament" },
@@ -27,6 +34,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "press", label: "Press" },
   { key: "redteam", label: "Red Team" },
   { key: "sdg", label: "SDG" },
+  { key: "diffusion", label: "Diffusion" },
 ];
 
 export default function PanelTabs() {
@@ -68,6 +76,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "sdg"}>
           <SdgPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "diffusion"}>
+          <DiffusionPanel />
         </div>
       </div>
     </div>

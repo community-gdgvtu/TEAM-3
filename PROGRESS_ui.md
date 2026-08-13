@@ -128,3 +128,17 @@ Dated notes, newest at the bottom. One line per shipped item.
   no-policy/loading/error states, no invented alignment when the backend is down
   (SPEC §34). Typed `runSdg` client + SDG types added to lib/api.ts. `tsc --noEmit`
   + `next build` clean.
+- 2026-08-13 — M8.2: Opinion-diffusion tab (SPEC §14). New DiffusionPanel convenes
+  `POST /diffusion` and visualises the Friedkin–Johnsen run: a multi-line SVG
+  chart of every actor's opinion trajectory over the information rounds on the
+  full bipolar [-1,+1] scale, with a solid zero midline, ±1 gridlines, citizen
+  cohorts drawn heavier than institutional actors, and information-shock markers.
+  Trajectories are coloured on the dataviz diverging polarity ramp by final
+  stance (green support / red oppose / slate contested) with a legend + hover
+  titles so colour is never the only channel. Adds a citizen net-support swing
+  (round 0 → final), the dominant narrative, salience + polarisation mini-lines,
+  and a ranked coalition list (stance, citizen share bar, mean opinion, members).
+  Honesty (SPEC §14/§34): the header states rounds are information steps, NOT the
+  Time-Machine horizon; everything tagged Simulated; graceful
+  no-policy/loading/error states. Typed `runDiffusion` client + diffusion types
+  added to lib/api.ts. `tsc --noEmit` + `next build` clean.
