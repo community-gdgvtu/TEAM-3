@@ -56,6 +56,11 @@ setup_backend() {
     log "generating synthetic city dataset"
     "$py" "$ROOT/data/generate_city.py"
   fi
+  # Generate the synthetic commuter population if it's missing (SPEC §6).
+  if [ ! -f "$ROOT/data/city/population.json" ]; then
+    log "generating synthetic population"
+    "$py" "$ROOT/data/generate_population.py"
+  fi
   ok "backend ready"
 }
 

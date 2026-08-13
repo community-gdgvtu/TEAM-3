@@ -18,7 +18,7 @@ Demo policy: *Pedestrianise / price vehicles entering a central district and rei
 - [x] Frontend policy input box + editable extracted-assumptions panel
 
 ## M2 — Baseline digital twin + synthetic population
-- [ ] Generate ≥5k numerical micro-agents (origin/dest, income, car access, price sensitivity) — SPEC §6
+- [x] Generate ≥5k numerical micro-agents (origin/dest, income, car access, price sensitivity) — SPEC §6
 - [ ] Baseline (World A) metrics: traffic, mode share, emissions proxy, transit demand
 - [ ] `GET /baseline` returns baseline metric time series
 
