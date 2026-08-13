@@ -3407,3 +3407,131 @@ export async function runCitizen(
   }
   return (await res.json()) as CitizenView;
 }
+
+// --------------------------------------------------------------------------- #
+// Business View — follow a single firm (SPEC §17 Business View)
+// --------------------------------------------------------------------------- #
+
+/** The static profile of one synthetic firm (SPEC §17). */
+export interface FirmProfile {
+  firm_id: string;
+  sector: string;
+  building_kind: string;
+  zone_id: string;
+  in_central_district: boolean;
+  floors: number;
+  floor_area_sqm: number;
+  estimated_jobs: number;
+  provenance: string;
+}
+
+/** This firm's operating picture at one Time-Machine checkpoint (SPEC §17). */
+export interface FirmSnapshot {
+  label: string;
+  t_months: number;
+  daily_footfall: number;
+  daily_footfall_low: number;
+  daily_footfall_high: number;
+  labour_accessibility_index: number;
+  daily_deliveries: number;
+  annual_cost_added: number;
+  annual_cost_added_low: number;
+  annual_cost_added_high: number;
+  revenue_proxy_annual: number;
+  revenue_proxy_annual_low: number;
+  revenue_proxy_annual_high: number;
+  net_revenue_proxy_change_pct: number;
+}
+
+/** Full Business View for one firm under a policy (SPEC §17 Business View). */
+export interface BusinessView {
+  policy_id: string;
+  selector: string;
+  profile: FirmProfile;
+  before_policy: FirmSnapshot;
+  trajectory: FirmSnapshot[];
+  adaptation_decisions: string[];
+  headline: string;
+  explanation: string[];
+  provenance: string;
+  not_modelled: string[];
+  params: Record<string, unknown>;
+}
+
+/** A lightweight, policy-independent firm card for a UI picker (SPEC §17). */
+export interface FirmSample {
+  firm_id: string;
+  label: string;
+  sector: string;
+  zone_id: string;
+  in_central_district: boolean;
+  estimated_jobs: number;
+  provenance: string;
+}
+
+/** The archetype selectors `POST /business` accepts when no `firm_id` is given. */
+export const BUSINESS_SELECTORS = [
+  "representative",
+  "most_exposed",
+  "biggest_footfall_loss",
+  "pedestrian_winner",
+  "largest",
+] as const;
+export type BusinessSelector = (typeof BUSINESS_SELECTORS)[number];
+
+/**
+ * A diverse, policy-independent set of firms for a "click a firm" picker
+ * (`GET /business/sample`, SPEC §17). Throws on network/HTTP error so the panel
+ * can show an honest waiting/error state.
+ */
+export async function getBusinessSample(
+  limit = 6,
+  signal?: AbortSignal,
+): Promise<FirmSample[]> {
+  const res = await fetch(`${API_BASE_URL}/business/sample?limit=${limit}`, {
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as FirmSample[];
+}
+
+/**
+ * Follow one firm through the Time Machine under a compiled policy
+ * (`POST /business`, SPEC §17 Business View). Either an explicit `firmId` or a
+ * `select` archetype is used. Labour accessibility reuses the same deterministic
+ * mode-choice model as `/simulate`; footfall / deliveries / cost / revenue reuse
+ * the same economic coefficients as `/economy` — no LLM on the numeric path
+ * (SPEC §34). Throws on network/HTTP error so the panel can show an honest
+ * waiting/error state.
+ */
+export async function runBusiness(
+  policy: PolicyDSL,
+  opts: { firmId?: string | null; select?: BusinessSelector } = {},
+  signal?: AbortSignal,
+): Promise<BusinessView> {
+  const res = await fetch(`${API_BASE_URL}/business`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      policy,
+      ...(opts.firmId ? { firm_id: opts.firmId } : {}),
+      select: opts.select ?? "representative",
+    }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Backend returned HTTP ${res.status}`;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {
+      // Non-JSON error body; keep the generic message.
+    }
+    throw new Error(detail);
+  }
+  return (await res.json()) as BusinessView;
+}

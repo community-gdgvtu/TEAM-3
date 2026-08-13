@@ -965,3 +965,21 @@ Frontend-only.
   no LLM); honest idle/loading/error + picker-unavailable fallback. Added `.cit-*` CSS.
   Green: `npx tsc --noEmit` clean, `npx next build` compiled (4/4 static, / = 65.8 kB,
   First Load 153 kB). Frontend-only.
+
+- 2026-08-13 — M33: Business View single-firm drill-down tab (SPEC §17 Business View).
+  Surfaced the engine's new `POST /business` (+ `GET /business/sample`) — the one endpoint
+  the UI hadn't surfaced after M32. New `BusinessPanel.tsx` mirrors the Citizen drill-down:
+  archetype selectors (representative / most-exposed / biggest-footfall-loss /
+  pedestrian-winner / largest) + a policy-independent "click a firm" picker; then per-firm
+  profile card, before→after topline tiles (daily footfall, labour-access index, deliveries,
+  added annual cost with band, net revenue-proxy Δ%), the Time-Machine trajectory table
+  (World-A row + widening footfall/cost/revenue bands), deterministic adaptation-decision
+  cards, "Why?" narrative, and collapsible not_modelled scope-limits. Honesty (SPEC §34):
+  physical drivers Simulated (same mode-choice model as /simulate), firm translation Estimated
+  (same /economy coefficients), revenue explicitly an Estimated proxy (before/after ratio, not
+  turnover), no LLM on the numeric path; honest idle/loading/error + picker-unavailable
+  fallback. Added `lib/api.ts` types+fns (FirmProfile/FirmSnapshot/BusinessView/FirmSample,
+  BUSINESS_SELECTORS, getBusinessSample, runBusiness), wired the tab into PanelTabs after
+  Citizen, added a small `.biz-*` CSS block (reuses `.cit-*` for shared structure).
+  Green: `npx tsc --noEmit` clean, `npx next build` compiled (4/4 static, / = 67.5 kB,
+  First Load 155 kB). Frontend-only; 29 analysis tabs now surface all 39 documented endpoints.

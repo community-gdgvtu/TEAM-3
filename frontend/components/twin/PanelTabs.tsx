@@ -17,6 +17,7 @@ import NorthStarPanel from "./NorthStarPanel";
 import RunPanel from "./RunPanel";
 import WorldPanel from "./WorldPanel";
 import CitizenPanel from "./CitizenPanel";
+import BusinessPanel from "./BusinessPanel";
 import ParliamentPanel from "./ParliamentPanel";
 import PublicReactionPanel from "./PublicReactionPanel";
 import PressFeedPanel from "./PressFeedPanel";
@@ -50,6 +51,7 @@ type TabKey =
   | "run"
   | "world"
   | "citizen"
+  | "business"
   | "parliament"
   | "public"
   | "press"
@@ -82,6 +84,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "run", label: "Run" },
   { key: "world", label: "World" },
   { key: "citizen", label: "Citizen" },
+  { key: "business", label: "Business" },
   { key: "parliament", label: "Parliament" },
   { key: "public", label: "Public" },
   { key: "press", label: "Press" },
@@ -151,6 +154,9 @@ export default function PanelTabs() {
         </div>
         <div role="tabpanel" hidden={active !== "citizen"}>
           <CitizenPanel />
+        </div>
+        <div role="tabpanel" hidden={active !== "business"}>
+          <BusinessPanel />
         </div>
         <div role="tabpanel" hidden={active !== "parliament"}>
           <ParliamentPanel />

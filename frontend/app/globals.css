@@ -9956,3 +9956,27 @@ td.neutral {
 .cit-note {
   margin-top: 0.2rem;
 }
+
+/* Business View — reuses the .cit-* drill-down styles, plus a couple of extras. */
+.biz-tiles {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.biz-adapt {
+  list-style: none;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.biz-adapt-card {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  background: color-mix(in srgb, var(--panel) 70%, var(--bg));
+}

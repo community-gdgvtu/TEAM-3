@@ -256,3 +256,19 @@ household is Simulated (synthetic micro-agent, SPEC §6 — never a real person)
 LLM on the numeric path, bands widen with the horizon, honest scope-limits,
 never fabricate a life when the backend is down.
 - [x] Citizen tab: `GET /citizen/sample` → a policy-independent "click a household" picker spanning the income spectrum, plus five archetype selectors (representative / most-burdened / biggest-loser / biggest-winner / median). `POST /citizen` → that household's staged Time-Machine trajectory: a consistency banner (same deterministic mode-choice model as `/simulate`, same per-agent opinion model as `/public`, no LLM), the household profile card (occupation / income band / age / household size / home+work zone / commute distance→CBD / car+transit access, all Simulated-tagged), a before→after topline (commute one-way, monthly transport cost, SPEC §31 policy support gauge with stance colouring), the Time-Machine table (World-A reference row + each checkpoint's mode, commute+cost with widening bands, monthly charge, support), the deterministic "Why?" narrative, a collapsible SPEC §31 Agent-State record table, and the collapsible `not_modelled` scope-limits. Everything Simulated (deterministic per-agent generalized-cost + cohort opinion model, SPEC §7.3/§13); no LLM on the numeric path; `idle` (no policy) / `loading` / `error` states + a graceful picker-unavailable fallback when the backend is down, never mints a fabricated household (SPEC §17/§31/§34)
+
+## M33 — Surface the Business View single-firm drill-down (SPEC §17 Business View)
+The engine shipped `POST /business` (+ `GET /business/sample`) after M32 declared
+the roadmap complete — the one endpoint the UI hadn't surfaced. Where the Citizen
+View follows one household, this follows one firm: the SPEC §17 "click a firm"
+Business View. It introduces **no new numeric model** — labour accessibility
+reuses the same deterministic mode-choice model as `/simulate` (the commute
+generalized cost of the firm's own workers), and footfall / deliveries / cost /
+revenue reuse the same economic coefficients as `/economy`, staged on the same
+adaptation curve as the aggregate Time Machine — so a firm's numbers can never
+disagree with the dashboard beside it. Same rules: the firm is Simulated
+(synthetic micro-agent, SPEC §6 — never a real business), the revenue figure is
+an Estimated proxy (before/after ratio only, never turnover), no LLM on the
+numeric path, bands widen with the horizon, honest scope-limits, never fabricate
+a firm when the backend is down.
+- [x] Business tab: `GET /business/sample` → a policy-independent "click a firm" picker spanning sectors + the central/outer split, plus five archetype selectors (representative / most-exposed / biggest-footfall-loss / pedestrian-winner / largest). `POST /business` → that firm's staged Time-Machine trajectory: a consistency banner (same deterministic mode-choice model as `/simulate`, same `/economy` coefficients, same adaptation curve as the Time Machine, no LLM, revenue = Estimated proxy), the firm profile card (sector / building kind / zone / central-district / floors / floor area / estimated jobs, all Simulated-tagged), a before→after topline (daily footfall, labour-access index, deliveries, added annual cost with band, net revenue-proxy Δ%), the Time-Machine table (World-A reference row + each checkpoint's footfall+cost+revenue with widening bands, labour access, deliveries, added cost, net rev Δ%), the deterministic adaptation-decision cards, the deterministic "Why?" narrative, and the collapsible `not_modelled` scope-limits. Physical drivers Simulated (SPEC §7.3/§7.5), firm translation Estimated (SPEC §7.4/§8); no LLM on the numeric path; `idle` (no policy) / `loading` / `error` states + a graceful picker-unavailable fallback when the backend is down, never mints a fabricated firm (SPEC §17/§34)
