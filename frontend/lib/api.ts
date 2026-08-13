@@ -1523,6 +1523,50 @@ export function applyAmendment(policy: PolicyDSL, a: Amendment): PolicyDSL {
   return amended as PolicyDSL;
 }
 
+/**
+ * Server-authoritative amendment comparison — `POST /simulate/amend` (SPEC §12).
+ * Where `applyAmendment` + `simulate` re-runs the amended World B to drive the
+ * shared map/dashboard, this endpoint re-simulates BOTH the original and amended
+ * policies over the same baseline and returns the isolated **Δ(amended − original)**
+ * — the amendment's own marginal effect, which the World-B snapshot alone can't
+ * show. Both worlds and the delta are Simulated; no LLM touches any number (§34).
+ */
+export interface AmendmentComparison {
+  original_policy_id: string;
+  amended_policy_id: string;
+  amendment: Amendment;
+  changes: string[];
+  original_world_b: Record<string, unknown>;
+  amended_world_b: Record<string, unknown>;
+  original_vs_baseline: DeltaTimeSeries;
+  amended_vs_baseline: DeltaTimeSeries;
+  /** Δ(amended − original): the effect of the amendment itself. */
+  amendment_delta: DeltaTimeSeries;
+}
+
+/**
+ * Ask the backend for the isolated effect of a structured amendment vs the
+ * original policy (`POST /simulate/amend`). Throws on network/HTTP error so the
+ * panel can show an honest waiting/error state instead of inventing a figure (§34).
+ */
+export async function amendPolicy(
+  policy: PolicyDSL,
+  amendment: Amendment,
+  signal?: AbortSignal,
+): Promise<AmendmentComparison> {
+  const res = await fetch(`${API_BASE_URL}/simulate/amend`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ policy, amendment }),
+    signal,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend returned HTTP ${res.status}`);
+  }
+  return (await res.json()) as AmendmentComparison;
+}
+
 // ---------------------------------------------------------------------------
 // Economic spillover (SPEC §7.4) — POST /economy
 // ---------------------------------------------------------------------------

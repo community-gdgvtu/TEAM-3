@@ -73,6 +73,7 @@ Every documented backend endpoint has a UI surface. All fetches are typed in `li
 | Outcomes dashboard tiles | (from `/simulate` + `/baseline`) | §27 |
 | Evidence drawer | `POST /evidence` | §26 |
 | Parliament debate + amendment | `POST /parliament/debate` | §11 |
+| Amendment effect Δ(amended − original) | `POST /simulate/amend` | §12 |
 | Red Team (Failure Mode Register) | (from `/parliament/debate`) | §11 |
 | Public reaction | `POST /public` | §13 |
 | Simulated press feed | `POST /media` | §15 |

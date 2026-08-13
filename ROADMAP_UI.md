@@ -85,3 +85,11 @@ The engine track shipped `POST /dynamics` — the stocks-and-flows loop SPEC §1
 "central to the concept" — after M14 declared the roadmap complete. Same rules: every
 number tagged, uncertainty visible, never invent one when the backend is down.
 - [x] Dynamics tab: `POST /dynamics` → the recursive feedback loop (charge → mode shift → revenue → transit capacity, and negative support → endogenous amendment → weaker charge → renewed crowding). Render the instantiated §19 cascade, the coupled monthly stock trajectories over 10y (demand vs capacity, crowding, charge, support) as banded SVG charts whose band widens with falling confidence, the closed-loop (political response ON) vs open-loop (OFF) end-state contrast with a toggle, the second-order feedback events with their causal chains, final-state tiles, the `not_modelled` list, and collapsible Simulated structural anchors + Estimated dynamics assumptions. Trajectory deterministic/LLM-free → Simulated; couplings Estimated — both provenance classes surfaced; `waiting`/`idle`/`error` states when the backend is down (SPEC §7.6/§19/§34)
+
+## M16 — Surface the isolated amendment effect (SPEC §12)
+The engine exposes a dedicated `POST /simulate/amend` that re-simulates the original
+AND amended policies over the same baseline and returns the isolated **Δ(amended −
+original)** — the amendment's own marginal effect. The Parliament amendment loop only
+drove the map with the amended World B (`/simulate`), so the chamber never saw what the
+amendment *itself* changed. Same rules: every number tagged, band visible, never invent.
+- [x] Parliament amendment loop: on "Apply + re-simulate", also call `POST /simulate/amend` and render an "Amendment effect vs original policy" table — the concrete structured `changes` + the isolated `amendment_delta` per metric at the final checkpoint (signed Δ, %, and low…high band), a near-zero row shown as "≈ 0 (no change)". Distinct from the dashboard (amended-vs-baseline): here the "before" is the *original policy*. Deterministic/LLM-free → Simulated; runs alongside the existing map-driving `/simulate` call; honest error state when the backend is down (SPEC §12/§34)

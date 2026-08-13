@@ -1070,6 +1070,120 @@ ul.assumptions {
   font-size: 0.82rem;
 }
 
+/* --- Amendment effect vs original: Δ(amended − original) (SPEC §12) ----- */
+.amd-effect {
+  margin-top: 0.9rem;
+  padding: 0.85rem 0.95rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+}
+
+.amd-effect-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.amd-effect-head h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.amd-changes {
+  list-style: none;
+  margin: 0.5rem 0 0.7rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.amd-changes li {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+.amd-table {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.amd-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1.4fr 1.2fr;
+  gap: 0.5rem;
+  align-items: center;
+  background: var(--panel);
+  padding: 0.5rem 0.7rem;
+}
+
+.amd-row-head {
+  background: var(--bg);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.amd-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.amd-metric-label {
+  font-size: 0.86rem;
+}
+
+.amd-metric-unit {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.amd-num {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.86rem;
+  text-align: right;
+}
+
+.amd-num.up {
+  color: var(--ok);
+}
+
+.amd-num.down {
+  color: var(--bad);
+}
+
+.amd-flat {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.amd-arrow {
+  font-size: 0.72rem;
+}
+
+.amd-band {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.76rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.amd-note {
+  margin-top: 0.5rem;
+}
+
 /* --- Failure Mode Register (Red Team, SPEC §12) ------------------------- */
 .redteam-body {
   margin-top: 0.4rem;

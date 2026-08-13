@@ -369,3 +369,25 @@ Dated notes, newest at the bottom. One line per shipped item.
   CSS reusing the theme tokens + existing `.tag.*` chips. Updated `frontend/README.md` endpoint
   map (now 20 surfaces). `tsc --noEmit` clean, `next lint` clean (0 warnings), `next build` clean
   (4/4 static pages). **M15 complete — every documented backend endpoint incl. /dynamics is surfaced.**
+
+- 2026-08-13 — **M16: Amendment effect surface — POST /simulate/amend (SPEC §12).**
+  The engine exposes a dedicated `POST /simulate/amend` that re-simulates BOTH the
+  original and amended policies over the same baseline and returns the isolated
+  **Δ(amended − original)** — the amendment's own marginal effect. Until now the
+  Parliament amendment loop only re-ran the amended World B through `/simulate` to drive
+  the shared map/dashboard, so the chamber saw the amended-vs-baseline outcome but never
+  what the amendment *itself* changed. This run surfaces it. Added `AmendmentComparison`
+  type + `amendPolicy()` client in `lib/api.ts`, and extended `ParliamentPanel`'s
+  "Apply + re-simulate" handler to fire `/simulate` (map drive) and `/simulate/amend`
+  (isolated effect) together via `Promise.all` — both share the deterministic model so
+  they stay consistent. New `AmendmentEffect` component renders the concrete structured
+  `changes` as chips + an "Amendment effect vs original policy" table: per-metric signed
+  Δ + % and the low…high band at the final checkpoint, with a near-zero row shown as
+  "≈ 0 (no change)" so a barely-moving metric reads honestly rather than as noise. Clearly
+  framed as distinct from the dashboard above (there the "before" is the baseline; here
+  it's the *original policy*). Deterministic/LLM-free → stamped Simulated; honest error
+  state when the backend is down (never invents a delta). Added ~120 lines of scoped
+  `.amd-*` CSS reusing the theme tokens + existing `.tag.*` chips. Updated
+  `frontend/README.md` endpoint map (now 21 surfaces incl. /simulate/amend). `tsc
+  --noEmit` clean, `next lint` clean (0 warnings), `next build` clean (4/4 static pages).
+  **M16 complete — the dedicated amendment-comparison endpoint is now surfaced.**
