@@ -11,6 +11,7 @@ from __future__ import annotations
 from ..baseline.params import DEFAULT_PARAMS
 from ..baseline.schema import MetricTag
 from ..config import settings
+from ..economy.params import DEFAULT_ECON_PARAMS
 from ..opinion.params import OpinionParams
 from ..simulation.levers import DEFAULT_SIM_PARAMS
 from ..simulation.timeline import DEFAULT_ADAPTATION
@@ -103,6 +104,33 @@ def _opinion_assumptions() -> list[AssumptionRecord]:
              "Income-band prior toward/against pricing interventions", est),
         _rec("opinion_sigma", "Opinion dispersion σ", o.opinion_sigma, "opinion units",
              "Spread mapping latent support → 6-bucket Likert distribution", est),
+    ]
+
+
+def _economy_assumptions() -> list[AssumptionRecord]:
+    e = DEFAULT_ECON_PARAMS
+    est = MetricTag.estimated
+    return [
+        _rec("local_consumption_mpc", "Local MPC out of withdrawn charge",
+             e.local_consumption_mpc, "share",
+             "Fraction of charged household spend that was local (leaves demand pre-recycling)", est),
+        _rec("fiscal_multiplier", "Local fiscal multiplier on recycled revenue",
+             e.fiscal_multiplier, "×", "Local expenditure multiplier on re-spent public revenue", est),
+        _rec("revenue_local_share", "Local share of recycled revenue", e.revenue_local_share,
+             "share", "Fraction of recycled revenue re-spent inside the local economy", est),
+        _rec("pedestrianisation_retail_uplift", "Pedestrianisation retail-amenity uplift",
+             e.pedestrianisation_retail_uplift, "relative",
+             "CBD retail turnover uplift from pedestrianisation (literature, not agent-derived)", est),
+        _rec("cbd_retail_spend_per_commuter_year", "CBD retail spend per commuter/yr",
+             e.cbd_retail_spend_per_commuter_year, "currency/yr",
+             "Scales commuter volume to central discretionary spend", est),
+        _rec("cbd_trip_avoidance_fraction", "Deterred-trip avoidance fraction",
+             e.cbd_trip_avoidance_fraction, "share",
+             "Share of deterred CBD car trips foregone entirely vs mode-switched", est),
+        _rec("freight_entry_share", "Freight share of cordon entries", e.freight_entry_share,
+             "share", "Documented ratio — freight is not in the synthetic population", est),
+        _rec("freight_cost_pass_through", "Freight cost pass-through", e.freight_cost_pass_through,
+             "share", "Share of the freight charge passed to CBD business/customers", est),
     ]
 
 
@@ -230,6 +258,30 @@ def _models() -> list[ModelCard]:
             assumptions=[],
         ),
         ModelCard(
+            id="economic_spillover",
+            name="Economic spillover layer (input-output / elasticities)",
+            spec_sections=["§7.4"],
+            layer="Economic Spillover Layer (SPEC §7.4)",
+            method=(
+                "Translates the deterministic mode-choice sim's Simulated physical "
+                "outputs (cordon revenue, Δ CBD car commuters, Σ Δ commuter travel-"
+                "minutes, freight-entry proxy) into local-economy channels via "
+                "transparent input-output relationships and elasticities: charge "
+                "transfer, revenue recycling (fiscal multiplier), CBD footfall, "
+                "business logistics and commuter travel cost → a net partial-"
+                "equilibrium estimate with a band. Physical drivers Simulated, the "
+                "monetary translation Estimated."
+            ),
+            determinism="deterministic",
+            produces_numbers=True,
+            llm_role="none",
+            inputs=["World A / World B mode-choice outputs", "economic coefficients"],
+            outputs=["economic channels", "sector exposure", "net annual estimate + band"],
+            output_tag=est,
+            code="app.economy.model",
+            assumptions=_economy_assumptions(),
+        ),
+        ModelCard(
             id="policy_optimiser",
             name="Policy optimiser (grid search → Pareto set)",
             spec_sections=["§22"],
@@ -338,9 +390,9 @@ def _guardrails() -> list[GuardrailCheck]:
             rule="LLMs never generate core numeric simulation effects.",
             enforced_by=(
                 "All numeric models (baseline, world_b, timeline, uncertainty, "
-                "opinion, diffusion, optimiser) are pure deterministic/seeded code; "
-                "LLM use is confined to prose (parliament, media) and language "
-                "structuring (policy compiler)."
+                "opinion, diffusion, economic spillover, optimiser) are pure "
+                "deterministic/seeded code; LLM use is confined to prose "
+                "(parliament, media) and language structuring (policy compiler)."
             ),
             holds=True,
         ),

@@ -255,3 +255,11 @@ Dated log of backend/simulation/data work. Newest at the bottom.
   fully deterministic, no LLM in the numeric path (SPEC §7.4/§34). 8 tests; **185 green**, app
   boots with **27 routes**. Follow-up: register the new layer in the §33 model registry so the
   transparency manifest stays complete.
+- 2026-08-13 09:46 UTC — Registered the economic spillover layer in the §33 model registry
+  (`backend/app/registry/model.py`): new `economic_spillover` ModelCard (SPEC §7.4, output_tag
+  Estimated, produces_numbers=True, llm_role none) with its coefficients read **live** from
+  `EconParams` via a new `_economy_assumptions()` helper, plus the `no_llm_numbers` guardrail's
+  enforced-by list updated to name the economy layer. Keeps the transparency manifest complete
+  and drift-free — the registry now catalogues all 10 forecast layers (8 numeric, 0 touching
+  numbers with an LLM). 185 green (5 registry tests unchanged — counts derive from the live
+  model list, not hardcoded).
