@@ -51,18 +51,23 @@ def policy_mode_options(
     * under pedestrianisation the car option is removed for CBD-bound commuters;
     * transit fare and effective speed are scaled by the reinvestment multipliers.
 
-    Walking is untouched. As in the baseline, every agent has car *or* transit
-    access, and a car ban only applies to CBD-bound trips, so a feasible mode
-    always remains.
+    Walking/cycling is improved only when revenue is reinvested in active travel:
+    the ``active_travel_speed_multiplier`` scales both the effective active-travel
+    speed and the maximum walkable/cyclable distance, so segregated infrastructure
+    both speeds up the trips already made on foot/bike and brings slightly longer
+    commutes into active-travel range. It defaults to 1.0 (walking untouched). As in
+    the baseline, every agent has car *or* transit access, and a car ban only applies
+    to CBD-bound trips, so a feasible mode always remains.
     """
     dist = agent["commute_distance_km"]
     price_sens = agent["price_sensitivity"]
     into_cbd = agent["commutes_into_cbd"]
+    at_mult = levers.active_travel_speed_multiplier
 
     options: dict[str, float] = {}
 
-    if dist <= params.walk_max_km:
-        options[WALK] = _one_way_minutes(dist, params.walk_speed_kmh, 0.0)
+    if dist <= params.walk_max_km * at_mult:
+        options[WALK] = _one_way_minutes(dist, params.walk_speed_kmh * at_mult, 0.0)
 
     car_available = agent["car_access"] and not (into_cbd and levers.car_banned_in_cbd)
     if car_available:
@@ -87,7 +92,8 @@ def policy_mode_options(
         # pedestrianised core. Rather than strand them, they drive to the cordon
         # edge and complete the trip on foot — counted as walk (they no longer
         # enter the CBD by car). This only fires under the pedestrianisation ban.
-        options[WALK] = _one_way_minutes(dist, params.walk_speed_kmh, 0.0)
+        # Active-travel infrastructure (if funded) speeds up this leg too.
+        options[WALK] = _one_way_minutes(dist, params.walk_speed_kmh * at_mult, 0.0)
 
     return options
 
@@ -130,10 +136,16 @@ def compute_world_b(
         # service-quality levers are neutral and their audit rule is dropped.
         levers.transit_fare_multiplier = 1.0
         levers.transit_speed_multiplier = 1.0
+        levers.active_travel_speed_multiplier = 1.0
         levers.rules = [
             r
             for r in levers.rules
-            if r.name not in ("transit_reinvestment", "transit_investment")
+            if r.name
+            not in (
+                "transit_reinvestment",
+                "transit_investment",
+                "active_travel_reinvestment",
+            )
         ]
     trips = params.trips_per_commuter_per_day
 

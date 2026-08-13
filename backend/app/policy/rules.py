@@ -181,6 +181,21 @@ def _find_revenue_allocation(text: str) -> tuple[RevenueAllocation, bool]:
             ),
             True,
         )
+    # "spend 40% ... on cycling/walking/active travel"
+    m = re.search(
+        r"(\d+(?:\.\d+)?)\s?%[^.]*?"
+        r"(cycl|bike|walking|footpath|foot path|pavement|active[- ]travel)",
+        t,
+    )
+    if m:
+        frac = min(max(float(m.group(1)) / 100.0, 0.0), 1.0)
+        return (
+            RevenueAllocation(
+                active_travel=round(frac, 4),
+                general_fund=round(1.0 - frac, 4),
+            ),
+            True,
+        )
     return RevenueAllocation(public_transport=0.0, general_fund=1.0), False
 
 

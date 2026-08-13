@@ -81,6 +81,19 @@ class SimParams:
     reinvest_max_fare_cut: float = 0.30
     #: Max transit effective-speed uplift at 100% revenue reinvestment (relative).
     reinvest_max_speed_gain: float = 0.15
+    #: Max active-travel improvement at 100% of revenue allocated to walking/cycling
+    #: (relative). Protected cycle lanes, wider pavements and secure cycle parking
+    #: make the active-travel option both faster/more pleasant *and* viable over a
+    #: wider radius, so this single multiplier scales BOTH the effective active-travel
+    #: speed and the maximum walkable/cyclable distance in World B. Like the transit
+    #: reinvestment caps it is an explicit Estimated assumption — NOT derived from the
+    #: £ amount (the model has no cost→infrastructure function, so a £→service
+    #: elasticity would be false precision, SPEC §34) — and it lands over the horizon
+    #: like any capacity build (neutral in the short-run anchor, present in the
+    #: long-run one), so an active-travel package ramps in rather than switching on at
+    #: T0. Default 0.20 sits just above the transit speed-gain cap because a marginal
+    #: short trip is the easiest mode-shift to buy with segregated infrastructure.
+    active_travel_max_speed_gain: float = 0.20
     #: Low-emission-zone: share of the CBD-bound car fleet that is non-compliant
     #: at introduction — only these vehicles face the LEZ charge (Estimated).
     lez_noncompliant_share: float = 0.25
@@ -135,6 +148,11 @@ class PolicyLevers:
     transit_fare_multiplier: float = 1.0
     #: Multiplier applied to transit effective speed (>= 1 means faster).
     transit_speed_multiplier: float = 1.0
+    #: Multiplier applied to the active-travel (walk/cycle) effective speed AND to the
+    #: maximum walkable/cyclable commute distance (>= 1 means better active-travel
+    #: infrastructure). Only revenue allocated to active travel moves this off 1.0, so
+    #: every existing policy leaves walking untouched and existing numbers unchanged.
+    active_travel_speed_multiplier: float = 1.0
     #: Multiplier applied to World B's car CO₂-per-km factor (<= 1 means a cleaner
     #: fleet). Only a low-emission zone moves this off 1.0 — every other policy
     #: cuts emissions purely by cutting vehicle-km, so World A and World B share
@@ -479,6 +497,44 @@ def derive_levers(
                 source=(
                     "revenue_allocation.public_transport × sim reinvestment "
                     "service-gain assumptions"
+                ),
+            )
+        )
+
+    # --- 3b. Active-travel reinvestment (revenue → walking & cycling) -------
+    # Revenue allocated to active travel (protected cycle lanes, wider pavements,
+    # secure cycle parking) buys a better walk/cycle option. Previously this share
+    # was parsed into the DSL and normalised by the compiler but never touched a
+    # number — a policy that spent all its charge revenue on cycle infrastructure
+    # produced byte-identical traffic/emissions to spending nothing (SPEC §34
+    # honesty gap). Now it raises the active-travel speed AND the viable
+    # walk/cycle distance by one explicit multiplier, pulling the nearest-margin
+    # car/transit commuters onto foot/bike. Like transit reinvestment it only
+    # engages when the charge/ban actually raises revenue, and it rides the same
+    # reinvestment gate so it ramps in over the horizon rather than at T0.
+    at_share = float(policy.revenue_allocation.active_travel or 0.0)
+    at_share = max(0.0, min(1.0, at_share))
+    if at_share > 0.0 and (levers.charge_per_one_way > 0 or levers.car_banned_in_cbd):
+        at_mult = 1.0 + at_share * sim.active_travel_max_speed_gain
+        levers.active_travel_speed_multiplier = at_mult
+        levers.rules.append(
+            BehaviouralRule(
+                name="active_travel_reinvestment",
+                label="Revenue reinvested in walking & cycling",
+                parameter="Active-travel effective speed and viable range ×mult from reinvestment",
+                value=round(at_mult, 3),
+                unit="active-travel multiplier",
+                plausible_range=[1.0, 1.0 + sim.active_travel_max_speed_gain],
+                sensitivity=(
+                    f"At this {at_share:.0%} active-travel allocation: segregated lanes "
+                    f"and pavements make active travel ×{at_mult:.2f} faster and viable "
+                    "over a wider radius, pulling the nearest-margin short-trip car and "
+                    "transit commuters onto foot/bike. Longer trips beyond active-travel "
+                    "range are unaffected, so the shift is smaller than a transit package."
+                ),
+                source=(
+                    "revenue_allocation.active_travel × sim active-travel "
+                    "service-gain assumption (Estimated; not the £ amount)"
                 ),
             )
         )

@@ -1198,3 +1198,33 @@ Roadmap was 100% complete on entry (46/46, 388 green, audit PASS, 50 routes). Ad
 - Files: `backend/app/simulation/levers.py`, `backend/app/registry/model.py`,
   `backend/tests/test_active_hours.py` (9 tests). **444 green** (was 435), `scripts/audit.py` PASS,
   app boots with **52 routes**. No frontend/shared files touched.
+
+## 2026-08-13 (active-travel revenue reinvestment actually bites)
+- Roadmap was fully checked (52/52) and green (448 tests, 53 routes, audit PASS). Continuing the
+  LEZ / parking-levy / transit-investment / active-hours precedent, closed the next §34 honesty
+  gap the model still carried: `revenue_allocation.active_travel` was a first-class DSL field
+  (extractable by the LLM, normalised by the compiler's alloc-sums-to-1 guardrail, echoed in
+  provenance) that **never touched a number**. The revenue→service lever read only
+  `revenue_allocation.public_transport`, so a policy that spent 100% of its charge revenue on
+  cycle lanes / pavements produced **byte-identical** traffic/emissions to banking it in the
+  general fund — telling a minister that active-travel infrastructure does literally nothing.
+- Fix: a new `active_travel_speed_multiplier` = `1 + share × active_travel_max_speed_gain`
+  (0.20, Estimated) scales BOTH the effective active-travel speed AND the max walkable/cyclable
+  distance in World B (segregated infra both speeds existing foot/bike trips and brings longer
+  commutes into range), pulling the nearest-margin short-trip car/transit commuters onto active
+  travel. On the demo £10 charge with full active-travel reinvestment: walk 3051→5036, car
+  3012→1812, daily vehicle-km 9181→7229.
+- Honest guardrails mirror transit reinvestment: engages ONLY when the charge/ban actually raises
+  revenue (no-revenue policy can't invent a shift); rides the same reinvestment gate so it ramps
+  in over the horizon (§9), neutral in the short-run anchor; multiplier is an explicit Estimated
+  assumption NOT derived from the £ amount (§34); co-exists with transit reinvestment on a split
+  allocation. Also taught the rule-based compiler to extract active-travel allocation ("spend 40%
+  on cycle lanes/walking/footpaths/pavements") so it's reachable + testable without an LLM
+  (transit still matched first → existing transit parses unchanged).
+- New SimParam `active_travel_max_speed_gain` surfaced live in the §33 registry (manifest can't
+  drift); share clamped to [0,1]. World A untouched, every existing active-travel-free policy
+  byte-identical (default allocation active_travel=0.0 → multiplier 1.0, no rule, no number moved).
+- Files: `backend/app/simulation/levers.py`, `backend/app/simulation/model.py`,
+  `backend/app/policy/rules.py`, `backend/app/registry/model.py`,
+  `backend/tests/test_active_travel_reinvestment.py` (11 tests). **459 green** (was 448),
+  `scripts/audit.py` PASS, app boots with **53 routes**. No frontend/shared files touched.
