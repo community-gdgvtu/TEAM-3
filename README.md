@@ -1,8 +1,8 @@
-# URBAN — Policy Digital Twin
+# GovSim — Policy Digital Twin
 
 > **Run the policy before you run the country.**
 
-URBAN is a policy simulation environment: a hybrid mechanistic + LLM system that lets
+GovSim is a policy simulation environment: a hybrid mechanistic + LLM system that lets
 policymakers test, stress-test, debate, and optimise policies before deploying them in
 the real world. See [`SPEC.md`](./SPEC.md) for the full product spec.
 
@@ -108,7 +108,7 @@ cd frontend && npm install && npm run dev
 
 ```bash
 curl http://localhost:8000/health
-# {"status":"ok","service":"URBAN Policy Digital Twin",...}
+# {"status":"ok","service":"GovSim Policy Digital Twin",...}
 ```
 
 Then open <http://localhost:3000> — the landing page fetches `/health` and shows
@@ -122,5 +122,5 @@ and commits. See [`AGENT_LOOP.md`](./AGENT_LOOP.md) for the loop contract.
 
 ## Epistemic rule
 
-URBAN never presents a synthetic future as fact. Every output is tagged
+GovSim never presents a synthetic future as fact. Every output is tagged
 `Observed | Estimated | Simulated | Generated`, and LLMs never produce core numeric effects.
