@@ -65,7 +65,7 @@ export default function Hero() {
             <button
               type="button"
               className="btn primary"
-              onClick={() => scrollTo("compiler")}
+              onClick={() => scrollTo("run")}
             >
               Generate simulation from policy
             </button>
