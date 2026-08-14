@@ -1,0 +1,46 @@
+{
+  "type": "Feature",
+  "id": "cbd_polygon",
+  "properties": {
+    "name": "Central district cordon",
+    "zone_ids": [
+      "Z030",
+      "Z031",
+      "Z032",
+      "Z039",
+      "Z040",
+      "Z041",
+      "Z048",
+      "Z049",
+      "Z050"
+    ],
+    "description": "Congestion-charge / pedestrianisation boundary for the demo policy. Vehicles crossing into this polygon are priced."
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          174.750671,
+          -36.858606
+        ],
+        [
+          174.775929,
+          -36.858606
+        ],
+        [
+          174.775929,
+          -36.838394
+        ],
+        [
+          174.750671,
+          -36.838394
+        ],
+        [
+          174.750671,
+          -36.858606
+        ]
+      ]
+    ]
+  }
+}

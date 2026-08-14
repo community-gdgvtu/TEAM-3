@@ -1,0 +1,67 @@
+{
+  "title": "GOV SIM — data lineage",
+  "note": "GOV SIM is anchored on Auckland, New Zealand — real coordinates, real OpenStreetMap road and land-use geometry, real basemap geography. The zone system, building footprints and trip matrix on top of it are modelled, not measured, and contain no real administrative record. The entries below are the real datasets this model is shaped like, plus the corpus the traffic model is actually fitted on.",
+  "sources": [
+    {
+      "id": "3dcitydb-web-map",
+      "role": "3D city geometry",
+      "name": "3DCityDB Web Map Client",
+      "publisher": "3D City Database project (TU Munich / virtualcitysystems)",
+      "url": "https://github.com/3dcitydb/3dcitydb-web-map",
+      "docs": "https://www.3dcitydb.org/3dcitydb/documentation/",
+      "license": "Apache-2.0",
+      "formats": [
+        "CityGML",
+        "Cesium 3D Tiles",
+        "COLLADA/KML/glTF",
+        "CZML",
+        "GeoJSON",
+        "I3S"
+      ],
+      "how_used": "The building layer follows the same semantic model a 3DCityDB export uses at LOD1: one footprint polygon per building with a measured height attribute, grouped by zone. Swapping in a real city means replacing buildings.geojson with a CityGML/3D-Tiles export from a 3DCityDB instance — the scene reads footprint + height and nothing else."
+    },
+    {
+      "id": "uk-census-wu03ew",
+      "role": "origin-destination travel demand",
+      "name": "2011 Census origin-destination flows, table WU03EW",
+      "full_name": "Location of usual residence and place of work by method of travel to work (WU03EW)",
+      "publisher": "Office for National Statistics (UK)",
+      "country": "United Kingdom",
+      "url": "https://www.nomisweb.co.uk/census/2011/wu03ew",
+      "license": "Open Government Licence v3.0",
+      "how_used": "The shape of the demand model: home-zone → work-zone daily commuter flows split by mode (car, public transport, walk). od_pairs.json is a destination-constrained gravity model fitted to the same schema, so a real WU03EW extract drops straight into the same pipeline."
+    },
+    {
+      "id": "link-speed-corpus",
+      "role": "traffic speed model — training corpus",
+      "name": "Link-speed corpus",
+      "full_name": "Arterial loop-detector speeds, 207-sensor network",
+      "publisher": "Jagadeesh et al. / DCRNN benchmark, via Hugging Face",
+      "url": "https://huggingface.co/datasets/witgaw/METR-LA",
+      "license": "Research use, per dataset card",
+      "formats": [
+        "Parquet",
+        "CSV sensor graph"
+      ],
+      "how_used": "This one is not a shape — it is the corpus the traffic model is actually fitted on. 207 arterial loop detectors at 5-minute resolution, with real sensor coordinates. GOV SIM trains nine classical regressors and an LSTM on it to predict link speed from a 12-step history, then runs that speed-response relationship on the local Auckland network. Reported R² and MAE are measured on the held-out test split, not asserted."
+    }
+  ],
+  "model": {
+    "name": "Cordon demand-response model",
+    "class": "reduced-form mechanistic (deterministic, no LLM)",
+    "inputs": [
+      "od_pairs.json — daily person-trips per origin→destination pair",
+      "zones.geojson — population, jobs, land use",
+      "roads.geojson — capacity, free-flow speed, cordon-crossing flag",
+      "buildings.geojson — footprints, heights, 10-year pipeline"
+    ],
+    "mechanism": "Trips crossing the cordon respond to the generalised cost of the charge with a constant-elasticity demand curve; suppressed car trips are reallocated to transit, walking and rerouting in fixed proportions, subject to transit capacity. Effects ramp in over roughly two years (behavioural adjustment), then land-use responds: transit-oriented development near the core, and pedestrianised kerbside converting to public realm.",
+    "counts": {
+      "buildings": 1006,
+      "parks": 232,
+      "pipeline_buildings": 85,
+      "greenable_lots": 78,
+      "tallest_m": 324.4
+    }
+  }
+}
